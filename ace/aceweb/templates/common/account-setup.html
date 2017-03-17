@@ -1,0 +1,16 @@
+<div ng-init="verifyURL()">
+	<form ng-submit="submitFurtherDetails()" ng-show="showAccountSetupForm">
+    
+        <label><b>Contact Number</b></label>
+        <input type="text" placeholder="Contact Number" ng-Model="userContactNumber" required>
+
+        <label><b>Password</b></label>
+        <input type="password" placeholder="Password" ng-Model="userPassword" required>
+
+        <label><b>Confirm Password</b></label>
+        <input type="password" placeholder="Confirm Password" ng-Model="userConfirmPassword" required>
+
+        <button type="submit">Register</button>
+        
+  	</form>
+</div>

@@ -1,0 +1,191 @@
+
+<head>
+	<title>ACE Program | Manage Students </title>
+
+	<link rel="stylesheet" type="text/css" href="css/admin/manage-student.css">
+</head>
+
+<body>
+
+<div>
+
+	<div class="input-group">
+
+					<!--
+          <div class="input-group-btn search-panel">
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+									<span id="search_concept">Search by</span>
+									<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+									<li><a href="javascript:void(0)" ng-click="changeFilterTo('sender_fullName')">Name</a></li>
+									<li><a href="javascript:void(0)" ng-click="changeFilterTo('message_subject')">Subject</a></li>
+							</ul>
+					</div>
+
+          -->
+
+					<input type="text" class="form-control" ng-model="searchBox" placeholder="Search">
+
+		</div>
+
+    <!--
+		<div class="dropdown">
+
+		  	<button class="btn btn-default dropdown-toggle" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		    	Action
+		    	<span class="caret"></span>
+		  	</button>
+
+		  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+					<li><a href="javascript:void(0)" ng-click="deleteReportList()">Delete</a></li>
+		  	</ul>
+
+		</div>
+    -->
+
+		<!--
+
+    <button class="btn btn-default" type="button" ng-click="initScope()">
+		    Refresh
+		</button>
+
+    -->
+
+		<table class="table table-bordered table-condensed table-striped table-condensed table-hover">
+			<col width="130">
+			<col width="200">
+				<tbody>
+						<tr>
+							<!--<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>-->
+							<th class="date">ID No. </th>
+							<th class="faculty">Name: </th>
+							<th class="course">Course: </th>
+							<th class="year"> Level: </th>
+							<th class="reportCount"> Report Count: </th>
+							<th class="student">Actions</th>
+
+						</tr>
+
+						<tr ng-repeat="student in students | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(student)">
+							<!--
+							<td>
+								<center><input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" checklist-change="updateMainCheckbox()" noclick></center>
+							</td>
+							-->
+							<td>
+								{{ student.student_id}}
+							</td>
+							<td>
+								{{ student.last_name }}, {{ student.first_name}}
+							</td>
+              <td>
+								{{ student.program }}
+							</td>
+							<td>
+								{{ student.level }}
+							</td>
+							<td>
+								{{ student.report_count }}
+							</td>
+
+							<td>
+								<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" ng-click="showPopup(student)" >Edit</button>-->
+								<button type="button" class="btn btn-primary" ng-click="deleteStudent(student.student_id)" no-click><span class="glyphicon glyphicon-trash"></span></button>
+							</td>
+						</tr>
+				</tbody>
+			</table>
+
+			<div ng-show="reports.length == 0">
+				<p>No Result</p>
+			</div>
+
+			<div>
+				<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+			</div>
+
+<!-- MODALS ------------------------------------------------------------------->
+			<!---   EDIT STUDENT  --------------------------------------------------->
+
+				<div id="editModal" class="modal fade" role="dialog">
+						<div class="modal-dialog">
+
+							<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+										<h4 class="modal-title custom-header-color">Edit Student Information</h4>
+								</div>
+									<div class="modal-body">
+
+											<p><b>Student ID Number: </b> <input type="textbox" ng-model="studId" name="studId" id="studId">
+											<p><b>Student Last Name: </b> <input type="textbox" ng-model="studLName" name="studLName" id="studLName">
+											<p><b>Student First Name: </b> <input type="textbox" ng-model="studFName" name="studFName" id="studFName">
+											<p><b>Course: </b>
+												<div class="style-select">
+													<select class="form-control" name="program" id="program" ng-model="program" required>
+
+															<optgroup label="Academic Tracks" ng-if="department==1">
+																<option value="1">Humanities And Social Sciences</option>
+																<option value="2">Accountancy Business And Management</option>
+															</optgroup>
+
+															<optgroup label="Technical Vocational" ng-if="department==1">
+																<option value="3">Computer Programming</option>
+																<option value="4">Animation</option>
+																<option value="5">Fashion Design</option>
+															</optgroup>
+
+															<optgroup label="Arts and Design Track" ng-if="department==1">
+																<option value="6">Multimedia Arts</option>
+															</optgroup>
+
+															<optgroup label="School of Computing" ng-if="department==2">
+																<option value="1">Software Engineering</option>
+																<option value="2">Game Development</option>
+																<option value="3">Web Development</option>
+															</optgroup>
+
+															<optgroup label="School of Design" ng-if="department==2">
+																<option value="4">Animation</option>
+																<option value="5">Multimedia Arts</option>
+																<option value="6">Fashion Design</option>
+															</optgroup>
+
+															<optgroup label="School of Business" ng-if="department==2">
+																<option value="7">Real Estate Management</option>
+																<option value="8">Business Administration</option>
+															</optgroup>
+
+													</select>
+												</div>
+
+											<p><b>Level: </b>
+												<div class="style-select">
+													<select class="form-control" name="level" id="level" ng-model="level" required>
+
+														<option ng-if="department==1" value="1">Grade 11</option>
+														<option ng-if="department==1" value="2">Grade 12</option>
+
+														<option ng-if="department==2" value="1">First Year</option>
+														<option ng-if="department==2" value="2">Second Year</option>
+														<option ng-if="department==2" value="3">Third Year</option>
+														<option ng-if="department==2" value="4">Fourth year</option>
+
+													</select>
+												</div>
+
+									</div>
+									<div class="modal-footer">
+								<button type="button" class="btn btn-primary" ng-click="updateStudent()">Submit</button>
+									</div>
+							</div>
+
+						</div>
+				</div><!-- modal closing tag -->
+
+
+</div>
+
+</body>

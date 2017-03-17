@@ -1,0 +1,67 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="css/faculty/faculty.css">
+</head>
+
+<body>
+  <!-- <div class="template-container" ng-show="referralUpdateCount!=null && newMessageCount!=null"> -->
+  <div class="row nav-bar">
+      <div class="col-md-12 nav-bar-col no-side-padding">
+        <img src="img/logo1.jpg">
+        <p>ACE Program<br />Online Referral System</p>
+
+        <a ui-sref="login" ng-click="logout()">
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+        </a>
+
+    </div>
+</div>
+
+<div class="row menu-content-row">
+
+    <div class="col-md-2 menu-col no-side-padding">
+        <ul class="navi list-unstyled">
+            <li>
+                <a ui-sref="superadmin.manageAdmin" class="manageAdminTab">
+                  <i class="fa fa-user-circle" aria-hidden="true"></i>
+                    <span class="nav-text">Manage Adminitrator<span class="badge" ng-show="referralUpdateCount">{{referralUpdateCount}}</span></span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="superadmin.settings" class="settingTab">
+                    <i class="fa fa-cog"></i>
+                    <span class="nav-text">Settings</span>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="col-md-10 content-col no-side-padding" ui-view></div>
+
+</div>
+</div>
+
+</body>
+</body>
+
+
+<!-- Original Code -->
+<!--
+<div class="header3" ng-controller="SuperAdminController">
+  <h1> LOGO HERE123</h1>
+  <a ui-sref="login">Notification</a>
+  <a ui-sref="login" ng-click="logout()">Logout</a>
+</div>
+
+<ul class="sidebarMenu">
+-->
+  <!--<li><a ui-sref="superadmin.newAdmin">Manage Administrator</a></li>
+  <li><a ui-sref="superadmin.settings">Settings</a></li>-->
+<!--
+  <li><a ui-sref="superadmin.manageAdmin">Manage Administrators</a></li>
+  <li><a ui-sref="superadmin.settings">Settings</a></li>
+
+</ul>
+
+<div ui-view></div>
+-->

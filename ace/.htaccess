@@ -1,0 +1,23 @@
+RewriteEngine on
+
+RewriteBase /ace/
+
+RewriteCond %{THE_REQUEST} /aceweb/([^\s?]*) [NC]
+RewriteRule ^ %1 [L,NE,R=302]
+RewriteRule ^((?!aceweb/).*)$ aceweb/$1 [L,NC]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

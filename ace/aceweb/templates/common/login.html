@@ -1,0 +1,77 @@
+    <head>
+
+        <title>ACE Program | Login</title>
+
+        <link rel="stylesheet" type="text/css" href="css/common/login.css">
+
+    </head>
+
+    <body>
+
+        <div class="logo" id="logo">
+            <center>
+                <img src="img/logo1.jpg">
+            </center>
+        </div>
+
+        <div class="container">
+
+            <div class="mainbox col-md-4 col-md-offset-4">
+                <form class="loginForm" name="loginForm" role="form" ng-submit="login()" novalidate>
+
+                    <div class="errorMessage" ng-show="invalidLogin">
+                        <i class="fa fa-exclamation-circle"></i>
+                        Invalid Email or Password
+                    </div>
+
+                    <div class="errorMessage" ng-show="invalidInput">
+                        <i class="fa fa-exclamation-circle"></i>
+                        Invalid Input
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon col-md-off-set-1">
+                            <i class="fa fa-envelope-o fa-fw fa-lg"></i>
+                        </span>
+                        <input type="email" auto-focus validate-email required class="form-control" name="email" id="login-email" placeholder="Enter Email Address" ng-Model="userEmail">
+                        <div class="e col-md-offset-11" ng-if="loginForm.email.$dirty && loginForm.email.$invalid || loginForm.$submitted && loginForm.email.$invalid">
+                            <i class="fa fa-times-circle fa-lg"></i>
+                        </div>
+                        <div class="e col-md-offset-11" ng-if="loginForm.email.$valid">
+                            <i class="fa fa-check-circle fa-lg"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-key fa-fw fa-lg"></i>
+                        </span>
+                        <input type="password" required class="form-control" name="password" id="login-password" placeholder="Enter Password" ng-Model="userPassword"/>
+                        <div class="e col-md-offset-11" ng-if="loginForm.password.$dirty && loginForm.password.$invalid || loginForm.$submitted && loginForm.password.$invalid">
+                            <i class="fa fa-times-circle fa-lg"></i>
+                        </div>
+                        <div class="e col-md-offset-11" ng-if="loginForm.password.$valid">
+                            <i class="fa fa-check-circle fa-lg"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row-md-1 control">
+                            <button class="button" type="submit">
+                                <span>
+                                    SIGN IN
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="form-group">
+                        <div class="control">
+                            <a class="forgotPass" ui-sref="forgotPassword">Forgot Password?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </body>

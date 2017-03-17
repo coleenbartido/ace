@@ -1,0 +1,17 @@
+@font-face {
+    font-family: acre-regular;
+    src: url('../../fonts/acre-regular.ttf');
+}
+
+body {
+    font-weight: 500;
+    font-size: 1.05em;
+    font-family: gotham-book;
+}
+
+.manageFacultyTab {
+  background: #122143 none repeat scroll 0 0;
+  border-left: 5px solid #5584ff;
+  padding-left: 25px;
+  text-decoration: none;
+}

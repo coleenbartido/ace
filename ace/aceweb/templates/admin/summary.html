@@ -1,0 +1,64 @@
+<head>
+  <title>ACE Program | Summary</title>
+
+  <link rel="stylesheet" type="text/css" href="css/admin/summary.css">
+</head>
+
+<body>
+	<a class="btn btn-info" ng-click="dummy()">Dummy</a>
+	<select ng-model="selectedSY">
+    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
+    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
+    </select>
+
+    <uib-tabset active="activeJustified" justified="true">
+
+	  <uib-tab index="0" heading="Term">
+	  	<div class="col-md-6 charts">
+			<canvas id="term" class="chart chart-bar" chart-data="termData" chart-labels="termLabels" chart-series="series" chart-options="options">
+			</canvas>
+		</div>
+		<a class="btn btn-info" id="downloadImg1" ng-click="downloadImage($event, 'term')">Save as Image</a>
+		<a class="btn btn-info" id="downloadPDF1" ng-click="downloadPDF('term')">Save as PDF</a>
+	  </uib-tab>
+
+	  <uib-tab index="1" heading="Program">
+	  	<div class="col-md-6">
+			<canvas id="program" class="chart chart-bar" chart-data="programData" chart-labels="programLabels" chart-series="series" chart-options="options">
+			</canvas>
+		</div>
+		<a class="btn btn-info" id="downloadImg2" ng-click="downloadImage($event, 'program')">Save as Image</a>
+		<a class="btn btn-info" id="downloadPDF2" ng-click="downloadPDF('program')">Save as PDF</a>
+	  </uib-tab>
+
+	  <uib-tab index="2" heading="Grade/Year Level">
+	  	<div class="col-md-6">
+			<canvas id="level" class="chart chart-bar" chart-data="levelData" chart-labels="levelLabels" chart-series="series" chart-options="options">
+			</canvas>
+		</div>
+		<a class="btn btn-info" id="downloadImg3" ng-click="downloadImage($event, 'level')">Save as Image</a>
+		<a class="btn btn-info" id="downloadPDF3" ng-click="downloadPDF('level')">Save as PDF</a>
+	  </uib-tab>
+
+	  <uib-tab index="3" heading="Reason">
+	  	<div class="col-md-6">
+			<canvas id="reason" class="chart chart-bar" chart-data="reasonData" chart-labels="reasonLabels" chart-series="series" chart-options="options">
+			</canvas>
+		</div>
+		<a class="btn btn-info" id="downloadImg4" ng-click="downloadImage($event, 'reason')">Save as Image</a>
+		<a class="btn btn-info" id="downloadPDF4" ng-click="downloadPDF('reason')">Save as PDF</a>
+	  </uib-tab>
+
+	  <uib-tab index="4" heading="Report Status">
+	  	<div class="col-md-6">
+			<canvas id="status" class="chart chart-bar" chart-data="statusData" chart-labels="statusLabels" chart-series="series" chart-options="options">
+			</canvas>
+		</div>
+		<a class="btn btn-info" id="downloadImg5" ng-click="downloadImage($event, 'status')">Save as Image</a>
+		<a class="btn btn-info" id="downloadPDF5" ng-click="downloadPDF('status')">Save as PDF</a>
+	  </uib-tab>
+
+	</uib-tabset>
+
+
+</body>

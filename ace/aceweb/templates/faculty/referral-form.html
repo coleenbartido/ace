@@ -1,0 +1,477 @@
+<head>
+  <title>ACE Program | Referral</title>
+
+  <link rel="stylesheet" type="text/css" href="css/faculty/referral-form.css">
+</head>
+
+<body>
+
+      <form class="refForm col-md-12" ng-submit="submitReferral()" name="refForm" id="refForm">
+          <div class="row col-md-12 col-md-offset-0 formContainer">
+
+              <div class="panel panel-default">
+
+                <div class="panel-heading">
+                  <div class='btn-toolbar pull-right'>
+                    <div class='btn-group'>
+                      <button class="historyBtn btn pull-right"><i class="fa fa-history" aria-hidden="true"></i> View History</button>
+                    </div>
+                  </div>
+                  <h1 class="panel-title">Student Information</h1>
+
+                </div>
+
+                <!--div class="row buttons historyDiv">
+                  <div class="btns pull-right">
+                    <button class="historyBtn btn"><i class="fa fa-history" aria-hidden="true"></i> History</button>
+                  </div>
+                </div-->
+
+                <div class="panel-body studInfo">
+
+                  <!--div class="col-md-12 otherInfo"-->
+                  <!---------------------------------------------------------------------->
+                  <div class="studentID col-md-4">
+                    <span class="input-label">Student ID:</span>
+
+                    <div class="style-select">
+                      <input name="studId" type="text" ng-Model="studId" class="form-control" id="studId" placeholder="ex. 2014-12345" pattern=".*(\d{4}-\d{5}).*" required>
+                      <div ng-messages="refForm.studId.$error" ng-show="refForm.studId.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle errspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.studId.$error" ng-show="refForm.studId.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                      <p class="error-message" ng-message="pattern">Invalid format</p>
+                    </div-->
+                  </div>
+
+                  <!---------------------------------------------------------------------->
+                  <div class="lastName col-md-4">
+                    <span class="input-label">Last Name:</span>
+
+                    <div class="style-select">
+                      <input name="studLName" type="text" ng-Model="studLName" class="form-control" id="studLName" placeholder="ex. Dela Cruz" required>
+                      <div ng-messages="refForm.studLName.$error" ng-show="refForm.studLName.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle errspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.studLName.$error" ng-show="refForm.studLName.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                    </div-->
+                  </div>
+
+                  <!---------------------------------------------------------------------->
+                  <div class="firstName col-md-4">
+                    <span class="input-label">First Name:</span>
+
+                    <div class="style-select">
+                      <input name="studFName" type="text" ng-Model="studFName" class="form-control" id="studFName" placeholder="ex. Juan Jr." required>
+                      <div ng-messages="refForm.studFName.$error" ng-show="refForm.studFName.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle errspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.studFName.$error" ng-show="refForm.studFName.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                    </div-->
+                  </div>
+
+                  <!---------------------------------------------------------------------->
+                  <div class="schoolYear col-md-2">
+                    <span class="input-label">School Year:</span>
+
+                    <div class="style-select">
+                      <select class="form-control" name="schoolYear" id="schoolYear" ng-model="schoolYear" required>
+                        <option disabled selected value></option>
+                        <option value="{{firstSY}}">{{firstSY}}</option>
+                        <option value="{{secondSY}}">{{secondSY}}</option>
+                        <option value="{{thirdSY}}">{{thirdSY}}</option>
+                      </select>
+
+                      <div ng-messages="refForm.schoolYear.$error" ng-show="refForm.schoolYear.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.schoolYear.$error" ng-show="refForm.schoolYear.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                    </div-->
+                  </div>
+
+                  <!---------------------------------------------------------------------->
+                  <div class="schoolTerm col-md-2">
+                    <span class="input-label">Term:</span>
+
+                    <div class="style-select">
+                      <select class="form-control" name="schoolTerm" id="schoolTerm" ng-model="schoolTerm" required>
+                        <option disabled selected value>  </option>
+                        <option value="1">1st Term</option>
+                        <option value="2">2nd Term</option>
+                        <option value="3">3rd Term</option>
+                      </select>
+
+                      <div ng-messages="refForm.schoolTerm.$error" ng-show="refForm.schoolTerm.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.schoolTerm.$error" ng-show="refForm.schoolTerm.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                    </div-->
+                  </div>
+
+                  <!---------------------------------------------------------------------->
+                  <div class="subjName col-md-4">
+                    <span class="input-label">Subject Name:</span>
+
+                    <div class="style-select">
+                      <input class="form-control" type="text" name="subjName" id="subjName" ng-Model="subjName" placeholder="ex. Core Java 1" required>
+                      <div ng-messages="refForm.subjName.$error" ng-show="refForm.subjName.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle errspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.subjName.$error" ng-show="refForm.subjName.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                    </div-->
+                  </div>
+
+                  <!---------------------------------------------------------------------->
+                  <div class="department col-md-4">
+                    <span class="input-label">Department:</span>
+
+                    <div class="style-select">
+                      <select class="form-control" name="department" id="department" ng-model="department" ng-change="resetInput()" required>
+                        <option disabled selected value> -- Select Department -- </option>
+                        <option value="1">Senior High School</option>
+                        <option value="2">College</option>
+                      </select>
+
+                      <div ng-messages="refForm.department.$error" ng-show="refForm.department.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle errspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.department.$error" ng-show="refForm.department.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                    </div-->
+                  </div>
+
+                  <!---------------------------------------------------------------------->
+                  <div class="level col-md-4">
+                    <span class="input-label">Grade/Year Level:</span>
+
+                    <div class="style-select">
+                      <select class="form-control" name="year" id="year" ng-model="year" ng-disabled="!department" required>
+                        <option disabled selected value> -- Select Grade/Year Level -- </option>
+
+                        <option ng-if="department==1" value="1">Grade 11</option>
+                        <option ng-if="department==1" value="2">Grade 12</option>
+
+                        <option ng-if="department==2" value="1">First Year</option>
+                        <option ng-if="department==2" value="2">Second Year</option>
+                        <option ng-if="department==2" value="3">Third Year</option>
+                        <option ng-if="department==2" value="4">Fourth year</option>
+                      </select>
+
+                      <div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                    </div-->
+                  </div>
+
+                  <!---------------------------------------------------------------------->
+                  <div class="courseProgram col-md-8">
+                    <span class="input-label">Program/Course:</span>
+
+                    <div class="style-select">
+                      <select class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
+                        <option disabled selected value> -- Select Program/Course -- </option>
+
+
+                          <optgroup label="Academic Tracks" ng-if="department==1">
+                            <option value="1">Humanities And Social Sciences</option>
+                            <option value="2">Accountancy Business And Management</option>
+                          </optgroup>
+
+                          <optgroup label="Technical Vocational" ng-if="department==1">
+                            <option value="3">Computer Programming</option>
+                            <option value="4">Animation</option>
+                            <option value="5">Fashion Design</option>
+                          </optgroup>
+
+                          <optgroup label="Arts and Design Track" ng-if="department==1">
+                            <option value="6">Multimedia Arts</option>
+                          </optgroup>
+
+                          <optgroup label="School of Computing" ng-if="department==2">
+                            <option value="1">Software Engineering</option>
+                            <option value="2">Game Development</option>
+                            <option value="3">Web Development</option>
+                          </optgroup>
+
+                          <optgroup label="School of Design" ng-if="department==2">
+                            <option value="4">Animation</option>
+                            <option value="5">Multimedia Arts</option>
+                            <option value="6">Fashion Design</option>
+                          </optgroup>
+
+                          <optgroup label="School of Business" ng-if="department==2">
+                            <option value="7">Real Estate Management</option>
+                            <option value="8">Business Administration</option>
+                          </optgroup>
+                      </select>
+
+                      <div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched || refForm.$submitted">
+                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required || pattern"></span>
+                      </div>
+                    </div>
+
+                    <!--div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched || refForm.$submitted">
+                      <p class="error-message" ng-message="required">This is required!</p>
+                    </div-->
+                  </div>
+
+                </div>
+                <!---------------------------------------------------------------------->
+
+
+                <div class="reasonRef panel-heading custom-panel-header">
+                  <h1 class="panel-title">Reason/s for Referral</h1>
+                </div>
+
+                <div class="referral panel-body reason-panel-body">
+
+                  <div class="col-md-12 no-side-padding">
+
+                    <!---------------------------------------------------------------------->
+                    <div class="row">
+
+
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <input type="checkbox" id="reasons[0]" ng-model="reasons[0].check" value="reasons[0].value">
+                          <label class="reason-label" for="reasons[0]">{{reasons[0].name}}</label>
+                        </div>
+                        <div class="col-md-12">
+                          <input type="checkbox" id="reasons[1]" ng-model="reasons[1].check" value="reasons[1].value">
+                          <label class="reason-label" for="reasons[1]">{{reasons[1].name}}</label>
+                        </div>
+                        <div class="col-md-12">
+                          <input type="checkbox" id="reasons[2]" ng-model="reasons[2].check" value="reasons[2].value">
+                          <label class="reason-label" for="reasons[2]">{{reasons[2].name}}</label>
+                        </div>
+                        <div class="col-md-12">
+                          <input type="checkbox" id="reasons[3]" ng-model="reasons[3].check" value="reasons[3].value">
+                          <label class="reason-label" for="reasons[3]">{{reasons[3].name}}</label>
+                        </div>
+                        <div class="col-md-12">
+                          <input type="checkbox" id="reasons[4]" ng-model="reasons[4].check" value="reasons[4].value">
+                          <label class="reason-label" for="reasons[4]">{{reasons[4].name}}</label>
+                        </div>
+                         <div class="col-md-12">
+                          <input type="checkbox" id="reasons[5]" ng-model="reasons[5].check" value="reasons[5].value">
+                          <label class="reason-label" for="reasons[5]">{{reasons[5].name}}</label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+
+                            <input type="checkbox" id="iba" ng-model="reasons[6].check" value="reasons[6].value">
+                            <label class="reason-label" for="iba">{{reasons[6].name}}</label>
+
+                        <div class="col-md-12 otherReason">
+                          <textarea class="col-md-11" id="others" name="others" ng-disabled="!reasons[6].check" ng-model="reasons[6].value"></textarea>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  <!---------------------------------------------------------------------->
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="buttons custom-btn-list col-md-12 col-md-offset-0">
+
+                <div class="btns pull-right">
+                  <button class="resetBtn btn" type="reset">Reset</button>
+                  <button id="refFormButton" class="submitBtn btn" type="submit" ng-disabled="refForm.$invalid || checkedReasons">Submit</button>
+                </div>
+
+              </div>
+
+          </div>
+      </form>
+</body>
+
+
+
+  <!--
+  <div ng-controller = "ReferralFormController">
+
+<form ng-submit="submitReferral()" name="refForm" id="refForm">
+
+
+  <div layout="row" layout-margin>
+    <md-input-container md-no-float flex="30">
+      <span>SCHOOL YEAR :</span>
+      <md-select name="schoolYear" id="schoolYear" ng-model="schoolYear" placeholder="Select School Year" md-no-asterisk="true" required>
+        <md-option value="{{(currentYear - 1) + ' - ' + currentYear}}">{{(currentYear - 1) + " - " + currentYear}}</md-option>
+        <md-option value="{{currentYear + ' - ' + (currentYear + 1)}}">{{currentYear + " - " + (currentYear + 1)}}</md-option>
+        <md-option value="{{(currentYear + 1) + ' - ' + (currentYear + 2)}}">{{(currentYear + 1) + " - " + (currentYear + 2)}}</md-option>
+      </md-select>
+      <div ng-messages="refForm.schoolTerm.$error">
+        <div ng-message="required">This is required!</div>
+      </div>
+    </md-input-container>
+
+    <md-input-container md-no-float flex="30">
+      <span>SCHOOL TERM :</span>
+      <md-select name="schoolTerm" id="schoolTerm" ng-model="schoolTerm" placeholder="Select Term" md-no-asterisk="true" required>
+        <md-option value="1">1st</md-option>
+        <md-option value="2">2nd</md-option>
+        <md-option value="3">3rd</md-option>
+      </md-select>
+      <div ng-messages="refForm.schoolTerm.$error">
+        <div ng-message="required">This is required!</div>
+      </div>
+    </md-input-container>
+
+    <md-input-container md-no-float flex="30">
+      <span>SUBJECT NAME :</span>
+      <input name="subjName" type="text" ng-Model="subjName" placeholder="Enter Subject Name" required>
+      <div ng-messages="refForm.subjName.$error">
+        <div ng-message="required">This is required!</div>
+      </div>
+    </md-input-container>
+  </div>
+
+
+  <div layout="row" layout-margin>
+    <md-input-container md-no-float flex="30">
+      <span>STUDENT ID :</span>
+      <input name="studId" type="text" ng-Model="studId" placeholder="Enter Student ID" ng-maxlength="15" required>
+      <div ng-messages="refForm.studId.$error">
+        <div ng-message="required">This is required!</div>
+        <div ng-message="maxlength">Too long!</div>
+      </div>
+    </md-input-container>
+
+    <md-input-container md-no-float flex="30">
+      <span>STUDENT'S LAST NAME :</span>
+      <input name="studLName" type="text" ng-Model="studLName" placeholder="Enter Student Last Name" required>
+      <div ng-messages="refForm.studLName.$error">
+        <div ng-message="required">This is required!</div>
+      </div>
+    </md-input-container>
+
+    <md-input-container md-no-float flex="30">
+      <span>STUDENT'S FIRST NAME :</span>
+      <input name="studFName" type="text" ng-Model="studFName" placeholder="Enter Student First Name" required>
+      <div ng-messages="refForm.studFName.$error">
+        <div ng-message="required">This is required!</div>
+      </div>
+    </md-input-container>
+  </div>
+
+
+  <div layout="row" layout-margin>
+    <md-input-container md-no-float flex="30">
+      <span>DEPARTMENT :</span>
+      <md-select name="department" id="department" ng-model="dropdown" placeholder="Select Department" md-no-asterisk="true" ng-change="resetInput()" required>
+        <md-option value="1">Senior High School</md-option>
+        <md-option value="2">College</md-option>
+      </md-select>
+      <div ng-messages="refForm.department.$error">
+        <div ng-message="required">This is required!</div>
+      </div>
+    </md-input-container>
+
+    <md-input-container md-no-float flex="30">
+      <span>GRADE/YEAR LEVEL :</span>
+      <md-select name="year" id="year" ng-model="year" placeholder="Select Grade/Year Level" md-no-asterisk="true" ng-disabled="!dropdown" required>
+        <div ng-if="dropdown=='1'">
+          <md-option value="11">Grade 11</md-option>
+          <md-option value="12">Grade 12</md-option>
+        </div>
+        <div ng-if="dropdown=='2'">
+          <md-option value="1">First Year</md-option>
+          <md-option value="2">Second Year</md-option>
+          <md-option value="3">Third Year</md-option>
+          <md-option value="4">Fourth year</md-option>
+        </div>
+      </md-select>
+      <div ng-messages="refForm.year.$error">
+        <div ng-message="required">This is required!</div>
+      </div>
+    </md-input-container>
+
+    <md-input-container md-no-float flex="30">
+      <span>PROGRAM/COURSE :</span>
+      <md-select name="course" id="course" ng-model="course" placeholder="Select Program/Course" md-no-asterisk="true" ng-disabled="!dropdown" required>
+        <div ng-if="dropdown=='1'">
+          <md-optgroup label="Academic Tracks">
+            <md-option value="11">Humanities And Social Sciences</md-option>
+            <md-option value="12">Accountancy Business And Management</md-option>
+          </md-optgroup>
+          <md-optgroup label="Technical Vocational">
+            <md-option value="13">Computer Programming</md-option>
+            <md-option value="14">Animation</md-option>
+            <md-option value="15">Fashion Design</md-option>
+          </md-optgroup>
+          <md-optgroup label="Arts and Design Track">
+            <md-option value="16">Multimedia Arts</md-option>
+          </md-optgroup>
+        </div>
+        <div ng-if="dropdown=='2'">
+          <md-optgroup label="School of Computing">
+            <md-option value="1">Software Engineering</md-option>
+            <md-option value="2">Game Development</md-option>
+            <md-option value="3">Web Development</md-option>
+          </md-optgroup>
+          <md-optgroup label="School of Design">
+            <md-option value="4">Animation</md-option>
+            <md-option value="5">Multimedia Arts</md-option>
+            <md-option value="6">Fashion Design</md-option>
+          </md-optgroup>
+          <md-optgroup label="School of Business">
+            <md-option value="7">Real Estate Management</md-option>
+            <md-option value="8">Business Administration</md-option>
+          </md-optgroup>
+        </div>
+      </md-select>
+      <div ng-messages="refForm.course.$error">
+        <div ng-message="required">This is required!</div>
+      </div>
+    </md-input-container>
+  </div>
+
+  <div id="reasons">
+    <br><label>Reason/s for Referral: </label><br>
+    <div ng-repeat="option in options">
+      <input type="checkbox" ng-model="option.value">
+      <label >{{option.name}}</label>
+    </div>
+    <input type="checkbox" onclick="var input = document.getElementById('others'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true;}" /> <b>Other Reasons (please specify):</b>
+    <br><input id="others" name="others" disabled="disabled" ng-model="refComment"/><br>
+
+    <md-button id="refFormButton" class="md-raised md-primary" type="submit" ng-disabled="refForm.$invalid">Submit Referral Form</md-button>
+  </div>
+
+
+
+
+</form>
+
+</div-->

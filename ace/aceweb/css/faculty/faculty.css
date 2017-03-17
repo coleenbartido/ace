@@ -1,0 +1,133 @@
+@font-face {
+    font-family: acre-regular;
+    src: url('../../fonts/acre-regular.ttf');
+}
+
+body {
+    background-color: #dfe3ee;
+    font-weight: 500;
+    font-size: 1.05em;
+    font-family: gotham-book;
+}
+
+a:focus, a:hover, a {
+    outline: none;
+    text-decoration: none;
+}
+
+.no-side-padding {
+   padding-left: 0 !important;
+   padding-right: 0 !important;
+}
+
+
+/*------------------------------Navbar----------------------->*/
+
+
+.nav-bar {
+    height: 10%;
+}
+
+.nav-bar-col{
+    min-height: 100%;
+    background-color: #10326F;
+    box-shadow: 1px 2px 2px #000000;
+    z-index: 1000;
+}
+
+
+.nav-bar-col img {
+    float: left;
+    width: 8.5vh;
+    padding-top: 1.4vh;
+    padding-left: 1.4vh;
+}
+
+
+.nav-bar-col p {
+    float: left;
+    color: white;
+    font-size: 2vh;
+    letter-spacing: 0.3vh;
+    text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.5);
+    font-family: acre-regular;
+    padding-top: 2.2vh;
+    padding-left: 1.6vh;
+}
+
+.nav-bar-col .fa-sign-out {
+    padding-top: 3.6vh;
+    padding-right: 2.5vh;
+    font-size: 3vh;
+    color: white;
+    float: right;
+    text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+
+/*------------------------------side menu----------------------->*/
+
+
+.menu-content-row {
+    height: 90%;
+}
+
+.menu-col {
+    min-height: 100%;
+}
+
+.menu-col {
+    background: #0e1a35;
+}
+
+.navi a {
+    border-bottom: 2px solid #0d172e;
+    color: #ffffff;
+    display: table;
+    position: relative;
+    font-size: 1.9vh;
+    padding: 4.2vh 2.5vh 4.2vh 3vh;
+    width: 100%;
+}
+
+.navi i {
+    color: #5584ff;
+}
+
+.navi .fa {
+    vertical-align: middle;
+    padding-right: 2.2vh;
+    font-size: 2.8vh;
+}
+
+.navi .nav-text {
+    position: relative;
+    vertical-align: middle;
+}
+
+.navi .nav-text .badge {
+    float: right;
+    background-color: red;
+    margin-top: 0.7vh;
+    font-size: 1.6vh;
+    width: auto;
+}
+
+.navi a:hover {
+    background: #122143 none repeat scroll 0 0;
+    border-left: 5px solid #5584ff;
+    padding-left: 25px;
+    text-decoration: none;
+	-webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+
+/*--------------content area--------------*/
+
+
+.content-col {
+    height: 100%;
+}

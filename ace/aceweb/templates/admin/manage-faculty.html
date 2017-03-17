@@ -1,0 +1,95 @@
+<head>
+	<title>ACE Program | Manage Faculty</title>
+
+	<link rel="stylesheet" type="text/css" href="css/admin/manage-faculty.css">
+</head>
+
+<body>
+
+<div>
+
+
+	<input type="text" class="form-control" ng-model="searchBox" placeholder="Search">
+		<button type="button" data-toggle="modal" data-target="#myModal"> Add Faculty Account </button>
+		<br><br>
+
+		<!--
+			check if no account is selected
+		-->
+		<button type="button" ng-disabled="disableDeleteBtn()" ng-click="deleteFacultyList()"> Delete Faculty </button>
+		<table class="table table-bordered table-condensed">
+			<col width="130">
+			<col width="200">
+			<tbody>
+				<tr>
+						<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Contact Number</th>
+						<th>Number of Reports</th>
+						<th>Action/s</th>
+				</tr>
+
+				<tr ng-repeat="faculty in facultyAccounts | filter:searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" ng-click="showPopup(message)">
+						<td>
+							<center><input type="checkbox" data-checklist-model="facultyList.email" data-checklist-value="faculty.email" checklist-change="updateMainCheckbox()" noclick></center>
+						</td>
+						<td>
+								{{ faculty.first_name }} {{ faculty.last_name }}
+						</td>
+						<td>
+								{{ faculty.email }}
+						</td>
+		        <td>
+		          	{{ faculty.contact_number }}
+		        </td>
+		        <td>
+		            {{ faculty.reported_count }}
+		        </td>
+						<td>
+							<button type="button" class="btn btn-primary" ng-click="deleteFaculty(faculty.email)" ><span class="glyphicon glyphicon-trash"></span></button>
+						</td>
+		    </tr>
+	 		</tbody>
+		</table>
+
+		<div ng-show="facultyAccounts.length == 0">
+			<p>No Result</p>
+		</div>
+
+		<div>
+			<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+		</div>
+
+
+		<div id="myModal" class="modal fade" role="dialog">
+		  	<div class="modal-dialog">
+
+			    <div class="modal-content">
+			      	<div class="modal-header">
+			        	<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+			        	<h4 class="modal-title custom-header-color">Register Faculty</h4>
+			     	</div>
+			      	<div class="modal-body">
+
+								<label><b>Email</b></label>
+				        <input type="email" placeholder="Email" ng-Model="facultyEmail" required>
+								<br><br>
+				        <label><b>First Name</b></label>
+				        <input type="text" placeholder="First Name" ng-Model="facultyFirstName" required>
+								<br><br>
+				        <label><b>Last Name</b></label>
+				        <input type="text" placeholder="Last Name" ng-Model="facultyLastName" required>
+
+			      	</div>
+			      	<div class="modal-footer">
+						<button type="button" class="btn btn-primary" ng-click="registerFaculty()">Submit</button>
+			      	</div>
+			    </div>
+
+		  	</div>
+		</div><!-- modal closing tag -->
+
+</div><!-- div ng-Controller -->
+
+</body>

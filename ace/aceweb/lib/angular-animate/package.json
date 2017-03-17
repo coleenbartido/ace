@@ -1,0 +1,72 @@
+{
+  "name": "angular-animate",
+  "version": "1.5.10",
+  "description": "AngularJS module for animations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/angular.js.git"
+  },
+  "keywords": [
+    "angular",
+    "framework",
+    "browser",
+    "animation",
+    "client-side"
+  ],
+  "author": {
+    "name": "Angular Core Team",
+    "email": "angular-core+npm@google.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/angular.js/issues"
+  },
+  "homepage": "http://angularjs.org",
+  "jspm": {
+    "shim": {
+      "angular-animate": {
+        "deps": [
+          "angular"
+        ]
+      }
+    }
+  },
+  "gitHead": "3f876c02d2fc6c0fd432c917d871a1e43c684a07",
+  "_id": "angular-animate@1.5.10",
+  "_shasum": "7bfd4fb035ace40f9c5a22dbbd3e174ee5fa0032",
+  "_from": "angular-animate@>=1.3.0 <1.6.0",
+  "_npmVersion": "3.10.9",
+  "_nodeVersion": "6.9.2",
+  "_npmUser": {
+    "name": "angularcore",
+    "email": "angular-core+npm@google.com"
+  },
+  "dist": {
+    "shasum": "7bfd4fb035ace40f9c5a22dbbd3e174ee5fa0032",
+    "tarball": "https://registry.npmjs.org/angular-animate/-/angular-animate-1.5.10.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "akalinovski",
+      "email": "a.kalinovski@gmail.com"
+    },
+    {
+      "name": "angularcore",
+      "email": "angular-core+npm@google.com"
+    },
+    {
+      "name": "petebd",
+      "email": "pete@bacondarwin.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/angular-animate-1.5.10.tgz_1481885272978_0.6651187280658633"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/angular-animate/-/angular-animate-1.5.10.tgz"
+}

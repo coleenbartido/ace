@@ -1,0 +1,98 @@
+<head>
+  <title>ACE Program | Manage Database</title>
+
+  <link rel="stylesheet" type="text/css" href="css/admin/manage-database.css">
+</head>
+
+<body>
+  <h1>MANAGE DATABASE</h1>
+
+  <div>
+    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#backupModal">
+            Backup Database
+    </button>
+    <button class="btn btn-default" type="file" data-toggle="modal" data-target="#restoreModal" file-dialog>
+            Restore Database
+    </button>
+    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#resetModal">
+            Reset Database
+    </button>
+
+
+
+    <div id="backupModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          <h4 class="modal-title">Backup Database</h4>
+        </div>
+
+        <div class="modal-body">
+          <p>Please enter password to confirm backup of the current database:</p>
+          <input type="text" placeholder="Password" ng-Model="userPassword">
+        </div>
+
+        <div class="modal-footer">
+      <button type="button" class="btn btn-primary" ng-click="databaseConfirmation()">Confirm</button>
+        </div>
+      </div>
+
+      </div>
+    </div> 
+
+</body>
+
+  <!--
+
+  <div id="restoreModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title">Restore Database</h4>
+      </div>
+
+      <div class="modal-body">
+        <p>Please enter password to confirm restoration of d</p>
+        <input type="text" placeholder="Password" ng-Model="userPassword">
+      </div>
+
+      <div class="modal-footer">
+    <button type="button" class="btn btn-primary" ng-click="">Confirm</button>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+  restore database modal --->
+
+  <div id="resetModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title">Reset Database</h4>
+      </div>
+
+      <div class="modal-body">
+        <label><b>Enter Password:</b></label>
+        <input type="password" placeholder="Password" ng-Model="userPassword">
+      </div>
+
+      <div class="modal-footer">
+    <button type="button" class="btn btn-primary" ng-click="databaseConfirmation()">Confirm</button>
+      </div>
+    </div>
+
+    </div>
+  </div> <!--- reset database modal --->
+
+</div>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<ace> 
+    <db> 
+        <DB_USERNAME>root</DB_USERNAME> 
+        <DB_PASSWORD></DB_PASSWORD> 
+        <DB_HOST>localhost</DB_HOST> 
+        <DB_NAME>ace</DB_NAME> 
+    </db> 
+    <gmail_smtp> 
+        <GMAIL_EMAIL>iacademyace@gmail.com</GMAIL_EMAIL> 
+        <GMAIL_PWORD>Studyhard</GMAIL_PWORD> 
+        <GMAIL_HOST>smtp.gmail.com:587</GMAIL_HOST> 
+        <GMAIL_SENDER_NAME>ACE</GMAIL_SENDER_NAME> 
+    </gmail_smtp> 
+    <domain> 
+        <CLIENT_URL>http://localhost/ace</CLIENT_URL> 
+    </domain> 
+    <key> 
+        <SECRET_KEY>studyhard</SECRET_KEY> 
+    </key> 
+</ace>

@@ -1,0 +1,98 @@
+@font-face {
+    font-family: acre-regular;
+    src: url('../../fonts/acre-regular.ttf');
+}
+
+body {
+    font-weight: 500;
+    font-size: 1.05em;
+    font-family: gotham-book;
+}
+
+.settingTab {
+  background: #122143 none repeat scroll 0 0;
+  border-left: 5px solid #5584ff;
+  padding-left: 25px;
+  text-decoration: none;
+}
+
+/*----------------------------*/
+
+.panel .panel-heading {
+  background-color: #10326F;
+  color: white;
+  border-radius: 0px 0px;
+  padding: 15px 15px;
+}
+
+.panel-body {
+  border-style: solid;
+  margin-top: -0.3vh;
+  border-color: #10326F;
+}
+
+.settingsContainer {
+  margin-top: 45px;
+}
+
+.centerCol {
+  float: none;
+  margin: 0 auto;
+}
+
+hr {
+  margin: 10px -15px 0 -15px;
+  height: 10px;
+  border: 0;
+  box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}
+
+.setting-label {
+  font-size: 14px;
+}
+
+.setting-text {
+  font-size: 12px;
+}
+
+.row-component {
+  float: left;
+}
+
+.editBtn {
+  margin-right: 13px;
+  margin-top: 9px;
+}
+
+#pwordModal .modal-dialog {
+  width:420px;
+}
+
+#contactModal .modal-dialog {
+  width:420px;
+}
+
+.modal-body .form-horizontal .control-label {
+  text-align: left;
+  padding-bottom: 7px;
+}
+
+.custom-form {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.saveBtn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: right;
+}
+
+.invalid-text {
+  margin-top: -10px;
+  color: #f00;
+}
+
+.errorBox {
+  border:1px solid #f00;
+}
