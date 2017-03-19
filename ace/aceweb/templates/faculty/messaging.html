@@ -1,128 +1,157 @@
 <head>
 	<title>ACE Program | Message</title>
 
-	<link rel="stylesheet" type="text/css" href="css/common/messaging.css">
+	<link rel="stylesheet" type="text/css" href="css/faculty/messaging.css">
 </head>
 
 <body>
 
 	<div class="container col-md-12" ng-show="messages">
- <div class="mail-box">
+ 		<div class="mail-box col-md-12">
 
                   <aside class="lg-side">
-                      <div class="inbox-head">
-                          <form action="#" class="pull-right position">
-                              <div class="input-append">
-                                  <input type="text" class="sr-input" ng-model="searchBox[myFilter]">
-                                  <button class="btn sr-btn" type="button"><i class="fa fa-search"></i></button>
-                              </div>
-                          </form>
-                      </div>
                       <div class="inbox-body">
                          <div class="mail-option">
-                             <div class="chk-all">
-                                 <input type="checkbox" class="mail-checkbox mail-group-checkbox">
-                                 <div class="btn-group">
-                                     <!--a data-toggle="dropdown" href="#" class="btn mini all" aria-expanded="false">
-                                         Select
-                                         <i class="fa fa-angle-down "></i>
-                                     </a-->
+														 <div class="head">
+															 <div class="chk-all">
+																 <input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
+																 	<div class="btn-group">
+		                                 <a class="btn mini all" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		                                     <i class="fa fa-angle-down "></i>
+		                                 </a>
+																		 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+																				<li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
+																				<li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
+																		 </ul>
+																 </div>
+															 </div>
 
-									 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMe	nu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-										Select
-										<span class="caret"></span>
-									</button>
+	                             <div class="btn-group hidden-phone">
+	                                 <button class="btn btn-default dropdown-toggle action" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+	                                     Action
+	                                     <i class="fa fa-angle-down "></i>
+	                                 </button>
+	                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+	                                     <li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i>  Mark as Read</a></li>
+	                                     <li><a href="javascript:void(0)" ng-click="markAsUnread()"><i class="fa fa-envelope"></i> Mark as Unread</a></li>
+	                                     <li class="divider"></li>
+	                                     <li><a href="javascript:void(0)" ng-click="deleteMessageList()"><i class="fa fa-trash-o"></i> Delete</a></li>
+	                                 </ul>
+	                             </div>
 
-                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-										<li><a href="javascript:void(0)" ng-click="markAsRead()">Mark as read</a></li>
-										<li><a href="javascript:void(0)" ng-click="markAsUnread()">Mark as unread</a></li>
-										<li><a href="javascript:void(0)" ng-click="deleteMessageList()">Delete</a></li>
-                                     </ul>
+															 <div class="btn-group">
+	                                 <button class="btn btn-default dropdown-toggle refresh" data-original-title="Refresh" data-placement="top" ng-click="initScope()">
+	                                     <i class=" fa fa-refresh"></i>
+																			 Refresh
+	                                 </button>
+	                             </div>
 
-                                 </div>
-                             </div>
+			                           <form class="pull-right searchBy">
+																	 <input type="text" class="sr-input" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}">
+			                               <div class="btn-group hidden-phone">
+			                                   <button class="btn btn-default dropdown-toggle" type="button" id="searchBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+																				 	Search By
+																					<span class="caret"></span>
+																				</button>
 
-                             <div class="btn-group">
-                                 <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips">
-                                     <i class=" fa fa-refresh"></i>
-                                 </a>
-                             </div>
-                             <div class="btn-group hidden-phone">
-                                 <a data-toggle="dropdown" href="#" class="btn mini blue" aria-expanded="false">
-                                     More
-                                     <i class="fa fa-angle-down "></i>
-                                 </a>
-                                 <ul class="dropdown-menu">
-                                     <li><a href="#"><i class="fa fa-pencil"></i> Mark as Read</a></li>
-                                     <li><a href="#"><i class="fa fa-ban"></i> Spam</a></li>
-                                     <li class="divider"></li>
-                                     <li><a href="#"><i class="fa fa-trash-o"></i> Delete</a></li>
-                                 </ul>
-                             </div>
-                             <div class="btn-group">
-                                 <a data-toggle="dropdown" href="#" class="btn mini blue">
-                                     Move to
-                                     <i class="fa fa-angle-down "></i>
-                                 </a>
-                                 <ul class="dropdown-menu">
-                                     <li><a href="#"><i class="fa fa-pencil"></i> Mark as Read</a></li>
-                                     <li><a href="#"><i class="fa fa-ban"></i> Spam</a></li>
-                                     <li class="divider"></li>
-                                     <li><a href="#"><i class="fa fa-trash-o"></i> Delete</a></li>
-                                 </ul>
-                             </div>
+			 																	<ul class="dropdown-menu" aria-labelledby="searchBy" role="menu" id="search">
+			 								                    <li><a href="javascript:void(0)" ng-click="changeFilterTo('sender_fullName')">Name</a></li>
+			 								                    <li><a href="javascript:void(0)" ng-click="changeFilterTo('message_subject')">Subject</a></li>
+			 								                    <li><a href="javascript:void(0)" ng-click="changeFilterTo('message_date')">Date</a></li>
+			 								                	</ul>
+			                               </div>
+			                           </form>
+			                       </div>
 
-                             <ul class="unstyled inbox-pagination">
+                             <!--ul class="unstyled inbox-pagination">
                                  <li><span>1-50 of 234</span></li>
                                  <li>
                                      <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
                                  </li>
                                  <li>
                                      <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
-                                 </li>
-                             </ul>
+                                 </li>	
+                             </ul-->
                          </div>
-                          <table class="table table-inbox table-hover">
-														<col width="40">
-														<col width="200">
-														<col width="400">
-														<col width="70">
-														<col width="70">
-                            <tbody>
-															<tr class="danger">
-																<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>
-																<th>FROM</th>
-																<th>SUBJECT</th>
-																<th>DATE</th>
-																<th>ACTION</th>
-															</tr>
-                              <tr ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
-                                  <td class="inbox-small-cells">
-                                      <center><input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" checklist-change="updateMainCheckbox()" noclick></center>
-                                  </td>
 
-                                  <td class="view-message  dont-show">{{ message.sender_fullName }}</td>
-                                  <td class="view-message ">{{ message.message_subject }}</td>
 
-                                  <td class="view-message">{{ message.message_date | date:"shortDate" }}</td>
+                      <table class="table table-inbox table-hover">
+												<col width="50">
+												<col width="50">
+												<col width="400">
+												<col width="80">
+												<col width="50">
 
-																	<td>
-																		<button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" noclick><span class="glyphicon glyphicon-trash"></span></button>
-																	</td>
-                              </tr>
-                          </tbody>
-                          </table>
-                      </div>
-                  </aside>
-              </div>
+												<tbody>
+													<tr class="title">
+														<!--td>
+															<center>
+																<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
+															</center>
+														</td-->
+														<td>
 
-							<div ng-show="(uniqueMessages | filter:searchBox).length == 0">
-			<p>No Result</p>
-		</div>
+														</td>
 
-		<div ng-show="(uniqueMessages | filter:searchBox).length > 0">
-			<ul uib-pagination total-items="(uniqueMessages | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
-		</div>
+														<td>
+															FROM
+														</td>
+
+														<td>
+															<center>SUBJECT</center>
+														</td>
+
+														<td>
+															DATE
+														</td>
+
+														<td>
+															<center>ACTION</center>
+														</td>
+													</tr>
+
+                          <tr class="messages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
+                              <td class="inbox-small-cells">
+                                  <center>
+																		<input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" checklist-change="updateMainCheckbox()" noclick>
+																	</center>
+                              </td>
+
+                              <td class="view-message dont-show">
+																{{ message.sender_fullName }}
+															</td>
+
+                              <td class="view-message ">
+																<center>{{ message.message_subject }}</center>
+															</td>
+
+                              <td class="view-message">
+																{{ message.message_date | date:"shortDate" }}
+															</td>
+
+															<td>
+																<center>
+																<button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" noclick><span class="fa fa-trash"></span></button>
+																</center>
+															</td>
+                          </tr>
+													<table class="noShow" ng-show="(uniqueMessages | filter:searchBox).length == 0">
+														<col width="2000"/>
+														<td><center>
+															NO RESULT
+														</center></table>
+													</tr>
+                      </tbody>
+
+											<div class="page pull-right" ng-show="(uniqueMessages | filter:searchBox).length > 0">
+												<ul uib-pagination total-items="(uniqueMessages | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+											</div>
+
+                      </table>
+                  </div>
+              </aside>
+          </div>
+
 
 		<div id="myModal" class="modal fade" role="dialog">
 		  	<div class="modal-dialog">
