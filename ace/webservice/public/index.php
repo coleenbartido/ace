@@ -68,7 +68,7 @@
     }
     else
     {
-      $responseBody = array('errMsg' => 'Invalid User');
+      $responseBody = array('errMsg' => 'Incorrect Email or Password');
       $response = setResponse($response, 400, $responseBody);
     }
     return $response;
@@ -87,7 +87,7 @@
     //check kung 1 yung status ng account
     if($db->emailExist($email) == false)
     {
-      $responseBody = array('errMsg' => 'Invalid Email');
+      $responseBody = array('errMsg' => 'Incorrect Email');
       $response = setResponse($response, 400, $responseBody);
     }
     else

@@ -42,7 +42,7 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
 
     .state('errorInvalidLink',
     {
-      url: '/error/invalid-link',
+      url: '/invalidlink',
       templateUrl: 'templates/common/error-invalid-link.html'
     })
 

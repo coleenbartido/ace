@@ -30,20 +30,24 @@ angular.module('aceWeb.controller', [])
 {
   $scope.initScope = function()
   {
-    $scope.invalidLogin = false;
+    $scope.incorrectInput = false;
     $scope.invalidInput = false;
+    $scope.disableLogin = false;
+    $scope.loginText = "SIGN IN";
   }
 
   $scope.initScope();
 
-  $scope.login = function()
+  $scope.login = function(loginForm)
   {
-    if($scope.userEmail == undefined || $scope.userPassword == undefined)
+    $scope.incorrectInput = false;
+    $scope.invalidInput = false;
+
+    if(loginForm.$valid)
     {
-      $scope.invalidInput = true;
-    }
-    else
-    {
+      $scope.disableLogin = true;
+      $scope.loginText = "SIGNING IN";
+   
       var loginDetails =
       {
         'email' : $scope.userEmail,
@@ -83,18 +87,22 @@ angular.module('aceWeb.controller', [])
 
         if(response.status == 400)
         {
-          if(response.data.errMsg)
-          {
-            $scope.invalidLogin = true;
-
-            $scope.userPassword = undefined;
-          }
+          $scope.errMsg = response.data.errMsg;
+          $scope.incorrectInput = true;
+          $scope.userPassword = undefined;         
         }
       })
       .finally(function()
       {
         //things to handle whether the response is success or not (ex: disable or hide loading)
+        $scope.disableLogin = false;
+        $scope.loginText = "SIGN IN";
       })
+    }
+    else
+    {
+      $scope.errMsg = "Invalid Email or Password";
+      $scope.invalidInput = true;
     }
   }
 })
@@ -105,19 +113,33 @@ angular.module('aceWeb.controller', [])
 
 .controller('ForgotPasswordController', function(config, $scope, $http, $state, $location)
 {
-  $scope.showResetPassForm = false;
-
-  $scope.verifyEmail = function()
+  $scope.initScope = function()
   {
-    $scope.validEmail = false;
-    $scope.invalidEmail = false;
+    $scope.showResetPassForm = false;
 
-    if($scope.userEmail == undefined)
+    $scope.incorrectInput = false;
+    $scope.invalidInput = false;
+    $scope.validEmail = false;
+    $scope.pwordChanged = false;
+    $scope.invalidPword = false;
+    $scope.disableLogin = false;
+    $scope.resetText = "SEND REQUEST";
+    $scope.resetText2 = "RESET PASSWORD";
+  }
+
+  $scope.initScope();
+  
+  $scope.verifyEmail = function(loginForm)
+  {
+    $scope.incorrectInput = false;
+    $scope.invalidInput = false;
+    $scope.validEmail = false;
+
+    if(loginForm.$valid)
     {
-      $scope.invalidEmail = true;
-    }
-    else
-    {
+      $scope.disableLogin = true;
+      $scope.resetText = "SENDING REQUEST";
+
       var resetDetails =
       {
         'email' : $scope.userEmail
@@ -134,7 +156,6 @@ angular.module('aceWeb.controller', [])
         //for checking
         console.log(response);
 
-        //display message telling that the link has already been sent to the user's email address which can be used to reset password
         $scope.validEmail = true;
       },
       function(response)
@@ -144,17 +165,20 @@ angular.module('aceWeb.controller', [])
 
         if(response.status == 400)
         {
-          if(response.data.errMsg == 'Invalid Email')
-          {
-            //validation if email does not exist (tell the user that the email that he entered is invalid)
-            $scope.invalidEmail = true;
-          }
+          $scope.errMsg = response.data.errMsg;
+          $scope.incorrectInput = true;
         }
       })
       .finally(function()
       {
-
+        $scope.disableLogin = false;
+        $scope.resetText = "SEND REQUEST";
       });
+    }
+    else
+    {
+      $scope.errMsg = "Invalid Email";
+      $scope.invalidInput = true;
     }
   }
 
@@ -188,10 +212,7 @@ angular.module('aceWeb.controller', [])
 
         if(response.status == 400)
         {
-          if(response.data.errMsg == 'Invalid URL')
-          {
-            $state.go('errorInvalidLink');
-          }
+          $state.go('errorInvalidLink');     
         }
       })
       .finally(function()
@@ -201,16 +222,22 @@ angular.module('aceWeb.controller', [])
     }
     else
     {
-      //for testing
-      console.log("INVALID LINK!")
       $state.go('errorInvalidLink');
     }
   } //closing tag verifyURL
 
-  $scope.confirmReset = function()
+  $scope.confirmReset = function(loginForm)
   {
-    if($scope.userPassword == $scope.userConfirmPassword) //validation if password and password confirmation field match
+    $scope.incorrectInput = false;
+    $scope.invalidInput = false;
+    $scope.pwordChanged = false;
+    $scope.invalidPword = false;
+    
+    if(loginForm.$valid)//validation if password and password confirmation field match
     {
+      $scope.disableLogin = true;
+      $scope.resetText2 = "RESETTING PASSWORD";
+
       var resetPassDetails =
       {
         'email' : $location.search()['email'],
@@ -229,8 +256,7 @@ angular.module('aceWeb.controller', [])
         //for checking
         console.log(response);
 
-        alert("Your password is updated!");
-        $state.go('login');
+        $scope.pwordChanged = true;
       },
       function(response)
       {
@@ -239,21 +265,28 @@ angular.module('aceWeb.controller', [])
 
         if(response.status == 400)
         {
-          if(response.data.errMsg == 'Failed Change Password')
-          {
-            alert("Failed to update password!");
-          }
+          $scope.incorrectInput = true;
         }
       })
       .finally(function()
       {
-
+        $scope.disableLogin = false;
+        $scope.resetText2 = "RESET PASSWORD";
       });
     }
     else
     {
-      //validation if password and password confirmation field dont match
-      alert("Password dont match");
+      if(loginForm.password.$invalid)
+      {
+        //validation if password and password confirmation field dont match
+        $scope.errMsg = "Invalid Password";
+        $scope.invalidInput = true;
+      }
+      else
+      {     
+        $scope.errMsg = "Password don't match";
+        $scope.invalidPword = true;
+      }    
     }
   }
 }) //closing tag
