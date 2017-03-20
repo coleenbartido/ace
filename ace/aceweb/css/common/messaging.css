@@ -1,6 +1,6 @@
 .messageTab {
-	background: #122143 none repeat scroll 0 0;
-	border-left: 5px solid #5584ff;
+  background: #122143 none repeat scroll 0 0;
+  border-left: 5px solid #5584ff;
   text-decoration: none;
 }
 
@@ -86,53 +86,53 @@ th:only-child{
 }
 
 .head .searchBy .sr-input{
-	width: 150px;
-	height: 30px;
-	padding-left: 10px;
+  width: 150px;
+  height: 30px;
+  padding-left: 10px;
 
 }
 
 .table .title:hover{
-	background-color: #ffffff;
-	cursor: default;
+  background-color: #ffffff;
+  cursor: default;
 }
 
 .table .title{
-	font-size: 12px;
-	font-weight: 800;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .noShow{
-	height: 400px;
-	margin-top: 80px;
+  height: 400px;
+  margin-top: 80px;
 }
 
 .mail-option .action, .mail-option .refresh{
-	border: solid 2px #27467d;
+  border: solid 2px #27467d;
 }
 
 .mail-option .head .chk-all{
-	border: solid 2px #27467d;
+  border: solid 2px #27467d;
 }
 
 .searchBy .btn{
-	border-radius: 0px 5px 5px 0px;
-	border: solid 2px #27467d;
-	margin-left: -100px;
-	margin-right: 20px;
-	margin-top: -5px;
-	background-color: #cfd6e2;
-	font-size: 15px;
-	font-weight: 800;
+  border-radius: 0px 5px 5px 0px;
+  border: solid 2px #27467d;
+  margin-left: -100px;
+  margin-right: 20px;
+  margin-top: -5px;
+  background-color: #cfd6e2;
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .searchBy .sr-input{
-	height: 35px !important;
-	border: solid 2px #27467d;
-	font-size: 15px;
-	font-weight: 500;
-	margin-right: -5px;
-	padding-top: -10px;
+  height: 35px !important;
+  border: solid 2px #27467d;
+  font-size: 15px;
+  font-weight: 500;
+  margin-right: -5px;
+  padding-top: -10px;
 }
 
 .mail-box .sm-side {

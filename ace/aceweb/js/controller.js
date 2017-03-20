@@ -712,7 +712,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.selecAllUnread = function ()
   {
-    $scope.markMessageList.message_id = [];
+    $scope.markMessageList.report_id = [];
 
     for(var counter=0; counter < $scope.uniqueMessages.length; counter++)
     {
@@ -1159,6 +1159,8 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.saveBtn = "Save";
+    $scope.disableSaveBtn = false;
     $scope.getPwordLength();
     $scope.getContactNum();
   } //scope initScope
@@ -1181,65 +1183,15 @@ angular.module('aceWeb.controller', [])
     $scope.settingsForm2.$setPristine();
     $scope.settingsForm2.newContactNum.$setUntouched();
     $scope.newContactNum = "";
-
-  }
-
-  //for reset password
-  $scope.confirmPassword = function()
-  {
-    if($scope.userPassword == $scope.userConfirmPassword) //validation if password and password confirmation field match
-    {
-      var changePassDetails =
-      {
-        'email' : AuthService.getEmail(),
-        'pword' : $scope.userPassword
-      };
-
-      $http({
-        method: 'POST',
-        url: config.apiUrl + '/changePassword',
-        data: changePassDetails,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      })
-      .then(function(response)
-      {
-        //for checking
-        console.log(response);
-
-        alert("Your password is updated!");
-      },
-      function(response)
-      {
-        //for checking
-        console.log(response);
-
-        if(response.status == 400)
-        {
-
-          if(response.data.errMsg == 'Failed Change Password'){
-              alert("Failed to update password.");
-          }
-        }
-      })
-      .finally(function()
-      {
-        $scope.userPassword = undefined;
-        $scope.userConfirmPassword = undefined;
-      });
-    }
-    else
-    {
-      //validation if password and password confirmation field dont match
-      alert("Password dont match");
-      $scope.userPassword = undefined;
-      $scope.userConfirmPassword = undefined;
-    }
   }
 
   $scope.confirmContact = function(settingsForm2)
   {
     if(settingsForm2.$valid)
     {
+      $scope.saveBtn = "Saving";
+      $scope.disableSaveBtn = true;
+
       var changeContactDetails =
       {
         'email' : AuthService.getEmail(),
@@ -1275,7 +1227,8 @@ angular.module('aceWeb.controller', [])
       })
       .finally(function()
       {
-
+        $scope.saveBtn = "Save";
+        $scope.disableSaveBtn = false;
       });
     }
   }
@@ -1283,8 +1236,14 @@ angular.module('aceWeb.controller', [])
   //compares old password to new password
   $scope.changePassword = function(settingsForm)
   {
+    $scope.settingsForm.oldPassword.$setValidity('invalidOldPword', true);
+    $scope.settingsForm.userPassword.$setValidity('samePword', true);
+
     if(settingsForm.$valid) //validation if password and password confirmation field match
     {
+      $scope.saveBtn = "Saving";
+      $scope.disableSaveBtn = true;
+
       var changePassDetails =
       {
         'email' : AuthService.getEmail(),
@@ -1318,11 +1277,11 @@ angular.module('aceWeb.controller', [])
 
         if(response.status == 400)
         {
-          if(response.data.errMsg == 'Failed Change Password')
+          if(response.data.errMsg == 'Invalid password')
           {
             $scope.settingsForm.oldPassword.$setValidity('invalidOldPword', false);
           }
-          if(response.data.errMsg == 'Invalid New Password')
+          if(response.data.errMsg == 'Invalid new password')
           {
             $scope.settingsForm.userPassword.$setValidity('samePword', false);
           }
@@ -1330,9 +1289,9 @@ angular.module('aceWeb.controller', [])
       })
       .finally(function()
       {
-
+        $scope.saveBtn = "Save";
+        $scope.disableSaveBtn = false;
       });
-
     }
   }
 

@@ -1,67 +1,67 @@
 <head>
-	<title>ACE Program | Message</title>
+  <title>ACE Program | Message</title>
 
-	<link rel="stylesheet" type="text/css" href="css/faculty/messaging.css">
+  <link rel="stylesheet" type="text/css" href="css/common/messaging.css">
 </head>
 
 <body>
 
-	<div class="container col-md-12" ng-show="messages">
- 		<div class="mail-box col-md-12">
+  <div class="container col-md-12" ng-show="messages">
+    <div class="mail-box col-md-12">
 
                   <aside class="lg-side">
                       <div class="inbox-body">
                          <div class="mail-option">
-														 <div class="head">
-															 <div class="chk-all">
-																 <input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
-																 	<div class="btn-group">
-		                                 <a class="btn mini all" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-		                                     <i class="fa fa-angle-down "></i>
-		                                 </a>
-																		 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-																				<li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
-																				<li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
-																		 </ul>
-																 </div>
-															 </div>
+                             <div class="head">
+                               <div class="chk-all">
+                                 <input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
+                                  <div class="btn-group">
+                                     <a class="btn mini all" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                         <i class="fa fa-angle-down "></i>
+                                     </a>
+                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
+                                        <li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
+                                     </ul>
+                                 </div>
+                               </div>
 
-	                             <div class="btn-group hidden-phone">
-	                                 <button class="btn btn-default dropdown-toggle action" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-	                                     Action
-	                                     <i class="fa fa-angle-down "></i>
-	                                 </button>
-	                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-	                                     <li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i>  Mark as Read</a></li>
-	                                     <li><a href="javascript:void(0)" ng-click="markAsUnread()"><i class="fa fa-envelope"></i> Mark as Unread</a></li>
-	                                     <li class="divider"></li>
-	                                     <li><a href="javascript:void(0)" ng-click="deleteMessageList()"><i class="fa fa-trash-o"></i> Delete</a></li>
-	                                 </ul>
-	                             </div>
+                               <div class="btn-group hidden-phone">
+                                   <button class="btn btn-default dropdown-toggle action" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                       Action
+                                       <i class="fa fa-angle-down "></i>
+                                   </button>
+                                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                       <li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i>  Mark as Read</a></li>
+                                       <li><a href="javascript:void(0)" ng-click="markAsUnread()"><i class="fa fa-envelope"></i> Mark as Unread</a></li>
+                                       <li class="divider"></li>
+                                       <li><a href="javascript:void(0)" ng-click="deleteMessageList()"><i class="fa fa-trash-o"></i> Delete</a></li>
+                                   </ul>
+                               </div>
 
-															 <div class="btn-group">
-	                                 <button class="btn btn-default dropdown-toggle refresh" data-original-title="Refresh" data-placement="top" ng-click="initScope()">
-	                                     <i class=" fa fa-refresh"></i>
-																			 Refresh
-	                                 </button>
-	                             </div>
+                               <div class="btn-group">
+                                   <button class="btn btn-default dropdown-toggle refresh" data-original-title="Refresh" data-placement="top" ng-click="initScope()">
+                                       <i class=" fa fa-refresh"></i>
+                                       Refresh
+                                   </button>
+                               </div>
 
-			                           <form class="pull-right searchBy">
-																	 <input type="text" class="sr-input" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}">
-			                               <div class="btn-group hidden-phone">
-			                                   <button class="btn btn-default dropdown-toggle" type="button" id="searchBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-																				 	Search By
-																					<span class="caret"></span>
-																				</button>
+                                 <form class="pull-right searchBy">
+                                   <input type="text" class="sr-input" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}">
+                                     <div class="btn-group hidden-phone">
+                                         <button class="btn btn-default dropdown-toggle" type="button" id="searchBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                          Search By
+                                          <span class="caret"></span>
+                                        </button>
 
-			 																	<ul class="dropdown-menu" aria-labelledby="searchBy" role="menu" id="search">
-			 								                    <li><a href="javascript:void(0)" ng-click="changeFilterTo('sender_fullName')">Name</a></li>
-			 								                    <li><a href="javascript:void(0)" ng-click="changeFilterTo('message_subject')">Subject</a></li>
-			 								                    <li><a href="javascript:void(0)" ng-click="changeFilterTo('message_date')">Date</a></li>
-			 								                	</ul>
-			                               </div>
-			                           </form>
-			                       </div>
+                                        <ul class="dropdown-menu" aria-labelledby="searchBy" role="menu" id="search">
+                                          <li><a href="javascript:void(0)" ng-click="changeFilterTo('sender_fullName')">Name</a></li>
+                                          <li><a href="javascript:void(0)" ng-click="changeFilterTo('message_subject')">Subject</a></li>
+                                          <li><a href="javascript:void(0)" ng-click="changeFilterTo('message_date')">Date</a></li>
+                                        </ul>
+                                     </div>
+                                 </form>
+                             </div>
 
                              <!--ul class="unstyled inbox-pagination">
                                  <li><span>1-50 of 234</span></li>
@@ -70,82 +70,82 @@
                                  </li>
                                  <li>
                                      <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
-                                 </li>	
+                                 </li>  
                              </ul-->
                          </div>
 
 
                       <table class="table table-inbox table-hover">
-												<col width="50">
-												<col width="50">
-												<col width="400">
-												<col width="80">
-												<col width="50">
+                        <col width="50">
+                        <col width="50">
+                        <col width="400">
+                        <col width="80">
+                        <col width="50">
 
-												<tbody>
-													<tr class="title">
-														<!--td>
-															<center>
-																<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
-															</center>
-														</td-->
-														<td>
+                        <tbody>
+                          <tr class="title">
+                            <!--td>
+                              <center>
+                                <input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
+                              </center>
+                            </td-->
+                            <td>
 
-														</td>
+                            </td>
 
-														<td>
-															FROM
-														</td>
+                            <td>
+                              FROM
+                            </td>
 
-														<td>
-															<center>SUBJECT</center>
-														</td>
+                            <td>
+                              <center>SUBJECT</center>
+                            </td>
 
-														<td>
-															DATE
-														</td>
+                            <td>
+                              DATE
+                            </td>
 
-														<td>
-															<center>ACTION</center>
-														</td>
-													</tr>
+                            <td>
+                              <center>ACTION</center>
+                            </td>
+                          </tr>
 
                           <tr class="messages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
                               <td class="inbox-small-cells">
                                   <center>
-																		<input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" checklist-change="updateMainCheckbox()" noclick>
-																	</center>
+                                    <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" checklist-change="updateMainCheckbox()" noclick>
+                                  </center>
                               </td>
 
                               <td class="view-message dont-show">
-																{{ message.sender_fullName }}
-															</td>
+                                {{ message.sender_fullName }}
+                              </td>
 
                               <td class="view-message ">
-																<center>{{ message.message_subject }}</center>
-															</td>
+                                <center>{{ message.message_subject }}</center>
+                              </td>
 
                               <td class="view-message">
-																{{ message.message_date | date:"shortDate" }}
-															</td>
+                                {{ message.message_date | date:"shortDate" }}
+                              </td>
 
-															<td>
-																<center>
-																<button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" noclick><span class="fa fa-trash"></span></button>
-																</center>
-															</td>
+                              <td>
+                                <center>
+                                <button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" noclick><span class="fa fa-trash"></span></button>
+                                </center>
+                              </td>
                           </tr>
-													<table class="noShow" ng-show="(uniqueMessages | filter:searchBox).length == 0">
-														<col width="2000"/>
-														<td><center>
-															NO RESULT
-														</center></table>
-													</tr>
+                          <table class="noShow" ng-show="(uniqueMessages | filter:searchBox).length == 0">
+                            <col width="2000"/>
+                            <td><center>
+                              NO RESULT
+                            </center></table>
+                          </tr>
                       </tbody>
 
-											<div class="page pull-right" ng-show="(uniqueMessages | filter:searchBox).length > 0">
-												<ul uib-pagination total-items="(uniqueMessages | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
-											</div>
+                      <div class="page pull-right" ng-show="(uniqueMessages | filter:searchBox).length > 0">
+                        <ul uib-pagination total-items="(uniqueMessages | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+                      </div>
 
                       </table>
                   </div>
@@ -153,57 +153,57 @@
           </div>
 
 
-		<div id="myModal" class="modal fade" role="dialog">
-		  	<div class="modal-dialog">
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
-			    <div class="modal-content">
-			      	<div class="modal-header">
-			        	<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-			        	<h4 class="modal-title custom-header-color">{{selectedMessage.message_subject}}</h4>
-			     	</div>
-			      	<div class="modal-body">
+          <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+                <h4 class="modal-title custom-header-color">{{selectedMessage.message_subject}}</h4>
+            </div>
+              <div class="modal-body">
 
-						<div id="scrollableDiv" scroll-glue load-more-data>
+            <div id="scrollableDiv" scroll-glue load-more-data>
 
-							<div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
-								<br ng-show="$first">
-			  					<strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
-								<br>
-								<br>
-								<p ng-bind-html="message.message_body|newline2br"></p>
-								<hr ng-hide="$last">
-								<br ng-show="$last">
-							</div>
+              <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
+                <br ng-show="$first">
+                  <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
+                <br>
+                <br>
+                <p ng-bind-html="message.message_body|newline2br"></p>
+                <hr ng-hide="$last">
+                <br ng-show="$last">
+              </div>
 
-						</div>
+            </div>
 
-						<textarea id="customTextArea" rows="4" ng-model="composeEmail" ></textarea>
-			      	</div>
-			      	<div class="modal-footer">
-						<button type="button" class="btn btn-primary" ng-click="sendEmail()">Reply</button>
-			      	</div>
-			    </div>
+            <textarea id="customTextArea" rows="4" ng-model="composeEmail" ></textarea>
+              </div>
+              <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="sendEmail()">Reply</button>
+              </div>
+          </div>
 
-		  	</div>
-		</div>
+        </div>
+    </div>
 </div>
 
- 					<!-------------------------------------------------------->
+          <!-------------------------------------------------------->
 
 
-	<div class="sk-fading-circle" ng-hide="messages">
-	    <div class="sk-circle1 sk-circle"></div>
-	    <div class="sk-circle2 sk-circle"></div>
-	    <div class="sk-circle3 sk-circle"></div>
-	    <div class="sk-circle4 sk-circle"></div>
-	    <div class="sk-circle5 sk-circle"></div>
-	    <div class="sk-circle6 sk-circle"></div>
-	    <div class="sk-circle7 sk-circle"></div>
-	    <div class="sk-circle8 sk-circle"></div>
-	    <div class="sk-circle9 sk-circle"></div>
-	    <div class="sk-circle10 sk-circle"></div>
-	    <div class="sk-circle11 sk-circle"></div>
-	    <div class="sk-circle12 sk-circle"></div>
-	</div> <!-- spinner -->
+  <div class="sk-fading-circle" ng-hide="messages">
+      <div class="sk-circle1 sk-circle"></div>
+      <div class="sk-circle2 sk-circle"></div>
+      <div class="sk-circle3 sk-circle"></div>
+      <div class="sk-circle4 sk-circle"></div>
+      <div class="sk-circle5 sk-circle"></div>
+      <div class="sk-circle6 sk-circle"></div>
+      <div class="sk-circle7 sk-circle"></div>
+      <div class="sk-circle8 sk-circle"></div>
+      <div class="sk-circle9 sk-circle"></div>
+      <div class="sk-circle10 sk-circle"></div>
+      <div class="sk-circle11 sk-circle"></div>
+      <div class="sk-circle12 sk-circle"></div>
+  </div> <!-- spinner -->
 
 </body>

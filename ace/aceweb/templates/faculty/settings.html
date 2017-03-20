@@ -72,39 +72,40 @@
             <div class="form-group">
               <label  class="col-md-12 control-label" for="oldPasswordInput">Old Password</label>
               <div class="col-md-12">
-                <input type="password" class="form-control" ng-class="{'errorBox': settingsForm.oldPassword.$invalid && (settingsForm.oldPassword.$touched || settingsForm.$submitted)}" id="oldPasswordInput" name="oldPassword" ng-model="oldPassword" required/>
+                <input type="password" class="form-control" id="oldPasswordInput" name="oldPassword" ng-model="oldPassword" required/>
               </div>
             </div>
-            <div ng-messages="settingsForm.oldPassword.$error" ng-show="settingsForm.oldPassword.$touched || settingsForm.$submitted">
-              <p class="invalid-text" ng-message="required">This field is required</p>
+            <div ng-messages="settingsForm.oldPassword.$error" ng-show="settingsForm.$submitted">
               <p class="invalid-text" ng-message="invalidOldPword">Invalid password</p>
+              <p class="invalid-text" ng-message="required">This field is required</p>         
             </div>
 
             <div class="form-group">
               <label class="col-md-12 control-label">New Password</label>
               <div class="col-md-12">
-                <input type="password" class="form-control" ng-class="{'errorBox': settingsForm.userPassword.$invalid && (settingsForm.userPassword.$touched || settingsForm.$submitted)}" id="userPasswordInput" name="userPassword" ng-model="userPassword" ng-model-options="{allowInvalid: true}" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" required/>
+                <input type="password" class="form-control" id="userPasswordInput" name="userPassword" ng-model="userPassword" ng-model-options="{allowInvalid: true}" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" required/>
               </div>
             </div>
-            <div ng-messages="settingsForm.userPassword.$error" ng-show="settingsForm.userPassword.$touched || settingsForm.$submitted">  <p class="invalid-text" ng-message="required">This field is required</p>
+            <div ng-messages="settingsForm.userPassword.$error" ng-show="settingsForm.$submitted">  
+              <p class="invalid-text" ng-message="samePword">Invalid password</p>
+              <p class="invalid-text" ng-message="required">This field is required</p>
               <p class="invalid-text" ng-message="minlength">Must be atleast 8 characters</p>
-              <p class="invalid-text" ng-message="pattern">Must be a combination of letters and numbers</p>
-              <p class="invalid-text" ng-message="samePword">Invalid Password</p>
+              <p class="invalid-text" ng-message="pattern">Must be a combination of letters and numbers</p>             
             </div>
 
             <div class="form-group">
               <label class="col-md-12 control-label">Confirm Password</label>
               <div class="col-md-12">
-                <input type="password" class="form-control" ng-class="{'errorBox': settingsForm.userConfirmPassword.$invalid && (settingsForm.userConfirmPassword.$touched || settingsForm.$submitted)}" id="userConfirmPasswordInput" name="userConfirmPassword" ng-model="userConfirmPassword" compare-to="userPassword" required/>
+                <input type="password" class="form-control" id="userConfirmPasswordInput" name="userConfirmPassword" ng-model="userConfirmPassword" compare-to="userPassword" required/>
               </div>
             </div>
-            <div ng-messages="settingsForm.userConfirmPassword.$error" ng-show="settingsForm.userConfirmPassword.$touched || settingsForm.$submitted">
+            <div ng-messages="settingsForm.userConfirmPassword.$error" ng-show="settingsForm.$submitted">
               <p class="invalid-text" ng-message="required">This field is required</p>
               <p class="invalid-text" ng-message="compareTo">Password don't match</p>
             </div>
 
             <div class="saveBtn">
-              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="submit" class="btn btn-primary" ng-disabled="disableSaveBtn">{{saveBtn}}</button>
             </div>
 
           </form>
@@ -131,16 +132,17 @@
             <div class="form-group">
               <label  class="col-md-12 control-label" for="newContactNumInput">New Contact Number</label>
               <div class="col-md-12">
-                <input type="tel" class="form-control" ng-class="{'errorBox': settingsForm2.newContactNum.$invalid && (settingsForm2.newContactNum.$touched || settingsForm2.$submitted)}" id="newContactNumInput" name="newContactNum" ng-model="newContactNum" pattern="^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$" required/>
+                <input type="text" class="form-control" id="newContactNumInput" name="newContactNum" ng-model="newContactNum" pattern="^[\d ()+-]+$" maxlength="20" required/>
               </div>
             </div>
-            <div ng-messages="settingsForm2.newContactNum.$error" ng-show="settingsForm2.newContactNum.$touched || settingsForm2.$submitted">
+            <div ng-messages="settingsForm2.newContactNum.$error" ng-show="settingsForm2.$submitted">
               <p class="invalid-text" ng-message="required">This field is required</p>
-              <p class="invalid-text" ng-message="pattern">Invalid Format</p>
+              <p class="invalid-text" ng-message="pattern">Invalid format</p>
+              <p class="invalid-text" ng-message="maxlength">Maximum of 20 characters</p>
             </div>
 
             <div class="saveBtn">
-              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="submit" class="btn btn-primary" ng-disabled="disableSaveBtn">{{saveBtn}}</button>
             </div>
 
           </form>

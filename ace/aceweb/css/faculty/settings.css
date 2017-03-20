@@ -93,6 +93,8 @@ hr {
   color: #f00;
 }
 
-.errorBox {
+form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
   border:1px solid #f00;
 }
+
+

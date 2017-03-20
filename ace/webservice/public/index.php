@@ -222,12 +222,12 @@
     }
     else if($db->isPasswordValid($email, $pword, $oldPword) == "Same Password")
     {
-      $responseBody = array('errMsg' => 'Invalid New Password');
+      $responseBody = array('errMsg' => 'Invalid new password');
       $response = setResponse($response, 400, $responseBody);
     }
     else
     {
-      $responseBody = array('errMsg' => 'Failed Change Password');
+      $responseBody = array('errMsg' => 'Invalid password');
       $response = setResponse($response, 400, $responseBody);
     }
 
