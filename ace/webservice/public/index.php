@@ -209,15 +209,16 @@
   {
     $changePassDetails = json_decode(file_get_contents("php://input"));
 
+    $db = new DbOperation();
+
     $email = $changePassDetails->email;
     $pword = $changePassDetails->pword;
     $oldPword = $changePassDetails->oldPword;
-
-    $db = new DbOperation();
-
+    $role = $db->getAccountRole($email);
+    
     if($db->isPasswordValid($email, $pword, $oldPword) == "Valid Password")
     {
-      $db->changePassword($email, $pword);
+      $db->changePassword($email, $pword, $role);
       $response = setSuccessResponse($response, 200);
     }
     else if($db->isPasswordValid($email, $pword, $oldPword) == "Same Password")

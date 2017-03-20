@@ -138,12 +138,23 @@ class DbOperation
 
 
     //used in RESET and CHANGE password
-    public function changePassword($email, $password)
+    public function changePassword($email, $password, $role)
     {
-        $stmt = $this->con->prepare("UPDATE user SET hashcode=NULL, token_exp=NULL, hash=? WHERE email=?");
-        $stmt->bind_param("ss",$password, $email);
-        $result = $stmt->execute();
-        $stmt->close();
+        if($role == 1)
+        {
+            $stmt = $this->con->prepare("UPDATE superadmin_account SET hash=? WHERE email=?");
+            $stmt->bind_param("ss", $password, $email);
+            $result = $stmt->execute();
+            $stmt->close();
+        }
+        else
+        {
+            $stmt = $this->con->prepare("UPDATE user SET hashcode=NULL, token_exp=NULL, hash=? WHERE email=?");
+            $stmt->bind_param("ss", $password, $email);
+            $result = $stmt->execute();
+            $stmt->close();
+        }
+        
         if($result)
         {
             return true;
@@ -480,9 +491,8 @@ class DbOperation
       //in the db
     public function isPasswordValid($email, $password, $oldPassword)
     {
-
-      $stmt = $this->con->prepare("SELECT hash FROM user WHERE email=?");
-      $stmt->bind_param("s",$email);
+      $stmt = $this->con->prepare("SELECT hash FROM user WHERE email=? UNION SELECT hash FROM superadmin_account WHERE email=?");
+      $stmt->bind_param("ss", $email, $email);
       $stmt->execute();
       $hash = $stmt->get_result()->fetch_assoc();
       $stmt->close();
