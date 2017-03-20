@@ -232,13 +232,15 @@ class DbOperation
     public function registerFaculty($email, $fname, $lname, $status, $userType, $hashCode)
     {
         //$password = md5($pass);
-        $stmt = $this->con->prepare("INSERT INTO user(email, first_name, last_name, status, user_type_id, hashCode) values(?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssiis", $email, $fname, $lname, $status, $userType, $hashCode);
+        $reportCount = 0;
+
+        $stmt = $this->con->prepare("INSERT INTO user(email, first_name, last_name, status, user_type_id, hashcode) values(?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE first_name=?, last_name=?, status=?, user_type_id=?, hashcode=?");
+        $stmt->bind_param("sssiisssiis", $email, $fname, $lname, $status, $userType, $hashCode, $fname, $lname, $status, $userType, $hashCode);
         $result = $stmt->execute();
         $stmt->close();
 
-        $stmt2 = $this->con->prepare("INSERT INTO faculty_account(email) values(?)");
-        $stmt2->bind_param("s", $email);
+        $stmt2 = $this->con->prepare("INSERT INTO faculty_account(email) values(?) ON DUPLICATE KEY UPDATE reported_count=?");
+        $stmt2->bind_param("si", $email, $reportCount);
         $result2 = $stmt2->execute();
         $stmt2->close();
 
@@ -247,22 +249,19 @@ class DbOperation
           return true;
         }
         return false;
-
-        //return $result;
-
     }
 
 
     public function registerAdmin($email, $fname, $lname, $status, $userType, $hashCode, $department)
     {
-        //$password = md5($pass);
-        $stmt = $this->con->prepare("INSERT INTO user(email, first_name, last_name, status, user_type_id, hashcode) values(?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssiis", $email, $fname, $lname, $status, $userType, $hashCode);
+        //$password = md5($pass);  
+        $stmt = $this->con->prepare("INSERT INTO user(email, first_name, last_name, status, user_type_id, hashcode) values(?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE first_name=?, last_name=?, status=?, user_type_id=?, hashcode=?");
+        $stmt->bind_param("sssiisssiis", $email, $fname, $lname, $status, $userType, $hashCode, $fname, $lname, $status, $userType, $hashCode);
         $result = $stmt->execute();
         $stmt->close();
 
-        $stmt2 = $this->con->prepare("INSERT INTO admin_account(email, department_id) values(?, ?)");
-        $stmt2->bind_param("si", $email, $department);
+        $stmt2 = $this->con->prepare("INSERT INTO admin_account(email, department_id) values(?, ?) ON DUPLICATE KEY UPDATE department_id=?");
+        $stmt2->bind_param("sii", $email, $department, $department);
         $result2 = $stmt2->execute();
         $stmt2->close();
 

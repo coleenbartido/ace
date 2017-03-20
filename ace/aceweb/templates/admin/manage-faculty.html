@@ -10,7 +10,7 @@
 
 
 	<input type="text" class="form-control" ng-model="searchBox" placeholder="Search">
-		<button type="button" data-toggle="modal" data-target="#myModal"> Add Faculty Account </button>
+		<button type="button" data-toggle="modal" data-target="#facultyRegModal" ng-click="showRegFacultyModal()">Add Faculty</button>
 		<br><br>
 
 		<!--
@@ -62,7 +62,7 @@
 		</div>
 
 
-		<div id="myModal" class="modal fade" role="dialog">
+		<div id="facultyRegModal" class="modal fade" role="dialog">
 		  	<div class="modal-dialog">
 
 			    <div class="modal-content">
@@ -72,19 +72,48 @@
 			     	</div>
 			      	<div class="modal-body">
 
-								<label><b>Email</b></label>
-				        <input type="email" placeholder="Email" ng-Model="facultyEmail" required>
-								<br><br>
-				        <label><b>First Name</b></label>
-				        <input type="text" placeholder="First Name" ng-Model="facultyFirstName" required>
-								<br><br>
-				        <label><b>Last Name</b></label>
-				        <input type="text" placeholder="Last Name" ng-Model="facultyLastName" required>
+			      		<form name="regFacultyForm" class="form-horizontal custom-form" role="form" ng-submit="registerFaculty(regFacultyForm)" novalidate>
+
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="facultyEmailInput">Email</label>
+				              <div class="col-md-12">
+				                <input type="email" class="form-control" id="facultyEmailInput" name="facultyEmail" ng-model="facultyEmail" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="regFacultyForm.facultyEmail.$error" ng-show="regFacultyForm.$submitted">
+				              <p class="invalid-text" ng-message="emailExist">Email already used</p> 
+				              <p class="invalid-text" ng-message="required">This field is required</p> 
+				              <p class="invalid-text" ng-message="email">Invalid email</p>         
+				            </div>
+
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="facultyFirstNameInput">First Name</label>
+				              <div class="col-md-12">
+				                <input type="text" class="form-control" id="facultyFirstNameInput" name="facultyFirstName" ng-model="facultyFirstName" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="regFacultyForm.facultyFirstName.$error" ng-show="regFacultyForm.$submitted">
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
+
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="facultyLastNameInput">Last Name</label>
+				              <div class="col-md-12">
+				                <input type="text" class="form-control" id="facultyLastNameInput" name="facultyLastName" ng-model="facultyLastName" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="regFacultyForm.facultyLastName.$error" ng-show="regFacultyForm.$submitted">
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
+	     
+				            <div class="regBtn">
+				              <button type="submit" class="btn btn-primary" ng-disabled="disableRegBtn">{{createBtn}}</button>
+				        	</div>
+
+				        </form>
 
 			      	</div>
-			      	<div class="modal-footer">
-						<button type="button" class="btn btn-primary" ng-click="registerFaculty()">Submit</button>
-			      	</div>
+			      	
 			    </div>
 
 		  	</div>
@@ -93,3 +122,19 @@
 </div><!-- div ng-Controller -->
 
 </body>
+
+
+<!--
+
+	<label><b>Email</b></label>
+				        <input type="email" placeholder="Email" ng-Model="facultyEmail" required>
+								<br><br>
+				        <label><b>First Name</b></label>
+				        <input type="text" placeholder="First Name" ng-Model="facultyFirstName" required>
+								<br><br>
+				        <label><b>Last Name</b></label>
+				        <input type="text" placeholder="Last Name" ng-Model="facultyLastName" required>
+
+				        <div class="modal-footer">
+						<button type="button" class="btn btn-primary" ng-click="registerFaculty()">Submit</button>
+			      	</div>

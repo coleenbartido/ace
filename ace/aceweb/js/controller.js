@@ -1236,9 +1236,16 @@ angular.module('aceWeb.controller', [])
   //compares old password to new password
   $scope.changePassword = function(settingsForm)
   {
-    $scope.settingsForm.oldPassword.$setValidity('invalidOldPword', true);
-    $scope.settingsForm.userPassword.$setValidity('samePword', true);
+    if(settingsForm.userPassword.$valid && settingsForm.userConfirmPassword.$valid)
+    {
+      $scope.settingsForm.oldPassword.$setValidity('invalidOldPword', true);
+    }
 
+    if(settingsForm.oldPassword.$valid && settingsForm.userConfirmPassword.$valid)
+    {
+      $scope.settingsForm.userPassword.$setValidity('samePword', true);
+    }
+    
     if(settingsForm.$valid) //validation if password and password confirmation field match
     {
       $scope.saveBtn = "Saving";
@@ -2058,12 +2065,6 @@ angular.module('aceWeb.controller', [])
 
       $scope.facultyAccounts = JSON.parse(response.data.facultyList);
       $scope.totalItems = $scope.facultyAccounts.length;
-
-      for(var counter=0; counter < $scope.facultyAccounts.length; counter++)
-      {
-          $scope.facultyAccounts[counter].reported_count = $scope.facultyAccounts[counter].reported_count;
-      }
-
     },
     function(response)
     {
@@ -2080,6 +2081,8 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.createBtn = "Create Account";
+    $scope.disableRegBtn = false;
 
     $scope.searchBox = undefined;
     $scope.facultyList = {};
@@ -2096,40 +2099,68 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
-  $scope.registerFaculty=function()
+  $scope.showRegFacultyModal = function()
   {
-    var registerDetails =
+    $scope.regFacultyForm.$setPristine();
+    $scope.regFacultyForm.facultyEmail.$setUntouched();
+    $scope.regFacultyForm.facultyFirstName.$setUntouched();
+    $scope.regFacultyForm.facultyLastName.$setUntouched();
+    $scope.facultyEmail = "";
+    $scope.facultyFirstName = "";
+    $scope.facultyLastName = "";
+  }
+
+  $scope.registerFaculty = function(regFacultyForm)
+  {   
+    if(regFacultyForm.facultyFirstName.$valid && regFacultyForm.facultyLastName.$valid)
     {
-      'email' : $scope.facultyEmail,
-      'fName' : $scope.facultyFirstName,
-      'lName' : $scope.facultyLastName
-    };
-
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/registerFaculty',
-      data: registerDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-    })
-    .then(function(response)
-    {
-      $scope.registerResponse = response.data;
-      //for checking
-      console.log($scope.registerResponse);
-
-      if($scope.registerResponse['emailSent'] == true && $scope.registerResponse['successfullyRegisterFaculty'] == true)
+      $scope.regFacultyForm.facultyEmail.$setValidity('emailExist', true);
+      
+      if(regFacultyForm.$valid)
       {
-        //valid account creation details (sent email and successfully inserted to db) show success account creation message
-        //$state.go('login');
-      }
-      else
-      {
-        //email exist (cant register account) show error message
+        $scope.createBtn = "Creating Account";
+        $scope.disableRegBtn = true;
 
-      }
-    });
+        var registerDetails =
+        {
+          'email' : $scope.facultyEmail,
+          'fName' : $scope.facultyFirstName,
+          'lName' : $scope.facultyLastName
+        };
 
+        $http({
+          method: 'POST',
+          url: config.apiUrl + '/registerFaculty',
+          data: registerDetails,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .then(function(response)
+        {
+          //for checking
+          console.log(response);
+
+          $('#facultyRegModal').modal('hide');
+        },
+        function(response)
+        {
+          //for checking
+          console.log(response);
+
+          if(response.status == 400)
+          {
+            if(response.data.errMsg == 'Email exist')
+            {
+              $scope.regFacultyForm.facultyEmail.$setValidity('emailExist', false);
+            }
+          }   
+        })
+        .finally(function()
+        {
+          $scope.createBtn = "Create Account";
+          $scope.disableRegBtn = false;
+        });
+      } 
+    }
   }//registerFaculty
 
   $scope.deleteFaculty = function(email)
@@ -2656,8 +2687,16 @@ angular.module('aceWeb.controller', [])
       console.log(response);
 
       $scope.adminAccounts = JSON.parse(response.data.adminList);
-      $scope.totalItems = $scope.adminAccounts.length;
+      $scope.totalItems = $scope.adminAccounts.length; 
 
+      for(var counter=0; counter < $scope.adminAccounts.length; counter++)
+      {
+        //if contact is null
+        if($scope.adminAccounts[counter].contact_number == null)
+        {
+          $scope.adminAccounts[counter].contact_number = "N/A";
+        }
+      }
     },
     function(response)
     {
@@ -2674,6 +2713,8 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.createBtn = "Create Account";
+    $scope.disableRegBtn = false;
 
     $scope.searchBox = undefined;
     //$scope.checkBoxSelected = false;
@@ -2691,38 +2732,71 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
-  $scope.registerAdmin=function()
+  $scope.showRegAdminModal = function()
   {
-    var registerDetails =
+    $scope.regAdminForm.$setPristine();
+    $scope.regAdminForm.adminEmail.$setUntouched();
+    $scope.regAdminForm.adminFirstName.$setUntouched();
+    $scope.regAdminForm.adminLastName.$setUntouched();
+    $scope.regAdminForm.adminDepartment.$setUntouched();
+    $scope.adminEmail = "";
+    $scope.adminFirstName = "";
+    $scope.adminLastName = "";
+    $scope.adminDepartment = "";
+  }
+
+  $scope.registerAdmin = function(regAdminForm)
+  {   
+    if(regAdminForm.adminFirstName.$valid && regAdminForm.adminLastName.$valid && regAdminForm.adminDepartment.$valid)
     {
-      'email' : $scope.adminEmail,
-      'fName' : $scope.adminFirstName,
-      'lName' : $scope.adminLastName,
-      'department' : parseInt($scope.department)
-    };
-
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/registerAdmin',
-      data: registerDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-    })
-    .then(function(response)
-    {
-      $scope.registerResponse = response.data;
-    //for checking
-      console.log($scope.registerResponse);
-
-      if($scope.registerResponse['emailSent'] == true && $scope.registerResponse['successfullyRegisterAdmin'] == true) //valid account creation details (sent email and successfully inserted to db) show success account creation message
+      $scope.regAdminForm.adminEmail.$setValidity('emailExist', true);
+      
+      if(regAdminForm.$valid)
       {
+        $scope.createBtn = "Creating Account";
+        $scope.disableRegBtn = true;
 
-      }
-      else
-      {
-      //email exist (cant register account) show error message
-      }
-    });
+        var registerDetails =
+        {
+          'email' : $scope.adminEmail,
+          'fName' : $scope.adminFirstName,
+          'lName' : $scope.adminLastName,
+          'department' : parseInt($scope.adminDepartment)
+        };
+
+        $http({
+          method: 'POST',
+          url: config.apiUrl + '/registerAdmin',
+          data: registerDetails,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .then(function(response)
+        {
+          //for checking
+          console.log(response);
+
+          $('#adminRegModal').modal('hide');
+        },
+        function(response)
+        {
+          //for checking
+          console.log(response);
+
+          if(response.status == 400)
+          {
+            if(response.data.errMsg == 'Email exist')
+            {
+              $scope.regAdminForm.adminEmail.$setValidity('emailExist', false);
+            }
+          }
+        })
+        .finally(function()
+        {
+          $scope.createBtn = "Create Account";
+          $scope.disableRegBtn = false;
+        });
+      } 
+    }
   }
 
 

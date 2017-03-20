@@ -412,26 +412,30 @@
     //$department = $db->getDepartment($email);
     $department = 1;
 
-    if($department ==1){
-        $reportsList = $db->listShsReports($status);
-    } else {
-        $reportsList = $db->listCollegeReports($status);
+    if($department == 1)
+    {
+      $reportsList = $db->listShsReports($status);
+    } 
+    else 
+    {
+      $reportsList = $db->listCollegeReports($status);
     }
 
-    for($counter=0; $counter < count($reportsList); $counter++){
-
+    for($counter=0; $counter < count($reportsList); $counter++)
+    {
       $reportsList[$counter]['sender_fname'] = $db->getFirstName($reportsList[$counter]['email']);
       $reportsList[$counter]['sender_lname'] = $db->getLastName($reportsList[$counter]['email']);
     }
 
     $responseBody = array('reportsList' => json_encode($reportsList));
     $response = setResponse($response, 200, $responseBody);
+    
     return $response;
   });
 
 
 
-  $app->post('/registerFaculty', function ()
+  $app->post('/registerFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $registerDetails = json_decode(file_get_contents("php://input"));
 
@@ -445,7 +449,8 @@
 
     if($db->emailExist($email) == true)
     {
-      $response['emailExist'] = $db->emailExist($email);
+      $responseBody = array('errMsg' => 'Email exist');
+      $response = setResponse($response, 400, $responseBody);
     }
     else
     {
@@ -459,23 +464,26 @@
       <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
       <br><br><br>Thank you.";
 
-      $response['emailExist'] = $db->emailExist($email);
-      $response['successfullyRegisterFaculty'] = $db->registerFaculty($email, $fName, $lName, $status, $userType, $hashCode);
-      $response['emailSent'] = sendEmail($email, $subject, $body);
+      if($db->registerFaculty($email, $fName, $lName, $status, $userType, $hashCode))
+      {
+        sendEmail($email, $subject, $body);
+        $response = setSuccessResponse($response, 200);
+      }
     }
 
-    sendResponse($response);
+    return $response; 
   });
 
 
 
-  $app->post('/registerAdmin', function ()
+  $app->post('/registerAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $registerDetails = json_decode(file_get_contents("php://input"));
 
     $email = $registerDetails->email;
     $fName = $registerDetails->fName;
     $lName = $registerDetails->lName;
+    $department = $registerDetails->department;
     $status = 0;
     $userType = 2;
 
@@ -483,7 +491,8 @@
 
     if($db->emailExist($email) == true)
     {
-      $response['emailExist'] = $db->emailExist($email);
+      $responseBody = array('errMsg' => 'Email exist');
+      $response = setResponse($response, 400, $responseBody);
     }
     else
     {
@@ -498,12 +507,14 @@
       <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
       <br><br><br>Thank you.";
 
-      $response['emailExist'] = $db->emailExist($email);
-      $response['successfullyRegisterAdmin'] = $db->registerAdmin($email, $fName, $lName, $status, $userType, $hashCode);
-      $response['emailSent'] = sendEmail($email, $subject, $body);
+      if($db->registerAdmin($email, $fName, $lName, $status, $userType, $hashCode, $department))
+      {
+        sendEmail($email, $subject, $body);
+        $response = setSuccessResponse($response, 200);
+      }
     }
 
-    sendResponse($response);
+    return $response; 
   });
 
 

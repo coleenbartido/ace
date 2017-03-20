@@ -11,7 +11,7 @@
 
 	<input type="text" class="form-control" ng-model="searchBox" placeholder="Search">
 
-		<button type="button" data-toggle="modal" data-target="#myModal"> Add Administrator </button>
+		<button type="button" data-toggle="modal" data-target="#adminRegModal" ng-click="showRegAdminModal()">Add Administrator</button>
 		<br><br>
 
 		<!--
@@ -34,14 +34,14 @@
 							<center><input type="checkbox" data-checklist-model="adminList.email" data-checklist-value="admin.email" checklist-change="updateMainCheckbox()" noclick></center>
 						</td>
 						<td>
-								{{ admin.email }}
+							{{admin.email}}
 						</td>
 						<td>
-		            {{ admin.last_name }}, {{ admin.first_name}}
-		        </td>
-		        <td>
-		            {{ admin.contact_number }}
-		        </td>
+		            		{{admin.first_name}} {{admin.last_name}}
+		        		</td>
+		        		<td>
+		            		{{admin.contact_number}}
+		        		</td>
 						<td>
 							<button type="button" class="btn btn-primary" ng-click="deleteAdmin(admin.email)" ><span class="glyphicon glyphicon-trash"></span></button>
 						</td>
@@ -58,7 +58,7 @@
 		</div>
 
 
-		<div id="myModal" class="modal fade" role="dialog">
+		<div id="adminRegModal" class="modal fade" role="dialog">
 		  	<div class="modal-dialog">
 
 			    <div class="modal-content">
@@ -68,7 +68,99 @@
 			     	</div>
 			      	<div class="modal-body">
 
-								<label><b>Email: </b></label>
+
+			      		<form name="regAdminForm" class="form-horizontal custom-form" role="form" ng-submit="registerAdmin(regAdminForm)" novalidate>
+
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="adminEmailInput">Email</label>
+				              <div class="col-md-12">
+				                <input type="email" class="form-control" id="adminEmailInput" name="adminEmail" ng-model="adminEmail" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="regAdminForm.adminEmail.$error" ng-show="regAdminForm.$submitted">
+				              <p class="invalid-text" ng-message="emailExist">Email already used</p> 
+				              <p class="invalid-text" ng-message="required">This field is required</p> 
+				              <p class="invalid-text" ng-message="email">Invalid email</p>         
+				            </div>
+
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="adminFirstNameInput">First Name</label>
+				              <div class="col-md-12">
+				                <input type="text" class="form-control" id="adminFirstNameInput" name="adminFirstName" ng-model="adminFirstName" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="regAdminForm.adminFirstName.$error" ng-show="regAdminForm.$submitted">
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
+
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="adminLastNameInput">Last Name</label>
+				              <div class="col-md-12">
+				                <input type="text" class="form-control" id="adminLastNameInput" name="adminLastName" ng-model="adminLastName" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="regAdminForm.adminLastName.$error" ng-show="regAdminForm.$submitted">
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
+
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="adminDepartmentInput">Department</label>
+				              <div class="col-md-12">		               
+				                <select class="form-control" id="adminDepartmentInput" name="adminDepartment" ng-model="adminDepartment" required>
+				                  <option disabled selected value>Select Department</option>
+							      <option value="1"> Senior High School</option>
+							      <option value="2"> College</option>
+							    </select>
+				              </div>
+				            </div>
+				            <div ng-messages="regAdminForm.adminDepartment.$error" ng-show="regAdminForm.$submitted">
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
+
+				            <div class="regBtn">
+				              <button type="submit" class="btn btn-primary" ng-disabled="disableRegBtn">{{createBtn}}</button>
+				        	</div>
+
+				        </form>
+
+			      	</div>
+			      	
+			    </div>
+
+		  	</div>
+		</div><!-- modal closing tag -->
+
+</div><!-- div ng-Controller -->
+
+</body>
+<!--
+
+ <div class="form-group">
+				              <label class="col-md-12 control-label">New Password</label>
+				              <div class="col-md-12">
+				                <input type="password" class="form-control" id="userPasswordInput" name="userPassword" ng-model="userPassword" ng-model-options="{allowInvalid: true}" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="regAdminForm.userPassword.$error" ng-show="regAdminForm.$submitted">  
+				              <p class="invalid-text" ng-message="samePword">Invalid password</p>
+				              <p class="invalid-text" ng-message="required">This field is required</p>
+				              <p class="invalid-text" ng-message="minlength">Must be atleast 8 characters</p>
+				              <p class="invalid-text" ng-message="pattern">Must be a combination of letters and numbers</p>             
+				            </div>
+
+				            <div class="form-group">
+				              <label class="col-md-12 control-label">Confirm Password</label>
+				              <div class="col-md-12">
+				                <input type="password" class="form-control" id="userConfirmPasswordInput" name="userConfirmPassword" ng-model="userConfirmPassword" compare-to="userPassword" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="regAdminForm.userConfirmPassword.$error" ng-show="regAdminForm.$submitted">
+				              <p class="invalid-text" ng-message="required">This field is required</p>
+				              <p class="invalid-text" ng-message="compareTo">Password don't match</p>
+				            </div>
+
+
+<label><b>Email: </b></label>
 				        <input type="email" placeholder="Email" ng-Model="adminEmail" required>
 								<br><br>
 				        <label><b>First Name: </b></label>
@@ -85,11 +177,3 @@
 			      	<div class="modal-footer">
 						<button type="button" class="btn btn-primary" ng-click="registerAdmin()">Submit</button>
 			      	</div>
-			    </div>
-
-		  	</div>
-		</div><!-- modal closing tag -->
-
-</div><!-- div ng-Controller -->
-
-</body>
