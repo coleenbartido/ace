@@ -100,7 +100,7 @@
 
     </div>
   </div><!-- modal closing tag -->
-  
+
 
   <div class="sk-fading-circle" ng-hide="pwordLength">
     <div class="sk-circle1 sk-circle"></div>
@@ -119,38 +119,3 @@
 
 </body>
 
-<!--
-
-<form name="contactForm" class="userContact" role="form" ng-submit="confirmContact()" novalidate>
-
-                <span class="padded-text">Contact Number</span>
-                <input class="form-control" type="tel" pattern=".{3,11}" name="userContact" id="userContact" ng-Model="userContact" required ng-maxlength="5" uib-popover="minimum of 3 and maximum of 11 numbers" popover-is-open="contactForm.userContact.$error.pattern" popover-enable="contactForm.userContact.$error.pattern" popover-placement="right" popover-class="customPopover">
-
-                <button id="btnUpdateContact" name="btnUpdateContact" class="btn btn-primary btn-block" ng-click="confirmContact()">Update Contact Number</button>
-
-              </form>
-
-<form name="passwordForm" class="changePass" role="form" ng-submit="changePassword()" novalidate>
-
-                      <div id="oldPassword">
-                        <span class="padded-text">Old Password</span>
-                        <input class="form-control" type="password" name="oldPassword" id="oldPasswordInput" ng-Model="oldPassword" required uib-popover="Invalid Password" popover-trigger="'none'" popover-is-open='{{oldPwordPopover}}' popover-placement="right" popover-class="customPopover">
-                      </div>
-
-
-                      <div id="userPassword">
-                        <span class="padded-text">New Password</span>
-                        <input class="form-control" type="password" id="userPasswordInput" ng-pattern="/^.*(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*-_])(?=.*[A-Z])(?=.*[a-z]).*$/" name="userPassword" ng-Model="userPassword" required uib-popover="must be atleast 8 characters and a combination of numbers, special character, uppercase and lowercase letters" popover-enable="passwordForm.userPassword.$error.pattern" popover-is-open="passwordForm.userPassword.$error.pattern" popover-placement="right" popover-class="customPopover">
-                      </div>
-
-
-                      <div id="userConfirmPassword">
-                        <span class="padded-text">Confirm Password</span>
-                        <input class="form-control" type="password" id="userConfirmPasswordInput" name="userConfirmPassword" ng-Model="userConfirmPassword" required uib-popover="password don't match" popover-enable="{{userConfirmPassword != userPassword}}" popover-is-open="{{userConfirmPassword != userPassword}}" popover-placement="right" popover-class="customPopover2">
-                      </div>
-
-
-                  <button id="btnUpdate" name="btnUpdate" class="btn btn-primary btn-block" ng-click="changePassword()">Update Password</button>
-
-            </form>
--->
