@@ -168,13 +168,13 @@
       }
       else
       {
-        $responseBody = array('errMsg' => 'Failed Change Password');
+        $responseBody = array('errMsg' => 'Password already set');
         $response = setResponse($response, 400, $responseBody);
       }
     }
     else
     {
-      $responseBody = array('errMsg' => 'Failed Change Password');
+      $responseBody = array('errMsg' => 'Password already set');
       $response = setResponse($response, 400, $responseBody);
     }
     return $response;
@@ -612,7 +612,12 @@
       if($db->isLinkValid($email, $hashCode))
       {
         $response = setSuccessResponse($response, 200);
-      }       
+      } 
+      else
+      {
+        $responseBody = array('errMsg' => 'Invalid Link');
+        $response = setResponse($response, 400, $responseBody);
+      }      
     }
     else
     {
@@ -647,13 +652,13 @@
       }
       else
       {
-        $responseBody = array('errMsg' => 'Invalid Link');
+        $responseBody = array('errMsg' => 'Account already activated');
         $response = setResponse($response, 400, $responseBody);
       }
     }
     else
     {
-      $responseBody = array('errMsg' => 'Invalid Link');
+      $responseBody = array('errMsg' => 'Account already activated');
       $response = setResponse($response, 400, $responseBody);
     }
 

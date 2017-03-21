@@ -355,6 +355,7 @@ angular.module('aceWeb.controller', [])
   $scope.submitFurtherDetails = function(accountForm)
   {
     $scope.invalidInput = false;
+    $scope.accountActivated = false;
 
     if(accountForm.$valid)
     {
@@ -380,14 +381,15 @@ angular.module('aceWeb.controller', [])
       {
         //for checking
         console.log(response);
-
         $scope.accountActivated = true;
       },
       function(response)
       {
         //for checking
         console.log(response);
-      
+
+        $scope.invalidInput = true;
+        $scope.errMsg = response.data.errMsg;      
       })
       .finally(function()
       {
