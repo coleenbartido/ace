@@ -297,7 +297,18 @@ angular.module('aceWeb.controller', [])
 
 .controller('AccountSetupController', function(config, $scope, $http, $state, $location)
 {
-  $scope.showAccountSetupForm = false;
+  $scope.initScope = function()
+  {
+    $scope.showAccountSetupForm = false;
+
+    $scope.invalidInput = false;
+    $scope.accountActivated = false;
+
+    $scope.disableLogin = false;
+    $scope.activateText = "ACTIVATE ACCOUNT";
+  }
+
+  $scope.initScope();
 
   $scope.verifyURL = function()
   {
@@ -315,39 +326,41 @@ angular.module('aceWeb.controller', [])
         params: verifyData, //instead of data, we pass the verifyData object as a parameter in url since we're using GET instead of POST. Thus, the url should be like this ../../../ace/webservice/public/verify?email="INSERT VALUE HERE"&hashCode="INSERT VALUE HERE".
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
-
       .then(function(response)
       {
-        $scope.verifyResponse = response.data;
         //for checking
-        console.log($scope.verifyResponse);
+        console.log(response);
 
-        if($scope.verifyResponse['isLinkValid'] == false)
-        {
-          //go to error page (tell the user that the link is invalid)
-          console.log("invalid link v1!!!!");
-          $state.go('errorInvalidLink');
-        }
-        else
-        {
-          // if link is valid, it will just proceed on showing the view
-          console.log("valid link!!!!");
-          $scope.showAccountSetupForm = true;
-        }
+        $scope.showAccountSetupForm = true;
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $state.go('errorInvalidLink');
       })
+      .finally(function()
+      {
+
+      });
     }
     else
     {
       //for checking
-      console.log("invalid link v2!!!!"); //trigger when the user use this kind of url http://localhost/ace/aceweb/#/verify?email=sample@faculty.com& or http://localhost/ace/aceweb/#/verify?email=sample@faculty.com&hashC or http://localhost/ace/aceweb/#/verify?email=sample@faculty.com&hashC or http://localhost/ace/aceweb/#/verify?email=sample@faculty.com&hashCode=
       $state.go('errorInvalidLink'); ////go to error page (tell the user that the link is invalid)
     }
   };
 
-  $scope.submitFurtherDetails = function()
+  $scope.submitFurtherDetails = function(accountForm)
   {
-    if($scope.userPassword == $scope.userConfirmPassword)
+    $scope.invalidInput = false;
+
+    if(accountForm.$valid)
     {
+      $scope.disableLogin = true;
+      $scope.activateText = "ACTIVATING ACCOUNT";
+
       var accountDetails =
       {
         'email' : $location.search()['email'], //get the value of one of the parameter in the current url
@@ -365,27 +378,43 @@ angular.module('aceWeb.controller', [])
       })
       .then(function(response)
       {
-        $scope.setupAccountResponse = response.data;
         //for checking
-        console.log($scope.setupAccountResponse);
+        console.log(response);
 
-        if($scope.setupAccountResponse['isLinkValid'] == false)
-        {
-          //go to error page which tells the user that the link is invalid
-          $state.go('errorInvalidLink');
-        }
-        else
-        {
-          //show message that the account has been activated!
-          console.log("Your Account has been updated!");
-          $state.go('login');
-        }
-      });
+        $scope.accountActivated = true;
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+      
+      })
+      .finally(function()
+      {
+        $scope.disableLogin = false;
+        $scope.activateText = "ACTIVATE ACCOUNT";
+      });     
     }
     else
     {
-      //client side validation (password and confirm password field do not match)
-      console.log("password dont match!");
+      $scope.invalidInput = true;
+
+      if(loginForm.password.$invalid)
+      {
+        $scope.errMsg = "Invalid Password";     
+      }
+      else if(loginForm.confirmpassword.$error.compareTo)
+      {
+        $scope.errMsg = "Password don't match";
+      }
+      else if(loginForm.contactnumber.$invalid)
+      {
+        $scope.errMsg = "Invalid Contact Number";
+      }
+      else
+      {     
+        $scope.errMsg = "Invalid Input";    
+      } 
     }
   }
 })

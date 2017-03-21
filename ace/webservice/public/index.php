@@ -429,7 +429,7 @@
 
     $responseBody = array('reportsList' => json_encode($reportsList));
     $response = setResponse($response, 200, $responseBody);
-    
+
     return $response;
   });
 
@@ -600,27 +600,32 @@
   });
 
 
-  $app->get('/verify', function ()
+  $app->get('/verify', function (ServerRequestInterface $request, ResponseInterface $response)
   {
+    $db = new DbOperation();
+
     if(isset($_GET['email'], $_GET['hashCode'])) //server side validation if may email and hashCode parameter sa url
     {
       $email = $_GET['email'];
       $hashCode = $_GET['hashCode'];
 
-      $db = new DbOperation();
-      $response['isLinkValid'] = $db->isLinkValid($email, $hashCode);
+      if($db->isLinkValid($email, $hashCode))
+      {
+        $response = setSuccessResponse($response, 200);
+      }       
     }
     else
     {
-      $response['isLinkValid'] = false;
+      $responseBody = array('errMsg' => 'Invalid Link');
+      $response = setResponse($response, 400, $responseBody);
     }
 
-    sendResponse($response);
+    return $response;
   });
 
 
 
-  $app->post('/accountSetup', function ()
+  $app->post('/accountSetup', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $accountDetails = json_decode(file_get_contents("php://input"));
 
@@ -636,19 +641,23 @@
 
       if($db->isLinkValid($email, $hashCode)) // if this returns true, perform the if statement
       {
-        $response['successfullySetupAccountDetails'] = $db->setupAccountDetails($email, $hashCode, $contactNumber, $pword, $status);
+        $db->setupAccountDetails($email, $hashCode, $contactNumber, $pword, $status);
+
+        $response = setSuccessResponse($response, 200);
       }
       else
       {
-        $response['isLinkValid'] = false;
+        $responseBody = array('errMsg' => 'Invalid Link');
+        $response = setResponse($response, 400, $responseBody);
       }
     }
     else
     {
-      $response['isLinkValid'] = false;
+      $responseBody = array('errMsg' => 'Invalid Link');
+      $response = setResponse($response, 400, $responseBody);
     }
 
-    sendResponse($response);
+    return $response;
   });
 
 

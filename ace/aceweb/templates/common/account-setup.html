@@ -1,16 +1,103 @@
-<div ng-init="verifyURL()">
-	<form ng-submit="submitFurtherDetails()" ng-show="showAccountSetupForm">
+<head>
+
+    <title>Reset Password</title>
+
+    <link rel="stylesheet" type="text/css" href="css/common/forgot-password.css">
+
+</head>
+
+<body>
+
+
+	<div ng-init="verifyURL()" ng-show="showAccountSetupForm">
+        <div class="forgotPassword margined-above col-md-6 col-md-offset-3">
+            <center>
+                <h3 class="form-group">ACCOUNT SETUP</h3>
+            </center>
+
+            <div class="message col-md-10 col-md-offset-1">
+                <center>
+                    <p>
+                        To activate your account, fill up and submit the form below.
+                    </p>
+                </center>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="mainbox col-md-4 col-md-offset-4">
+                <form class="loginForm" name="accountForm" role="form" ng-submit="submitFurtherDetails(accountForm)" novalidate>
+
+                    <div class="errorMessage" ng-if="accountForm.$submitted && invalidInput">
+                        <i class="fa fa-exclamation-circle"></i>
+                        {{errMsg}}
+                    </div>
+
+                    <div class="successMessage" ng-if="accountActivated">
+                        Account successfully activated
+                    </div>
+                    
+                    <div class="input-group">
+                        <span class="input-group-addon col-md-off-set-1">
+                                <i class="fa fa-key fa-fw fa-lg"></i>
+                            </span>
+                        <input type="password" autoFocus required class="form-control" name="password" placeholder="Enter Password" ng-Model="userPassword" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" ng-model-options="{allowInvalid: true}">
+                        <div class="e col-md-offset-11" ng-if="accountForm.password.$dirty && accountForm.password.$invalid || accountForm.$submitted && accountForm.password.$invalid">
+                            <i class="fa fa-times-circle fa-lg"></i>
+                        </div>
+                        <div class="e col-md-offset-11" ng-if="accountForm.password.$valid">
+                            <i class="fa fa-check-circle fa-lg"></i>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon col-md-off-set-1">
+                                <i class="fa fa-key fa-fw fa-lg"></i>
+                            </span>
+                        <input type="password" required class="form-control" name="confirmpassword" placeholder="Confirm Password" ng-Model="userConfirmPassword" compare-to="userPassword" ng-model-options="{allowInvalid: true}">
+                        <div class="e col-md-offset-11" ng-if="accountForm.confirmpassword.$dirty && accountForm.confirmpassword.$invalid || accountForm.$submitted && accountForm.confirmpassword.$invalid">
+                            <i class="fa fa-times-circle fa-lg"></i>
+                        </div>
+                        <div class="e col-md-offset-11" ng-if="accountForm.confirmpassword.$valid">
+                            <i class="fa fa-check-circle fa-lg"></i>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon col-md-off-set-1">
+                                <i class="fa fa-address-book fa-fw fa-lg"></i>
+                            </span>
+                        <input type="text" required class="form-control" name="contactnumber" placeholder="Contact Number" ng-Model="userContactNumber" pattern="^[\d ()+-]+$" maxlength="20">
+                        <div class="e col-md-offset-11" ng-if="accountForm.contactnumber.$dirty && accountForm.contactnumber.$invalid || accountForm.$submitted && accountForm.contactnumber.$invalid">
+                            <i class="fa fa-times-circle fa-lg"></i>
+                        </div>
+                        <div class="e col-md-offset-11" ng-if="accountForm.contactnumber.$valid">
+                            <i class="fa fa-check-circle fa-lg"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row-md-1 control">
+                            <button class="button" type="submit" ng-disabled="disableLogin">
+                                    <span>
+                                        {{activateText}}
+                                    </span>
+                                </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-4 control">
+                    <a class="goBack" ui-sref="login">Back to sign in page</a>
+                </div>
+            </div>
+
+        </div>
+
     
-        <label><b>Contact Number</b></label>
-        <input type="text" placeholder="Contact Number" ng-Model="userContactNumber" required>
+    </div>
 
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Password" ng-Model="userPassword" required>
-
-        <label><b>Confirm Password</b></label>
-        <input type="password" placeholder="Confirm Password" ng-Model="userConfirmPassword" required>
-
-        <button type="submit">Register</button>
-        
-  	</form>
-</div>
+</body>
