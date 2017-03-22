@@ -492,6 +492,23 @@ angular.module('aceWeb.controller', [])
 
 .controller('ReferralFormController', function(config, $scope, $http, $state, $localStorage, AuthService, $filter)
 {
+  $scope.resetForm = function () 
+  {
+    $scope.refForm.$setPristine();
+    $scope.refForm.$setUntouched();
+
+    $scope.schoolYear = undefined;
+    $scope.schoolTerm = undefined;
+    $scope.studId = undefined;
+    $scope.studFName = undefined;
+    $scope.studLName = undefined;
+    $scope.subjName = undefined;
+    $scope.course = undefined;
+    $scope.year = undefined;
+    $scope.department = undefined;
+    $scope.reasons[6].check = false;
+  }
+
   $scope.initScope = function()
   {
     $scope.currentYear = new Date().getFullYear();

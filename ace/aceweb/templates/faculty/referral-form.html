@@ -6,7 +6,7 @@
 
 <body>
 
-      <form class="refForm col-md-12" ng-submit="submitReferral()" name="refForm" id="refForm">
+      <form class="refForm col-md-12" ng-submit="submitReferral()" name="refForm" id="refForm" novalidate>
           <div class="row col-md-12 col-md-offset-0 formContainer">
 
               <div class="panel panel-default">
@@ -305,7 +305,7 @@
               <div class="buttons custom-btn-list col-md-12 col-md-offset-0">
 
                 <div class="btns pull-right">
-                  <button class="resetBtn btn" type="reset">Reset</button>
+                  <button class="resetBtn btn" type="reset" ng-click="resetForm()">Reset</button>
                   <button id="refFormButton" class="submitBtn btn" type="submit" ng-disabled="refForm.$invalid || checkedReasons">Submit</button>
                 </div>
 
@@ -314,164 +314,3 @@
           </div>
       </form>
 </body>
-
-
-
-  <!--
-  <div ng-controller = "ReferralFormController">
-
-<form ng-submit="submitReferral()" name="refForm" id="refForm">
-
-
-  <div layout="row" layout-margin>
-    <md-input-container md-no-float flex="30">
-      <span>SCHOOL YEAR :</span>
-      <md-select name="schoolYear" id="schoolYear" ng-model="schoolYear" placeholder="Select School Year" md-no-asterisk="true" required>
-        <md-option value="{{(currentYear - 1) + ' - ' + currentYear}}">{{(currentYear - 1) + " - " + currentYear}}</md-option>
-        <md-option value="{{currentYear + ' - ' + (currentYear + 1)}}">{{currentYear + " - " + (currentYear + 1)}}</md-option>
-        <md-option value="{{(currentYear + 1) + ' - ' + (currentYear + 2)}}">{{(currentYear + 1) + " - " + (currentYear + 2)}}</md-option>
-      </md-select>
-      <div ng-messages="refForm.schoolTerm.$error">
-        <div ng-message="required">This is required!</div>
-      </div>
-    </md-input-container>
-
-    <md-input-container md-no-float flex="30">
-      <span>SCHOOL TERM :</span>
-      <md-select name="schoolTerm" id="schoolTerm" ng-model="schoolTerm" placeholder="Select Term" md-no-asterisk="true" required>
-        <md-option value="1">1st</md-option>
-        <md-option value="2">2nd</md-option>
-        <md-option value="3">3rd</md-option>
-      </md-select>
-      <div ng-messages="refForm.schoolTerm.$error">
-        <div ng-message="required">This is required!</div>
-      </div>
-    </md-input-container>
-
-    <md-input-container md-no-float flex="30">
-      <span>SUBJECT NAME :</span>
-      <input name="subjName" type="text" ng-Model="subjName" placeholder="Enter Subject Name" required>
-      <div ng-messages="refForm.subjName.$error">
-        <div ng-message="required">This is required!</div>
-      </div>
-    </md-input-container>
-  </div>
-
-
-  <div layout="row" layout-margin>
-    <md-input-container md-no-float flex="30">
-      <span>STUDENT ID :</span>
-      <input name="studId" type="text" ng-Model="studId" placeholder="Enter Student ID" ng-maxlength="15" required>
-      <div ng-messages="refForm.studId.$error">
-        <div ng-message="required">This is required!</div>
-        <div ng-message="maxlength">Too long!</div>
-      </div>
-    </md-input-container>
-
-    <md-input-container md-no-float flex="30">
-      <span>STUDENT'S LAST NAME :</span>
-      <input name="studLName" type="text" ng-Model="studLName" placeholder="Enter Student Last Name" required>
-      <div ng-messages="refForm.studLName.$error">
-        <div ng-message="required">This is required!</div>
-      </div>
-    </md-input-container>
-
-    <md-input-container md-no-float flex="30">
-      <span>STUDENT'S FIRST NAME :</span>
-      <input name="studFName" type="text" ng-Model="studFName" placeholder="Enter Student First Name" required>
-      <div ng-messages="refForm.studFName.$error">
-        <div ng-message="required">This is required!</div>
-      </div>
-    </md-input-container>
-  </div>
-
-
-  <div layout="row" layout-margin>
-    <md-input-container md-no-float flex="30">
-      <span>DEPARTMENT :</span>
-      <md-select name="department" id="department" ng-model="dropdown" placeholder="Select Department" md-no-asterisk="true" ng-change="resetInput()" required>
-        <md-option value="1">Senior High School</md-option>
-        <md-option value="2">College</md-option>
-      </md-select>
-      <div ng-messages="refForm.department.$error">
-        <div ng-message="required">This is required!</div>
-      </div>
-    </md-input-container>
-
-    <md-input-container md-no-float flex="30">
-      <span>GRADE/YEAR LEVEL :</span>
-      <md-select name="year" id="year" ng-model="year" placeholder="Select Grade/Year Level" md-no-asterisk="true" ng-disabled="!dropdown" required>
-        <div ng-if="dropdown=='1'">
-          <md-option value="11">Grade 11</md-option>
-          <md-option value="12">Grade 12</md-option>
-        </div>
-        <div ng-if="dropdown=='2'">
-          <md-option value="1">First Year</md-option>
-          <md-option value="2">Second Year</md-option>
-          <md-option value="3">Third Year</md-option>
-          <md-option value="4">Fourth year</md-option>
-        </div>
-      </md-select>
-      <div ng-messages="refForm.year.$error">
-        <div ng-message="required">This is required!</div>
-      </div>
-    </md-input-container>
-
-    <md-input-container md-no-float flex="30">
-      <span>PROGRAM/COURSE :</span>
-      <md-select name="course" id="course" ng-model="course" placeholder="Select Program/Course" md-no-asterisk="true" ng-disabled="!dropdown" required>
-        <div ng-if="dropdown=='1'">
-          <md-optgroup label="Academic Tracks">
-            <md-option value="11">Humanities And Social Sciences</md-option>
-            <md-option value="12">Accountancy Business And Management</md-option>
-          </md-optgroup>
-          <md-optgroup label="Technical Vocational">
-            <md-option value="13">Computer Programming</md-option>
-            <md-option value="14">Animation</md-option>
-            <md-option value="15">Fashion Design</md-option>
-          </md-optgroup>
-          <md-optgroup label="Arts and Design Track">
-            <md-option value="16">Multimedia Arts</md-option>
-          </md-optgroup>
-        </div>
-        <div ng-if="dropdown=='2'">
-          <md-optgroup label="School of Computing">
-            <md-option value="1">Software Engineering</md-option>
-            <md-option value="2">Game Development</md-option>
-            <md-option value="3">Web Development</md-option>
-          </md-optgroup>
-          <md-optgroup label="School of Design">
-            <md-option value="4">Animation</md-option>
-            <md-option value="5">Multimedia Arts</md-option>
-            <md-option value="6">Fashion Design</md-option>
-          </md-optgroup>
-          <md-optgroup label="School of Business">
-            <md-option value="7">Real Estate Management</md-option>
-            <md-option value="8">Business Administration</md-option>
-          </md-optgroup>
-        </div>
-      </md-select>
-      <div ng-messages="refForm.course.$error">
-        <div ng-message="required">This is required!</div>
-      </div>
-    </md-input-container>
-  </div>
-
-  <div id="reasons">
-    <br><label>Reason/s for Referral: </label><br>
-    <div ng-repeat="option in options">
-      <input type="checkbox" ng-model="option.value">
-      <label >{{option.name}}</label>
-    </div>
-    <input type="checkbox" onclick="var input = document.getElementById('others'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true;}" /> <b>Other Reasons (please specify):</b>
-    <br><input id="others" name="others" disabled="disabled" ng-model="refComment"/><br>
-
-    <md-button id="refFormButton" class="md-raised md-primary" type="submit" ng-disabled="refForm.$invalid">Submit Referral Form</md-button>
-  </div>
-
-
-
-
-</form>
-
-</div-->
