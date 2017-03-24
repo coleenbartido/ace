@@ -55,13 +55,9 @@ hr {
   font-size: 12px;
 }
 
-.row-component {
-  float: left;
-}
-
 .editBtn {
   margin-right: 13px;
-  margin-top: 9px;
+  margin-top: 1px;
 }
 
 #pwordModal .modal-dialog {

@@ -14,27 +14,17 @@ class DbOperation
 
     public function loginUser($email, $pword, $status)
     {
-        /*
-        $hash = hash('sha256', $password1);
-
-        FUNCTION createSalt()
-        {
-        $text = md5(uniqid(rand(), TRUE));
-        RETURN substr($text, 0, 3);
-        }
-
-        $salt = createSalt();
-        $password = hash('sha256', $salt . $hash);
-        */
-
-        $stmt = $this->con->prepare("SELECT email FROM user WHERE email=? and hash=? and status=? UNION SELECT email FROM superadmin_account WHERE email=? and hash=?");
-        $stmt->bind_param("ssiss", $email, $pword, $status, $email, $pword);
+        $stmt = $this->con->prepare("SELECT hash FROM user WHERE email=? and status=? UNION SELECT hash FROM superadmin_account WHERE email=?");
+        $stmt->bind_param("sis", $email, $status, $email);
         $stmt->execute();
-        $stmt->store_result();
-        $num_rows = $stmt->num_rows;
+        $account = $stmt->get_result()->fetch_assoc();
         $stmt->close();
 
-        return $num_rows>0;
+        if(password_verify($pword, $account['hash']))
+        {
+            return true;
+        }
+        return false;
     }
 
 
@@ -140,6 +130,8 @@ class DbOperation
     //used in RESET and CHANGE password
     public function changePassword($email, $password, $role)
     {
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
         if($role == 1)
         {
             $stmt = $this->con->prepare("UPDATE superadmin_account SET hash=? WHERE email=?");
@@ -154,7 +146,7 @@ class DbOperation
             $result = $stmt->execute();
             $stmt->close();
         }
-
+        
         if($result)
         {
             return true;
@@ -202,18 +194,6 @@ class DbOperation
             return true;
         }
         return false;
-    }
-
-
-    public function getPwordLength($email)
-    {
-        $stmt = $this->con->prepare("SELECT hash FROM user WHERE email=? UNION SELECT hash FROM superadmin_account WHERE email=?");
-        $stmt->bind_param("ss",$email,$email);
-        $stmt->execute();
-        $accountDetails = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-
-        return strlen($accountDetails['hash']);
     }
 
 
@@ -275,6 +255,8 @@ class DbOperation
 
     public function setupAccountDetails($email, $hashCode, $contactNumber, $pword, $status)
     {
+        $pword = password_hash($pword, PASSWORD_DEFAULT);
+
         $stmt = $this->con->prepare("UPDATE user SET contact_number=?, hash=?, status=?, hashcode=NULL WHERE email=? and hashcode=?");
         $stmt->bind_param("ssiss", $contactNumber, $pword, $status, $email, $hashCode);
         $result = $stmt->execute();
@@ -493,14 +475,14 @@ class DbOperation
       $stmt = $this->con->prepare("SELECT hash FROM user WHERE email=? UNION SELECT hash FROM superadmin_account WHERE email=?");
       $stmt->bind_param("ss", $email, $email);
       $stmt->execute();
-      $hash = $stmt->get_result()->fetch_assoc();
+      $account = $stmt->get_result()->fetch_assoc();
       $stmt->close();
 
-      if($hash['hash'] != $password && $hash['hash'] == $oldPassword)
+      if(password_verify($password, $account['hash']) == false && password_verify($oldPassword, $account['hash']) == true)
       {
         return "Valid Password";
       }
-      else if($hash['hash'] == $password && $hash['hash'] == $oldPassword)
+      else if(password_verify($password, $account['hash']) == true && password_verify($oldPassword, $account['hash']) == true)
       {
         return "Same Password";
       }
@@ -508,7 +490,6 @@ class DbOperation
       {
         return "Invalid Password";
       }
-
     }
 
 
@@ -586,19 +567,6 @@ class DbOperation
             return true;
         }
         return false;
-    }
-
-
-    //check if password and email matches
-    public function confirmPassword($email, $password)
-    {
-      $stmt = $this->con->prepare("SELECT * FROM user WHERE email=? AND hash=?");
-      $stmt->bind_param("ss", $email, $password);
-      $stmt->execute();
-      $stmt->store_result();
-      $num_rows = $stmt->num_rows;
-      $stmt->close();
-      return $num_rows>0;
     }
 
 

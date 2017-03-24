@@ -1142,38 +1142,6 @@ angular.module('aceWeb.controller', [])
 
 .controller('SettingsController', function(config, $scope, $http, $state, $location, $localStorage, AuthService)
 {
-
-  $scope.getPwordLength = function ()
-  {
-    var accountDetails =
-    {
-      'email' : AuthService.getEmail()
-    }
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/getPwordLength',
-      data: accountDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function(response)
-    {
-      //for checking
-      console.log(response);
-
-      $scope.pwordLength = response.data.pwordLength;
-    },
-    function(response)
-    {
-      //for checking
-      console.log(response);
-
-    })
-    .finally(function()
-    {
-
-    });
-  }
-
   $scope.getContactNum = function ()
   {
     var accountDetails =
@@ -1209,7 +1177,6 @@ angular.module('aceWeb.controller', [])
   {
     $scope.saveBtn = "Save";
     $scope.disableSaveBtn = false;
-    $scope.getPwordLength();
     $scope.getContactNum();
   } //scope initScope
 
@@ -1230,7 +1197,7 @@ angular.module('aceWeb.controller', [])
   {
     $scope.settingsForm2.$setPristine();
     $scope.settingsForm2.newContactNum.$setUntouched();
-    $scope.newContactNum = "";
+    $scope.newContactNum = $scope.contactNum;
   }
 
   $scope.confirmContact = function(settingsForm2)
@@ -1293,7 +1260,7 @@ angular.module('aceWeb.controller', [])
     {
       $scope.settingsForm.userPassword.$setValidity('samePword', true);
     }
-
+    
     if(settingsForm.$valid) //validation if password and password confirmation field match
     {
       $scope.saveBtn = "Saving";

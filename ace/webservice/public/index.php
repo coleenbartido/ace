@@ -922,19 +922,20 @@
   {
     $databaseDetails = json_decode(file_get_contents("php://input"));
 
+    $status = 1;
     $email = $databaseDetails->email;
     $password = $databaseDetails->password;
 
     $db = new DbOperation();
 
-    if($db->confirmPassword($email, $password))
+    if($db->loginUser($email, $password, $status))
     {
       databaseBackup();
       $response = setSuccessResponse($response, 200);
     }
     else
     {
-      $responseBody = array('errMsg' => 'Credentials invalid.');
+      $responseBody = array('errMsg' => 'Incorrect Email or Password');
       $response = setResponse($response, 400, $responseBody);
     }
 
