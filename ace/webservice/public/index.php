@@ -215,7 +215,7 @@
     $pword = $changePassDetails->pword;
     $oldPword = $changePassDetails->oldPword;
     $role = $db->getAccountRole($email);
-    
+
     if($db->isPasswordValid($email, $pword, $oldPword) == "Valid Password")
     {
       $db->changePassword($email, $pword, $role);
@@ -415,8 +415,8 @@
     if($department == 1)
     {
       $reportsList = $db->listShsReports($status);
-    } 
-    else 
+    }
+    else
     {
       $reportsList = $db->listCollegeReports($status);
     }
@@ -471,7 +471,7 @@
       }
     }
 
-    return $response; 
+    return $response;
   });
 
 
@@ -514,7 +514,7 @@
       }
     }
 
-    return $response; 
+    return $response;
   });
 
 
@@ -612,12 +612,12 @@
       if($db->isLinkValid($email, $hashCode))
       {
         $response = setSuccessResponse($response, 200);
-      } 
+      }
       else
       {
         $responseBody = array('errMsg' => 'Invalid Link');
         $response = setResponse($response, 400, $responseBody);
-      }      
+      }
     }
     else
     {
@@ -828,6 +828,15 @@
 
     $db = new DbOperation();
 
+    $subject = "ACE Submitted Report Status";
+    $link = $_ENV['DOMAIN']->CLIENT_URL;
+    $body =
+      "The report you submitted has been read by the administrator.
+      <br><br>
+      If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
+
+      sendEmail($email, $subject, $body);
+
     $db->markReport($isRead, $reportId);
 
     $response = setSuccessResponse($response, 200);
@@ -994,6 +1003,35 @@
     $response = setResponse($response, 200, $responseBody);
     return $response;
   });
+
+
+  $app->post('/updateStatus', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $updateDetails = json_decode(file_get_contents("php://input"));
+
+    $db = new DbOperation();
+
+    $email = $updateDetails->email;
+    $status = $updateDetails->status;
+    $reportId = $updateDetails->reportId;
+
+    //$responseBody = array('SYList' => json_encode($db->getSYList($department)));
+
+    $response = setResponse($response, 200, $responseBody);
+    return $response;
+  });
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

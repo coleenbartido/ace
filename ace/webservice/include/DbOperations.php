@@ -154,7 +154,7 @@ class DbOperation
             $result = $stmt->execute();
             $stmt->close();
         }
-        
+
         if($result)
         {
             return true;
@@ -254,7 +254,7 @@ class DbOperation
 
     public function registerAdmin($email, $fname, $lname, $status, $userType, $hashCode, $department)
     {
-        //$password = md5($pass);  
+        //$password = md5($pass);
         $stmt = $this->con->prepare("INSERT INTO user(email, first_name, last_name, status, user_type_id, hashcode) values(?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE first_name=?, last_name=?, status=?, user_type_id=?, hashcode=?");
         $stmt->bind_param("sssiisssiis", $email, $fname, $lname, $status, $userType, $hashCode, $fname, $lname, $status, $userType, $hashCode);
         $result = $stmt->execute();
@@ -813,6 +813,40 @@ class DbOperation
       return $arrResult;
 
     }
+
+
+    public function getReferralReasons($status)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM report WHERE status=?");
+        $stmt->bind_param("i",$status);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $arrResult = array();
+        while ($myrow = $result->fetch_assoc())
+        {
+            $arrResult[] = $myrow;
+        }
+        $stmt->close();
+
+        return $arrResult;
+    }
+
+
+
+    public function updateStatus($reportId, $status)
+    {
+      $stmt = $this->con->prepare("UPDATE report_status_id=? FROM report WHERE report_id=?");
+      $stmt->bind_param("ii",$status, $reportId);
+      $result = $stmt->execute();
+      $stmt->close();
+
+      if($result)
+      {
+          return true;
+      }
+        return false;
+
+      }
 
 
 

@@ -47,7 +47,7 @@ angular.module('aceWeb.controller', [])
     {
       $scope.disableLogin = true;
       $scope.loginText = "SIGNING IN";
-   
+
       var loginDetails =
       {
         'email' : $scope.userEmail,
@@ -89,7 +89,7 @@ angular.module('aceWeb.controller', [])
         {
           $scope.errMsg = response.data.errMsg;
           $scope.incorrectInput = true;
-          $scope.userPassword = undefined;         
+          $scope.userPassword = undefined;
         }
       })
       .finally(function()
@@ -128,7 +128,7 @@ angular.module('aceWeb.controller', [])
   }
 
   $scope.initScope();
-  
+
   $scope.verifyEmail = function(loginForm)
   {
     $scope.incorrectInput = false;
@@ -212,7 +212,7 @@ angular.module('aceWeb.controller', [])
 
         if(response.status == 400)
         {
-          $state.go('errorInvalidLink');     
+          $state.go('errorInvalidLink');
         }
       })
       .finally(function()
@@ -232,7 +232,7 @@ angular.module('aceWeb.controller', [])
     $scope.invalidInput = false;
     $scope.pwordChanged = false;
     $scope.invalidPword = false;
-    
+
     if(loginForm.$valid)//validation if password and password confirmation field match
     {
       $scope.disableLogin = true;
@@ -283,10 +283,10 @@ angular.module('aceWeb.controller', [])
         $scope.invalidInput = true;
       }
       else
-      {     
+      {
         $scope.errMsg = "Password don't match";
         $scope.invalidPword = true;
-      }    
+      }
     }
   }
 }) //closing tag
@@ -389,13 +389,13 @@ angular.module('aceWeb.controller', [])
         console.log(response);
 
         $scope.invalidInput = true;
-        $scope.errMsg = response.data.errMsg;      
+        $scope.errMsg = response.data.errMsg;
       })
       .finally(function()
       {
         $scope.disableLogin = false;
         $scope.activateText = "ACTIVATE ACCOUNT";
-      });     
+      });
     }
     else
     {
@@ -403,7 +403,7 @@ angular.module('aceWeb.controller', [])
 
       if(loginForm.password.$invalid)
       {
-        $scope.errMsg = "Invalid Password";     
+        $scope.errMsg = "Invalid Password";
       }
       else if(loginForm.confirmpassword.$error.compareTo)
       {
@@ -414,9 +414,9 @@ angular.module('aceWeb.controller', [])
         $scope.errMsg = "Invalid Contact Number";
       }
       else
-      {     
-        $scope.errMsg = "Invalid Input";    
-      } 
+      {
+        $scope.errMsg = "Invalid Input";
+      }
     }
   }
 })
@@ -492,7 +492,7 @@ angular.module('aceWeb.controller', [])
 
 .controller('ReferralFormController', function(config, $scope, $http, $state, $localStorage, AuthService, $filter)
 {
-  $scope.resetForm = function () 
+  $scope.resetForm = function ()
   {
     $scope.refForm.$setPristine();
     $scope.refForm.$setUntouched();
@@ -1293,7 +1293,7 @@ angular.module('aceWeb.controller', [])
     {
       $scope.settingsForm.userPassword.$setValidity('samePword', true);
     }
-    
+
     if(settingsForm.$valid) //validation if password and password confirmation field match
     {
       $scope.saveBtn = "Saving";
@@ -1454,6 +1454,7 @@ angular.module('aceWeb.controller', [])
     return false;
   }
 
+
   $scope.deleteReportList = function()
   {
     BootstrapDialog.confirm({
@@ -1544,7 +1545,7 @@ angular.module('aceWeb.controller', [])
   }
 
 
-  /*$scope.selecAllRead = function ()
+  $scope.selectAllRead = function ()
   {
     $scope.reportList.report_id = [];
 
@@ -1557,7 +1558,7 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  $scope.selecAllUnread = function ()
+  $scope.selectAllUnread = function ()
   {
     $scope.reportList.report_id = [];
 
@@ -1568,7 +1569,8 @@ angular.module('aceWeb.controller', [])
         $scope.reportList.report_id.push($scope.reports[counter].report_id);
       }
     }
-  }*/
+  }
+
 
   $scope.deleteReport = function(report_id)
   {
@@ -1800,6 +1802,41 @@ angular.module('aceWeb.controller', [])
   {
     $scope.readReport();
   })
+
+  $scope.updateReport = function(report)
+  {
+    var updateDetails = {
+        'email' : report.email,
+        'reportId' : report.id,
+        'status' : $scope.status
+
+    }
+
+    $http({
+        method: 'POST',
+        url: config.apiUrl + '/updateStatus',
+        data: updateDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+
+    .then(function(response)
+      {
+          console.log(response);
+
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+
+      })
+      .finally(function()
+      {
+
+      });
+
+  }
 
 }) //closing tag controller
 
@@ -2159,11 +2196,11 @@ angular.module('aceWeb.controller', [])
   }
 
   $scope.registerFaculty = function(regFacultyForm)
-  {   
+  {
     if(regFacultyForm.facultyFirstName.$valid && regFacultyForm.facultyLastName.$valid)
     {
       $scope.regFacultyForm.facultyEmail.$setValidity('emailExist', true);
-      
+
       if(regFacultyForm.$valid)
       {
         $scope.createBtn = "Creating Account";
@@ -2200,14 +2237,14 @@ angular.module('aceWeb.controller', [])
             {
               $scope.regFacultyForm.facultyEmail.$setValidity('emailExist', false);
             }
-          }   
+          }
         })
         .finally(function()
         {
           $scope.createBtn = "Create Account";
           $scope.disableRegBtn = false;
         });
-      } 
+      }
     }
   }//registerFaculty
 
@@ -2385,7 +2422,7 @@ angular.module('aceWeb.controller', [])
 
 
 .controller('SummaryController', function(config, $scope, $http, AuthService)
-{  
+{
   //init function which will retrieve list of school year in the database
   $scope.getSY = function()
   {
@@ -2406,7 +2443,7 @@ angular.module('aceWeb.controller', [])
       console.log(response);
 
       $scope.SYList = JSON.parse(response.data.SYList);
-      
+
       for(var counter=0; counter < $scope.SYList.length; counter++)
       {
         $scope.SYList[counter].school_year = $scope.SYList[counter].school_year.split('-').join(' - ');
@@ -2414,12 +2451,12 @@ angular.module('aceWeb.controller', [])
 
       if($scope.SYList.length != 0)
       {
-        $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;        
-      } 
+        $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
+      }
       else
       {
         $scope.isEmptySYList = true;
-      }    
+      }
     },
     function(response)
     {
@@ -2427,7 +2464,7 @@ angular.module('aceWeb.controller', [])
     })
     .finally(function()
     {
-        
+
     });
   }
 
@@ -2475,28 +2512,28 @@ angular.module('aceWeb.controller', [])
 
       $scope.combinedArr = $scope.termData[0].concat($scope.programData[0], $scope.levelData[0], $scope.reasonData[0], $scope.statusData[0]);
 
-      $scope.options = 
+      $scope.options =
       {
-        scales: 
+        scales:
         {
-          yAxes: 
+          yAxes:
           [{
               id: 'y-axis-1',
               type: 'linear',
               display: true,
               position: 'left',
-              ticks: 
+              ticks:
               {
                 min: 0, max: Math.ceil((arrayMax($scope.combinedArr) + 10) / 10) * 10, stepSize: 10
               },
-              scaleLabel: 
+              scaleLabel:
               {
                 display: true,
                 labelString: 'Number of Reports'
               }
           }]
         },
-        title: 
+        title:
         {
           display: true,
           text: 'Reports Per',
@@ -2506,7 +2543,7 @@ angular.module('aceWeb.controller', [])
         }
       };
 
-      
+
       //$scope.SYList = JSON.parse(response.data.SYList);
     },
     function(response)
@@ -2515,7 +2552,7 @@ angular.module('aceWeb.controller', [])
     })
     .finally(function()
     {
-        
+
     });
   }
 
@@ -2533,48 +2570,48 @@ angular.module('aceWeb.controller', [])
   $scope.initScope();
 
   //user defined functions
-  function arrayMax(array) 
+  function arrayMax(array)
   {
     return array.reduce(function(a, b) {
       return Math.max(a, b);
     });
   }
- 
-  function arrayMin(array) 
+
+  function arrayMin(array)
   {
     return array.reduce(function(a, b) {
       return Math.min(a, b);
     });
   }
 
-  function getXOffset(doc, str) 
+  function getXOffset(doc, str)
   {
-    return strOffset = (doc.internal.pageSize.width / 2) - (doc.getStringUnitWidth(str) * doc.internal.getFontSize() / 6);         
+    return strOffset = (doc.internal.pageSize.width / 2) - (doc.getStringUnitWidth(str) * doc.internal.getFontSize() / 6);
   }
 
-  function capitalizeFirstLetter(string) 
+  function capitalizeFirstLetter(string)
   {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   //download image function
   $scope.downloadImage = function(event, chartId)
-  {  
+  {
     var elemRef = document.getElementById(event.target.id);
 
     elemRef.href = document.getElementById(chartId).toDataURL('image/png', 1.0);
-    elemRef.download = chartId + '_chart_' + $scope.currentDateNum + '.png'; 
-  }     
+    elemRef.download = chartId + '_chart_' + $scope.currentDateNum + '.png';
+  }
 
 
 
   //download pdf function
   $scope.downloadPDF = function(chartId)
   {
-    html2canvas($("#" + chartId), 
+    html2canvas($("#" + chartId),
     {
       background: "#ffffff",
-      onrendered: function(canvas) 
+      onrendered: function(canvas)
       {
         var mainTitle = 'Reports Per ' + capitalizeFirstLetter(chartId);
         var sy = 'S.Y. ' + $scope.selectedSY;
@@ -2592,11 +2629,11 @@ angular.module('aceWeb.controller', [])
 
         doc.text(getXOffset(doc, $scope.currentDate), 43, $scope.currentDate);
 
-        doc.addImage(myImage, 'JPEG', 50, 55, 200, 110); 
+        doc.addImage(myImage, 'JPEG', 50, 55, 200, 110);
 
         doc.save(chartId + '_chart_' + $scope.currentDateNum + '.pdf');
       }
-    });  
+    });
   }
 
 }) //closing tag controller
@@ -2735,7 +2772,7 @@ angular.module('aceWeb.controller', [])
       console.log(response);
 
       $scope.adminAccounts = JSON.parse(response.data.adminList);
-      $scope.totalItems = $scope.adminAccounts.length; 
+      $scope.totalItems = $scope.adminAccounts.length;
 
       for(var counter=0; counter < $scope.adminAccounts.length; counter++)
       {
@@ -2794,11 +2831,11 @@ angular.module('aceWeb.controller', [])
   }
 
   $scope.registerAdmin = function(regAdminForm)
-  {   
+  {
     if(regAdminForm.adminFirstName.$valid && regAdminForm.adminLastName.$valid && regAdminForm.adminDepartment.$valid)
     {
       $scope.regAdminForm.adminEmail.$setValidity('emailExist', true);
-      
+
       if(regAdminForm.$valid)
       {
         $scope.createBtn = "Creating Account";
@@ -2843,7 +2880,7 @@ angular.module('aceWeb.controller', [])
           $scope.createBtn = "Create Account";
           $scope.disableRegBtn = false;
         });
-      } 
+      }
     }
   }
 
