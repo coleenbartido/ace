@@ -126,37 +126,54 @@
 												<div class="style-select">
 													<select class="form-control" name="program" id="program" ng-model="program" required>
 
-															<optgroup label="Academic Tracks" ng-if="department==1">
-																<option value="1">Humanities And Social Sciences</option>
-																<option value="2">Accountancy Business And Management</option>
-															</optgroup>
+													<optgroup ng-if="department==1">
+														<option ng-repeat='program in programList' value='{{ program.value }}' ng-selected="program.value == program">
+															{{program.text}}
+														</option>
+													</optgroup>
 
-															<optgroup label="Technical Vocational" ng-if="department==1">
-																<option value="3">Computer Programming</option>
-																<option value="4">Animation</option>
-																<option value="5">Fashion Design</option>
-															</optgroup>
+													<optgroup ng-if="department==2">
+														<option ng-repeat='course in courseList' value='{{ course.value }}'>
+															{{course.text}}
+														</option>
+													</optgroup>
 
-															<optgroup label="Arts and Design Track" ng-if="department==1">
-																<option value="6">Multimedia Arts</option>
-															</optgroup>
+														<!--
+														<optgroup label="Academic Tracks" ng-if="department==1">
+															<option value="1">Humanities And Social Sciences</option>
+															<option value="2">Accountancy Business And Management</option>
+														</optgroup>
 
-															<optgroup label="School of Computing" ng-if="department==2">
-																<option value="1">Software Engineering</option>
-																<option value="2">Game Development</option>
-																<option value="3">Web Development</option>
-															</optgroup>
+														<optgroup label="Technical Vocational" ng-if="department==1">
+															<option value="3">Computer Programming</option>
+															<option value="4">Animation</option>
+															<option value="5">Fashion Design</option>
+														</optgroup>
 
-															<optgroup label="School of Design" ng-if="department==2">
-																<option value="4">Animation</option>
-																<option value="5">Multimedia Arts</option>
-																<option value="6">Fashion Design</option>
-															</optgroup>
+														<optgroup label="Arts and Design Track" ng-if="department==1">
+															<option value="6">Multimedia Arts</option>
+														</optgroup>
 
-															<optgroup label="School of Business" ng-if="department==2">
-																<option value="7">Real Estate Management</option>
-																<option value="8">Business Administration</option>
-															</optgroup>
+
+
+														<optgroup label="School of Computing" ng-if="department==2">
+															<option value="1">Software Engineering</option>
+															<option value="2">Game Development</option>
+															<option value="3">Web Development</option>
+														</optgroup>
+
+														<optgroup label="School of Design" ng-if="department==2">
+															<option value="4">Animation</option>
+															<option value="5">Multimedia Arts</option>
+															<option value="6">Fashion Design</option>
+														</optgroup>
+
+														<optgroup label="School of Business" ng-if="department==2">
+															<option value="7">Real Estate Management</option>
+															<option value="8">Business Administration</option>
+														</optgroup>
+
+														-->
 
 													</select>
 												</div>
@@ -165,6 +182,19 @@
 												<div class="style-select">
 													<select class="form-control" name="level" id="level" ng-model="level" required>
 
+														<optgroup ng-if="department==1">
+															<option ng-repeat='grade in gradeList' value='{{ grade.value }}' ng-selected= '{{grade.value == level}}'>
+																{{grade.text}}
+															</option>
+														</optgroup>
+
+														<optgroup ng-if="department==2">
+															<option ng-repeat='year in yearList' value='{{ year.value }}'>
+																{{year.text}}
+															</option>
+														</optgroup>
+
+														<!--
 														<option ng-if="department==1" value="1">Grade 11</option>
 														<option ng-if="department==1" value="2">Grade 12</option>
 
@@ -173,12 +203,13 @@
 														<option ng-if="department==2" value="3">Third Year</option>
 														<option ng-if="department==2" value="4">Fourth year</option>
 
+														-->
 													</select>
 												</div>
 
 									</div>
 									<div class="modal-footer">
-								<button type="button" class="btn btn-primary" ng-click="updateStudent()">Submit</button>
+										<button type="button" class="btn btn-primary" ng-click="updateStudent()">Submit</button>
 									</div>
 							</div>
 

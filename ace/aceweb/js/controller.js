@@ -1260,7 +1260,7 @@ angular.module('aceWeb.controller', [])
     {
       $scope.settingsForm.userPassword.$setValidity('samePword', true);
     }
-    
+
     if(settingsForm.$valid) //validation if password and password confirmation field match
     {
       $scope.saveBtn = "Saving";
@@ -1342,6 +1342,12 @@ angular.module('aceWeb.controller', [])
 .controller('ReportsController', function(config, $scope, $http, $state, $localStorage, AuthService)
 {
 
+  $scope.reportStatus = [
+    { text: "Uncounseled", value:1},
+    { text: "In Progress", value:2},
+    { text: "Counseled", value:3}
+  ];
+
   $scope.getReportList = function() {
     var reportDetails =
     {
@@ -1373,6 +1379,10 @@ angular.module('aceWeb.controller', [])
 
         if($scope.reports[counter].report_status_id == 1){
           $scope.reports[counter].report_status_id = "Uncounseled";
+        } else if ($scope.reports[counter].report_status_id == 2){
+          $scope.reports[counter].report_status_id = "In Progress";
+        } else {
+          $scope.reports[counter].report_status_id = "Counseled";
         }
       }
 
@@ -1609,7 +1619,7 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  $scope.readReport = function()
+  $scope.readReport = function(report)
   {
     var reportDetails =
     {
@@ -1651,33 +1661,38 @@ angular.module('aceWeb.controller', [])
 
   }
 
+//------------------------------------------- MODALS -----------------
 
   $scope.showPopup = function(report)
   {
     $scope.selectedReport = report;
     console.log(report);
-    $scope.composeEmail = undefined;
+    //$scope.composeEmail = undefined;
 
+  }
+
+  $scope.viewReport = function(report)
+  {
+    $scope.selectedReport = report;
+    console.log(report);
+
+    $scope.comment = report.counselor_note;
+    $scope.status = report.report_status_id;
+    //$scope.composeEmail = undefined;
   }
 
   $scope.createMessage = function(report)
   {
+    $('#messageModal').modal('show');
+
     $scope.selectedReport = report;
     console.log(report);
     $scope.composeEmail = undefined;
 
   }
 
-  $scope.editButton = function(report)
-  {
-    $scope.selectedReport = report;
-    console.log("edit button");
-    BootstrapDialog.show({
-            title: report.report_id,
-            message: "Hi " + report.first_name
-        });
 
-  }
+//------------------------------------------- MODALS -----------------
 
   $scope.sendEmail = function(replyEmail, reportId, studentName, subjectName)
   {
@@ -1720,8 +1735,6 @@ angular.module('aceWeb.controller', [])
     });
   }
 
-
-
   $scope.markAsRead = function(){
 
       var reportDetails =
@@ -1753,8 +1766,8 @@ angular.module('aceWeb.controller', [])
       },
       function(response)
       {
-        //for checking
         console.log(response);
+        //for checking
 
 
       })
@@ -1765,17 +1778,64 @@ angular.module('aceWeb.controller', [])
       });
   }
 
+  $scope.markAsUnread = function()
+  {
+    //$interval.cancel($rootScope.notifPoll);
+    //$interval.cancel($scope.msgPoll);
+
+    var reportDetails =
+    {
+      'reportList' : $scope.reportList,
+      'email': AuthService.getEmail()
+    }
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/markReport',
+      data: reportDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      //for checking
+      console.log(response);
+
+      for(var counter=0; counter < $scope.reports.length; counter++)
+      {
+        if($.inArray($scope.reports[counter].report_id, $scope.reportList.report_id) > -1 && $scope.reports[counter].is_read == 1)
+        {
+          $scope.reports[counter].is_read = 0;
+          //$rootScope.newMessageCount += 1;
+        }
+      }
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+      $scope.markMessageList.report_id = [];
+      $scope.mainCheckbox = false;
+      //$scope.msgPoll = $interval($scope.getMessageList, 3000);
+      //$rootScope.notifPoll = $interval($scope.getNotif, 3000);
+    });
+  }
+
   $('#viewModal').focus(function()
   {
     $scope.readReport();
   })
 
-  $scope.updateReport = function(report)
+  $scope.updateReportStatus = function(report)
   {
     var updateDetails = {
         'email' : report.email,
-        'reportId' : report.id,
-        'status' : $scope.status
+        'reportId' : report.report_id,
+        'status' : parseInt($scope.status),
+        'comment' : $scope.comment
 
     }
 
@@ -1794,7 +1854,7 @@ angular.module('aceWeb.controller', [])
       function(response)
       {
         //for checking
-        console.log(response);
+        //console.log(response);
 
 
       })
@@ -1813,6 +1873,38 @@ angular.module('aceWeb.controller', [])
 
 .controller('ManageStudentController', function(config, $scope, $http, $state, AuthService)
 {
+
+  $scope.programList = [
+    { text: "Humanities and Social Sciences", value: 1 },
+    { text: "Accountancy, Business and Management", value: 2},
+    { text: "Computer Programming", value: 3 },
+    { text: "Animation", value: 4},
+    { text: "Fashion Design", value: 5 },
+    { text: "Multimedia Arts", value: 6},
+  ];
+
+  $scope.courseList = [
+    { text: "Software Engineering", value: 1 },
+    { text: "Game Development", value: 2},
+    { text: "Web Development", value: 3 },
+    { text: "Animation", value: 4},
+    { text: "Multimedia Arts", value: 5 },
+    { text: "Fashion Design", value: 6},
+    { text: "Real Estate Management", value: 7 },
+    { text: "Business Administration", value: 8}
+  ];
+
+  $scope.gradeList = [
+    { text: "Grade 11", value: 1 },
+    { text: "Grade 12", value: 2}
+  ];
+
+  $scope.yearList = [
+    { text: "First Year", value: 1 },
+    { text: "Second Year", value: 2},
+    { text: "Third Year", value: 3},
+    { text: "Fourth Year", value: 4}
+  ];
 
   $scope.getStudentList = function(){
     var adminDetails =
@@ -2012,6 +2104,8 @@ angular.module('aceWeb.controller', [])
     $scope.studFName = student.first_name;
     $scope.program = student.program_id;
     $scope.level = student.level;
+
+    //$scope.defaultSelected = student.program_id;
 
     //console.log($scope.selectedStudent);
     //$scope.composeEmail = undefined;

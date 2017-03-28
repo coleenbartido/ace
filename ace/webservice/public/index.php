@@ -409,8 +409,8 @@
 
     $db = new DbOperation();
 
-    //$department = $db->getDepartment($email);
-    $department = 1;
+    $department = $db->getDepartment($email);
+    //$department = 1;
 
     if($department == 1)
     {
@@ -1015,10 +1015,13 @@
     $email = $updateDetails->email;
     $status = $updateDetails->status;
     $reportId = $updateDetails->reportId;
+    $comment = $updateDetails->comment;
 
     //$responseBody = array('SYList' => json_encode($db->getSYList($department)));
 
-    $response = setResponse($response, 200, $responseBody);
+    $db->updateStatus($reportId, $status, $comment);
+
+    $response = setResponse($response, 200);
     return $response;
   });
 

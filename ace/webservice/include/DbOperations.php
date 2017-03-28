@@ -146,7 +146,7 @@ class DbOperation
             $result = $stmt->execute();
             $stmt->close();
         }
-        
+
         if($result)
         {
             return true;
@@ -801,10 +801,10 @@ class DbOperation
 
 
 
-    public function updateStatus($reportId, $status)
+    public function updateStatus($reportId, $status, $comment)
     {
-      $stmt = $this->con->prepare("UPDATE report_status_id=? FROM report WHERE report_id=?");
-      $stmt->bind_param("ii",$status, $reportId);
+      $stmt = $this->con->prepare("UPDATE report SET report_status_id=?, counselor_note=? WHERE report_id=?");
+      $stmt->bind_param("isi",$status, $comment, $reportId);
       $result = $stmt->execute();
       $stmt->close();
 

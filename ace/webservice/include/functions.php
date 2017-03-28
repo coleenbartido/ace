@@ -121,7 +121,8 @@
       ///xampp/mysql/bin/mysqldump --opt -h localhost -u root ace > "C:\dbbkup.%DATE:/=%.bak"
 
       $var = system($command, $ret_val);
-      echo "annoyeong" . $var . "kill me " . $ret_val;
+
+      return $var;
 
     }
 ?>
