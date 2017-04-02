@@ -492,22 +492,6 @@ angular.module('aceWeb.controller', [])
 
 .controller('ReferralFormController', function(config, $scope, $http, $state, $localStorage, AuthService, $filter)
 {
-  $scope.resetForm = function ()
-  {
-    $scope.refForm.$setPristine();
-    $scope.refForm.$setUntouched();
-
-    $scope.schoolYear = undefined;
-    $scope.schoolTerm = undefined;
-    $scope.studId = undefined;
-    $scope.studFName = undefined;
-    $scope.studLName = undefined;
-    $scope.subjName = undefined;
-    $scope.course = undefined;
-    $scope.year = undefined;
-    $scope.department = undefined;
-    $scope.reasons[6].check = false;
-  }
 
   $scope.initScope = function()
   {
@@ -604,6 +588,64 @@ angular.module('aceWeb.controller', [])
     {
 
     });
+  }
+
+  $scope.getStudentInfo = function(val)
+  {
+    var studentInfo =
+    {
+      'studId' : val
+    }
+    return $http({
+      method: 'POST',
+      url: config.apiUrl + '/getStudentInfo',
+      data: studentInfo,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      console.log(response);
+
+      var students = JSON.parse(response.data.studInfoList)
+      return students;
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
+
+  $scope.onSelect = function ($item, $model, $label) 
+  {
+    console.log($item);
+    $scope.studFName = $item.first_name;
+    $scope.studLName = $item.last_name;
+    $scope.department = '' + $item.department_id;
+    $scope.course = '' + $item.program;
+    $scope.year = '' + $item.level;
+  };
+
+  $scope.resetForm = function ()
+  {
+    $scope.refForm.$setPristine();
+    $scope.refForm.$setUntouched();
+
+    $scope.schoolYear = undefined;
+    $scope.schoolTerm = undefined;
+    $scope.studId = undefined;
+    $scope.studFName = undefined;
+    $scope.studLName = undefined;
+    $scope.subjName = undefined;
+    $scope.course = undefined;
+    $scope.year = undefined;
+    $scope.department = undefined;
+    $scope.reasons[6].check = false;
   }
 })
 

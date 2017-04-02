@@ -12,11 +12,7 @@
               <div class="panel panel-default">
 
                 <div class="panel-heading">
-                  <div class='btn-toolbar pull-right'>
-                    <div class='btn-group'>
-                      <button class="historyBtn btn pull-right"><i class="fa fa-history" aria-hidden="true"></i> View History</button>
-                    </div>
-                  </div>
+          
                   <h1 class="panel-title">Student Information</h1>
 
                 </div>
@@ -29,13 +25,13 @@
 
                 <div class="panel-body studInfo">
 
-                  <!--div class="col-md-12 otherInfo"-->
                   <!---------------------------------------------------------------------->
+
                   <div class="studentID col-md-4">
                     <span class="input-label">Student ID:</span>
 
                     <div class="style-select">
-                      <input name="studId" type="text" ng-Model="studId" class="form-control" id="studId" placeholder="ex. 2014-12345" pattern=".*(\d{4}-\d{5}).*" required>
+                      <input name="studId" type="text" ng-Model="studId" uib-typeahead="students.student_id for students in getStudentInfo($viewValue)" typeahead-on-select="onSelect($item, $model, $label)" typeahead-min-length="6" class="form-control" id="studId" placeholder="ex. 2014-12345" pattern=".*(\d{4}-\d{5}).*" required>
                       <div ng-messages="refForm.studId.$error" ng-show="refForm.studId.$touched || refForm.$submitted">
                         <span class="fa fa-exclamation-circle errspan" ng-message="required || pattern"></span>
                       </div>
@@ -48,6 +44,7 @@
                   </div>
 
                   <!---------------------------------------------------------------------->
+
                   <div class="lastName col-md-4">
                     <span class="input-label">Last Name:</span>
 
@@ -64,6 +61,7 @@
                   </div>
 
                   <!---------------------------------------------------------------------->
+
                   <div class="firstName col-md-4">
                     <span class="input-label">First Name:</span>
 
@@ -80,6 +78,7 @@
                   </div>
 
                   <!---------------------------------------------------------------------->
+
                   <div class="schoolYear col-md-2">
                     <span class="input-label">School Year:</span>
 
@@ -102,6 +101,7 @@
                   </div>
 
                   <!---------------------------------------------------------------------->
+
                   <div class="schoolTerm col-md-2">
                     <span class="input-label">Term:</span>
 
@@ -124,6 +124,7 @@
                   </div>
 
                   <!---------------------------------------------------------------------->
+
                   <div class="subjName col-md-4">
                     <span class="input-label">Subject Name:</span>
 
@@ -140,6 +141,7 @@
                   </div>
 
                   <!---------------------------------------------------------------------->
+
                   <div class="department col-md-4">
                     <span class="input-label">Department:</span>
 
@@ -161,6 +163,7 @@
                   </div>
 
                   <!---------------------------------------------------------------------->
+
                   <div class="level col-md-4">
                     <span class="input-label">Grade/Year Level:</span>
 
@@ -188,6 +191,7 @@
                   </div>
 
                   <!---------------------------------------------------------------------->
+
                   <div class="courseProgram col-md-8">
                     <span class="input-label">Program/Course:</span>
 
@@ -240,11 +244,13 @@
                   </div>
 
                 </div>
+
                 <!---------------------------------------------------------------------->
 
-
                 <div class="reasonRef panel-heading custom-panel-header">
+
                   <h1 class="panel-title">Reason/s for Referral</h1>
+
                 </div>
 
                 <div class="referral panel-body reason-panel-body">
@@ -252,6 +258,7 @@
                   <div class="col-md-12 no-side-padding">
 
                     <!---------------------------------------------------------------------->
+
                     <div class="row">
 
 
