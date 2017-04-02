@@ -1033,7 +1033,7 @@ angular.module('aceWeb.controller', [])
 
       for(var counter=0; counter < $scope.uniqueMessages.length; counter++)
       {
-        if($scope.uniqueMessages[counter].report_id == $scope.selectedMessage.report_id && $scope.uniqueMessages[counter].receiver_email == AuthService.getEmail() && $scope.uniqueMessages[counter].is_read == 0)
+        if($scope.uniqueMessages[counter].report_id == $scope.selectedMessage.report_id && $scope.uniqueMessages[counter].is_read == 0)
         {
           $scope.uniqueMessages[counter].is_read = 1;
           $rootScope.newMessageCount -= 1;

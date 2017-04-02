@@ -63,91 +63,74 @@
                                  </form>
                              </div>
 
-                             <!--ul class="unstyled inbox-pagination">
-                                 <li><span>1-50 of 234</span></li>
-                                 <li>
-                                     <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
-                                 </li>
-                                 <li>
-                                     <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
-                                 </li>  
-                             </ul-->
                          </div>
 
+                      <div class="table-height">
+                        <table class="table table-inbox table-hover">
+                          <col width="50">
+                          <col width="120">
+                          <col width="330">
+                          <col width="80">
+                          <col width="50">
 
-                      <table class="table table-inbox table-hover">
-                        <col width="50">
-                        <col width="50">
-                        <col width="400">
-                        <col width="80">
-                        <col width="50">
+                          <thead>
 
-                        <tbody>
-                          <tr class="title">
-                            <!--td>
-                              <center>
-                                <input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
-                              </center>
-                            </td-->
-                            <td>
+                            <tr class="title">
+                            
+                              <td></td>
 
-                            </td>
+                              <td>FROM</td>
 
-                            <td>
-                              FROM
-                            </td>
+                              <td>SUBJECT</td>
 
-                            <td>
-                              <center>SUBJECT</center>
-                            </td>
+                              <td>DATE</td>
 
-                            <td>
-                              DATE
-                            </td>
+                              <td><center>ACTION</center></td>
 
-                            <td>
-                              <center>ACTION</center>
-                            </td>
-                          </tr>
+                            </tr>
 
-                          <tr class="messages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
-                              <td class="inbox-small-cells">
+                          </thead>
+
+                          <tbody>
+                            
+                            <tr class="messages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
+                                <td class="inbox-small-cells">
+                                    <center>
+                                      <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" checklist-change="updateMainCheckbox()" noclick>
+                                    </center>
+                                </td>
+
+                                <td class="view-message dont-show">
+                                  {{ message.sender_fullName }}
+                                </td>
+
+                                <td class="view-message">
+                                  {{ message.message_subject }}
+                                </td>
+
+                                <td class="view-message">
+                                  {{ message.message_date | date:"shortDate" }}
+                                </td>
+
+                                <td>
                                   <center>
-                                    <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" checklist-change="updateMainCheckbox()" noclick>
+                                  <button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" noclick><span class="fa fa-trash"></span></button>
                                   </center>
-                              </td>
+                                </td>
+                            </tr>
+                            <tr class="noShow" ng-show="(uniqueMessages | filter:searchBox).length == 0">
+                              <td colspan="5"><center>NO RESULT</center></td>
+                            </tr>
+                          </tbody>
 
-                              <td class="view-message dont-show">
-                                {{ message.sender_fullName }}
-                              </td>
+                        </table>
 
-                              <td class="view-message ">
-                                <center>{{ message.message_subject }}</center>
-                              </td>
+                        <div class="page pull-right custom-pagination" ng-show="(uniqueMessages | filter:searchBox).length > 0">
+                          <ul uib-pagination total-items="(uniqueMessages | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+                        </div>
 
-                              <td class="view-message">
-                                {{ message.message_date | date:"shortDate" }}
-                              </td>
-
-                              <td>
-                                <center>
-                                <button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" noclick><span class="fa fa-trash"></span></button>
-                                </center>
-                              </td>
-                          </tr>
-                          <table class="noShow" ng-show="(uniqueMessages | filter:searchBox).length == 0">
-                            <col width="2000"/>
-                            <td><center>
-                              NO RESULT
-                            </center></table>
-                          </tr>
-                      </tbody>
-
-                      <div class="page pull-right" ng-show="(uniqueMessages | filter:searchBox).length > 0">
-                        <ul uib-pagination total-items="(uniqueMessages | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
                       </div>
-
-                      </table>
+                    
                   </div>
               </aside>
           </div>
