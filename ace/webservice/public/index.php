@@ -892,13 +892,16 @@
 
     $db = new DbOperation();
 
+    $last_name = $db->getFirstName($sender);
+    $first_name = $db->getLastName($sender);
+
     if($db->insertMessage($report_id, $sender, $receiver, $message, $subject, $isRead, $status, $timestamp))
     {
       $subject = "ACE Message";
       $link = $_ENV['DOMAIN']->CLIENT_URL;
       $body =
 
-        "Greetings, <br><br>" . $sender . " sent you a message!
+        "Greetings, <br><br>" . $first_name . " " . $last_name . " sent you a message!
         <br><br>To view message, login <a href=" . $link . ">here</a>.
         <br><br><br>Thank you.";
 
@@ -975,38 +978,39 @@
 
 
   $app->post('/getSYList', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
+{
+  $accountDetails = json_decode(file_get_contents("php://input"));
 
-    $db = new DbOperation();
+  $db = new DbOperation();
 
-    $email = $accountDetails->email;
-    $department = $db->getDepartment($email);
-    $status = 1;
+  $email = $accountDetails->email;
+  $department = $db->getDepartment($email);
+  $status = 1;
 
-    $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)));
+  $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)));
 
-    $response = setResponse($response, 200, $responseBody);
-    return $response;
-  });
+  $response = setResponse($response, 200, $responseBody);
+  return $response;
+});
 
 
-  $app->post('/getChartData', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
+$app->post('/getChartData', function (ServerRequestInterface $request, ResponseInterface $response)
+{
+  $accountDetails = json_decode(file_get_contents("php://input"));
 
-    $db = new DbOperation();
+  $db = new DbOperation();
 
-    $email = $accountDetails->email;
-    $schoolYear = $accountDetails->schoolYear;
-    $department = $db->getDepartment($email);
-    $status = 1;
+  $email = $accountDetails->email;
+  $schoolYear = $accountDetails->schoolYear;
+  $department = $db->getDepartment($email);
+  $status = 1;
 
-    $responseBody = array('department' => $department, 'termData' => json_encode($db->getTermData($department, $status, $schoolYear)), 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear)));
+  $responseBody = array('department' => $department, 'termData' => json_encode($db->getTermData($department, $status, $schoolYear)), 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear)));
 
-    $response = setResponse($response, 200, $responseBody);
-    return $response;
-  });
+  $response = setResponse($response, 200, $responseBody);
+  return $response;
+});
+
 
 
   $app->post('/updateStatus', function (ServerRequestInterface $request, ResponseInterface $response)

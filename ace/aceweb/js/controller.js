@@ -1342,6 +1342,7 @@ angular.module('aceWeb.controller', [])
 .controller('ReportsController', function(config, $scope, $http, $state, $localStorage, AuthService)
 {
 
+
   $scope.reportStatus = [
     { text: "Uncounseled", value:1},
     { text: "In Progress", value:2},
@@ -1378,11 +1379,11 @@ angular.module('aceWeb.controller', [])
         $scope.reports[counter].sender_fullName = $scope.reports[counter].sender_fname + " " + $scope.reports[counter].sender_lname;
 
         if($scope.reports[counter].report_status_id == 1){
-          $scope.reports[counter].report_status_id = "Uncounseled";
+          $scope.reports[counter].report_status = "Uncounseled";
         } else if ($scope.reports[counter].report_status_id == 2){
-          $scope.reports[counter].report_status_id = "In Progress";
+          $scope.reports[counter].report_status = "In Progress";
         } else {
-          $scope.reports[counter].report_status_id = "Counseled";
+          $scope.reports[counter].report_status = "Counseled";
         }
       }
 
@@ -1416,7 +1417,7 @@ angular.module('aceWeb.controller', [])
     $scope.maxSize = 5;
     $scope.currentPage = 1;
     $scope.itemsPerPage = 10;
-
+    $scope.comment = "N/A";
     $scope.getReportList();
   } //scope initScope
 
@@ -1624,7 +1625,9 @@ angular.module('aceWeb.controller', [])
     var reportDetails =
     {
       'reportId' : $scope.selectedReport.report_id,
-      'email': AuthService.getEmail()
+      //'email': AuthService.getEmail(),
+      'email' : $scope.selectedReport.email
+
     }
 
     $http({
@@ -1677,7 +1680,7 @@ angular.module('aceWeb.controller', [])
     console.log(report);
 
     $scope.comment = report.counselor_note;
-    $scope.status = report.report_status_id;
+    $scope.status = report.report_status_id + "";
     //$scope.composeEmail = undefined;
   }
 
@@ -1694,19 +1697,20 @@ angular.module('aceWeb.controller', [])
 
 //------------------------------------------- MODALS -----------------
 
-  $scope.sendEmail = function(replyEmail, reportId, studentName, subjectName)
+  //$scope.sendEmail = function(replyEmail, reportId, studentName, subjectName)
+  $scope.sendEmail = function(report)
   {
-    $scope.subject = "Referral for  " + studentName + ": " + subjectName;
+    $scope.subject = "Referral for  " + report.first_name + " " + report.last_name + ": " + report.subject_name;
 
     $scope.showLimit -= 1;
 
     var messageDetails =
     {
       'sender' : AuthService.getEmail(),
-      'receiver': replyEmail,
+      'receiver': report.email, //replyEmail,
       'messageBody': $scope.composeEmail,
       'messageSubj': $scope.subject,
-      'reportId': reportId
+      'reportId': report.report_id//reportId
     }
 
     $http({
@@ -1831,6 +1835,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.updateReportStatus = function(report)
   {
+
     var updateDetails = {
         'email' : report.email,
         'reportId' : report.report_id,
@@ -1925,6 +1930,12 @@ angular.module('aceWeb.controller', [])
 
       $scope.students = JSON.parse(response.data.studentList);
       $scope.totalItems = $scope.students.length;
+
+      for(var counter =0; counter < $scope.students.length; counter++){
+
+        $scope.students[counter].student_name = $scope.students[counter].first_name
+                + " " + $scope.students[counter].last_name;
+      }
 
 
     },
@@ -2182,6 +2193,22 @@ angular.module('aceWeb.controller', [])
     });
   }
 
+
+  $scope.changeFilterTo = function(filterProperty)
+  {
+    $scope.searchBox = undefined;
+
+    $scope.myFilter = filterProperty;
+
+    if(filterProperty == 'student_name')
+    {
+      $scope.searchPlacholder = 'Name';
+    }
+    else if(filterProperty == 'program')
+    {
+      $scope.searchPlacholder = 'Course / Program';
+    }
+  }
 
 })
 
@@ -2506,7 +2533,7 @@ angular.module('aceWeb.controller', [])
       $scope.showSY = true;
 
       $scope.SYList = JSON.parse(response.data.SYList);
-    
+
       if($scope.SYList.length != 0)
       {
         $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
@@ -2558,7 +2585,7 @@ angular.module('aceWeb.controller', [])
       var statusDataObj = JSON.parse(response.data.statusData);
       console.log(response.data.levelData);
 
-      //labels 
+      //labels
 
       if(dept == 1)
       {
@@ -2568,18 +2595,18 @@ angular.module('aceWeb.controller', [])
       else
       {
         $scope.programLabels = [['','Software','Engineering'],['','Game','Development'],['','Web','Development'],'Animation',['','Multimedia','Arts And Design'],['','Fashion','Design'],['','Real Estate','Management'],['','Business','Administration']];
-        $scope.levelLabels = ['First Year','Second Year','Third Year','Fourth Year'];  
+        $scope.levelLabels = ['First Year','Second Year','Third Year','Fourth Year'];
       }
-     
+
       $scope.termLabels = ['First Term','Second Term','Third Term'];
       $scope.reasonLabels = ['Absent or Late','Underachieving','Failing','Plans to Transfer','Violent/Disruptive','Emotional Distress','Others'];
       $scope.statusLabels = ['Uncounseled','In Progress','Counseled'];
 
-      //data 
-      
-      $scope.termData = [[]]; 
-      $scope.programData = [[]]; 
-      $scope.levelData = [[]];    
+      //data
+
+      $scope.termData = [[]];
+      $scope.programData = [[]];
+      $scope.levelData = [[]];
       $scope.reasonData = [[]];
       $scope.statusData = [[]];
 
@@ -2588,7 +2615,7 @@ angular.module('aceWeb.controller', [])
       convertToArray(levelDataObj[0], $scope.levelData[0]);
       convertToArray(reasonDataObj[0], $scope.reasonData[0]);
       convertToArray(statusDataObj[0], $scope.statusData[0]);
-     
+
       //series
       $scope.series = ['Number of reports'];
 
@@ -2621,14 +2648,14 @@ angular.module('aceWeb.controller', [])
   } //scope initScope
 
   $scope.initScope();
- 
+
   //user defined functions
   function convertToArray(obj, scopeArr)
   {
-    angular.forEach(obj, function(value, key) 
+    angular.forEach(obj, function(value, key)
     {
       scopeArr.push(value);
-    });   
+    });
   }
 
   function arrayMax(array)
@@ -2675,17 +2702,17 @@ angular.module('aceWeb.controller', [])
           fontFamily: 'gotham-book'
         }
         ,
-        tooltips: 
+        tooltips:
         {
           enabled: true,
           mode: 'single',
           callbacks: {
             title: function(tooltipItems, data) {
-              return '';          
+              return '';
             }
           }
         }
-      }; 
+      };
       return option;
   }
 

@@ -11,21 +11,21 @@
 
 	<div class="input-group">
 
-					<!--
-          <div class="input-group-btn search-panel">
-							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-									<span id="search_concept">Search by</span>
-									<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)" ng-click="changeFilterTo('sender_fullName')">Name</a></li>
-									<li><a href="javascript:void(0)" ng-click="changeFilterTo('message_subject')">Subject</a></li>
-							</ul>
-					</div>
 
-          -->
+		<form class="pull-right searchBy">
+			<input type="text" class="sr-input" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}">
+				<div class="btn-group hidden-phone">
+						<button class="btn btn-default dropdown-toggle" type="button" id="searchBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						 Search By
+						 <span class="caret"></span>
+					 </button>
 
-					<input type="text" class="form-control" ng-model="searchBox" placeholder="Search">
+					 <ul class="dropdown-menu" aria-labelledby="searchBy" role="menu" id="search">
+						 <li><a href="javascript:void(0)" ng-click="changeFilterTo('student_name')">Name</a></li>
+						 <li><a href="javascript:void(0)" ng-click="changeFilterTo('program')">Course / Program</a></li>
+				</div>
+		</form>
+
 
 		</div>
 
@@ -78,7 +78,7 @@
 								{{student.student_id}}
 							</td>
 							<td>
-								{{student.first_name}} {{student.last_name}}
+								{{student.student_name }}
 							</td>
               <td>
 								{{student.program}}

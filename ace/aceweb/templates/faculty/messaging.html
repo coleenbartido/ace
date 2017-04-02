@@ -76,7 +76,7 @@
                           <thead>
 
                             <tr class="title">
-                            
+
                               <td></td>
 
                               <td>FROM</td>
@@ -92,7 +92,7 @@
                           </thead>
 
                           <tbody>
-                            
+
                             <tr class="messages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
                                 <td class="inbox-small-cells">
                                     <center>
@@ -130,7 +130,7 @@
                         </div>
 
                       </div>
-                    
+
                   </div>
               </aside>
           </div>

@@ -95,7 +95,7 @@
 								{{ report.program }}
 							</td>
 							<td>
-								{{ report.report_status_id }}
+								{{ report.report_status }}
 							</td>
 							<td>
 								<!--
@@ -161,7 +161,10 @@
 								</div>
 
 								<div class="modal-footer">
+										<!--
 										<button type="button" class="btn btn-primary" ng-click="sendEmail(selectedReport.email, selectedReport.report_id, selectedReport.student_id, selectedReport.subject_name)">Reply</button>
+										-->
+										<button type="button" class="btn btn-primary" ng-click="sendEmail(selectedReport)">Reply</button>
 										<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
 								</div>
 						</div>
@@ -218,15 +221,19 @@
 											<p><b>Report Status</b></p>
 											<select class="form-control" name="status" id="status" ng-model="status" required>
 
-											<option ng-selected="status == item.value" ng-repeat="item in reportStatus" ng-value="item.value">{{item.text}}</option>
-
+											<!--<option ng-selected=" {{status == item.text }}" ng-repeat="item in reportStatus" ng-value="item.value">{{item.text}}</option>-->
+											<option value="1">Uncounseled</option>
+											<option value="2">In Progress</option>
+											<option value="3">Counseled</option>
 											</select>
 
+											<!--
 											<select ng-model="status" ng-options="house.house_id as house.house_display_name for house in house_list">
 											</select>
+											-->
 
 											<p><b>Counselor's Note</b></p>
-											<textarea id="customTextArea" rows="4" ng-model="comment">N/A</textarea>
+											<textarea id="customTextArea" rows="4" ng-model="comment" placeholder="Write a comment..."></textarea>
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-primary" ng-click="updateReportStatus(selectedReport)">Update</button>
