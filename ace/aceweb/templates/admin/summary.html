@@ -5,60 +5,77 @@
 </head>
 
 <body>
-	<a class="btn btn-info" ng-click="dummy()">Dummy</a>
-	<select ng-model="selectedSY">
-    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
-    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
-    </select>
 
-    <uib-tabset active="activeJustified" justified="true">
+	<div ng-show="showSY && showChart">
 
-	  <uib-tab index="0" heading="Term">
-	  	<div class="col-md-9">
-			<canvas id="term" class="chart chart-bar" chart-data="termData" chart-labels="termLabels" chart-series="series" chart-options="options">
-			</canvas>
-		</div>
-		<a class="btn btn-info" id="downloadImg1" ng-click="downloadImage($event, 'term')">Save as Image</a>
-		<a class="btn btn-info" id="downloadPDF1" ng-click="downloadPDF('term')">Save as PDF</a>
-	  </uib-tab>
+		<select ng-model="selectedSY" ng-change="getSummaryData()">
+	    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
+	    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
+	    </select>
 
-	  <uib-tab index="1" heading="Program">
-	  	<div class="col-md-9">
-			<canvas id="program" class="chart chart-bar" chart-data="programData" chart-labels="programLabels" chart-series="series" chart-options="options">
-			</canvas>
-		</div>
-		<a class="btn btn-info" id="downloadImg2" ng-click="downloadImage($event, 'program')">Save as Image</a>
-		<a class="btn btn-info" id="downloadPDF2" ng-click="downloadPDF('program')">Save as PDF</a>
-	  </uib-tab>
+	    <uib-tabset active="activeJustified" justified="true">
 
-	  <uib-tab index="2" heading="Grade/Year Level">
-	  	<div class="col-md-9">
-			<canvas id="level" class="chart chart-bar" chart-data="levelData" chart-labels="levelLabels" chart-series="series" chart-options="options">
-			</canvas>
-		</div>
-		<a class="btn btn-info" id="downloadImg3" ng-click="downloadImage($event, 'level')">Save as Image</a>
-		<a class="btn btn-info" id="downloadPDF3" ng-click="downloadPDF('level')">Save as PDF</a>
-	  </uib-tab>
+		  <uib-tab index="0" heading="Term">
+		  	<div class="col-md-11">
+				<canvas id="term" class="chart chart-bar" chart-data="termData" chart-labels="termLabels" chart-series="series" chart-options="termOptions">
+				</canvas>
+			</div>
+			<a class="btn btn-info" id="downloadImg1" ng-click="downloadImage($event, 'term')">Save as Image</a>
+			<a class="btn btn-info" id="downloadPDF1" ng-click="downloadPDF('term')">Save as PDF</a>
+		  </uib-tab>
 
-	  <uib-tab index="3" heading="Reason">
-	  	<div class="col-md-9">
-			<canvas id="reason" class="chart chart-bar" chart-data="reasonData" chart-labels="reasonLabels" chart-series="series" chart-options="options">
-			</canvas>
-		</div>
-		<a class="btn btn-info" id="downloadImg4" ng-click="downloadImage($event, 'reason')">Save as Image</a>
-		<a class="btn btn-info" id="downloadPDF4" ng-click="downloadPDF('reason')">Save as PDF</a>
-	  </uib-tab>
+		  <uib-tab index="1" heading="Program">
+		  	<div class="col-md-11">
+				<canvas id="program" class="chart chart-bar" chart-data="programData" chart-labels="programLabels" chart-series="series" chart-options="programOptions">
+				</canvas>
+			</div>
+			<a class="btn btn-info" id="downloadImg2" ng-click="downloadImage($event, 'program')">Save as Image</a>
+			<a class="btn btn-info" id="downloadPDF2" ng-click="downloadPDF('program')">Save as PDF</a>
+		  </uib-tab>
 
-	  <uib-tab index="4" heading="Report Status">
-	  	<div class="col-md-9">
-			<canvas id="status" class="chart chart-bar" chart-data="statusData" chart-labels="statusLabels" chart-series="series" chart-options="options">
-			</canvas>
-		</div>
-		<a class="btn btn-info" id="downloadImg5" ng-click="downloadImage($event, 'status')">Save as Image</a>
-		<a class="btn btn-info" id="downloadPDF5" ng-click="downloadPDF('status')">Save as PDF</a>
-	  </uib-tab>
+		  <uib-tab index="2" heading="Grade/Year Level">
+		  	<div class="col-md-11">
+				<canvas id="level" class="chart chart-bar" chart-data="levelData" chart-labels="levelLabels" chart-series="series" chart-options="levelOptions">
+				</canvas>
+			</div>
+			<a class="btn btn-info" id="downloadImg3" ng-click="downloadImage($event, 'level')">Save as Image</a>
+			<a class="btn btn-info" id="downloadPDF3" ng-click="downloadPDF('level')">Save as PDF</a>
+		  </uib-tab>
 
-	</uib-tabset>
+		  <uib-tab index="3" heading="Reason">
+		  	<div class="col-md-11">
+				<canvas id="reason" class="chart chart-bar" chart-data="reasonData" chart-labels="reasonLabels" chart-series="series" chart-options="reasonOptions">
+				</canvas>
+			</div>
+			<a class="btn btn-info" id="downloadImg4" ng-click="downloadImage($event, 'reason')">Save as Image</a>
+			<a class="btn btn-info" id="downloadPDF4" ng-click="downloadPDF('reason')">Save as PDF</a>
+		  </uib-tab>
 
+		  <uib-tab index="4" heading="Report Status">
+		  	<div class="col-md-11">
+				<canvas id="status" class="chart chart-bar" chart-data="statusData" chart-labels="statusLabels" chart-series="series" chart-options="statusOptions">
+				</canvas>
+			</div>
+			<a class="btn btn-info" id="downloadImg5" ng-click="downloadImage($event, 'status')">Save as Image</a>
+			<a class="btn btn-info" id="downloadPDF5" ng-click="downloadPDF('status')">Save as PDF</a>
+		  </uib-tab>
 
+		</uib-tabset>
+
+	</div>
+
+	<div class="sk-fading-circle" ng-hide="showSY && showChart">
+      <div class="sk-circle1 sk-circle"></div>
+      <div class="sk-circle2 sk-circle"></div>
+      <div class="sk-circle3 sk-circle"></div>
+      <div class="sk-circle4 sk-circle"></div>
+      <div class="sk-circle5 sk-circle"></div>
+      <div class="sk-circle6 sk-circle"></div>
+      <div class="sk-circle7 sk-circle"></div>
+      <div class="sk-circle8 sk-circle"></div>
+      <div class="sk-circle9 sk-circle"></div>
+      <div class="sk-circle10 sk-circle"></div>
+      <div class="sk-circle11 sk-circle"></div>
+      <div class="sk-circle12 sk-circle"></div>
+  	</div> <!-- spinner -->
 </body>

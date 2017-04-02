@@ -982,8 +982,9 @@
 
     $email = $accountDetails->email;
     $department = $db->getDepartment($email);
+    $status = 1;
 
-    $responseBody = array('SYList' => json_encode($db->getSYList($department)));
+    $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)));
 
     $response = setResponse($response, 200, $responseBody);
     return $response;
@@ -997,9 +998,11 @@
     $db = new DbOperation();
 
     $email = $accountDetails->email;
+    $schoolYear = $accountDetails->schoolYear;
     $department = $db->getDepartment($email);
+    $status = 1;
 
-    $responseBody = array('SYList' => json_encode($db->getSYList($department)));
+    $responseBody = array('department' => $department, 'termData' => json_encode($db->getTermData($department, $status, $schoolYear)), 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear)));
 
     $response = setResponse($response, 200, $responseBody);
     return $response;

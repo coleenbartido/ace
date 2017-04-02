@@ -2503,16 +2503,15 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
+      $scope.showSY = true;
+
       $scope.SYList = JSON.parse(response.data.SYList);
-
-      for(var counter=0; counter < $scope.SYList.length; counter++)
-      {
-        $scope.SYList[counter].school_year = $scope.SYList[counter].school_year.split('-').join(' - ');
-      }
-
+    
       if($scope.SYList.length != 0)
       {
         $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
+
+        $scope.getSummaryData();
       }
       else
       {
@@ -2549,63 +2548,56 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
+      $scope.showChart = true;
+
+      var dept = response.data.department;
+      var termDataObj = JSON.parse(response.data.termData);
+      var programDataObj = JSON.parse(response.data.programData);
+      var levelDataObj = JSON.parse(response.data.levelData);
+      var reasonDataObj = JSON.parse(response.data.reasonData);
+      var statusDataObj = JSON.parse(response.data.statusData);
+      console.log(response.data.levelData);
+
+      //labels 
+
+      if(dept == 1)
+      {
+        $scope.programLabels = [['','Humanities And','Social Sciences'],['','Accountancy Business','And Management'],['','Computer','Programming'],'Animation','Fashion Design','Multimedia Arts'];
+        $scope.levelLabels = ['Grade 11','Grade 12'];
+      }
+      else
+      {
+        $scope.programLabels = [['','Software','Engineering'],['','Game','Development'],['','Web','Development'],'Animation',['','Multimedia','Arts And Design'],['','Fashion','Design'],['','Real Estate','Management'],['','Business','Administration']];
+        $scope.levelLabels = ['First Year','Second Year','Third Year','Fourth Year'];  
+      }
+     
       $scope.termLabels = ['First Term','Second Term','Third Term'];
-
-      $scope.programLabels = ['SE','GD','WD'];
-
-      $scope.levelLabels = ['First Year','Second Year','Third Year','Fourth Year'];
-
-      $scope.reasonLabels = ['Late','Mental','Lazy'];
-
+      $scope.reasonLabels = ['Absent or Late','Underachieving','Failing','Plans to Transfer','Violent/Disruptive','Emotional Distress','Others'];
       $scope.statusLabels = ['Uncounseled','In Progress','Counseled'];
 
-      $scope.termData = [[40,50,45]];
+      //data 
+      
+      $scope.termData = [[]]; 
+      $scope.programData = [[]]; 
+      $scope.levelData = [[]];    
+      $scope.reasonData = [[]];
+      $scope.statusData = [[]];
 
-      $scope.programData = [[20,30,25]];
-
-      $scope.levelData = [[100,30,25,77]];
-
-      $scope.reasonData = [[50,70,25]];
-
-      $scope.statusData = [[54,30,85]];
-
+      convertToArray(termDataObj[0], $scope.termData[0]);
+      convertToArray(programDataObj[0], $scope.programData[0]);
+      convertToArray(levelDataObj[0], $scope.levelData[0]);
+      convertToArray(reasonDataObj[0], $scope.reasonData[0]);
+      convertToArray(statusDataObj[0], $scope.statusData[0]);
+     
+      //series
       $scope.series = ['Number of reports'];
 
-      $scope.combinedArr = $scope.termData[0].concat($scope.programData[0], $scope.levelData[0], $scope.reasonData[0], $scope.statusData[0]);
-
-      $scope.options =
-      {
-        scales:
-        {
-          yAxes:
-          [{
-              id: 'y-axis-1',
-              type: 'linear',
-              display: true,
-              position: 'left',
-              ticks:
-              {
-                min: 0, max: Math.ceil((arrayMax($scope.combinedArr) + 10) / 10) * 10, stepSize: 10
-              },
-              scaleLabel:
-              {
-                display: true,
-                labelString: 'Number of Reports'
-              }
-          }]
-        },
-        title:
-        {
-          display: true,
-          text: 'Reports Per',
-          padding: 25,
-          fontSize: 25,
-          fontFamily: 'gotham-book'
-        }
-      };
-
-
-      //$scope.SYList = JSON.parse(response.data.SYList);
+      //options
+      $scope.termOptions = getOption("Term", $scope.termData[0]);
+      $scope.programOptions = getOption("Program", $scope.programData[0]);
+      $scope.levelOptions = getOption("Level", $scope.levelData[0]);
+      $scope.reasonOptions = getOption("Reason", $scope.reasonData[0]);
+      $scope.statusOptions = getOption("Status", $scope.statusData[0]);
     },
     function(response)
     {
@@ -2619,29 +2611,30 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.showSY = false;
+    $scope.showChart = false;
     $scope.currentDate = Date.today().toString('dddd, MMMM d, yyyy');
     $scope.currentDateNum = Date.today().toString('MMddyy');
     $scope.isEmptySYList = false;
 
-
     $scope.getSY();
-    $scope.getSummaryData();
   } //scope initScope
 
   $scope.initScope();
-
+ 
   //user defined functions
+  function convertToArray(obj, scopeArr)
+  {
+    angular.forEach(obj, function(value, key) 
+    {
+      scopeArr.push(value);
+    });   
+  }
+
   function arrayMax(array)
   {
     return array.reduce(function(a, b) {
       return Math.max(a, b);
-    });
-  }
-
-  function arrayMin(array)
-  {
-    return array.reduce(function(a, b) {
-      return Math.min(a, b);
     });
   }
 
@@ -2650,21 +2643,61 @@ angular.module('aceWeb.controller', [])
     return strOffset = (doc.internal.pageSize.width / 2) - (doc.getStringUnitWidth(str) * doc.internal.getFontSize() / 6);
   }
 
-  function capitalizeFirstLetter(string)
+  function getOption(chartName, dataArr)
   {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    var option =
+    {
+        scales:
+        {
+          yAxes:
+          [{
+              id: 'y-axis-1',
+              type: 'linear',
+              display: true,
+              position: 'left',
+              ticks:
+              {
+                min: 0, max: (Math.ceil(arrayMax(dataArr) / 10) * 10) + 30, stepSize: 10
+              },
+              scaleLabel:
+              {
+                display: true,
+                labelString: 'Number of Reports'
+              }
+          }]
+        },
+        title:
+        {
+          display: true,
+          text: 'Reports Per ' + chartName,
+          padding: 30,
+          fontSize: 30,
+          fontFamily: 'gotham-book'
+        }
+        ,
+        tooltips: 
+        {
+          enabled: true,
+          mode: 'single',
+          callbacks: {
+            title: function(tooltipItems, data) {
+              return '';          
+            }
+          }
+        }
+      }; 
+      return option;
   }
 
   //download image function
   $scope.downloadImage = function(event, chartId)
   {
+    var sy = $scope.selectedSY.split(/\s*-\s*/);
     var elemRef = document.getElementById(event.target.id);
 
     elemRef.href = document.getElementById(chartId).toDataURL('image/png', 1.0);
-    elemRef.download = chartId + '_chart_' + $scope.currentDateNum + '.png';
+    elemRef.download = chartId + '_chart_' + $scope.currentDateNum + '_' + sy[0] + sy[1] + '.png';
   }
-
-
 
   //download pdf function
   $scope.downloadPDF = function(chartId)
@@ -2674,25 +2707,13 @@ angular.module('aceWeb.controller', [])
       background: "#ffffff",
       onrendered: function(canvas)
       {
-        var mainTitle = 'Reports Per ' + capitalizeFirstLetter(chartId);
-        var sy = 'S.Y. ' + $scope.selectedSY;
+        var sy = $scope.selectedSY.split(/\s*-\s*/);
         var myImage = canvas.toDataURL("image/jpeg");
 
         var doc = new jsPDF('landscape');
 
-        doc.setFontSize(28);
-        doc.setFontType('bold');
-        doc.text(getXOffset(doc, mainTitle), 25, mainTitle);
-
-        doc.setFontSize(16);
-        doc.setFontType('normal');
-        doc.text(getXOffset(doc, sy), 35, sy);
-
-        doc.text(getXOffset(doc, $scope.currentDate), 43, $scope.currentDate);
-
-        doc.addImage(myImage, 'JPEG', 50, 55, 200, 110);
-
-        doc.save(chartId + '_chart_' + $scope.currentDateNum + '.pdf');
+        doc.addImage(myImage, 'JPEG', 23, 15, 250, 160);
+        doc.save(chartId + '_chart_' + $scope.currentDateNum + '_' + sy[0] + sy[1] + '.pdf');
       }
     });
   }
