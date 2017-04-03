@@ -38,6 +38,21 @@ body {
     background-color: #ef5068;
 }
 
+.caps-lock-alert{
+  color: white;
+  margin-top: -2%;
+  margin-bottom: 7%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: inherit;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: gotham-book;
+  font-size: 14px;
+  border-radius: 4px 4px;
+  background-color: #FAB631;
+}
+
 .input-group {
     margin-bottom: 3%;
 }
