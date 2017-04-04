@@ -470,6 +470,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.userName = AuthService.getName();
     $scope.getNotif();
   }
 
@@ -1370,6 +1371,12 @@ angular.module('aceWeb.controller', [])
 
 .controller('AdminController', function(config, $scope, $http, $state, AuthService)
 {
+  $scope.initScope = function()
+  {
+    $scope.userName = AuthService.getName();
+  }
+
+  $scope.initScope();
 
   $scope.logout = function()
   {
@@ -2892,6 +2899,13 @@ angular.module('aceWeb.controller', [])
 
 .controller('SuperAdminController', function(config, $scope, $http, $state, AuthService)
 {
+  $scope.initScope = function()
+  {
+    $scope.userName = AuthService.getName();
+  }
+
+  $scope.initScope();
+
   $scope.logout = function()
   {
     AuthService.logout();

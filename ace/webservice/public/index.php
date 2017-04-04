@@ -9,7 +9,6 @@
 
 
   $app->add(new \Slim\Middleware\JwtAuthentication([
-
     "path" => "/auth",
     "secure" => false,
     "secret" => $_ENV['KEY']->SECRET_KEY
@@ -23,28 +22,38 @@
   });
 
 
-
+  //new
   $app->post('/login', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $loginDetails = json_decode(file_get_contents("php://input")); //php://input is a read-only stream that allows you to read raw data from the request body. json_decode function takes a JSON string and converts it into a PHP array or object
 
+    $db = new DbOperation();
+
     $status = 1;
     $email = $loginDetails->email;
     $pword = $loginDetails->pword;
-
-    $db = new DbOperation();
+    
 
     if($db->loginUser($email, $pword, $status)) // if true yung e rereturn ng function na "loginUser($email, $pword)", magiging true yung condition. Thus, e execute nya yung if block. At the same time, siniset nya rin yung value ng "$response['isValidAccount']" sa kung ano ang erereturn ng function na "loginUser($email, $pword)"
     {
       $tokenId    = base64_encode(mcrypt_create_iv(32));
       $issuedAt   = time();
-      $serverName = "ACE";                        // Retrieve the server name from config file
+      $serverName = "ACE";  
+      $role = $db->getAccountRole($email);
+
+      if($role == 1)
+      {
+        $name = "Super Admin";
+      }
+      else
+      {
+        $name = $db->getFirstName($email) . " " . $db->getLastName($email);
+      }   
+
       //$notBefore  = $issuedAt + 10;             //Adding 10 seconds
       //$expire     = $notBefore + 60;            // Adding 60 seconds
-
-      /*
-        * Create the token as an array
-      */
+ 
+      //Create the token as an array
       $payload =
       [
         'iat'  => $issuedAt,         // Issued at: time when the token was generated
@@ -53,15 +62,16 @@
         'data' =>
         [                            // Data related to the signer user
           'email' => $email,         // User name
-          'role' => $db->getAccountRole($email)
+          'role' => $role,
+          'name' => $name
         ]
       ];
 
       $jwt = JWT::encode
       (
-        $payload,      //Data to be encoded in the JWT
-        $_ENV['KEY']->SECRET_KEY, // The signing key
-        'HS256'     // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
+        $payload,      
+        $_ENV['KEY']->SECRET_KEY, 
+        'HS256'     
       );
 
       $responseBody = array('token' => $jwt);

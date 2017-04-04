@@ -332,6 +332,7 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
 {
   var email = '';
   var role = '';
+  var name = '';
 
   function getPayLoad()
   {
@@ -350,6 +351,7 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
   {
     email = '';
     role = '';
+    name = '';
     $http.defaults.headers.common.Authorization = '';
     $localStorage.$reset();
   }
@@ -372,6 +374,16 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
     }
 
     return role
+  }
+
+  this.getName = function ()
+  {
+    if(getPayLoad())
+    {
+      name = getPayLoad().data.name;
+    }
+
+    return name
   }
 
   this.storeUserCredentials = function (token)
