@@ -336,20 +336,21 @@
   //lists admin accounts
   $app->post('/listAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
   {
-    $superAdminDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $superAdminDetails->email;
-    $admin = 2;
-    $status= 1;
-
-    //echo $email;
-
     $db = new DbOperation();
 
-    $responseBody = array('adminList' => json_encode($db->listAccounts($admin, $status)));
-    $response = setResponse($response, 200, $responseBody);
+    $userType = 2;
+    $status= 1;
 
-    //echo json_encode($db->showMessages($email));
+    $adminList = $db->listAccounts($userType, $status);
+
+    for($counter=0; $counter < count($adminList); $counter++)
+    {
+      $departmentId = $db->getDepartment($adminList[$counter]['email']);
+      $adminList[$counter]['department'] = $db->getDepartmentName($departmentId);
+    }
+
+    $responseBody = array('adminList' => json_encode($adminList));
+    $response = setResponse($response, 200, $responseBody);
 
     return $response;
   });

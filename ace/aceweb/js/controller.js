@@ -2918,16 +2918,20 @@ angular.module('aceWeb.controller', [])
 .controller('ManageAdminController', function(config, $scope, $http, $state, AuthService)
 {
 
-  $scope.getAdminList = function(){
-    var superAdminDetails =
+  function indexOfId(array, email) 
+  {
+    for (var i=0; i<array.length; i++) 
     {
-      'email' : AuthService.getEmail()
+      if (array[i].email==email) return i;
     }
+    return -1;
+  }
 
+  $scope.getAdminList = function()
+  {
     $http({
       method: 'POST',
       url: config.apiUrl + '/listAdmin',
-      data: superAdminDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then(function(response)
@@ -2957,7 +2961,6 @@ angular.module('aceWeb.controller', [])
     {
 
     });
-
   }
 
   $scope.initScope = function()
@@ -2966,7 +2969,6 @@ angular.module('aceWeb.controller', [])
     $scope.disableRegBtn = false;
 
     $scope.searchBox = undefined;
-    //$scope.checkBoxSelected = false;
     $scope.adminList = {};
     $scope.adminList.email = [];
     $scope.mainCheckbox = false;
@@ -3080,7 +3082,7 @@ angular.module('aceWeb.controller', [])
             console.log(response);
 
             var emailIndex = indexOfId($scope.adminAccounts, email);
-            //$scope.adminAccounts.splice($scope.adminAccounts.email.indexOf(email),1);
+            
             $scope.adminAccounts.splice(emailIndex,1);
           },
           function(response)
@@ -3105,15 +3107,6 @@ angular.module('aceWeb.controller', [])
         }
       }
     });
-
-
-    function indexOfId(array, email) {
-    for (var i=0; i<array.length; i++) {
-       if (array[i].email==email) return i;
-    }
-    return -1;
-
-    }
   } // $scope.deleteAdmin
 
   $scope.deleteAdminList = function()

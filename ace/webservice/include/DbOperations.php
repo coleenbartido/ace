@@ -451,7 +451,7 @@ class DbOperation
     public function listAccounts($role, $status)
     {
 
-        $stmt = $this->con->prepare("SELECT * FROM user WHERE user_type_id=? and status=?");
+        $stmt = $this->con->prepare("SELECT email, user_type_id, first_name, last_name, contact_number FROM user WHERE user_type_id=? and status=?");
         $stmt->bind_param("ii",$role, $status);
         $stmt->execute();
         $result= $stmt->get_result();
@@ -619,6 +619,17 @@ class DbOperation
         return $accountRole['department_id'];
     }
 
+
+    public function getDepartmentName($departmentId)
+    {
+        $stmt = $this->con->prepare("SELECT department_name FROM department WHERE department_id=?");
+        $stmt->bind_param("i", $departmentId);
+        $stmt->execute();
+        $accountRole = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $accountRole['department_name'];
+    }
 
 
     public function listShsReports($status)
