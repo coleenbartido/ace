@@ -634,10 +634,9 @@ angular.module('aceWeb.controller', [])
 
   $scope.resetForm = function ()
   {
-    $scope.refForm.$setPristine();
     $scope.refForm.$setUntouched();
 
-    $scope.schoolYear = undefined;
+    $scope.schoolYear = undefined;  
     $scope.schoolTerm = undefined;
     $scope.studId = undefined;
     $scope.studFName = undefined;
