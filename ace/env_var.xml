@@ -8,7 +8,7 @@
     </db> 
     <gmail_smtp> 
         <GMAIL_EMAIL>iacademyace@gmail.com</GMAIL_EMAIL> 
-        <GMAIL_PWORD>Studyhard</GMAIL_PWORD> 
+        <GMAIL_PWORD>HpBs9C0bads2FdOk+gcZdDXW+Zo9j6Jc23/kf5g2eaw=</GMAIL_PWORD> 
         <GMAIL_HOST>smtp.gmail.com:587</GMAIL_HOST> 
         <GMAIL_SENDER_NAME>ACE</GMAIL_SENDER_NAME> 
     </gmail_smtp> 
@@ -16,6 +16,6 @@
         <CLIENT_URL>http://localhost/ace</CLIENT_URL> 
     </domain> 
     <key> 
-        <SECRET_KEY>studyhard</SECRET_KEY> 
+        <SECRET_KEY>c+K56LuwIEuB0jAF3rdyhsO7VYa8vqJHOpHN/5v+J5U=</SECRET_KEY> 
     </key> 
 </ace>

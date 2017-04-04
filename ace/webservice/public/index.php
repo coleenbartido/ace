@@ -9,6 +9,7 @@
 
 
   $app->add(new \Slim\Middleware\JwtAuthentication([
+
     "path" => "/auth",
     "secure" => false,
     "secret" => $_ENV['KEY']->SECRET_KEY

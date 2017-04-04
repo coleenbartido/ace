@@ -1,24 +1,6 @@
 <?php
 
 
-    //temporary function
-    function sendResponse($response)
-    {
-        header('Content-Type: application/json');
-        header("Access-Control-Allow-Origin: *");
-        echo json_encode($response);
-    }
-
-
-    //temporary function
-    function sendStatusCode($statusCode)
-    {
-        header('Content-Type: application/json');
-        header("Access-Control-Allow-Origin: *");
-        http_response_code($statusCode);
-    }
-
-
     function setResponse($response, $statusCode, $responseBody)
     {
         header('Content-Type: application/json');
@@ -38,39 +20,41 @@
 
 
     function sendEmail($recipient, $subject, $body)
-	{
-		$mail = new PHPMailer;
+    {
+      $mail = new PHPMailer;
 
-        $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Host = $_ENV['GMAIL']->GMAIL_HOST;
-        $mail->Username = $_ENV['GMAIL']->GMAIL_EMAIL;                        // SMTP username
-        $mail->Password = $_ENV['GMAIL']->GMAIL_PWORD;                        // SMTP password
-        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = 587;                                    // TCP port to connect to
+          $mail->isSMTP();                                      // Set mailer to use SMTP
+          $mail->SMTPAuth = true;                               // Enable SMTP authentication
+          $mail->Host = $_ENV['GMAIL']->GMAIL_HOST;
+          $mail->Username = $_ENV['GMAIL']->GMAIL_EMAIL;                        // SMTP username
+          $mail->Password = $_ENV['GMAIL']->GMAIL_PWORD;                        // SMTP password
+          $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+          $mail->Port = 587;                                    // TCP port to connect to
 
-        if(count($recipient) == 1){
-          $mail->AddAddress($recipient);
-        } else {
-          for($counter=0; $counter < count($recipient); $counter++){
-            $email = implode(',', $recipient[$counter]);
-            $mail->AddAddress($email);
+          if(count($recipient) == 1)
+          {
+            $mail->AddAddress($recipient);
+          } 
+          else 
+          {
+            for($counter=0; $counter < count($recipient); $counter++)
+            {
+              $email = implode(',', $recipient[$counter]);
+              $mail->AddAddress($email);
+            }
           }
-        }
 
+          //$mail->AddAddress($recipient);                        // Name is optional
 
+          //$mail->addReplyTo('ace@iacademy.com', 'ACE');
+          $mail->SetFrom($_ENV['GMAIL']->GMAIL_EMAIL, $_ENV['GMAIL']->GMAIL_SENDER_NAME);
+          //$mail->addAttachment('/var/tmp/file.tar.gz');       // Add attachments
+          $mail->Subject = $subject;
+          $mail->Body = $body;
+          $mail->IsHTML(true);
 
-        //$mail->AddAddress($recipient);                        // Name is optional
-
-        //$mail->addReplyTo('ace@iacademy.com', 'ACE');
-        $mail->SetFrom($_ENV['GMAIL']->GMAIL_EMAIL, $_ENV['GMAIL']->GMAIL_SENDER_NAME);
-        //$mail->addAttachment('/var/tmp/file.tar.gz');       // Add attachments
-        $mail->Subject = $subject;
-        $mail->Body = $body;
-        $mail->IsHTML(true);
-
-        return $mail->Send();
-	}
+          return $mail->Send();
+    }
 
 
     function randStrGen()
@@ -125,4 +109,5 @@
       return $var;
 
     }
+
 ?>
