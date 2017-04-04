@@ -211,7 +211,7 @@
                   <div class="courseProgram col-md-8" ng-if="department">
                     <span ng-if="department==1" class="input-label">Program:</span>
 
-                    <div class="style-select">
+                    <div class="style-select" ng-if="department==1">
                       <select ng-if="department==1" class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
                         <option disabled selected value> -- Select Program -- </option>
 
@@ -241,7 +241,7 @@
                     <span ng-if="department==2" class="input-label">Course:</span>
 
                     <div class="style-select" ng-if="department==2">
-                      <select class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
+                      <select ng-if="department==2" class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
                         <option disabled selected value> -- Select Program -- </option>
 
                           <optgroup label="School of Computing">
