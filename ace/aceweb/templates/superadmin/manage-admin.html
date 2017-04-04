@@ -6,27 +6,43 @@
 
 <body>
 
-<div>
+	<div class="manageAdmin col-md-12" ng-submit="submitReferral()" name="refForm" id="refForm" novalidate>
+			<div class="row col-md-12 col-md-offset-0 formContainer">
+
+					<div class="panel panel-default">
+
+						<div class="panel-body manageContainer">
+
+								<div class="col-md-4 searchBar pull-right">
+									<!--input type="text" class="sr-input" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}"-->
+									<input type="text" class="form-control" ng-model="searchBox" placeholder="Search">
+								</div>
+
+								<div class="register-button col-md-2">
+									<button type="button" data-toggle="modal" data-target="#adminRegModal" ng-click="showRegAdminModal()">Register Administrator</button>
+								</div>
+
+								<div class="delete-button col-md-1">
+									<button type="button" ng-click="deleteAdminList()" ng-disabled="disableDeleteBtn()"> Delete Administrator</button>
+								</div>
 
 
-	<input type="text" class="form-control" ng-model="searchBox" placeholder="Search">
 
-		<button type="button" data-toggle="modal" data-target="#adminRegModal" ng-click="showRegAdminModal()">Add Administrator</button>
-		<br><br>
 
 		<!--
 			check if no account is selected
 		-->
-		<button type="button" ng-click="deleteAdminList()" ng-disabled="disableDeleteBtn()"> Delete Administrator</button>
-		<table class="table table-bordered table-condensed">
+<div class="table-height">
+		<table class="table table-inbox table-condensed">
 			<col width="130">
 			<col width="200">
 			<tbody>
 				<tr>
 						<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>
 						<th>EMAIL</th>
-						<th>NAME</th>
-						<th>CONTACT NUMBER</th>
+						<th><center>NAME</center></th>
+						<th><center>CONTACT NUMBER</center></th>
+						<th><center>ACTION</center></th>
 				</tr>
 
 				<tr ng-repeat="admin in adminAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" ng-click="showPopup(message)">
@@ -37,13 +53,19 @@
 							{{admin.email}}
 						</td>
 						<td>
+							<center>
 		            		{{admin.first_name}} {{admin.last_name}}
+									</center>
 		        		</td>
 		        		<td>
+									<center>
 		            		{{admin.contact_number}}
+									</center>
 		        		</td>
 						<td>
+							<center>
 							<button type="button" class="btn btn-primary" ng-click="deleteAdmin(admin.email)" ><span class="glyphicon glyphicon-trash"></span></button>
+							</center>
 						</td>
 		    </tr>
 	 		</tbody>
@@ -52,9 +74,13 @@
 		<div ng-show="adminAccounts.length == 0">
 			<p>No Result</p>
 		</div>
-
+</div>
+</div>
+</div>
 		<div>
+			<center>
 			<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+			</center>
 		</div>
 
 
@@ -78,9 +104,9 @@
 				              </div>
 				            </div>
 				            <div ng-messages="regAdminForm.adminEmail.$error" ng-show="regAdminForm.$submitted">
-				              <p class="invalid-text" ng-message="emailExist">Email already used</p> 
-				              <p class="invalid-text" ng-message="required">This field is required</p> 
-				              <p class="invalid-text" ng-message="email">Invalid email</p>         
+				              <p class="invalid-text" ng-message="emailExist">Email already used</p>
+				              <p class="invalid-text" ng-message="required">This field is required</p>
+				              <p class="invalid-text" ng-message="email">Invalid email</p>
 				            </div>
 
 				            <div class="form-group">
@@ -90,7 +116,7 @@
 				              </div>
 				            </div>
 				            <div ng-messages="regAdminForm.adminFirstName.$error" ng-show="regAdminForm.$submitted">
-				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="form-group">
@@ -100,12 +126,12 @@
 				              </div>
 				            </div>
 				            <div ng-messages="regAdminForm.adminLastName.$error" ng-show="regAdminForm.$submitted">
-				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="form-group">
 				              <label  class="col-md-12 control-label" for="adminDepartmentInput">Department</label>
-				              <div class="col-md-12">		               
+				              <div class="col-md-12">
 				                <select class="form-control" id="adminDepartmentInput" name="adminDepartment" ng-model="adminDepartment" required>
 				                  <option disabled selected value>Select Department</option>
 							      <option value="1"> Senior High School</option>
@@ -114,7 +140,7 @@
 				              </div>
 				            </div>
 				            <div ng-messages="regAdminForm.adminDepartment.$error" ng-show="regAdminForm.$submitted">
-				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="regBtn">
@@ -124,7 +150,7 @@
 				        </form>
 
 			      	</div>
-			      	
+
 			    </div>
 
 		  	</div>
@@ -141,11 +167,11 @@
 				                <input type="password" class="form-control" id="userPasswordInput" name="userPassword" ng-model="userPassword" ng-model-options="{allowInvalid: true}" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" required/>
 				              </div>
 				            </div>
-				            <div ng-messages="regAdminForm.userPassword.$error" ng-show="regAdminForm.$submitted">  
+				            <div ng-messages="regAdminForm.userPassword.$error" ng-show="regAdminForm.$submitted">
 				              <p class="invalid-text" ng-message="samePword">Invalid password</p>
 				              <p class="invalid-text" ng-message="required">This field is required</p>
 				              <p class="invalid-text" ng-message="minlength">Must be atleast 8 characters</p>
-				              <p class="invalid-text" ng-message="pattern">Must be a combination of letters and numbers</p>             
+				              <p class="invalid-text" ng-message="pattern">Must be a combination of letters and numbers</p>
 				            </div>
 
 				            <div class="form-group">

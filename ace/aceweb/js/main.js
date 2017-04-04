@@ -1,5 +1,5 @@
 //MAIN MODULE
-angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ngStorage','ngMessages', 'ui.bootstrap', 'ngTouch', 'ngAnimate','checklist-model','luegg.directives','angular.filter','chart.js','ngCapsLock']) //kailangan yang ui.router pag gagamit ng $stateProvider. Yung 'aceWeb' naman is yung name ng module. Nakalink sya dun sa body tag ng index.html file which tells na yung module na 'aceWeb' ay e e implement sa html file na yun. Lahat ng may "app." ay under ng 'aceWeb' module
+angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ngStorage','ngMessages', 'ui.bootstrap', 'ngTouch', 'ngAnimate','checklist-model','luegg.directives','angular.filter','chart.js','ngCapsLock','ngAnimate']) //kailangan yang ui.router pag gagamit ng $stateProvider. Yung 'aceWeb' naman is yung name ng module. Nakalink sya dun sa body tag ng index.html file which tells na yung module na 'aceWeb' ay e e implement sa html file na yun. Lahat ng may "app." ay under ng 'aceWeb' module
 
 
 // <------------------------------------------------------------------>
@@ -267,13 +267,13 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
 
       if(localStorage.getItem("ngStorage-currentUser") === null)
       {
-        state.go('404');             
+        state.go('404');
       }
       else
       {
         if(authService.getRole() == 3)
         {
-          state.go('faculty.404Inside'); 
+          state.go('faculty.404Inside');
         }
         else if(authService.getRole() == 2)
         {
@@ -283,7 +283,7 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
         {
           state.go('superadmin.404Inside');
         }
-      }         
+      }
     }); //fallback page 404 error page
 
     $locationProvider.html5Mode(true); //remove # on url
