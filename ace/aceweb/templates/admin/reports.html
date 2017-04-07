@@ -218,25 +218,29 @@
 											<h4 class="modal-title custom-header-color">Edit</h4>
 									</div>
 										<div class="modal-body">
-											<p><b>Report Status</b></p>
-											<select class="form-control" name="status" id="status" ng-model="status" required>
+
+										<form ng-submit="updateReportStatus(selectedReport)">
+												<p><b>Report Status</b></p>
+												<select class="form-control" name="status" id="status" ng-model="status" required>
 
 											<!--<option ng-selected=" {{status == item.text }}" ng-repeat="item in reportStatus" ng-value="item.value">{{item.text}}</option>-->
-											<option value="1">Uncounseled</option>
-											<option value="2">In Progress</option>
-											<option value="3">Counseled</option>
-											</select>
+													<option value="1">Uncounseled</option>
+													<option value="2">In Progress</option>
+													<option value="3">Counseled</option>
+												</select>
 
 											<!--
 											<select ng-model="status" ng-options="house.house_id as house.house_display_name for house in house_list">
 											</select>
 											-->
 
-											<p><b>Counselor's Note</b></p>
-											<textarea id="customTextArea" rows="4" ng-model="comment" placeholder="Write a comment..."></textarea>
+												<p><b>Counselor's Note</b></p>
+												<textarea id="customTextArea" rows="4" ng-model="comment" placeholder="Write a comment..."></textarea>
+											<button type="submit" class="btn btn-primary">Update</button>
 										</div>
 										<div class="modal-footer">
-											<button type="button" class="btn btn-primary" ng-click="updateReportStatus(selectedReport)">Update</button>
+
+											<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
 										</div>
 								</div>
 
