@@ -32,13 +32,13 @@
     $status = 1;
     $email = $loginDetails->email;
     $pword = $loginDetails->pword;
-    
+
 
     if($db->loginUser($email, $pword, $status)) // if true yung e rereturn ng function na "loginUser($email, $pword)", magiging true yung condition. Thus, e execute nya yung if block. At the same time, siniset nya rin yung value ng "$response['isValidAccount']" sa kung ano ang erereturn ng function na "loginUser($email, $pword)"
     {
       $tokenId    = base64_encode(mcrypt_create_iv(32));
       $issuedAt   = time();
-      $serverName = "ACE";  
+      $serverName = "ACE";
       $role = $db->getAccountRole($email);
 
       if($role == 1)
@@ -48,11 +48,11 @@
       else
       {
         $name = $db->getFirstName($email) . " " . $db->getLastName($email);
-      }   
+      }
 
       //$notBefore  = $issuedAt + 10;             //Adding 10 seconds
       //$expire     = $notBefore + 60;            // Adding 60 seconds
- 
+
       //Create the token as an array
       $payload =
       [
@@ -69,9 +69,9 @@
 
       $jwt = JWT::encode
       (
-        $payload,      
-        $_ENV['KEY']->SECRET_KEY, 
-        'HS256'     
+        $payload,
+        $_ENV['KEY']->SECRET_KEY,
+        'HS256'
       );
 
       $responseBody = array('token' => $jwt);
@@ -421,10 +421,10 @@
 
     $db = new DbOperation();
 
-    $studInfoList = $db->getStudentInfo($studId); 
+    $studInfoList = $db->getStudentInfo($studId);
 
     for($counter=0; $counter < count($studInfoList); $counter++)
-    {    
+    {
       $studInfoList[$counter]['level'] = $db->getStudentLevel($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
       $studInfoList[$counter]['program'] = $db->getStudentProgram($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
     }
@@ -497,7 +497,7 @@
       $subject = "Verify your ACE Program Account";
       $link = $_ENV['DOMAIN']->CLIENT_URL . "/accountsetup?email=" . $email . "&hashcode=" . $hashCode;
       $body =
-      "Greetings! <br><br>An ACE Online Referral System account was created for you by the Administrator.
+      "Greetings! <br><br>An ACE Online Referral System account was created by the Administrator.
       <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
       <br><br><br>Thank you.";
 
@@ -540,7 +540,7 @@
       $link = $_ENV['DOMAIN']->CLIENT_URL . "/accountsetup?email=" . $email . "&hashcode=" . $hashCode;
       $body =
 
-      "Greetings! <br><br>An ACE Online Referral System account was created for you by the Super Administrator.
+      "Greetings! <br><br>An ACE Online Referral System account was created by the Super Administrator.
       <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
       <br><br><br>Thank you.";
 
@@ -729,16 +729,29 @@
       $refComment = NULL;
     }
 
+    $last_name = $db->getFirstName($sender);
+	  $first_name = $db->getLastName($sender);
+	  $full_name = $first_name + "  " + $last_name;
+	  $isActive = 1;
+
 
     $db = new DbOperation();
 
-
     $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons);
-
     $db->insertStudent($studId, $department, $studFName, $studLName, $course, $year);
-
     $db->updateReportCount($email);
 
+    $emailList = $db->getAdminAccounts($department, $isActive);
+
+    $subject = "ACE Submitted Report";
+    $link = $_ENV['DOMAIN']->CLIENT_URL;
+    $body =
+
+      "Greetings, <br><br>" . $full_name . " submitted a referral!
+      <br><br>To view the submitted report, login <a href=" . $link . ">here</a>.
+      <br><br><br>Thank you.";
+
+    sendEmail($email, $subject, $body);
 
     $response = setSuccessResponse($response, 200);
 
@@ -861,20 +874,25 @@
 
     $reportId = $reportDetails->reportId;
     $email = $reportDetails->email;
-    $isRead = 1;
+    $isRead = $reportDetails->isRead;
+    $status = 1;
 
     $db = new DbOperation();
 
-    $subject = "ACE Submitted Report Status";
-    $link = $_ENV['DOMAIN']->CLIENT_URL;
-    $body =
-      "The report you submitted has been read by the administrator.
-      <br><br>
-      If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
+    if($isRead == 0)
+    {
 
-      sendEmail($email, $subject, $body);
+      $subject = "ACE Submitted Report Status";
+      $link = $_ENV['DOMAIN']->CLIENT_URL;
+      $body =
+        "The report you submitted has been read by the administrator.
+        <br><br>
+        If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
 
-    $db->markReport($isRead, $reportId);
+        sendEmail($email, $subject, $body);
+
+      $db->markReport($status, $reportId);
+    }
 
     $response = setSuccessResponse($response, 200);
 
@@ -1058,6 +1076,7 @@ $app->post('/getChartData', function (ServerRequestInterface $request, ResponseI
 
     $email = $updateDetails->email;
     $status = $updateDetails->status;
+    $updateStatus = $updateDetails->updateStatus;
     $reportId = $updateDetails->reportId;
     $comment = $updateDetails->comment;
 
@@ -1065,7 +1084,40 @@ $app->post('/getChartData', function (ServerRequestInterface $request, ResponseI
 
     $db->updateStatus($reportId, $status, $comment);
 
-    $response = setResponse($response, 200);
+    $db->updateStatus($reportId, $updateStatus, $comment, $updated);
+
+    if($status == 1){
+      $email_status = "UNCOUNSELED";
+    } else if ($status == 2){
+      $email_status = "IN PROGRESS";
+    } else {
+      $email_status = "COUNSELED";
+    }
+
+    if($updateStatus == 1){
+      $email_updateStatus = "UNCOUNSELED";
+    } else if ($updateStatus == 2){
+      $email_updateStatus = "IN PROGRESS";
+    } else {
+      $email_updateStatus = "COUNSELED";
+    }
+
+    if($status != $updateStatus)
+    {
+        $subject = "ACE Submitted Report Status";
+        $link = $_ENV['DOMAIN']->CLIENT_URL;
+        $body =
+
+          "The administrator updated the status of your submitted report from " . $email_status . " to " . $email_updateStatus . ".
+          <br><br>
+          If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
+
+      //send Email
+      sendEmail($email, $subject, $body);
+    }
+
+
+    $response = setSuccessResponse($response, 200);
     return $response;
   });
 

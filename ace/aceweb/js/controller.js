@@ -559,7 +559,7 @@ angular.module('aceWeb.controller', [])
       'studFName': $scope.studFName,
       'studLName' : $scope.studLName,
       'subjName' : $scope.subjName,
-      'department' : $scope.department,
+      'department' : parseInt($scope.department),
       'course' : $scope.course,
       'year' : $scope.year,
       'reason': $scope.reasons
@@ -622,7 +622,7 @@ angular.module('aceWeb.controller', [])
     });
   }
 
-  $scope.onSelect = function ($item, $model, $label) 
+  $scope.onSelect = function ($item, $model, $label)
   {
     console.log($item);
     $scope.studFName = $item.first_name;
@@ -636,7 +636,7 @@ angular.module('aceWeb.controller', [])
   {
     $scope.refForm.$setUntouched();
 
-    $scope.schoolYear = undefined;  
+    $scope.schoolYear = undefined;
     $scope.schoolTerm = undefined;
     $scope.studId = undefined;
     $scope.studFName = undefined;
@@ -1673,7 +1673,7 @@ angular.module('aceWeb.controller', [])
     var reportDetails =
     {
       'reportId' : $scope.selectedReport.report_id,
-      //'email': AuthService.getEmail(),
+      'isRead': $scope.selectedReport.is_read,
       'email' : $scope.selectedReport.email
 
     }
@@ -1887,7 +1887,8 @@ angular.module('aceWeb.controller', [])
     var updateDetails = {
         'email' : report.email,
         'reportId' : report.report_id,
-        'status' : parseInt($scope.status),
+        'status' : report.report_status_id,
+        'updateStatus' : parseInt($scope.status),
         'comment' : $scope.comment
 
     }
@@ -1907,7 +1908,13 @@ angular.module('aceWeb.controller', [])
       function(response)
       {
         //for checking
-        //console.log(response);
+        if(response.status == 400)
+        {
+          if(response.data.errMsg == 'Failed')
+          {
+            console.log(response);
+          }
+        }
 
 
       })
@@ -2918,9 +2925,9 @@ angular.module('aceWeb.controller', [])
 .controller('ManageAdminController', function(config, $scope, $http, $state, AuthService)
 {
 
-  function indexOfId(array, email) 
+  function indexOfId(array, email)
   {
-    for (var i=0; i<array.length; i++) 
+    for (var i=0; i<array.length; i++)
     {
       if (array[i].email==email) return i;
     }
@@ -3082,7 +3089,7 @@ angular.module('aceWeb.controller', [])
             console.log(response);
 
             var emailIndex = indexOfId($scope.adminAccounts, email);
-            
+
             $scope.adminAccounts.splice(emailIndex,1);
           },
           function(response)

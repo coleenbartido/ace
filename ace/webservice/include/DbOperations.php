@@ -965,10 +965,10 @@ class DbOperation
     }
 
 
-    public function updateStatus($reportId, $status, $comment)
+    public function updateStatus($reportId, $status, $updated, $comment)
     {
-      $stmt = $this->con->prepare("UPDATE report SET report_status_id=?, counselor_note=? WHERE report_id=?");
-      $stmt->bind_param("isi",$status, $comment, $reportId);
+      $stmt = $this->con->prepare("UPDATE report SET report_status_id=?, counselor_note=?, is_updated=? WHERE report_id=?");
+      $stmt->bind_param("isii",$status, $comment, $updated, $reportId);
       $result = $stmt->execute();
       $stmt->close();
 
@@ -980,9 +980,8 @@ class DbOperation
 
     }
 
-
     public function getStudentInfo($studId)
-    {    
+    {
       $studId = $studId . "%";
       $limit = 5;
 
@@ -1011,7 +1010,7 @@ class DbOperation
       {
         $stmt = $this->con->prepare("SELECT level FROM college_student WHERE student_id=?");
       }
-      
+
       $stmt->bind_param("s", $studId);
       $stmt->execute();
       $user = $stmt->get_result()->fetch_assoc();
@@ -1031,7 +1030,7 @@ class DbOperation
       {
         $stmt = $this->con->prepare("SELECT program_id FROM college_student WHERE student_id=?");
       }
-      
+
       $stmt->bind_param("s", $studId);
       $stmt->execute();
       $user = $stmt->get_result()->fetch_assoc();
@@ -1039,7 +1038,7 @@ class DbOperation
 
       return $user['program_id'];
     }
-    
+
 
     public function getStudentName($reportId)
     {
@@ -1065,5 +1064,5 @@ class DbOperation
 
 
 
-    
+
 }
