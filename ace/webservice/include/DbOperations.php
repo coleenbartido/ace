@@ -274,10 +274,10 @@ class DbOperation
 
 
     //Inserting report to database
-    public function insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons)
+    public function insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons, $note)
     {
-        $stmt = $this->con->prepare("INSERT INTO report(email, student_id, department_id, subject_name, term, school_year, referral_comment) VALUES(?,?,?,?,?,?,?)");
-        $stmt->bind_param("ssisiss", $email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment);
+        $stmt = $this->con->prepare("INSERT INTO report(email, student_id, department_id, subject_name, term, school_year, referral_comment, counselor_note) VALUES(?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssisisss", $email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $note);
         $result = $stmt->execute();
         $report_id = $stmt->insert_id;
         $stmt->close();
@@ -948,27 +948,30 @@ class DbOperation
     }
 
 
-    public function getReferralReasons($status)
+    public function getReferralReasons($reportId)
     {
-        $stmt = $this->con->prepare("SELECT * FROM report WHERE status=?");
-        $stmt->bind_param("i",$status);
+        //$stmt = $this->con->prepare("SELECT referral_reason FROM reasons where report_id=?");
+        $stmt = $this->con->prepare("SELECT referral_reason FROM ((report INNER JOIN reason ON report.report_id=reason.report_id)
+            INNER JOIN report_reason ON reason.referral_reason_id=report_reason.referral_reason_id) WHERE report.report_id=?");
+
+        $stmt->bind_param("i",$reportId);
         $stmt->execute();
         $result = $stmt->get_result();
+        //$stmt->close();
         $arrResult = array();
         while ($myrow = $result->fetch_assoc())
         {
             $arrResult[] = $myrow;
         }
         $stmt->close();
-
         return $arrResult;
     }
 
 
-    public function updateStatus($reportId, $status, $updated, $comment)
+    public function updateStatus($reportId, $updateStatus, $comment, $isUpdated)
     {
       $stmt = $this->con->prepare("UPDATE report SET report_status_id=?, counselor_note=?, is_updated=? WHERE report_id=?");
-      $stmt->bind_param("isii",$status, $comment, $updated, $reportId);
+      $stmt->bind_param("isii", $updateStatus, $comment, $isUpdated , $reportId);
       $result = $stmt->execute();
       $stmt->close();
 

@@ -1887,7 +1887,9 @@ angular.module('aceWeb.controller', [])
     var updateDetails = {
         'email' : report.email,
         'reportId' : report.report_id,
+        //current status
         'status' : report.report_status_id,
+        //status to update to
         'updateStatus' : parseInt($scope.status),
         'comment' : $scope.comment
 
@@ -2864,7 +2866,7 @@ angular.module('aceWeb.controller', [])
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/confirmPassword',
+      url: config.apiUrl + '/databaseConfirm',
       data: userDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })

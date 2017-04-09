@@ -447,15 +447,39 @@
     $db = new DbOperation();
 
     $department = $db->getDepartment($email);
-    //$department = 1;
 
     if($department == 1)
     {
       $reportsList = $db->listShsReports($status);
+
+      for($counter=0; $counter<count($reportsList); $counter++)
+      {
+
+        $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
+
+        for($ctr=0; $ctr<count($reasonArr); $ctr++)
+        {
+          $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
+        }
+
+      }
+
     }
     else
     {
       $reportsList = $db->listCollegeReports($status);
+
+      for($counter=0; $counter<count($reportsList); $counter++)
+      {
+
+        $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
+
+        for($ctr=0; $ctr<count($reasonArr); $ctr++)
+        {
+          $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
+        }
+
+      }
     }
 
     for($counter=0; $counter < count($reportsList); $counter++)
@@ -719,6 +743,7 @@
     $course = $reportDetails->course;
     $year = $reportDetails->year;
     $reasons = $reportDetails->reason;
+    $note = "N/A";
 
     if($reasons[6]->check == true)
     {
@@ -729,15 +754,15 @@
       $refComment = NULL;
     }
 
+    $db = new DbOperation();
+
     $last_name = $db->getFirstName($sender);
 	  $first_name = $db->getLastName($sender);
 	  $full_name = $first_name + "  " + $last_name;
 	  $isActive = 1;
 
 
-    $db = new DbOperation();
-
-    $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons);
+    $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons, $note);
     $db->insertStudent($studId, $department, $studFName, $studLName, $course, $year);
     $db->updateReportCount($email);
 
@@ -976,7 +1001,7 @@
 
 
 
-  $app->post('/confirmPassword', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/databaseConfirm', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $databaseDetails = json_decode(file_get_contents("php://input"));
 
@@ -1070,21 +1095,34 @@ $app->post('/getChartData', function (ServerRequestInterface $request, ResponseI
 
   $app->post('/updateStatus', function (ServerRequestInterface $request, ResponseInterface $response)
   {
-    $updateDetails = json_decode(file_get_contents("php://input"));
+      $updateDetails = json_decode(file_get_contents("php://input"));
 
-    $db = new DbOperation();
+      $db = new DbOperation();
 
-    $email = $updateDetails->email;
-    $status = $updateDetails->status;
-    $updateStatus = $updateDetails->updateStatus;
-    $reportId = $updateDetails->reportId;
-    $comment = $updateDetails->comment;
+      $email = $updateDetails->email;
+      //previous status
+      $status = $updateDetails->status;
+      //status to update to
+      $updateStatus = $updateDetails->updateStatus;
+      $reportId = $updateDetails->reportId;
+      $isUpdated = 1;
 
-    //$responseBody = array('SYList' => json_encode($db->getSYList($department)));
+      if(isset($_POST['comment']))
+      {
+        $comment = $updateDetails->comment;
 
-    $db->updateStatus($reportId, $status, $comment);
+      }
+      else
+      {
 
-    $db->updateStatus($reportId, $updateStatus, $comment, $updated);
+        $comment = "N/A";
+      }
+
+
+      //$responseBody = array('SYList' => json_encode($db->getSYList($department)));
+      //$db->updateStatus($reportId, $status, $comment);
+
+      $db->updateStatus($reportId, $updateStatus, $comment, $isUpdated);
 
     if($status == 1){
       $email_status = "UNCOUNSELED";

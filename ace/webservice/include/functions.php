@@ -34,8 +34,8 @@
           if(count($recipient) == 1)
           {
             $mail->AddAddress($recipient);
-          } 
-          else 
+          }
+          else
           {
             for($counter=0; $counter < count($recipient); $counter++)
             {
@@ -109,5 +109,23 @@
       return $var;
 
     }
+
+    function databaseRestore(){
+
+      $dbName = $_ENV['DB']->DB_NAME;
+      $dbHost = $_ENV['DB']->DB_HOST;
+      $dbUsername = $_ENV['DB']->DB_USERNAME;
+      $dbPassword = $_ENV['DB']->DB_PASSWORD;
+      $timestamp = getTimeStamp()->format('y-m-d_H-i');
+      $backupFile = $dbName . "(" .$timestamp . ").sql";
+
+      $command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
+
+      $var = system($command, $ret_val);
+
+      return $var;
+
+    }
+
 
 ?>
