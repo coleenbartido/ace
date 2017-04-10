@@ -1455,15 +1455,6 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
-  function indexOfId(array, report_id) 
-  {
-    for (var i=0; i<array.length; i++) 
-    {
-      if (array[i].report_id==report_id) return i;
-    }
-    return -1;
-  }
-
   $scope.disableActionBtn = function ()
   {
     if($scope.reportList.report_id == undefined || $scope.reportList.report_id.length == 0)
@@ -1504,14 +1495,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            for(var counter=$scope.reports.length - 1; counter >= 0 ; counter--)
-            {
-              if($.inArray($scope.reports[counter].report_id, $scope.reportList.report_id) > -1)
-              {
-                $scope.reports.splice(counter,1);
-              }
-            }
-            //$rootScope.newMessageCount -= 1;
+            $scope.getReportList();
           },
           function(response)
           {
@@ -1622,9 +1606,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            var reportIndex = indexOfId($scope.reports, report_id);
-            //$scope.adminAccounts.splice($scope.adminAccounts.email.indexOf(email),1);
-            $scope.reports.splice(reportIndex,1);
+            $scope.getReportList();
           },
           function(response)
           {
@@ -1689,16 +1671,11 @@ angular.module('aceWeb.controller', [])
   $scope.showPopup = function(report)
   {
     $scope.selectedReport = report;
-    console.log(report);
-    //$scope.composeEmail = undefined;
-
   }
 
   $scope.viewReport = function(report)
   {
     $scope.selectedReport = report;
-    console.log(report);
-
     $scope.comment = report.counselor_note;
     $scope.status = report.report_status_id + "";
   }
@@ -1730,7 +1707,7 @@ angular.module('aceWeb.controller', [])
       'messageSubj': $scope.subject,
       'reportId': report.report_id//reportId
     }
-
+    console.log(messageDetails);
     $http({
       method: 'POST',
       url: config.apiUrl + '/sendMessage',
@@ -1749,7 +1726,6 @@ angular.module('aceWeb.controller', [])
     {
       //for checking
       console.log(response);
-
 
     })
     .finally(function()

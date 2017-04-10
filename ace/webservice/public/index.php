@@ -960,8 +960,8 @@
       $link = $_ENV['DOMAIN']->CLIENT_URL;
       $body =
 
-        "Greetings, <br><br>" . $first_name . " " . $last_name . " sent you a message!
-        <br><br>To view message, login <a href=" . $link . ">here</a>.
+        "Greetings, <br><br>" . $first_name . " " . $last_name . " sent you a message regarding the referral that you have submitted!
+        <br><br>To view the message, login <a href=" . $link . ">here</a>.
         <br><br><br>Thank you.";
 
       //send Email

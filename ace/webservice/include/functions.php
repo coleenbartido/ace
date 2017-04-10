@@ -23,28 +23,33 @@
     {
       $mail = new PHPMailer;
 
-          $mail->isSMTP();                                                      // Set mailer to use SMTP
-          $mail->SMTPAuth = true;                                               // Enable SMTP authentication
-          $mail->Host = $_ENV['GMAIL']->GMAIL_HOST;
-          $mail->Username = $_ENV['GMAIL']->GMAIL_EMAIL;                        // SMTP username
-          $mail->Password = $_ENV['GMAIL']->GMAIL_PWORD;                        // SMTP password
-          $mail->SMTPSecure = 'tls';                                            // Enable TLS encryption, `ssl` also accepted
-          $mail->Port = 587;                                                    // TCP port to connect to
+      if(is_object($recipient))
+      {
+        for($counter=0; $counter < count($recipient); $counter++)
+        {
+          $email = $recipient[$counter]['email'];
+          $mail->AddAddress($email);
+        }
+      } 
+      else 
+      {
+        $mail->AddAddress($recipient);
+      }
+      
+      $mail->isSMTP();                                                      // Set mailer to use SMTP
+      $mail->SMTPAuth = true;                                               // Enable SMTP authentication
+      $mail->Host = $_ENV['GMAIL']->GMAIL_HOST;
+      $mail->Username = $_ENV['GMAIL']->GMAIL_EMAIL;                        // SMTP username
+      $mail->Password = $_ENV['GMAIL']->GMAIL_PWORD;                        // SMTP password
+      $mail->SMTPSecure = 'tls';                                            // Enable TLS encryption, `ssl` also accepted
+      $mail->Port = 587;                                                    // TCP port to connect to
+      //$mail->addReplyTo('ace@iacademy.com', 'ACE');
+      $mail->SetFrom($_ENV['GMAIL']->GMAIL_EMAIL, $_ENV['GMAIL']->GMAIL_SENDER_NAME);
+      $mail->Subject = $subject;
+      $mail->Body = $body;
+      $mail->IsHTML(true);
 
-          for($counter=0; $counter < count($recipient); $counter++)
-          {
-            $email = $recipient[$counter]['email'];
-            $mail->AddAddress($email);
-          }
-
-          //$mail->AddAddress($recipient);                                      // Name is optional
-          //$mail->addReplyTo('ace@iacademy.com', 'ACE');
-          $mail->SetFrom($_ENV['GMAIL']->GMAIL_EMAIL, $_ENV['GMAIL']->GMAIL_SENDER_NAME);
-          $mail->Subject = $subject;
-          $mail->Body = $body;
-          $mail->IsHTML(true);
-
-          return $mail->Send();
+      return $mail->Send();
     }
 
 
@@ -103,24 +108,20 @@
 
     function databaseRestore(){
 
-        $dbName = $_ENV['DB']->DB_NAME;
-        $dbHost = $_ENV['DB']->DB_HOST;
-        $dbUsername = $_ENV['DB']->DB_USERNAME;
-        $dbPassword = $_ENV['DB']->DB_PASSWORD;
-        $timestamp = getTimeStamp()->format('y-m-d_H-i');
-        $backupFile = $dbName . "(" .$timestamp . ").sql";
+      $dbName = $_ENV['DB']->DB_NAME;
+      $dbHost = $_ENV['DB']->DB_HOST;
+      $dbUsername = $_ENV['DB']->DB_USERNAME;
+      $dbPassword = $_ENV['DB']->DB_PASSWORD;
+      $timestamp = getTimeStamp()->format('y-m-d_H-i');
+      $backupFile = $dbName . "(" .$timestamp . ").sql";
 
-        //database backup
-        //$command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
+      $command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
 
-        //database restore
-        $command = "mysql -u $dbUsername -p $dbName < filename.sql";
+      $var = system($command, $ret_val);
 
-        $var = system($command, $ret_val);
+      return $var;
 
-        return $var;
-
-      }
+    }
 
 
 ?>

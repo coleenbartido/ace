@@ -558,8 +558,7 @@ class DbOperation
 
         $stmt = $this->con->prepare("INSERT INTO message(report_id, sender_email, receiver_email, message_body, message_subject, is_read, is_read_sender, receiver_status, sender_status, message_date) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("issssiiiis", $report_id, $sender, $receiver, $message, $subject, $isRead, $isReadSender, $status, $status, $timestamp);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $stmt->execute();
         $stmt->close();
 
         if($result)
@@ -575,23 +574,6 @@ class DbOperation
     {
       $stmt = $this->con->prepare("SELECT email FROM admin_view WHERE department_id=? AND status=?");
       $stmt->bind_param("ii",$department, $status);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $arrResult = array();
-      while ($myrow = $result->fetch_assoc())
-      {
-          $arrResult[] = $myrow;
-      }
-      $stmt->close();
-
-      return $arrResult;
-    }
-
-	//get faculty accounts
-    public function getFacultyAccounts($userType, $status)
-    {
-      $stmt = $this->con->prepare("SELECT email FROM user WHERE user_type_id=? AND status=?");
-      $stmt->bind_param("ii",$userType, $status);
       $stmt->execute();
       $result = $stmt->get_result();
       $arrResult = array();
@@ -1003,7 +985,7 @@ class DbOperation
 
     public function getReportStatusName($reportStatus)
     {
-
+    
       $stmt = $this->con->prepare("SELECT report_status FROM report_status WHERE report_status_id=?");
       $stmt->bind_param("i", $reportStatus);
       $stmt->execute();
@@ -1012,7 +994,7 @@ class DbOperation
 
       return $report['report_status'];
     }
-
+    
 
     public function getStudentInfo($studId)
     {
