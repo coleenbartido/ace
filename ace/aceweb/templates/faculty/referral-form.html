@@ -166,10 +166,10 @@
 
                   <!---------------------------------------------------------------------->
 
-                  <div class="level col-md-4" ng-if="department">
-                    <span ng-if="department==1" class="input-label">Grade Level:</span>
+                  <div class="level col-md-4">
+                    <span ng-show="department==1" class="input-label">Grade Level:</span>
 
-                    <div ng-if="department==1" class="style-select">
+                    <div ng-show="department==1" class="style-select">
                       <select class="form-control" name="year" id="year" ng-model="year" ng-disabled="!department" required>
                         <option disabled selected value> -- Select Grade Level -- </option>
 
@@ -177,15 +177,15 @@
                         <option ng-if="department==1" value="2">Grade 12</option>
                       </select>
 
-                      <div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
+                      <!--div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
                         <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
-                      </div>
+                      </div-->
                     </div>
 
                     <!---SELECT YEAR LEVEL--->
-                    <span ng-if="department==2" class="input-label">Year Level:</span>
+                    <span ng-show="department==2" class="input-label">Year Level:</span>
 
-                    <div ng-if="department==2" class="style-select">
+                    <div ng-show="department==2" class="style-select">
                       <select class="form-control" name="year" id="year" ng-model="year" ng-disabled="!department" required>
                         <option disabled selected value> -- Select Year Level -- </option>
 
@@ -195,10 +195,10 @@
                         <option ng-if="department==2" value="4">Fourth year</option>
 
                       </select>
+                    </div>
 
-                      <div ng-if="department==2" ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
-                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
-                      </div>
+                    <div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
+                      <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
                     </div>
 
                     <!--div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
@@ -208,11 +208,11 @@
 
                   <!---------------------------------------------------------------------->
 
-                  <div class="courseProgram col-md-8" ng-if="department">
-                    <span ng-if="department==1" class="input-label">Program:</span>
+                  <div class="courseProgram col-md-8">
+                    <span ng-show="department==1" class="input-label">Program:</span>
 
-                    <div class="style-select" ng-if="department==1">
-                      <select ng-if="department==1" class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
+                    <div class="style-select" ng-show="department==1">
+                      <select class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
                         <option disabled selected value> -- Select Program -- </option>
 
                           <optgroup label="Academic Tracks">
@@ -231,17 +231,17 @@
                           </optgroup>
                       </select>
 
-                      <div ng-if="department==1" ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
+                      <!--div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
                         <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
-                      </div>
+                      </div-->
                     </div>
 
 
                     <!---SELECT COURSE--->
-                    <span ng-if="department==2" class="input-label">Course:</span>
+                    <span ng-show="department==2" class="input-label">Course:</span>
 
-                    <div class="style-select" ng-if="department==2">
-                      <select ng-if="department==2" class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
+                    <div class="style-select" ng-show="department==2">
+                      <select class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
                         <option disabled selected value> -- Select Course -- </option>
 
                           <optgroup label="School of Computing">
@@ -262,9 +262,11 @@
                           </optgroup>
                       </select>
 
-                      <div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
-                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
-                      </div>
+
+                    </div>
+
+                    <div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
+                      <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
                     </div>
 
                     <!--div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
