@@ -16,8 +16,34 @@ body {
   text-decoration: none;
 }
 
-#customTextArea {
-  width:100%;
-  height:100%;
-  resize: none;
+#comment {
+  height: 100px;
+  width: 100%;
+  padding:1%;
+  
+}
+
+.panel-body {
+  border: solid 3px #10326F;
+  border-radius: 0px 0px;
+}
+
+.modal-body .form-horizontal .control-label {
+  text-align: left;
+  padding-bottom: 7px;
+}
+
+.custom-form {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.modalBtn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: right;
+}
+
+.custom-modal-title {
+  font-size: 15px;
 }

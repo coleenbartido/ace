@@ -166,28 +166,21 @@
 
                   <!---------------------------------------------------------------------->
 
-                  <div class="level col-md-4">
-                    <span ng-show="department==1" class="input-label">Grade Level:</span>
+                  <div class="level col-md-4" ng-show="department">
 
-                    <div ng-show="department==1" class="style-select">
+                    <span ng-show="department==1" class="input-label">Grade Level:</span>
+                    <span ng-show="department==2" class="input-label">Year Level:</span>
+
+                    <div class="style-select">
+
                       <select class="form-control" name="year" id="year" ng-model="year" ng-disabled="!department" required>
-                        <option disabled selected value> -- Select Grade Level -- </option>
+
+                        <option ng-if="department==1" disabled selected value> -- Select Grade Level -- </option>
 
                         <option ng-if="department==1" value="1">Grade 11</option>
                         <option ng-if="department==1" value="2">Grade 12</option>
-                      </select>
 
-                      <!--div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
-                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
-                      </div-->
-                    </div>
-
-                    <!---SELECT YEAR LEVEL--->
-                    <span ng-show="department==2" class="input-label">Year Level:</span>
-
-                    <div ng-show="department==2" class="style-select">
-                      <select class="form-control" name="year" id="year" ng-model="year" ng-disabled="!department" required>
-                        <option disabled selected value> -- Select Year Level -- </option>
+                        <option ng-if="department==2" disabled selected value> -- Select Year Level -- </option>
 
                         <option ng-if="department==2" value="1">First Year</option>
                         <option ng-if="department==2" value="2">Second Year</option>
@@ -195,84 +188,73 @@
                         <option ng-if="department==2" value="4">Fourth year</option>
 
                       </select>
-                    </div>
 
-                    <div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
-                      <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
-                    </div>
+                    
 
-                    <!--div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
-                      <p class="error-message" ng-message="required">This is required!</p>
-                    </div-->
+                      <div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
+                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
+                      </div>
+
+                    </div>
+                                        
                   </div>
 
                   <!---------------------------------------------------------------------->
 
-                  <div class="courseProgram col-md-8">
+                  <div class="courseProgram col-md-8" ng-show="department">
+
                     <span ng-show="department==1" class="input-label">Program:</span>
-
-                    <div class="style-select" ng-show="department==1">
-                      <select class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
-                        <option disabled selected value> -- Select Program -- </option>
-
-                          <optgroup label="Academic Tracks">
-                            <option value="1">Humanities And Social Sciences</option>
-                            <option value="2">Accountancy Business And Management</option>
-                          </optgroup>
-
-                          <optgroup label="Technical Vocational">
-                            <option value="3">Computer Programming</option>
-                            <option value="4">Animation</option>
-                            <option value="5">Fashion Design</option>
-                          </optgroup>
-
-                          <optgroup label="Arts and Design Track">
-                            <option value="6">Multimedia Arts</option>
-                          </optgroup>
-                      </select>
-
-                      <!--div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
-                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
-                      </div-->
-                    </div>
-
-
-                    <!---SELECT COURSE--->
                     <span ng-show="department==2" class="input-label">Course:</span>
 
-                    <div class="style-select" ng-show="department==2">
+                    <div class="style-select">
+
                       <select class="form-control" name="course" id="course" ng-model="course" ng-disabled="!department" required>
-                        <option disabled selected value> -- Select Course -- </option>
 
-                          <optgroup label="School of Computing">
-                            <option value="1">Software Engineering</option>
-                            <option value="2">Game Development</option>
-                            <option value="3">Web Development</option>
+                          <option ng-if="department==1" disabled selected value> -- Select Program -- </option>
+
+                          <optgroup ng-if="department==1" label="Academic Tracks">
+                            <option ng-if="department==1" value="1">Humanities And Social Sciences</option>
+                            <option ng-if="department==1" value="2">Accountancy Business And Management</option>
                           </optgroup>
 
-                          <optgroup label="School of Design">
-                            <option value="4">Animation</option>
-                            <option value="5">Multimedia Arts</option>
-                            <option value="6">Fashion Design</option>
+                          <optgroup ng-if="department==1" label="Technical Vocational">
+                            <option ng-if="department==1" value="3">Computer Programming</option>
+                            <option ng-if="department==1" value="4">Animation</option>
+                            <option ng-if="department==1" value="5">Fashion Design</option>
                           </optgroup>
 
-                          <optgroup label="School of Business">
-                            <option value="7">Real Estate Management</option>
-                            <option value="8">Business Administration</option>
+                          <optgroup ng-if="department==1"label="Arts and Design Track">
+                            <option ng-if="department==1" value="6">Multimedia Arts</option>
                           </optgroup>
+
+                          <option ng-if="department==2" disabled selected value> -- Select Course -- </option>
+
+                          <optgroup ng-if="department==2" label="School of Computing">
+                            <option ng-if="department==2" value="1">Software Engineering</option>
+                            <option ng-if="department==2" value="2">Game Development</option>
+                            <option ng-if="department==2" value="3">Web Development</option>
+                          </optgroup>
+
+                          <optgroup ng-if="department==2" label="School of Design">
+                            <option ng-if="department==2" value="4">Animation</option>
+                            <option ng-if="department==2" value="5">Multimedia Arts</option>
+                            <option ng-if="department==2" value="6">Fashion Design</option>
+                          </optgroup>
+
+                          <optgroup ng-if="department==2" label="School of Business">
+                            <option ng-if="department==2" value="7">Real Estate Management</option>
+                            <option ng-if="department==2" value="8">Business Administration</option>
+                          </optgroup>
+
                       </select>
 
+                      <div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
+                        <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
+                      </div>
+                    </div>        
 
-                    </div>
-
-                    <div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
-                      <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
-                    </div>
-
-                    <!--div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
-                      <p class="error-message" ng-message="required">This is required!</p>
-                    </div-->
                   </div>
+
 
                 </div>
 

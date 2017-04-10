@@ -23,32 +23,23 @@
     {
       $mail = new PHPMailer;
 
-          $mail->isSMTP();                                      // Set mailer to use SMTP
-          $mail->SMTPAuth = true;                               // Enable SMTP authentication
+          $mail->isSMTP();                                                      // Set mailer to use SMTP
+          $mail->SMTPAuth = true;                                               // Enable SMTP authentication
           $mail->Host = $_ENV['GMAIL']->GMAIL_HOST;
           $mail->Username = $_ENV['GMAIL']->GMAIL_EMAIL;                        // SMTP username
           $mail->Password = $_ENV['GMAIL']->GMAIL_PWORD;                        // SMTP password
-          $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-          $mail->Port = 587;                                    // TCP port to connect to
+          $mail->SMTPSecure = 'tls';                                            // Enable TLS encryption, `ssl` also accepted
+          $mail->Port = 587;                                                    // TCP port to connect to
 
-          if(count($recipient) == 1)
+          for($counter=0; $counter < count($recipient); $counter++)
           {
-            $mail->AddAddress($recipient);
-          }
-          else
-          {
-            for($counter=0; $counter < count($recipient); $counter++)
-            {
-              $email = implode(',', $recipient[$counter]);
-              $mail->AddAddress($email);
-            }
+            $email = $recipient[$counter]['email'];
+            $mail->AddAddress($email);
           }
 
-          //$mail->AddAddress($recipient);                        // Name is optional
-
+          //$mail->AddAddress($recipient);                                      // Name is optional
           //$mail->addReplyTo('ace@iacademy.com', 'ACE');
           $mail->SetFrom($_ENV['GMAIL']->GMAIL_EMAIL, $_ENV['GMAIL']->GMAIL_SENDER_NAME);
-          //$mail->addAttachment('/var/tmp/file.tar.gz');       // Add attachments
           $mail->Subject = $subject;
           $mail->Body = $body;
           $mail->IsHTML(true);

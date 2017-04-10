@@ -536,8 +536,11 @@ angular.module('aceWeb.controller', [])
 
   $scope.resetInput = function()
   {
+    $scope.refForm.year.$setUntouched();
+    $scope.refForm.course.$setUntouched();
+
     $scope.year = undefined;
-    $scope.course = undefined;
+    $scope.course = undefined;  
   }
 
   $scope.$watch("reasons", function(n, o)
@@ -564,7 +567,7 @@ angular.module('aceWeb.controller', [])
       'year' : $scope.year,
       'reason': $scope.reasons
     };
-
+    
     $http({
       method: 'POST',
       url: config.apiUrl + '/referralForm',
@@ -1390,18 +1393,11 @@ angular.module('aceWeb.controller', [])
 .controller('ReportsController', function(config, $scope, $http, $state, $localStorage, AuthService)
 {
 
-
-  $scope.reportStatus = [
-    { text: "Uncounseled", value:1},
-    { text: "In Progress", value:2},
-    { text: "Counseled", value:3}
-  ];
-
-  $scope.getReportList = function() {
+  $scope.getReportList = function() 
+  {
     var reportDetails =
     {
       'email' : AuthService.getEmail()
-      //'department' : AuthService.getRole()
     }
 
     $http({
@@ -1423,20 +1419,9 @@ angular.module('aceWeb.controller', [])
         //convert string date into javascript date object
         strDate = $scope.reports[counter].report_date.replace(/-/g,'/');
         $scope.reports[counter].report_date = new Date(strDate);
-
-        $scope.reports[counter].sender_fullName = $scope.reports[counter].sender_fname + " " + $scope.reports[counter].sender_lname;
-
-        if($scope.reports[counter].report_status_id == 1){
-          $scope.reports[counter].report_status = "Uncounseled";
-        } else if ($scope.reports[counter].report_status_id == 2){
-          $scope.reports[counter].report_status = "In Progress";
-        } else {
-          $scope.reports[counter].report_status = "Counseled";
-        }
       }
 
       $scope.totalItems = $scope.reports.length;
-      //$scope.reports = ['apple', 'orange', 'green'];
     },
     function(response)
     {
@@ -1449,7 +1434,6 @@ angular.module('aceWeb.controller', [])
 
     });
   }
-
 
   $scope.initScope = function()
   {
@@ -1465,11 +1449,20 @@ angular.module('aceWeb.controller', [])
     $scope.maxSize = 5;
     $scope.currentPage = 1;
     $scope.itemsPerPage = 10;
-    $scope.comment = "N/A";
+
     $scope.getReportList();
   } //scope initScope
 
   $scope.initScope();
+
+  function indexOfId(array, report_id) 
+  {
+    for (var i=0; i<array.length; i++) 
+    {
+      if (array[i].report_id==report_id) return i;
+    }
+    return -1;
+  }
 
   $scope.disableActionBtn = function ()
   {
@@ -1479,7 +1472,6 @@ angular.module('aceWeb.controller', [])
     }
     return false;
   }
-
 
   $scope.deleteReportList = function()
   {
@@ -1570,7 +1562,6 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-
   $scope.selectAllRead = function ()
   {
     $scope.reportList.report_id = [];
@@ -1596,7 +1587,6 @@ angular.module('aceWeb.controller', [])
       }
     }
   }
-
 
   $scope.deleteReport = function(report_id)
   {
@@ -1643,7 +1633,7 @@ angular.module('aceWeb.controller', [])
             {
               if(response.data.errMsg == 'Cannot delete report')
               {
-                console.log("just go");
+                //
               }
             }
 
@@ -1658,14 +1648,6 @@ angular.module('aceWeb.controller', [])
         }
       }
     });
-
-    function indexOfId(array, report_id) {
-    for (var i=0; i<array.length; i++) {
-       if (array[i].report_id==report_id) return i;
-    }
-    return -1;
-
-    }
   }
 
   $scope.readReport = function(report)
@@ -1675,7 +1657,6 @@ angular.module('aceWeb.controller', [])
       'reportId' : $scope.selectedReport.report_id,
       'isRead': $scope.selectedReport.is_read,
       'email' : $scope.selectedReport.email
-
     }
 
     $http({
@@ -1689,14 +1670,7 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      for(var counter=0; counter < $scope.reports.length; counter++)
-      {
-        if($scope.reports[counter].report_id == $scope.selectedReport.report_id && $scope.reports[counter].is_read == 0)
-        {
-          $scope.reports[counter].is_read = 1;
-        }
-      }
-
+      $scope.getReportList();
     },
     function(response)
     {
@@ -1708,8 +1682,6 @@ angular.module('aceWeb.controller', [])
     {
 
     });
-
-
   }
 
 //------------------------------------------- MODALS -----------------
@@ -1729,7 +1701,6 @@ angular.module('aceWeb.controller', [])
 
     $scope.comment = report.counselor_note;
     $scope.status = report.report_status_id + "";
-    //$scope.composeEmail = undefined;
   }
 
   $scope.createMessage = function(report)
@@ -1737,21 +1708,20 @@ angular.module('aceWeb.controller', [])
     $('#messageModal').modal('show');
 
     $scope.selectedReport = report;
-    console.log(report);
+    $scope.subject = "Referral for " + report.student_fname + " " + report.student_lname + ": " + report.subject_name;
+    $scope.receiver = report.faculty_fname + " " + report.faculty_lname;
     $scope.composeEmail = undefined;
-
   }
 
+  $('#viewModal').focus(function()
+  {
+    $scope.readReport();
+  })
 
 //------------------------------------------- MODALS -----------------
 
-  //$scope.sendEmail = function(replyEmail, reportId, studentName, subjectName)
   $scope.sendEmail = function(report)
   {
-    $scope.subject = "Referral for  " + report.first_name + " " + report.last_name + ": " + report.subject_name;
-
-    $scope.showLimit -= 1;
-
     var messageDetails =
     {
       'sender' : AuthService.getEmail(),
@@ -1772,6 +1742,7 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
+      $scope.composeEmail = undefined;
     },
     //2/28
     function(response)
@@ -1783,12 +1754,12 @@ angular.module('aceWeb.controller', [])
     })
     .finally(function()
     {
-      $scope.composeEmail = undefined;
+      
     });
   }
 
-  $scope.markAsRead = function(){
-
+  $scope.markAsRead = function()
+  {
       var reportDetails =
       {
         'reportList' : $scope.reportList,
@@ -1804,23 +1775,14 @@ angular.module('aceWeb.controller', [])
 
       .then(function(response)
       {
-          console.log(response);
+        console.log(response);
 
-          for(var counter=0; counter < $scope.reports.length; counter++)
-          {
-            if($.inArray($scope.reports[counter].report_id, $scope.reportList.report_id) > -1 && $scope.reports[counter].is_read == 0)
-            {
-              $scope.reports[counter].is_read = 1;
-              //$rootScope.newMessageCount -= 1;
-            }
-          }
-
+        $scope.getReportList();
       },
       function(response)
       {
         console.log(response);
         //for checking
-
 
       })
       .finally(function()
@@ -1852,14 +1814,7 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      for(var counter=0; counter < $scope.reports.length; counter++)
-      {
-        if($.inArray($scope.reports[counter].report_id, $scope.reportList.report_id) > -1 && $scope.reports[counter].is_read == 1)
-        {
-          $scope.reports[counter].is_read = 0;
-          //$rootScope.newMessageCount += 1;
-        }
-      }
+      $scope.getReportList();
     },
     function(response)
     {
@@ -1876,23 +1831,16 @@ angular.module('aceWeb.controller', [])
     });
   }
 
-  $('#viewModal').focus(function()
-  {
-    $scope.readReport();
-  })
-
   $scope.updateReportStatus = function(report)
   {
 
-    var updateDetails = {
+    var updateDetails = 
+    {
         'email' : report.email,
         'reportId' : report.report_id,
-        //current status
-        'status' : report.report_status_id,
-        //status to update to
-        'updateStatus' : parseInt($scope.status),
+        'prevReportStatus' : report.report_status_id,
+        'reportStatus' : parseInt($scope.status),
         'comment' : $scope.comment
-
     }
 
     $http({
@@ -1900,15 +1848,18 @@ angular.module('aceWeb.controller', [])
         url: config.apiUrl + '/updateStatus',
         data: updateDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      })
+    })
 
     .then(function(response)
-      {
-          console.log(response);
+    {
+        console.log(response);
 
-      },
-      function(response)
-      {
+        $scope.getReportList();
+
+        $('#noteModal').modal('hide');
+    },
+    function(response)
+    {
         //for checking
         if(response.status == 400)
         {
@@ -1918,12 +1869,11 @@ angular.module('aceWeb.controller', [])
           }
         }
 
+    })
+    .finally(function()
+    {
 
-      })
-      .finally(function()
-      {
-
-      });
+    });
 
   }
 
@@ -2027,6 +1977,14 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
+  function indexOfId(array, report_id) 
+  {
+    for (var i=0; i<array.length; i++) 
+    {
+      if (array[i].report_id==report_id) return i;
+    }
+    return -1;
+  }
 
   $scope.deleteStudent = function(student_id)
   {
@@ -2085,14 +2043,6 @@ angular.module('aceWeb.controller', [])
       }
     });
 
-
-    function indexOfId(array, student_id) {
-    for (var i=0; i<array.length; i++) {
-       if (array[i].student_id==student_id) return i;
-    }
-    return -1;
-
-    }
   } // $scope.deleteAdmin
 
   /*$scope.deleteAdminList = function()
@@ -2329,6 +2279,15 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
+  function indexOfId(array, report_id) 
+  {
+    for (var i=0; i<array.length; i++) 
+    {
+      if (array[i].report_id==report_id) return i;
+    }
+    return -1;
+  }
+
   $scope.showRegFacultyModal = function()
   {
     $scope.regFacultyForm.$setPristine();
@@ -2450,14 +2409,6 @@ angular.module('aceWeb.controller', [])
       }
     });
 
-
-    function indexOfId(array, email) {
-    for (var i=0; i<array.length; i++) {
-       if (array[i].email==email) return i;
-    }
-    return -1;
-
-    }
   } // $scope.deleteAdmin
 
   $scope.deleteFacultyList = function()
@@ -2587,20 +2538,19 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      $scope.showSY = true;
-
       $scope.SYList = JSON.parse(response.data.SYList);
 
       if($scope.SYList.length != 0)
       {
-        $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
-
-        $scope.getSummaryData();
+        $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;  
+        $scope.getSummaryData();    
       }
       else
       {
         $scope.isEmptySYList = true;
+        $scope.isLoading = false;
       }
+
     },
     function(response)
     {
@@ -2632,7 +2582,7 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      $scope.showChart = true;
+      $scope.isLoading = false;
 
       var dept = response.data.department;
       var termDataObj = JSON.parse(response.data.termData);
@@ -2695,8 +2645,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
-    $scope.showSY = false;
-    $scope.showChart = false;
+    $scope.isLoading = true;
     $scope.currentDate = Date.today().toString('dddd, MMMM d, yyyy');
     $scope.currentDateNum = Date.today().toString('MMddyy');
     $scope.isEmptySYList = false;
@@ -2927,15 +2876,6 @@ angular.module('aceWeb.controller', [])
 .controller('ManageAdminController', function(config, $scope, $http, $state, AuthService)
 {
 
-  function indexOfId(array, email)
-  {
-    for (var i=0; i<array.length; i++)
-    {
-      if (array[i].email==email) return i;
-    }
-    return -1;
-  }
-
   $scope.getAdminList = function()
   {
     $http({
@@ -2991,6 +2931,15 @@ angular.module('aceWeb.controller', [])
   } //scope initScope
 
   $scope.initScope();
+
+  function indexOfId(array, email)
+  {
+    for (var i=0; i<array.length; i++)
+    {
+      if (array[i].email==email) return i;
+    }
+    return -1;
+  }
 
   $scope.showRegAdminModal = function()
   {

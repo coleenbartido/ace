@@ -983,6 +983,20 @@ class DbOperation
 
     }
 
+
+    public function getReportStatusName($reportStatus)
+    {
+    
+      $stmt = $this->con->prepare("SELECT report_status FROM report_status WHERE report_status_id=?");
+      $stmt->bind_param("i", $reportStatus);
+      $stmt->execute();
+      $report = $stmt->get_result()->fetch_assoc();
+      $stmt->close();
+
+      return $report['report_status'];
+    }
+    
+
     public function getStudentInfo($studId)
     {
       $studId = $studId . "%";

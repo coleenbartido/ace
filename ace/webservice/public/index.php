@@ -441,51 +441,31 @@
   {
     $reportDetails = json_decode(file_get_contents("php://input"));
 
-    $status = 1;
-    $email = $reportDetails->email;
-
     $db = new DbOperation();
 
+    $status = 1;
+    $email = $reportDetails->email;
     $department = $db->getDepartment($email);
 
     if($department == 1)
     {
       $reportsList = $db->listShsReports($status);
-
-      for($counter=0; $counter<count($reportsList); $counter++)
-      {
-
-        $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
-
-        for($ctr=0; $ctr<count($reasonArr); $ctr++)
-        {
-          $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
-        }
-
-      }
-
     }
     else
     {
       $reportsList = $db->listCollegeReports($status);
-
-      for($counter=0; $counter<count($reportsList); $counter++)
-      {
-
-        $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
-
-        for($ctr=0; $ctr<count($reasonArr); $ctr++)
-        {
-          $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
-        }
-
-      }
     }
 
-    for($counter=0; $counter < count($reportsList); $counter++)
+    for($counter=0; $counter<count($reportsList); $counter++)
     {
-      $reportsList[$counter]['sender_fname'] = $db->getFirstName($reportsList[$counter]['email']);
-      $reportsList[$counter]['sender_lname'] = $db->getLastName($reportsList[$counter]['email']);
+
+      $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
+
+      for($ctr=0; $ctr<count($reasonArr); $ctr++)
+      {
+        $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
+      }
+
     }
 
     $responseBody = array('reportsList' => json_encode($reportsList));
@@ -744,6 +724,7 @@
     $year = $reportDetails->year;
     $reasons = $reportDetails->reason;
     $note = "N/A";
+    $isActive = 1;
 
     if($reasons[6]->check == true)
     {
@@ -756,12 +737,10 @@
 
     $db = new DbOperation();
 
-    $last_name = $db->getFirstName($sender);
-	  $first_name = $db->getLastName($sender);
-	  $full_name = $first_name + "  " + $last_name;
-	  $isActive = 1;
-
-
+    $last_name = $db->getFirstName($email);
+    $first_name = $db->getLastName($email);
+    $full_name = $first_name . "  " .$last_name;
+    
     $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons, $note);
     $db->insertStudent($studId, $department, $studFName, $studLName, $course, $year);
     $db->updateReportCount($email);
@@ -776,7 +755,7 @@
       <br><br>To view the submitted report, login <a href=" . $link . ">here</a>.
       <br><br><br>Thank you.";
 
-    sendEmail($email, $subject, $body);
+    sendEmail($emailList, $subject, $body);
 
     $response = setSuccessResponse($response, 200);
 
@@ -914,7 +893,7 @@
         <br><br>
         If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
 
-        sendEmail($email, $subject, $body);
+      sendEmail($email, $subject, $body);
 
       $db->markReport($status, $reportId);
     }
@@ -1100,63 +1079,37 @@ $app->post('/getChartData', function (ServerRequestInterface $request, ResponseI
       $db = new DbOperation();
 
       $email = $updateDetails->email;
-      //previous status
-      $status = $updateDetails->status;
-      //status to update to
-      $updateStatus = $updateDetails->updateStatus;
       $reportId = $updateDetails->reportId;
+      $status = $updateDetails->prevReportStatus;
+      $updateStatus = $updateDetails->reportStatus;      
       $isUpdated = 1;
 
-      if(isset($_POST['comment']))
+      if(isset($updateDetails->comment))
       {
         $comment = $updateDetails->comment;
-
       }
       else
       {
-
-        $comment = "N/A";
+        $comment = null;
       }
 
+      if($status != $updateStatus)
+      {
+        $db->updateStatus($reportId, $updateStatus, $comment, $isUpdated);
 
-      //$responseBody = array('SYList' => json_encode($db->getSYList($department)));
-      //$db->updateStatus($reportId, $status, $comment);
-
-      $db->updateStatus($reportId, $updateStatus, $comment, $isUpdated);
-
-    if($status == 1){
-      $email_status = "UNCOUNSELED";
-    } else if ($status == 2){
-      $email_status = "IN PROGRESS";
-    } else {
-      $email_status = "COUNSELED";
-    }
-
-    if($updateStatus == 1){
-      $email_updateStatus = "UNCOUNSELED";
-    } else if ($updateStatus == 2){
-      $email_updateStatus = "IN PROGRESS";
-    } else {
-      $email_updateStatus = "COUNSELED";
-    }
-
-    if($status != $updateStatus)
-    {
         $subject = "ACE Submitted Report Status";
         $link = $_ENV['DOMAIN']->CLIENT_URL;
         $body =
-
-          "The administrator updated the status of your submitted report from " . $email_status . " to " . $email_updateStatus . ".
+          "The administrator updated the status of your submitted report from " . $db->getReportStatusName($status) . " to " . $db->getReportStatusName($updateStatus) . ".
           <br><br>
           If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
 
-      //send Email
-      sendEmail($email, $subject, $body);
-    }
+        //send Email
+        sendEmail($email, $subject, $body);
+      }
 
-
-    $response = setSuccessResponse($response, 200);
-    return $response;
+      $response = setSuccessResponse($response, 200);
+      return $response;
   });
 
 

@@ -6,7 +6,7 @@
 
 <body>
 
-	<div ng-show="showSY && showChart">
+	<div ng-show="!isLoading">
 
 		<select ng-model="selectedSY" ng-change="getSummaryData()">
 	    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
@@ -64,7 +64,7 @@
 
 	</div>
 
-	<div class="sk-fading-circle" ng-hide="showSY && showChart">
+	<div class="sk-fading-circle" ng-hide="!isLoading">
       <div class="sk-circle1 sk-circle"></div>
       <div class="sk-circle2 sk-circle"></div>
       <div class="sk-circle3 sk-circle"></div>
