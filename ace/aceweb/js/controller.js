@@ -3091,7 +3091,7 @@ angular.module('aceWeb.controller', [])
             console.log(response);
 
             var emailIndex = indexOfId($scope.adminAccounts, email);
-
+            
             $scope.adminAccounts.splice(emailIndex,1);
           },
           function(response)

@@ -67,33 +67,32 @@
 											</td>
 
 											<td>
-							       		{{admin.first_name}} {{admin.last_name}}
-							        </td>
+									       		{{admin.first_name | uppercase}} {{admin.last_name | uppercase}}
+									        </td>
 
-					        		<td>
-												<center>
-					            		{{admin.contact_number}}
-												</center>
-					        		</td>
+							        		<td>														
+							            		{{admin.contact_number}}
+							        		</td>
 
-											<td>
-												<center>
-					            		{{admin.department}}
-												</center>
-					        		</td>
+											<td>														
+							            		{{admin.department}}														
+							        		</td>
 
 											<td>
 												<center>
 												<button type="button" class="btn btn-primary" ng-click="deleteAdmin(admin.email)" ><span class="glyphicon glyphicon-trash"></span></button>
 												</center>
 											</td>
-							    </tr>
+							    	</tr>
+
+							    	<tr ng-show="(adminAccounts | filter:searchBox).length == 0">
+										<td colspan="5"><center>NO RESULT</center></td>
+									</tr>
+
 	 							</tbody>
 							</table>
 
-							<div ng-show="adminAccounts.length == 0">
-								<p>No Result</p>
-							</div>
+							
 
 							<div class="page">
 								<center>
