@@ -775,6 +775,21 @@ class DbOperation
         return false;
     }
 
+    public function markReportAsUnread($isRead, $reportId)
+    {
+        $stmt = $this->con->prepare("UPDATE report SET is_read=? WHERE report_id=?");
+        $stmt->bind_param("ii", $isRead, $reportId);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if($result)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
 
     public function getSYList($department, $status)
     {
@@ -985,7 +1000,7 @@ class DbOperation
 
     public function getReportStatusName($reportStatus)
     {
-    
+
       $stmt = $this->con->prepare("SELECT report_status FROM report_status WHERE report_status_id=?");
       $stmt->bind_param("i", $reportStatus);
       $stmt->execute();
@@ -994,7 +1009,7 @@ class DbOperation
 
       return $report['report_status'];
     }
-    
+
 
     public function getStudentInfo($studId)
     {

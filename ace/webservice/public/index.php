@@ -740,7 +740,7 @@
     $last_name = $db->getFirstName($email);
     $first_name = $db->getLastName($email);
     $full_name = $first_name . "  " .$last_name;
-    
+
     $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons, $note);
     $db->insertStudent($studId, $department, $studFName, $studLName, $course, $year);
     $db->updateReportCount($email);
@@ -830,6 +830,25 @@
     return $response;
   });
 
+  $app->post('/markReportAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $reportDetails = json_decode(file_get_contents("php://input"));
+
+    $reportList = $reportDetails->reportList;
+    //$email = $reportDetails->email;
+    $isRead = 0;
+
+    $db = new DbOperation();
+
+    foreach ($reportList->report_id as $value)
+    {
+      $db->markReportAsUnread($isRead, $value);
+    }
+
+    $response = setSuccessResponse($response, 200);
+
+    return $response;
+  });
 
 
   $app->post('/markAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
@@ -1081,7 +1100,7 @@ $app->post('/getChartData', function (ServerRequestInterface $request, ResponseI
       $email = $updateDetails->email;
       $reportId = $updateDetails->reportId;
       $status = $updateDetails->prevReportStatus;
-      $updateStatus = $updateDetails->reportStatus;      
+      $updateStatus = $updateDetails->reportStatus;
       $isUpdated = 1;
 
       if(isset($updateDetails->comment))

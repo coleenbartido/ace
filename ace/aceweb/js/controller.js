@@ -540,7 +540,7 @@ angular.module('aceWeb.controller', [])
     $scope.refForm.course.$setUntouched();
 
     $scope.year = undefined;
-    $scope.course = undefined;  
+    $scope.course = undefined;
   }
 
   $scope.$watch("reasons", function(n, o)
@@ -567,7 +567,7 @@ angular.module('aceWeb.controller', [])
       'year' : $scope.year,
       'reason': $scope.reasons
     };
-    
+
     $http({
       method: 'POST',
       url: config.apiUrl + '/referralForm',
@@ -1393,7 +1393,7 @@ angular.module('aceWeb.controller', [])
 .controller('ReportsController', function(config, $scope, $http, $state, $localStorage, AuthService)
 {
 
-  $scope.getReportList = function() 
+  $scope.getReportList = function()
   {
     var reportDetails =
     {
@@ -1730,7 +1730,7 @@ angular.module('aceWeb.controller', [])
     })
     .finally(function()
     {
-      
+
     });
   }
 
@@ -1781,7 +1781,7 @@ angular.module('aceWeb.controller', [])
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markReport',
+      url: config.apiUrl + '/markReportAsUnread',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -1810,7 +1810,7 @@ angular.module('aceWeb.controller', [])
   $scope.updateReportStatus = function(report)
   {
 
-    var updateDetails = 
+    var updateDetails =
     {
         'email' : report.email,
         'reportId' : report.report_id,
@@ -1953,9 +1953,9 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
-  function indexOfId(array, report_id) 
+  function indexOfId(array, report_id)
   {
-    for (var i=0; i<array.length; i++) 
+    for (var i=0; i<array.length; i++)
     {
       if (array[i].report_id==report_id) return i;
     }
@@ -2255,9 +2255,9 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
-  function indexOfId(array, report_id) 
+  function indexOfId(array, report_id)
   {
-    for (var i=0; i<array.length; i++) 
+    for (var i=0; i<array.length; i++)
     {
       if (array[i].report_id==report_id) return i;
     }
@@ -2518,8 +2518,8 @@ angular.module('aceWeb.controller', [])
 
       if($scope.SYList.length != 0)
       {
-        $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;  
-        $scope.getSummaryData();    
+        $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
+        $scope.getSummaryData();
       }
       else
       {
@@ -3016,7 +3016,7 @@ angular.module('aceWeb.controller', [])
             console.log(response);
 
             var emailIndex = indexOfId($scope.adminAccounts, email);
-            
+
             $scope.adminAccounts.splice(emailIndex,1);
           },
           function(response)
