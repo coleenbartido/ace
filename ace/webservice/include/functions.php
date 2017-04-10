@@ -103,20 +103,24 @@
 
     function databaseRestore(){
 
-      $dbName = $_ENV['DB']->DB_NAME;
-      $dbHost = $_ENV['DB']->DB_HOST;
-      $dbUsername = $_ENV['DB']->DB_USERNAME;
-      $dbPassword = $_ENV['DB']->DB_PASSWORD;
-      $timestamp = getTimeStamp()->format('y-m-d_H-i');
-      $backupFile = $dbName . "(" .$timestamp . ").sql";
+        $dbName = $_ENV['DB']->DB_NAME;
+        $dbHost = $_ENV['DB']->DB_HOST;
+        $dbUsername = $_ENV['DB']->DB_USERNAME;
+        $dbPassword = $_ENV['DB']->DB_PASSWORD;
+        $timestamp = getTimeStamp()->format('y-m-d_H-i');
+        $backupFile = $dbName . "(" .$timestamp . ").sql";
 
-      $command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
+        //database backup
+        //$command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
 
-      $var = system($command, $ret_val);
+        //database restore
+        $command = "mysql -u $dbUsername -p $dbName < filename.sql";
 
-      return $var;
+        $var = system($command, $ret_val);
 
-    }
+        return $var;
+
+      }
 
 
 ?>

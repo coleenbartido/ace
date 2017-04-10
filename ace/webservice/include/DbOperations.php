@@ -587,6 +587,23 @@ class DbOperation
       return $arrResult;
     }
 
+	//get faculty accounts
+    public function getFacultyAccounts($userType, $status)
+    {
+      $stmt = $this->con->prepare("SELECT email FROM user WHERE user_type_id=? AND status=?");
+      $stmt->bind_param("ii",$userType, $status);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $arrResult = array();
+      while ($myrow = $result->fetch_assoc())
+      {
+          $arrResult[] = $myrow;
+      }
+      $stmt->close();
+
+      return $arrResult;
+    }
+
 
     //lists students
     public function listStudent($department)
@@ -986,7 +1003,7 @@ class DbOperation
 
     public function getReportStatusName($reportStatus)
     {
-    
+
       $stmt = $this->con->prepare("SELECT report_status FROM report_status WHERE report_status_id=?");
       $stmt->bind_param("i", $reportStatus);
       $stmt->execute();
@@ -995,7 +1012,7 @@ class DbOperation
 
       return $report['report_status'];
     }
-    
+
 
     public function getStudentInfo($studId)
     {
