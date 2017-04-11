@@ -30,12 +30,12 @@
           $email = $recipient[$counter]['email'];
           $mail->AddAddress($email);
         }
-      } 
-      else 
+      }
+      else
       {
         $mail->AddAddress($recipient);
       }
-      
+
       $mail->isSMTP();                                                      // Set mailer to use SMTP
       $mail->SMTPAuth = true;                                               // Enable SMTP authentication
       $mail->Host = $_ENV['GMAIL']->GMAIL_HOST;
@@ -115,7 +115,11 @@
       $timestamp = getTimeStamp()->format('y-m-d_H-i');
       $backupFile = $dbName . "(" .$timestamp . ").sql";
 
-      $command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
+      //database backup
+      //$command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
+
+      //database restore
+      $command = "mysql -u $dbUsername -p $dbName < filename.sql";
 
       $var = system($command, $ret_val);
 

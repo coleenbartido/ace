@@ -587,6 +587,24 @@ class DbOperation
     }
 
 
+    //get faculty accounts
+    public function getFacultyAccounts($userType, $status)
+    {
+      $stmt = $this->con->prepare("SELECT email FROM user WHERE user_type_id=? AND status=?");
+      $stmt->bind_param("ii",$userType, $status);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $arrResult = array();
+      while ($myrow = $result->fetch_assoc())
+      {
+          $arrResult[] = $myrow;
+      }
+      $stmt->close();
+
+      return $arrResult;
+    }
+
+
     //lists students
     public function listStudent($department)
     {
