@@ -23,7 +23,7 @@
     {
       $mail = new PHPMailer;
 
-      if(is_object($recipient))
+      if(is_array($recipient))
       {
         for($counter=0; $counter < count($recipient); $counter++)
         {
