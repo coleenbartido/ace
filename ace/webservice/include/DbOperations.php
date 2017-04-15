@@ -396,12 +396,34 @@ class DbOperation
     }
 
 
-    public function deleteUser($email)
+    public function deleteUser($email, $status)
     {
-        $stmt = $this->con->prepare("UPDATE user SET status=0 WHERE email=?");
-        $stmt->bind_param("s",$email);
+           $stmt = $this->con->prepare("UPDATE user SET status=? WHERE email=?");
+           $stmt->bind_param("is",$status,$email);
+           $result = $stmt->execute();
+           $stmt->close();
+           if($result){
+               return true;
+             }
+           return false;
+    }
+
+    public function deleteStudent($studentId, $department, $status)
+    {
+        if($department == 1){
+          $stmt = $this->con->prepare("UPDATE shs_student SET status=? WHERE student_id=?");
+
+        }
+        else
+        {
+          $stmt = $this->con->prepare("UPDATE college_student SET status=? WHERE student_id=?");
+
+        }
+
+        $stmt->bind_param("is",$status,$studentId);
         $result = $stmt->execute();
         $stmt->close();
+
         if($result){
             return true;
           }
@@ -734,7 +756,7 @@ class DbOperation
       return $arrResult;
     }
 
-    public function updateCollegeStudent($studentId, $orig_studentId,  $lastName, $firstName, $program, $level)
+    public function updateCollegeStudent($studentId, $originalId,  $lastName, $firstName, $program, $level)
     {
       $stmt = $this->con->prepare("UPDATE student SET student_id=?, last_name=?, first_name=? WHERE student_id=?");
       $stmt->bind_param("ssss",$studentId, $lastName, $firstName, $originalId);

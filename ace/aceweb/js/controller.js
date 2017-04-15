@@ -1490,7 +1490,7 @@ angular.module('aceWeb.controller', [])
       $scope.mainCheckbox = false;
     }
   }
-  
+
   $scope.selectAllRead = function ()
   {
     $scope.reportList.report_id = [];
@@ -1715,7 +1715,7 @@ angular.module('aceWeb.controller', [])
       }
     });
   }
-  
+
   $scope.deleteReportList = function()
   {
     BootstrapDialog.confirm({
@@ -1978,7 +1978,7 @@ angular.module('aceWeb.controller', [])
 
     $scope.searchBox = undefined;
     $scope.studentList = {};
-    $scope.studentList.id = [];
+    $scope.studentList.student_id = [];
     $scope.mainCheckbox = false;
 
     //for pagination
@@ -2000,7 +2000,7 @@ angular.module('aceWeb.controller', [])
     return -1;
   }
 
-  $scope.deleteStudent = function(student_id)
+  $scope.deleteStudent = function(student)
   {
     BootstrapDialog.confirm({
       title: 'Delete Student',
@@ -2016,7 +2016,8 @@ angular.module('aceWeb.controller', [])
         {
           var studentDetails =
           {
-            'studentId': student_id
+            'studentId': student.student_id,
+            'email' : AuthService.getEmail()
           }
 
           $http({
@@ -2057,71 +2058,71 @@ angular.module('aceWeb.controller', [])
       }
     });
 
-  } // $scope.deleteAdmin
+  } // $scope.deleteStudent
 
-  /*$scope.deleteAdminList = function()
-  {
-    BootstrapDialog.confirm({
-      title: 'Delete Administrators',
-      message: 'Are you sure you want to delete selected accounts?',
-      type: BootstrapDialog.TYPE_PRIMARY,
-      closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
-        {
-          var adminDetails =
-          {
-            'adminList' : $scope.adminList
-            //'email': AuthService.getEmail()
-          }
+  $scope.deleteStudentList = function()
+ {
+   BootstrapDialog.confirm({
+     title: 'Delete Students',
+     message: 'Are you sure you want to delete selected student/s?',
+     type: BootstrapDialog.TYPE_PRIMARY,
+     closable: false,
+     btnCancelLabel: 'Cancel',
+     btnOKLabel: 'Delete',
+     btnOKClass: 'btn-danger',
+     callback: function(result)
+     {
+       if(result)
+       {
+         var studentDetails =
+         {
+           'studentList' : $scope.studentList,
+           'email': AuthService.getEmail()
+         }
 
-          $http({
-            method: 'POST',
-            url: config.apiUrl + '/deleteAdmin',
-            data: adminDetails,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-          })
-          .then(function(response)
-          {
-            //for checking
-            console.log(response);
+         $http({
+           method: 'POST',
+           url: config.apiUrl + '/deleteStudent',
+           data: studentDetails,
+           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+         })
+         .then(function(response)
+         {
+           //for checking
+           console.log(response);
 
-            for(var counter=$scope.adminAccounts.length - 1; counter >= 0 ; counter--)
-            {
-              if($.inArray($scope.adminAccounts[counter].email, $scope.adminList.email) > -1)
-              {
-                $scope.adminAccounts.splice(counter,1);
-              }
-            }
-            //$rootScope.newMessageCount -= 1;
-          },
-          function(response)
-          {
-            //for checking
-            console.log(response);
+           for(var counter=$scope.students.length - 1; counter >= 0 ; counter--)
+           {
+             if($.inArray($scope.students[counter].student_id, $scope.studentList.student_id) > -1)
+             {
+               $scope.students.splice(counter,1);
+             }
+           }
+           //$rootScope.newMessageCount -= 1;
+         },
+         function(response)
+         {
+           //for checking
+           console.log(response);
 
-            if(response.status == 400)
-            {
-              if(response.data.errMsg == 'Cannot delete admin')
-              {
-                //empty for now
-              }
-            }
+           if(response.status == 400)
+           {
+             if(response.data.errMsg == 'Cannot delete student')
+             {
+               //empty for now
+             }
+           }
 
-          })
-          .finally(function()
-          {
-            //$scope.markMessageList.report_id = [];
-            $scope.mainCheckbox = false;
-          });
-        }
-      }
-    });
-  }*/
+         })
+         .finally(function()
+         {
+           //$scope.markMessageList.report_id = [];
+           $scope.mainCheckbox = false;
+         });
+       }
+     }
+   });
+ }
 
   $scope.showPopup = function(student)
   {
@@ -2134,8 +2135,8 @@ angular.module('aceWeb.controller', [])
     $scope.originalId = student.student_id;
     $scope.studLName = student.last_name;
     $scope.studFName = student.first_name;
-    $scope.program = student.program_id;
-    $scope.level = student.level;
+    $scope.program = student.program_id + "";
+    $scope.level = student.level + "";
 
     //$scope.defaultSelected = student.program_id;
 
@@ -2145,23 +2146,32 @@ angular.module('aceWeb.controller', [])
     //$scope.showLimit = -4;
   }
 
-  /*
+  $scope.disableActionBtn = function ()
+  {
+    if($scope.studentList.student_id == undefined || $scope.studentList.student_id.length == 0)
+    {
+      return true;
+    }
+    return false;
+  }
+
+
   $scope.controlCheckbox = function ()
   {
-    $scope.adminList.email = [];
+    $scope.studentList.student_id = [];
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < $scope.adminAccounts.length; counter++)
+      for(var counter=0; counter < $scope.students.length; counter++)
       {
-        $scope.adminList.email.push($scope.adminAccounts[counter].email);
+        $scope.studentList.student_id.push($scope.students[counter].student_id);
       }
     }
   }
 
   $scope.updateMainCheckbox = function ()
   {
-    if($scope.adminList.email.length == $scope.adminAccounts.length)
+    if($scope.studentList.student_id.length == $scope.students.length)
     {
       $scope.mainCheckbox = true;
     }
@@ -2171,7 +2181,6 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  */
 
   $scope.updateStudent = function(){
     var studentDetails =
@@ -2181,8 +2190,8 @@ angular.module('aceWeb.controller', [])
         'studentId' : $scope.studId,
         'lastName' : $scope.studLName,
         'firstName' : $scope.studFName,
-        'program' : parseInt($scope.program),
-        'level' : parseInt($scope.level)
+        'program' : $scope.program,
+        'level' : $scope.level
 
     };
 
@@ -2198,6 +2207,8 @@ angular.module('aceWeb.controller', [])
     {
       //for checking
       console.log(response);
+
+      $scope.getStudentList();
 
     },
     //2/28

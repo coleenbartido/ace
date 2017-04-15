@@ -572,14 +572,14 @@
     if(is_object($email)){
 
       foreach($email->email as $user) {
-        $db->deleteUser($user);
+        $db->deleteUser($user, $status);
       }
 
       $response = setSuccessResponse($response, 200);
 
     } else {
 
-        $db->deleteUser($email);
+        $db->deleteUser($email, $status);
         $response = setSuccessResponse($response, 200);
     }
 
@@ -593,20 +593,51 @@
     $deleteFacultyAdminDetails = json_decode(file_get_contents("php://input"));
 
     $email = $deleteFacultyAdminDetails->facultyList;
+    $status = 0;
 
     $db = new DbOperation();
 
     if(is_object($email)){
 
       foreach($email->email as $user) {
-        $db->deleteUser($user);
+        $db->deleteUser($user, $status);
       }
 
       $response = setSuccessResponse($response, 200);
 
     } else {
 
-        $db->deleteUser($email);
+        $db->deleteUser($email, $status);
+        $response = setSuccessResponse($response, 200);
+    }
+
+    return $response;
+  });
+
+
+  $app->post('/deleteStudent', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $deleteStudentDetails = json_decode(file_get_contents("php://input"));
+
+    $student= $deleteStudentDetails->studentList;
+    $email = $deleteStudentDetails->email;
+    $status = 0;
+
+    $db = new DbOperation();
+
+    $department = $db->getDepartment($email);
+
+    if(is_object($student)){
+
+      foreach($student->student_id as $student) {
+        $db->deleteStudent($student, $department, $status);
+      }
+
+      $response = setSuccessResponse($response, 200);
+
+    } else {
+
+        $db->deleteStudent($student, $department, $status);
         $response = setSuccessResponse($response, 200);
     }
 
@@ -1051,7 +1082,7 @@
       $db->updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
       $response = setSuccessResponse($response, 200);
     } else {
-      $db->updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
+      $db->updateCollegeStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
       $response = setSuccessResponse($response, 200);
     }
 
