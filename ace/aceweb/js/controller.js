@@ -1419,6 +1419,9 @@ angular.module('aceWeb.controller', [])
         //convert string date into javascript date object
         strDate = $scope.reports[counter].report_date.replace(/-/g,'/');
         $scope.reports[counter].report_date = new Date(strDate);
+
+        $scope.reports[counter].faculty_fullname = $scope.reports[counter].faculty_fname + " " + $scope.reports[counter].faculty_lname;
+        $scope.reports[counter].student_fullname = $scope.reports[counter].student_fname + " " + $scope.reports[counter].student_lname;
       }
 
       $scope.totalItems = $scope.reports.length;
@@ -1437,9 +1440,8 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
-    //$scope.userEmail = AuthService.getEmail();
-    //$scope.myFilter = 'sender_fullName';
-    //$scope.searchPlacholder = 'Name';
+    $scope.myFilter = 'subject_name';
+    $scope.searchPlacholder = 'Subject';
     $scope.searchBox = undefined;
     $scope.reportList = {};
     $scope.reportList.report_id = [];
@@ -1462,63 +1464,6 @@ angular.module('aceWeb.controller', [])
       return true;
     }
     return false;
-  }
-
-  $scope.deleteReportList = function()
-  {
-    BootstrapDialog.confirm({
-      title: 'Delete Reports',
-      message: 'Are you sure you want to delete selected reports?',
-      type: BootstrapDialog.TYPE_PRIMARY,
-      closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
-        {
-          var facultyDetails =
-          {
-            'reportList' : $scope.reportList
-            //'email': AuthService.getEmail()
-          }
-
-          $http({
-            method: 'POST',
-            url: config.apiUrl + '/deleteReport',
-            data: facultyDetails,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-          })
-          .then(function(response)
-          {
-            //for checking
-            console.log(response);
-
-            $scope.getReportList();
-          },
-          function(response)
-          {
-            //for checking
-            console.log(response);
-
-            if(response.status == 400)
-            {
-              if(response.data.errMsg == 'Cannot delete faculty')
-              {
-                //empty for now
-              }
-            }
-
-          })
-          .finally(function()
-          {
-            $scope.reportList.report_id = [];
-            $scope.mainCheckbox = false;
-          });
-        }
-      }
-    });
   }
 
   $scope.controlCheckbox = function ()
@@ -1545,7 +1490,7 @@ angular.module('aceWeb.controller', [])
       $scope.mainCheckbox = false;
     }
   }
-
+  
   $scope.selectAllRead = function ()
   {
     $scope.reportList.report_id = [];
@@ -1572,64 +1517,28 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  $scope.deleteReport = function(report_id)
+  $scope.changeFilterTo = function(filterProperty)
   {
-    BootstrapDialog.confirm({
-      title: 'Delete Report',
-      message: 'Are you sure you want to delete this report?',
-      type: BootstrapDialog.TYPE_PRIMARY,
-      closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
-        {
-          //$interval.cancel($rootScope.notifPoll);
-          //$interval.cancel($scope.msgPoll);
+    $scope.searchBox = undefined;
 
-          var reportDetails =
-          {
-            'reportList' : report_id
-            //'email': AuthService.getEmail()
-          }
+    $scope.myFilter = filterProperty;
 
-          $http({
-            method: 'POST',
-            url: config.apiUrl + '/deleteReport',
-            data: reportDetails,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-          })
-          .then(function(response)
-          {
-            //for checking
-            console.log(response);
-
-            $scope.getReportList();
-          },
-          function(response)
-          {
-            //for checking
-            if(response.status == 400)
-            {
-              if(response.data.errMsg == 'Cannot delete report')
-              {
-                //
-              }
-            }
-
-          })
-          .finally(function()
-          {
-            $scope.reportList.report_id = [];
-            $scope.mainCheckbox = false;
-            //$scope.msgPoll = $interval($scope.getMessageList, 3000);
-            //$rootScope.notifPoll = $interval($scope.getNotif, 3000);
-          });
-        }
-      }
-    });
+    if(filterProperty == 'subject_name')
+    {
+      $scope.searchPlacholder = 'Subject';
+    }
+    else if(filterProperty == 'faculty_fullname')
+    {
+      $scope.searchPlacholder = 'Faculty Name';
+    }
+    else if(filterProperty == 'student_fullname')
+    {
+      $scope.searchPlacholder = 'Student Name';
+    }
+    else if(filterProperty == 'program')
+    {
+      $scope.searchPlacholder = 'Course';
+    }
   }
 
   $scope.readReport = function(report)
@@ -1707,7 +1616,6 @@ angular.module('aceWeb.controller', [])
       'messageSubj': $scope.subject,
       'reportId': report.report_id//reportId
     }
-    console.log(messageDetails);
     $http({
       method: 'POST',
       url: config.apiUrl + '/sendMessage',
@@ -1721,7 +1629,6 @@ angular.module('aceWeb.controller', [])
 
       $scope.composeEmail = undefined;
     },
-    //2/28
     function(response)
     {
       //for checking
@@ -1731,6 +1638,123 @@ angular.module('aceWeb.controller', [])
     .finally(function()
     {
 
+    });
+  }
+
+  $scope.deleteReport = function(report_id)
+  {
+    BootstrapDialog.confirm({
+      title: 'Delete Report',
+      message: 'Are you sure you want to delete this report?',
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false,
+      btnCancelLabel: 'Cancel',
+      btnOKLabel: 'Delete',
+      btnOKClass: 'btn-danger',
+      callback: function(result)
+      {
+        if(result)
+        {
+          //$interval.cancel($rootScope.notifPoll);
+          //$interval.cancel($scope.msgPoll);
+
+          var reportDetails =
+          {
+            'reportList' : report_id
+            //'email': AuthService.getEmail()
+          }
+
+          $http({
+            method: 'POST',
+            url: config.apiUrl + '/deleteReport',
+            data: reportDetails,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          })
+          .then(function(response)
+          {
+            //for checking
+            console.log(response);
+
+            $scope.getReportList();
+          },
+          function(response)
+          {
+            //for checking
+            if(response.status == 400)
+            {
+              if(response.data.errMsg == 'Cannot delete report')
+              {
+                //
+              }
+            }
+
+          })
+          .finally(function()
+          {
+            $scope.reportList.report_id = [];
+            $scope.mainCheckbox = false;
+            //$scope.msgPoll = $interval($scope.getMessageList, 3000);
+            //$rootScope.notifPoll = $interval($scope.getNotif, 3000);
+          });
+        }
+      }
+    });
+  }
+  
+  $scope.deleteReportList = function()
+  {
+    BootstrapDialog.confirm({
+      title: 'Delete Reports',
+      message: 'Are you sure you want to delete selected reports?',
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false,
+      btnCancelLabel: 'Cancel',
+      btnOKLabel: 'Delete',
+      btnOKClass: 'btn-danger',
+      callback: function(result)
+      {
+        if(result)
+        {
+          var facultyDetails =
+          {
+            'reportList' : $scope.reportList
+            //'email': AuthService.getEmail()
+          }
+
+          $http({
+            method: 'POST',
+            url: config.apiUrl + '/deleteReport',
+            data: facultyDetails,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          })
+          .then(function(response)
+          {
+            //for checking
+            console.log(response);
+
+            $scope.getReportList();
+          },
+          function(response)
+          {
+            //for checking
+            console.log(response);
+
+            if(response.status == 400)
+            {
+              if(response.data.errMsg == 'Cannot delete faculty')
+              {
+                //empty for now
+              }
+            }
+
+          })
+          .finally(function()
+          {
+            $scope.reportList.report_id = [];
+            $scope.mainCheckbox = false;
+          });
+        }
+      }
     });
   }
 
@@ -1800,7 +1824,7 @@ angular.module('aceWeb.controller', [])
     })
     .finally(function()
     {
-      $scope.markMessageList.report_id = [];
+      $scope.reportList.report_id = [];
       $scope.mainCheckbox = false;
       //$scope.msgPoll = $interval($scope.getMessageList, 3000);
       //$rootScope.notifPoll = $interval($scope.getNotif, 3000);
@@ -1844,7 +1868,6 @@ angular.module('aceWeb.controller', [])
             console.log(response);
           }
         }
-
     })
     .finally(function()
     {
