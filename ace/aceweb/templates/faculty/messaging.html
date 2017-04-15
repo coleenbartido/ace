@@ -143,24 +143,24 @@
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
                 <h4 class="modal-title custom-header-color">{{selectedMessage.message_subject}}</h4>
-            </div>
+              </div>
               <div class="modal-body">
 
-            <div id="scrollableDiv" scroll-glue load-more-data>
+                <div id="scrollableDiv" scroll-glue load-more-data>
 
-              <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
-                <br ng-show="$first">
-                  <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
-                <br>
-                <br>
-                <p ng-bind-html="message.message_body|newline2br"></p>
-                <hr ng-hide="$last">
-                <br ng-show="$last">
-              </div>
+                  <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
+                    <br ng-show="$first">
+                      <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
+                    <br>
+                    <br>
+                    <p ng-bind-html="message.message_body|newline2br"></p>
+                    <hr ng-hide="$last">
+                    <br ng-show="$last">
+                  </div>
 
-            </div>
+                </div>
 
-            <textarea id="customTextArea" rows="4" ng-model="composeEmail" ></textarea>
+                <textarea id="customTextArea" rows="4" ng-model="composeEmail" ></textarea>
               </div>
               <div class="modal-footer">
             <button type="button" class="btn btn-primary" ng-click="sendEmail()">Reply</button>

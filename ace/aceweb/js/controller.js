@@ -1577,12 +1577,32 @@ angular.module('aceWeb.controller', [])
 
 //------------------------------------------- MODALS -----------------
 
-  $scope.showPopup = function(report)
+  $scope.viewReport = function(report)
   {
     $scope.selectedReport = report;
+    $scope.reasonList = report.report_reasons;
+    $scope.readReport();
+
+    if(report.counselor_note == null)
+    {
+      report.counselor_note_view = "N/A";
+    }
+    else
+    {
+      report.counselor_note_view = report.counselor_note;
+    }
+
+    if(report.referral_comment == null)
+    {
+      report.referral_comment_view = "N/A";
+    }
+    else
+    {
+      report.referral_comment_view = report.referral_comment;
+    }
   }
 
-  $scope.viewReport = function(report)
+  $scope.updateStatus = function(report)
   {
     $scope.selectedReport = report;
     $scope.comment = report.counselor_note;
@@ -1594,15 +1614,10 @@ angular.module('aceWeb.controller', [])
     $('#messageModal').modal('show');
 
     $scope.selectedReport = report;
-    $scope.subject = "Referral for " + report.student_fname + " " + report.student_lname + ": " + report.subject_name;
-    $scope.receiver = report.faculty_fname + " " + report.faculty_lname;
+    $scope.subject = "Referral for " + report.student_fullname + ": " + report.subject_name;
+    $scope.receiver = report.faculty_fullname;
     $scope.composeEmail = undefined;
   }
-
-  $('#viewModal').focus(function()
-  {
-    $scope.readReport();
-  })
 
 //------------------------------------------- MODALS -----------------
 
@@ -1760,36 +1775,36 @@ angular.module('aceWeb.controller', [])
 
   $scope.markAsRead = function()
   {
-      var reportDetails =
-      {
-        'reportList' : $scope.reportList,
-        'email': AuthService.getEmail()
-      };
+    var reportDetails =
+    {
+      'reportList' : $scope.reportList,
+      'email': AuthService.getEmail()
+    };
 
-      $http({
-        method: 'POST',
-        url: config.apiUrl + '/markReport',
-        data: reportDetails,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      })
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/markReport',
+      data: reportDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
 
-      .then(function(response)
-      {
-        console.log(response);
+    .then(function(response)
+    {
+      console.log(response);
 
-        $scope.getReportList();
-      },
-      function(response)
-      {
-        console.log(response);
-        //for checking
+      $scope.getReportList();
+    },
+    function(response)
+    {
+      console.log(response);
+      //for checking
 
-      })
-      .finally(function()
-      {
-        $scope.reportList.report_id = [];
-        $scope.mainCheckbox = false;
-      });
+    })
+    .finally(function()
+    {
+      $scope.reportList.report_id = [];
+      $scope.mainCheckbox = false;
+    });
   }
 
   $scope.markAsUnread = function()

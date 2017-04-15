@@ -274,10 +274,10 @@ class DbOperation
 
 
     //Inserting report to database
-    public function insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons, $note)
+    public function insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons)
     {
-        $stmt = $this->con->prepare("INSERT INTO report(email, student_id, department_id, subject_name, term, school_year, referral_comment, counselor_note) VALUES(?,?,?,?,?,?,?,?)");
-        $stmt->bind_param("ssisisss", $email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $note);
+        $stmt = $this->con->prepare("INSERT INTO report(email, student_id, department_id, subject_name, term, school_year, referral_comment) VALUES(?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssisiss", $email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment);
         $result = $stmt->execute();
         $report_id = $stmt->insert_id;
         $stmt->close();

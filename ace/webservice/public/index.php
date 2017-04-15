@@ -723,7 +723,6 @@
     $course = $reportDetails->course;
     $year = $reportDetails->year;
     $reasons = $reportDetails->reason;
-    $note = "N/A";
     $isActive = 1;
 
     if($reasons[6]->check == true)
@@ -741,7 +740,7 @@
     $first_name = $db->getLastName($email);
     $full_name = $first_name . "  " .$last_name;
 
-    $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons, $note);
+    $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons);
     $db->insertStudent($studId, $department, $studFName, $studLName, $course, $year);
     $db->updateReportCount($email);
 
@@ -810,46 +809,6 @@
   });
 
 
-  $app->post('/markReport', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $reportList = $reportDetails->reportList;
-    //$email = $reportDetails->email;
-    $isRead = 1;
-
-    $db = new DbOperation();
-
-    foreach ($reportList->report_id as $value)
-    {
-      $db->markReport($isRead, $value);
-    }
-
-    $response = setSuccessResponse($response, 200);
-
-    return $response;
-  });
-
-  $app->post('/markReportAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $reportList = $reportDetails->reportList;
-    //$email = $reportDetails->email;
-    $isRead = 0;
-
-    $db = new DbOperation();
-
-    foreach ($reportList->report_id as $value)
-    {
-      $db->markReportAsUnread($isRead, $value);
-    }
-
-    $response = setSuccessResponse($response, 200);
-
-    return $response;
-  });
-
 
   $app->post('/markAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
   {
@@ -889,6 +848,51 @@
 
     return $response;
   });
+
+
+
+  $app->post('/markReport', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $reportDetails = json_decode(file_get_contents("php://input"));
+
+    $reportList = $reportDetails->reportList;
+    //$email = $reportDetails->email;
+    $isRead = 1;
+
+    $db = new DbOperation();
+
+    foreach ($reportList->report_id as $value)
+    {
+      $db->markReport($isRead, $value);
+    }
+
+    $response = setSuccessResponse($response, 200);
+
+    return $response;
+  });
+
+
+
+  $app->post('/markReportAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $reportDetails = json_decode(file_get_contents("php://input"));
+
+    $reportList = $reportDetails->reportList;
+    //$email = $reportDetails->email;
+    $isRead = 0;
+
+    $db = new DbOperation();
+
+    foreach ($reportList->report_id as $value)
+    {
+      $db->markReportAsUnread($isRead, $value);
+    }
+
+    $response = setSuccessResponse($response, 200);
+
+    return $response;
+  });
+
 
 
   $app->post('/readReport', function (ServerRequestInterface $request, ResponseInterface $response)
