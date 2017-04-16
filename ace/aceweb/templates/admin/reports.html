@@ -157,7 +157,8 @@
 									    <div class="form-group">
 									        <label  class="col-md-12 control-label" for="composeEmail">Message</label>
 									        <div class="col-md-12">										
-												<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" placeholder="Write a message..." required></textarea>
+												<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}" placeholder="Write a message..." maxlength="500" ng-trim="false" required></textarea>
+												<p class="pull-right">{{composeEmail.length}}/500</p>
 									        </div>
 									    </div>
 																		
@@ -289,8 +290,9 @@
 										<div class="form-group">
 								            <label  class="col-md-12 control-label" for="comment">Counselor's Note</label>
 								            <div class="col-md-12">
-								              <textarea id="comment" rows="5" name="comment" ng-model="comment" placeholder="Write a comment..." maxlength="255"></textarea>
-								            </div>
+								              <textarea id="comment" rows="5" name="comment" ng-model="comment" placeholder="Write a comment..." maxlength="255" ng-trim="false"></textarea>
+								              <p class="pull-right">{{comment.length}}/255</p>
+								            </div>								            
 								        </div>
 
 								        <div class="modalBtn">

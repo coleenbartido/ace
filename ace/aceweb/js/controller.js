@@ -1606,8 +1606,17 @@ angular.module('aceWeb.controller', [])
   $scope.updateStatus = function(report)
   {
     $scope.selectedReport = report;
-    $scope.comment = report.counselor_note;
     $scope.status = report.report_status_id + "";
+
+    if(report.counselor_note != null)
+    {
+      $scope.comment = report.counselor_note;
+    }
+    else
+    {
+      $scope.comment = "";
+    }
+      
     $scope.updateBtn = "Update";
     $scope.disableUpdateBtn = false;
   }
@@ -1619,7 +1628,7 @@ angular.module('aceWeb.controller', [])
     $scope.selectedReport = report;
     $scope.subject = "Referral for " + report.student_fullname + ": " + report.subject_name;
     $scope.receiver = report.faculty_fullname;
-    $scope.composeEmail = undefined;
+    $scope.composeEmail = "";
     $scope.sendBtn = "Send";
     $scope.disableSendBtn = false;
   }
