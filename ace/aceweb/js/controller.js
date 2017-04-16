@@ -1440,6 +1440,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.currentDateNum = Date.today().toString('MMddyy');
     $scope.myFilter = 'subject_name';
     $scope.searchPlacholder = 'Subject';
     $scope.searchBox = undefined;
@@ -1490,7 +1491,7 @@ angular.module('aceWeb.controller', [])
       $scope.mainCheckbox = false;
     }
   }
-
+  
   $scope.selectAllRead = function ()
   {
     $scope.reportList.report_id = [];
@@ -1715,7 +1716,7 @@ angular.module('aceWeb.controller', [])
       }
     });
   }
-
+  
   $scope.deleteReportList = function()
   {
     BootstrapDialog.confirm({
@@ -1888,9 +1889,158 @@ angular.module('aceWeb.controller', [])
     {
 
     });
-
   }
 
+  //export report to PDF
+  $scope.exportReportPDF = function(report)
+  {
+    var doc = new jsPDF('portrait');
+ 
+    var rowHeightData = 46;
+    var rowHeightLabel = 38;
+
+    doc.setFontSize(26);
+    doc.setFont("courier");
+    doc.setFontType("bold");
+    doc.text('REPORT DETAILS', 68, 16);
+
+    doc.setFontSize(15);
+    doc.text('Date:', 15, rowHeightLabel);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.report_date.toString('MM/dd/yy hh:mm tt'), 53);
+    var lineNum1 = lines.length;
+    doc.text(15, rowHeightData, lines);
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Referred by:', 70, rowHeightLabel);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.faculty_fullname, 53);
+    var lineNum2 = lines.length;
+    doc.text(70, rowHeightData, lines);
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Subject:', 130, rowHeightLabel);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.subject_name, 62);
+    var lineNum3 = lines.length;
+    doc.text(130, rowHeightData, lines);
+
+    var rowLineNum = Math.max(lineNum1, lineNum2, lineNum3);
+    
+    rowHeightData = rowHeightData + 8 + (rowLineNum * 6);
+    rowHeightLabel = rowHeightData + 8;
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Student ID:', 15, rowHeightData);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.student_id, 53);
+    var lineNum1 = lines.length;
+    doc.text(15, rowHeightLabel, lines);
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Student Name:', 70, rowHeightData);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.student_fullname, 53);
+    var lineNum2 = lines.length;
+    doc.text(70, rowHeightLabel, lines);
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Course:', 130, rowHeightData);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.program, 62);
+    var lineNum3 = lines.length;
+    doc.text(130, rowHeightLabel, lines);
+    
+    var rowLineNum = Math.max(lineNum1, lineNum2, lineNum3);
+    
+    rowHeightData = rowHeightData + 16 + (rowLineNum * 6);
+    rowHeightLabel = rowHeightData + 8;
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Level:', 15, rowHeightData);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.level, 53);
+    var lineNum1 = lines.length;
+    doc.text(15, rowHeightLabel, lines);
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Status:', 70, rowHeightData);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.report_status, 53);
+    var lineNum2 = lines.length;
+    doc.text(70, rowHeightLabel, lines);
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Counselor\'s Note:', 130, rowHeightData);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.counselor_note_view, 62);
+    var lineNum3 = lines.length;
+    doc.text(130, rowHeightLabel, lines);
+
+    var rowLineNum = Math.max(lineNum1, lineNum2, lineNum3);
+    
+    rowHeightData = rowHeightData + 12 + (rowLineNum * 5);
+    rowHeightLabel = rowHeightData + 8;
+
+    doc.line(195, rowHeightData, 15, rowHeightData);
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Reason(s) for Referral:', 15, rowHeightData + 12);
+
+    doc.setFontSize(11.3);
+    doc.setFontType("normal");
+
+    var lineCount = 0;
+
+    for(var counter = 0; counter < report.report_reasons.length; counter++)
+    {
+      var lines = doc.splitTextToSize(counter + 1 + ". " + report.report_reasons[counter], 181);   
+      var lineNum = lines.length;
+      lineCount += lineNum;  
+      doc.text(15, rowHeightLabel + 12 + (counter * lineNum * 6), lines);   
+    }   
+
+    rowHeightData = rowHeightData + 16 + (lineCount * 6);
+    rowHeightLabel = rowHeightData + 19;   
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Other Reasons:', 15, rowHeightData + 11);
+
+    doc.setFontSize(11.3);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.referral_comment_view, 181);     
+    doc.text(15, rowHeightLabel, lines);
+
+    doc.save(report.student_fullname.replace(/[^A-Z0-9]/ig, '').toLowerCase() + $scope.currentDateNum + '.pdf');
+  }
 }) //closing tag controller
 
 
@@ -1978,7 +2128,7 @@ angular.module('aceWeb.controller', [])
 
     $scope.searchBox = undefined;
     $scope.studentList = {};
-    $scope.studentList.student_id = [];
+    $scope.studentList.id = [];
     $scope.mainCheckbox = false;
 
     //for pagination
@@ -2000,7 +2150,7 @@ angular.module('aceWeb.controller', [])
     return -1;
   }
 
-  $scope.deleteStudent = function(student)
+  $scope.deleteStudent = function(student_id)
   {
     BootstrapDialog.confirm({
       title: 'Delete Student',
@@ -2016,8 +2166,7 @@ angular.module('aceWeb.controller', [])
         {
           var studentDetails =
           {
-            'studentId': student.student_id,
-            'email' : AuthService.getEmail()
+            'studentId': student_id
           }
 
           $http({
@@ -2058,71 +2207,71 @@ angular.module('aceWeb.controller', [])
       }
     });
 
-  } // $scope.deleteStudent
+  } // $scope.deleteAdmin
 
-  $scope.deleteStudentList = function()
- {
-   BootstrapDialog.confirm({
-     title: 'Delete Students',
-     message: 'Are you sure you want to delete selected student/s?',
-     type: BootstrapDialog.TYPE_PRIMARY,
-     closable: false,
-     btnCancelLabel: 'Cancel',
-     btnOKLabel: 'Delete',
-     btnOKClass: 'btn-danger',
-     callback: function(result)
-     {
-       if(result)
-       {
-         var studentDetails =
-         {
-           'studentList' : $scope.studentList,
-           'email': AuthService.getEmail()
-         }
+  /*$scope.deleteAdminList = function()
+  {
+    BootstrapDialog.confirm({
+      title: 'Delete Administrators',
+      message: 'Are you sure you want to delete selected accounts?',
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false,
+      btnCancelLabel: 'Cancel',
+      btnOKLabel: 'Delete',
+      btnOKClass: 'btn-danger',
+      callback: function(result)
+      {
+        if(result)
+        {
+          var adminDetails =
+          {
+            'adminList' : $scope.adminList
+            //'email': AuthService.getEmail()
+          }
 
-         $http({
-           method: 'POST',
-           url: config.apiUrl + '/deleteStudent',
-           data: studentDetails,
-           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-         })
-         .then(function(response)
-         {
-           //for checking
-           console.log(response);
+          $http({
+            method: 'POST',
+            url: config.apiUrl + '/deleteAdmin',
+            data: adminDetails,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          })
+          .then(function(response)
+          {
+            //for checking
+            console.log(response);
 
-           for(var counter=$scope.students.length - 1; counter >= 0 ; counter--)
-           {
-             if($.inArray($scope.students[counter].student_id, $scope.studentList.student_id) > -1)
-             {
-               $scope.students.splice(counter,1);
-             }
-           }
-           //$rootScope.newMessageCount -= 1;
-         },
-         function(response)
-         {
-           //for checking
-           console.log(response);
+            for(var counter=$scope.adminAccounts.length - 1; counter >= 0 ; counter--)
+            {
+              if($.inArray($scope.adminAccounts[counter].email, $scope.adminList.email) > -1)
+              {
+                $scope.adminAccounts.splice(counter,1);
+              }
+            }
+            //$rootScope.newMessageCount -= 1;
+          },
+          function(response)
+          {
+            //for checking
+            console.log(response);
 
-           if(response.status == 400)
-           {
-             if(response.data.errMsg == 'Cannot delete student')
-             {
-               //empty for now
-             }
-           }
+            if(response.status == 400)
+            {
+              if(response.data.errMsg == 'Cannot delete admin')
+              {
+                //empty for now
+              }
+            }
 
-         })
-         .finally(function()
-         {
-           //$scope.markMessageList.report_id = [];
-           $scope.mainCheckbox = false;
-         });
-       }
-     }
-   });
- }
+          })
+          .finally(function()
+          {
+            //$scope.markMessageList.report_id = [];
+            $scope.mainCheckbox = false;
+          });
+        }
+      }
+    });
+  }*/
 
   $scope.showPopup = function(student)
   {
@@ -2135,8 +2284,8 @@ angular.module('aceWeb.controller', [])
     $scope.originalId = student.student_id;
     $scope.studLName = student.last_name;
     $scope.studFName = student.first_name;
-    $scope.program = student.program_id + "";
-    $scope.level = student.level + "";
+    $scope.program = student.program_id;
+    $scope.level = student.level;
 
     //$scope.defaultSelected = student.program_id;
 
@@ -2146,32 +2295,23 @@ angular.module('aceWeb.controller', [])
     //$scope.showLimit = -4;
   }
 
-  $scope.disableActionBtn = function ()
-  {
-    if($scope.studentList.student_id == undefined || $scope.studentList.student_id.length == 0)
-    {
-      return true;
-    }
-    return false;
-  }
-
-
+  /*
   $scope.controlCheckbox = function ()
   {
-    $scope.studentList.student_id = [];
+    $scope.adminList.email = [];
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < $scope.students.length; counter++)
+      for(var counter=0; counter < $scope.adminAccounts.length; counter++)
       {
-        $scope.studentList.student_id.push($scope.students[counter].student_id);
+        $scope.adminList.email.push($scope.adminAccounts[counter].email);
       }
     }
   }
 
   $scope.updateMainCheckbox = function ()
   {
-    if($scope.studentList.student_id.length == $scope.students.length)
+    if($scope.adminList.email.length == $scope.adminAccounts.length)
     {
       $scope.mainCheckbox = true;
     }
@@ -2181,6 +2321,7 @@ angular.module('aceWeb.controller', [])
     }
   }
 
+  */
 
   $scope.updateStudent = function(){
     var studentDetails =
@@ -2190,8 +2331,8 @@ angular.module('aceWeb.controller', [])
         'studentId' : $scope.studId,
         'lastName' : $scope.studLName,
         'firstName' : $scope.studFName,
-        'program' : $scope.program,
-        'level' : $scope.level
+        'program' : parseInt($scope.program),
+        'level' : parseInt($scope.level)
 
     };
 
@@ -2207,8 +2348,6 @@ angular.module('aceWeb.controller', [])
     {
       //for checking
       console.log(response);
-
-      $scope.getStudentList();
 
     },
     //2/28

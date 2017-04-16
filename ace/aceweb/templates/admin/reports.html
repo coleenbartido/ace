@@ -208,7 +208,7 @@
 													<p class="reportFieldData">{{ selectedReport.student_id }}</p>
 												</div>
 												<div class="col-md-4">
-													<p class="reportFieldLabel"><b>Name: </b> 
+													<p class="reportFieldLabel"><b>Student Name: </b> 
 													<p class="reportFieldData">{{ selectedReport.student_fname }} {{ selectedReport.student_lname }}</p>
 												</div>
 												<div class="col-md-4">
@@ -223,7 +223,7 @@
 													<p class="reportFieldData">{{ selectedReport.level }}</p>
 												</div>
 												<div class="col-md-4">
-													<p class="reportFieldLabel"><b>Status </b> 
+													<p class="reportFieldLabel"><b>Status: </b> 
 													<p class="reportFieldData">{{ selectedReport.report_status }}</p>
 												</div>
 												<div class="col-md-4">
@@ -251,7 +251,9 @@
 											
 								</div>
 								<div class="modal-footer">
-										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#noteModal" ng-click="updateStatus(selectedReport)" data-dismiss="modal">Update Status</button>
+									<button type="button" class="btn btn-primary reportBtn" ng-click="exportReportPDF(selectedReport)">Export PDF</button>
+
+									<button type="button" class="btn btn-primary reportBtn" data-toggle="modal" data-target="#noteModal" ng-click="updateStatus(selectedReport)" data-dismiss="modal">Update Status</button>
 										
 								</div>
 							</div>

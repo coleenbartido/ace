@@ -65,3 +65,7 @@ body {
 .reportFieldData {
   font-size: 10.5px;
 }
+
+.reportBtn {
+  width: 130px;
+}
