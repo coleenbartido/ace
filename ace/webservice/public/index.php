@@ -1148,7 +1148,7 @@ $app->post('/getChartData', function (ServerRequestInterface $request, ResponseI
       $updateStatus = $updateDetails->reportStatus;
       $isUpdated = 1;
 
-      if(isset($updateDetails->comment))
+      if(isset($updateDetails->comment) && $updateDetails->comment != "")
       {
         $comment = $updateDetails->comment;
       }
