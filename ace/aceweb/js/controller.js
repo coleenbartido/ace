@@ -1608,6 +1608,8 @@ angular.module('aceWeb.controller', [])
     $scope.selectedReport = report;
     $scope.comment = report.counselor_note;
     $scope.status = report.report_status_id + "";
+    $scope.updateBtn = "Update";
+    $scope.disableUpdateBtn = false;
   }
 
   $scope.createMessage = function(report)
@@ -1618,66 +1620,79 @@ angular.module('aceWeb.controller', [])
     $scope.subject = "Referral for " + report.student_fullname + ": " + report.subject_name;
     $scope.receiver = report.faculty_fullname;
     $scope.composeEmail = undefined;
+    $scope.sendBtn = "Send";
+    $scope.disableSendBtn = false;
   }
 
 //------------------------------------------- MODALS -----------------
 
-  $scope.sendEmail = function(report)
+  $scope.sendEmail = function(report, form)
   {
-    var messageDetails =
+    if(form.$valid)
     {
-      'sender' : AuthService.getEmail(),
-      'receiver': report.email, //replyEmail,
-      'messageBody': $scope.composeEmail,
-      'messageSubj': $scope.subject,
-      'reportId': report.report_id//reportId
+      $scope.sendBtn = "Sending";
+      $scope.disableSendBtn = true;
+
+      var messageDetails =
+      {
+        'sender' : AuthService.getEmail(),
+        'receiver': report.email,
+        'messageBody': $scope.composeEmail,
+        'messageSubj': $scope.subject,
+        'reportId': report.report_id
+      }
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/sendMessage',
+        data: messageDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $scope.composeEmail = undefined;
+
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        if(response.status == 400)
+        {
+          $scope.showCustomModal("ERROR", response.data.errorMsg);
+        }
+      })
+      .finally(function()
+      {
+        $('#messageModal').modal('hide');
+        $scope.sendBtn = "Send";
+        $scope.disableSendBtn = false;
+      });
     }
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/sendMessage',
-      data: messageDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function(response)
-    {
-      //for checking
-      console.log(response);
-
-      $scope.composeEmail = undefined;
-    },
-    function(response)
-    {
-      //for checking
-      console.log(response);
-
-    })
-    .finally(function()
-    {
-
-    });
   }
 
   $scope.deleteReport = function(report_id)
   {
+    $scope.deleteBtn = "Delete";
+
     BootstrapDialog.confirm({
       title: 'Delete Report',
       message: 'Are you sure you want to delete this report?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
       btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
+      btnOKLabel: $scope.deleteBtn,
       btnOKClass: 'btn-danger',
       callback: function(result)
       {
         if(result)
         {
-          //$interval.cancel($rootScope.notifPoll);
-          //$interval.cancel($scope.msgPoll);
+          $scope.deleteBtn = "Deleting";
 
           var reportDetails =
           {
             'reportList' : report_id
-            //'email': AuthService.getEmail()
           }
 
           $http({
@@ -1692,25 +1707,23 @@ angular.module('aceWeb.controller', [])
             console.log(response);
 
             $scope.getReportList();
+
+            $scope.showCustomModal("SUCCESS", response.data.successMsg);
           },
           function(response)
           {
             //for checking
             if(response.status == 400)
             {
-              if(response.data.errMsg == 'Cannot delete report')
-              {
-                //
-              }
+              $scope.showCustomModal("ERROR", response.data.errorMsg);
             }
-
           })
           .finally(function()
           {
+            $scope.deleteBtn = "Delete";
+
             $scope.reportList.report_id = [];
             $scope.mainCheckbox = false;
-            //$scope.msgPoll = $interval($scope.getMessageList, 3000);
-            //$rootScope.notifPoll = $interval($scope.getNotif, 3000);
           });
         }
       }
@@ -1719,22 +1732,25 @@ angular.module('aceWeb.controller', [])
   
   $scope.deleteReportList = function()
   {
+    $scope.deleteBtn = "Delete";
+
     BootstrapDialog.confirm({
       title: 'Delete Reports',
       message: 'Are you sure you want to delete selected reports?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
       btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
+      btnOKLabel: $scope.deleteBtn,
       btnOKClass: 'btn-danger',
       callback: function(result)
       {
         if(result)
         {
+          $scope.deleteBtn = "Deleting";
+
           var facultyDetails =
           {
             'reportList' : $scope.reportList
-            //'email': AuthService.getEmail()
           }
 
           $http({
@@ -1749,6 +1765,8 @@ angular.module('aceWeb.controller', [])
             console.log(response);
 
             $scope.getReportList();
+
+            $scope.showCustomModal("SUCCESS", response.data.successMsg);
           },
           function(response)
           {
@@ -1757,15 +1775,13 @@ angular.module('aceWeb.controller', [])
 
             if(response.status == 400)
             {
-              if(response.data.errMsg == 'Cannot delete faculty')
-              {
-                //empty for now
-              }
+              $scope.showCustomModal("ERROR", response.data.errorMsg);
             }
-
           })
           .finally(function()
           {
+            $scope.deleteBtn = "Delete";
+
             $scope.reportList.report_id = [];
             $scope.mainCheckbox = false;
           });
@@ -1799,7 +1815,6 @@ angular.module('aceWeb.controller', [])
     {
       console.log(response);
       //for checking
-
     })
     .finally(function()
     {
@@ -1810,9 +1825,6 @@ angular.module('aceWeb.controller', [])
 
   $scope.markAsUnread = function()
   {
-    //$interval.cancel($rootScope.notifPoll);
-    //$interval.cancel($scope.msgPoll);
-
     var reportDetails =
     {
       'reportList' : $scope.reportList,
@@ -1842,53 +1854,54 @@ angular.module('aceWeb.controller', [])
     {
       $scope.reportList.report_id = [];
       $scope.mainCheckbox = false;
-      //$scope.msgPoll = $interval($scope.getMessageList, 3000);
-      //$rootScope.notifPoll = $interval($scope.getNotif, 3000);
     });
   }
 
-  $scope.updateReportStatus = function(report)
+  $scope.updateReportStatus = function(report, form)
   {
-
-    var updateDetails =
+    if(form.$valid)
     {
+      $scope.updateBtn = "Updating";
+      $scope.disableUpdateBtn = true;
+
+      var updateDetails =
+      {
         'email' : report.email,
         'reportId' : report.report_id,
         'prevReportStatus' : report.report_status_id,
         'reportStatus' : parseInt($scope.status),
         'comment' : $scope.comment
-    }
+      }
 
-    $http({
+      $http({
         method: 'POST',
         url: config.apiUrl + '/updateStatus',
         data: updateDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
+      })
 
-    .then(function(response)
-    {
+      .then(function(response)
+      {
         console.log(response);
 
         $scope.getReportList();
 
-        $('#noteModal').modal('hide');
-    },
-    function(response)
-    {
-        //for checking
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
         if(response.status == 400)
         {
-          if(response.data.errMsg == 'Failed')
-          {
-            console.log(response);
-          }
+          $scope.showCustomModal("ERROR", response.data.errorMsg);
         }
-    })
-    .finally(function()
-    {
-
-    });
+      })
+      .finally(function()
+      {
+        $('#noteModal').modal('hide');
+        $scope.updateBtn = "Update";
+        $scope.disableUpdateBtn = false;
+      });
+    }
   }
 
   //export report to PDF
@@ -2040,6 +2053,16 @@ angular.module('aceWeb.controller', [])
     doc.text(15, rowHeightLabel, lines);
 
     doc.save(report.student_fullname.replace(/[^A-Z0-9]/ig, '').toLowerCase() + $scope.currentDateNum + '.pdf');
+  }
+
+  $scope.showCustomModal = function(modalTitle, modalMsg)
+  {
+    BootstrapDialog.alert({
+      title: modalTitle,
+      message: modalMsg,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false   
+    });
   }
 }) //closing tag controller
 

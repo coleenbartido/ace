@@ -794,9 +794,11 @@ class DbOperation
         $stmt->bind_param("i",$report_id);
         $result = $stmt->execute();
         $stmt->close();
-        if($result){
+
+        if($result)
+        {
             return true;
-          }
+        }
         return false;
     }
 

@@ -650,22 +650,31 @@
     $deleteReportDetails = json_decode(file_get_contents("php://input"));
 
     $reports = $deleteReportDetails->reportList;
-    //print_r($reports);
+    $deleteSuccess = false;
 
     $db = new DbOperation();
 
-    if(is_object($reports)){
-
-      foreach($reports->report_id as $report) {
-        $db->deleteReport($report);
+    if(is_object($reports))
+    {
+      foreach($reports->report_id as $report) 
+      {
+        $deleteSuccess = $db->deleteReport($report);
       }
+    } 
+    else 
+    {
+      $deleteSuccess = $db->deleteReport($reports);
+    }
 
-      $response = setSuccessResponse($response, 200);
-
-    } else {
-
-        $db->deleteReport($reports);
-        $response = setSuccessResponse($response, 200);
+    if($deleteSuccess)
+    {
+      $responseBody = array('successMsg' => 'Report(s) successfully deleted');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Failed to delete report(s)');
+      $response = setResponse($response, 200, $responseBody);
     }
 
     return $response;
@@ -1021,11 +1030,12 @@
       //send Email
       sendEmail($receiver, $subject, $body);
 
-      $response = setSuccessResponse($response, 200);
+      $responseBody = array('successMsg' => 'Message sent');
+      $response = setResponse($response, 200, $responseBody);
     }
     else
     {
-      $responseBody = array('errMsg' => 'Failed to send message.');
+      $responseBody = array('errorMsg' => 'Message sending failed');
       $response = setResponse($response, 400, $responseBody);
     }
 
@@ -1147,22 +1157,30 @@ $app->post('/getChartData', function (ServerRequestInterface $request, ResponseI
         $comment = null;
       }
 
-      if($status != $updateStatus)
+      if($db->updateStatus($reportId, $updateStatus, $comment, $isUpdated))
       {
-        $db->updateStatus($reportId, $updateStatus, $comment, $isUpdated);
+        if($status != $updateStatus)
+        {
+          $subject = "ACE Submitted Report Status";
+          $link = $_ENV['DOMAIN']->CLIENT_URL;
+          $body =
+            "The administrator updated the status of your submitted report from " . $db->getReportStatusName($status) . " to " . $db->getReportStatusName($updateStatus) . ".
+            <br><br>
+            If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
 
-        $subject = "ACE Submitted Report Status";
-        $link = $_ENV['DOMAIN']->CLIENT_URL;
-        $body =
-          "The administrator updated the status of your submitted report from " . $db->getReportStatusName($status) . " to " . $db->getReportStatusName($updateStatus) . ".
-          <br><br>
-          If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
+          //send Email
+          sendEmail($email, $subject, $body);
+        }
 
-        //send Email
-        sendEmail($email, $subject, $body);
+        $responseBody = array('successMsg' => 'Report status successfully updated');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Report status failed to update');
+        $response = setResponse($response, 400, $responseBody);
       }
 
-      $response = setSuccessResponse($response, 200);
       return $response;
   });
 

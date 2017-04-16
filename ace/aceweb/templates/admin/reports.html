@@ -145,7 +145,7 @@
 
 								<div class="modal-body">
 
-									<form name="messageFacultyForm" class="form-horizontal custom-form" role="form" ng-submit="sendEmail(selectedReport)" novalidate>
+									<form name="messageFacultyForm" class="form-horizontal custom-form" role="form" ng-submit="sendEmail(selectedReport, messageFacultyForm)" novalidate>
 
 										<div class="form-group">
 									        <label  class="col-md-12 control-label" for="receiver">To</label>
@@ -157,12 +157,12 @@
 									    <div class="form-group">
 									        <label  class="col-md-12 control-label" for="composeEmail">Message</label>
 									        <div class="col-md-12">										
-												<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" placeholder="Write a message..."></textarea>
+												<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" placeholder="Write a message..." required></textarea>
 									        </div>
 									    </div>
 																		
 										<div class="modalBtn">
-									        <button type="submit" class="btn btn-primary">Send</button>
+									        <button type="submit" class="btn btn-primary" ng-disabled="disableSendBtn">{{sendBtn}}</button>
 									    </div>
 
 									</form>
@@ -273,7 +273,7 @@
 										<h4 class="modal-title custom-header-color">Update Report Status</h4>
 								</div>
 								<div class="modal-body">
-									<form name="reportUpdateForm" class="form-horizontal custom-form" role="form" ng-submit="updateReportStatus(selectedReport)" novalidate>
+									<form name="reportUpdateForm" class="form-horizontal custom-form" role="form" ng-submit="updateReportStatus(selectedReport, reportUpdateForm)" novalidate>
 
 										<div class="form-group">
 								            <label  class="col-md-12 control-label" for="status">Report Status</label>
@@ -294,7 +294,7 @@
 								        </div>
 
 								        <div class="modalBtn">
-								            <button type="submit" class="btn btn-primary">Update</button>
+								            <button type="submit" class="btn btn-primary" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
 								        </div>
 											
 									</form>
