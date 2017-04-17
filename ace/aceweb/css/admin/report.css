@@ -49,12 +49,12 @@ body {
 }
 
 #viewModal .modal-dialog {
-  width:55%;
+  width:65%;
 }
 
 #viewModal .modal-body {
   overflow-y: auto;
-  max-height: 450px;
+  max-height: 480px;
   text-align: justify;
 }
 

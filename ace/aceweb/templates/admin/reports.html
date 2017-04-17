@@ -8,6 +8,12 @@
 <body>
 
 <div>
+	<div ng-show="!isLoading">
+
+		<select ng-model="selectedSY" ng-change="getReportList()">
+	    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
+	    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
+	    </select>
 
 		<div class="input-group">
 
@@ -122,13 +128,31 @@
 						</tr>
 
 				</tbody>
-			</table>
+		</table>
 
 			
 
-			<div>
-				<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
-			</div>
+		<div>
+			<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+		</div>
+
+	</div>
+
+	<div class="sk-fading-circle" ng-hide="!isLoading">
+      <div class="sk-circle1 sk-circle"></div>
+      <div class="sk-circle2 sk-circle"></div>
+      <div class="sk-circle3 sk-circle"></div>
+      <div class="sk-circle4 sk-circle"></div>
+      <div class="sk-circle5 sk-circle"></div>
+      <div class="sk-circle6 sk-circle"></div>
+      <div class="sk-circle7 sk-circle"></div>
+      <div class="sk-circle8 sk-circle"></div>
+      <div class="sk-circle9 sk-circle"></div>
+      <div class="sk-circle10 sk-circle"></div>
+      <div class="sk-circle11 sk-circle"></div>
+      <div class="sk-circle12 sk-circle"></div>
+  	</div> <!-- spinner -->
+
 
 
 			<!-- MESSAGE MODAL -->
@@ -189,45 +213,53 @@
 									<div class="row">
 										<div class="col-md-12">
 											<div class="row">
-												<div class="col-md-4">
+												<div class="col-md-3">
 													<p class="reportFieldLabel"><b>Date: </b> 
 													<p class="reportFieldData">{{ selectedReport.report_date | date : "MMMM d, yyyy"}}</p>
 												</div>
-												<div class="col-md-4">
-													<p class="reportFieldLabel"><b>Referred by: </b> 
-													<p class="reportFieldData">{{ selectedReport.faculty_fname }} {{ selectedReport.faculty_lname }}</p>
+												<div class="col-md-3">
+													<p class="reportFieldLabel"><b>School Year: </b> 
+													<p class="reportFieldData">{{ selectedReport.school_year }}</p>
 												</div>
-												<div class="col-md-4">
-													<p class="reportFieldLabel"><b>Subject: </b>
-													<p class="reportFieldData">{{ selectedReport.subject_name }}</p>
-												</div>
-											</div>
-											<br>
-											<div class="row">
-												<div class="col-md-4">
-													<p class="reportFieldLabel"><b>Student ID Number: </b> 
-													<p class="reportFieldData">{{ selectedReport.student_id }}</p>
-												</div>
-												<div class="col-md-4">
-													<p class="reportFieldLabel"><b>Student Name: </b> 
-													<p class="reportFieldData">{{ selectedReport.student_fname }} {{ selectedReport.student_lname }}</p>
-												</div>
-												<div class="col-md-4">
-													<p class="reportFieldLabel"><b>Course: </b> 
-													<p class="reportFieldData">{{ selectedReport.program }}</p>
-												</div>
-											</div>
-											<br>
-											<div class="row">
-												<div class="col-md-4">
-													<p class="reportFieldLabel"><b>Level: </b> 											
-													<p class="reportFieldData">{{ selectedReport.level }}</p>
-												</div>
-												<div class="col-md-4">
+												<div class="col-md-3">
+													<p class="reportFieldLabel"><b>Term: </b> 
+													<p class="reportFieldData">{{ selectedReport.term }}</p>
+												</div>											
+												<div class="col-md-3">
 													<p class="reportFieldLabel"><b>Status: </b> 
 													<p class="reportFieldData">{{ selectedReport.report_status }}</p>
 												</div>
-												<div class="col-md-4">
+											</div>
+											<br>
+											<div class="row">
+												<div class="col-md-3">
+													<p class="reportFieldLabel"><b>Student ID Number: </b> 
+													<p class="reportFieldData">{{ selectedReport.student_id }}</p>
+												</div>
+												<div class="col-md-3">
+													<p class="reportFieldLabel"><b>Student Name: </b> 
+													<p class="reportFieldData">{{ selectedReport.student_fname }} {{ selectedReport.student_lname }}</p>
+												</div>
+												<div class="col-md-3">
+													<p class="reportFieldLabel"><b>Course: </b> 
+													<p class="reportFieldData">{{ selectedReport.program }}</p>
+												</div>
+												<div class="col-md-3">
+													<p class="reportFieldLabel"><b>Level: </b> 											
+													<p class="reportFieldData">{{ selectedReport.level }}</p>
+												</div>
+											</div>
+											<br>
+											<div class="row">
+												<div class="col-md-3">
+													<p class="reportFieldLabel"><b>Subject: </b>
+													<p class="reportFieldData">{{ selectedReport.subject_name }}</p>
+												</div>
+												<div class="col-md-3">
+													<p class="reportFieldLabel"><b>Referred by: </b> 
+													<p class="reportFieldData">{{ selectedReport.faculty_fname }} {{ selectedReport.faculty_lname }}</p>
+												</div>																			
+												<div class="col-md-6">
 													<p class="reportFieldLabel"><b>Counselor's Note: </b> 
 													<p class="reportFieldData">{{ selectedReport.counselor_note_view }}</p>
 												</div>

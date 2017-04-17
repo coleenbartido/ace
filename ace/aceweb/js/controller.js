@@ -1392,12 +1392,55 @@ angular.module('aceWeb.controller', [])
 
 .controller('ReportsController', function(config, $scope, $http, $state, $localStorage, AuthService)
 {
+  $scope.getSY = function()
+  {
+    var userDetails =
+    {
+      'email' : AuthService.getEmail()
+    }
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/getSYList',
+      data: userDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      //for checking
+      console.log(response);
+
+      $scope.SYList = JSON.parse(response.data.SYList);
+
+      if($scope.SYList.length != 0)
+      {
+        $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
+        $scope.getReportList();
+      }
+      else
+      {
+        $scope.isEmptySYList = true;
+        $scope.isLoading = false;
+      }
+    },
+    function(response)
+    {
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
 
   $scope.getReportList = function()
   {
+    $scope.isLoading = true;
+
     var reportDetails =
     {
-      'email' : AuthService.getEmail()
+      'email' : AuthService.getEmail(),
+      'schoolYear' : $scope.selectedSY
     }
 
     $http({
@@ -1411,6 +1454,8 @@ angular.module('aceWeb.controller', [])
     {
       //for checking
       console.log(response);
+
+      $scope.isLoading = false;
 
       $scope.reports = JSON.parse(response.data.reportsList);
 
@@ -1440,6 +1485,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.isLoading = true;
     $scope.currentDateNum = Date.today().toString('MMddyy');
     $scope.myFilter = 'subject_name';
     $scope.searchPlacholder = 'Subject';
@@ -1453,7 +1499,7 @@ angular.module('aceWeb.controller', [])
     $scope.currentPage = 1;
     $scope.itemsPerPage = 10;
 
-    $scope.getReportList();
+    $scope.getSY();
   } //scope initScope
 
   $scope.initScope();
@@ -1937,21 +1983,21 @@ angular.module('aceWeb.controller', [])
 
     doc.setFontSize(15);
     doc.setFontType("bold");
-    doc.text('Referred by:', 70, rowHeightLabel);
+    doc.text('School Year:', 70, rowHeightLabel);
 
     doc.setFontSize(12.5);
     doc.setFontType("normal");
-    var lines = doc.splitTextToSize(report.faculty_fullname, 53);
+    var lines = doc.splitTextToSize(report.school_year, 53);
     var lineNum2 = lines.length;
     doc.text(70, rowHeightData, lines);
 
     doc.setFontSize(15);
     doc.setFontType("bold");
-    doc.text('Subject:', 130, rowHeightLabel);
+    doc.text('Term:', 130, rowHeightLabel);
 
     doc.setFontSize(12.5);
     doc.setFontType("normal");
-    var lines = doc.splitTextToSize(report.subject_name, 62);
+    var lines = doc.splitTextToSize(report.term + "", 62);
     var lineNum3 = lines.length;
     doc.text(130, rowHeightData, lines);
 
@@ -2007,25 +2053,52 @@ angular.module('aceWeb.controller', [])
 
     doc.setFontSize(15);
     doc.setFontType("bold");
-    doc.text('Status:', 70, rowHeightData);
+    doc.text('Referred by:', 70, rowHeightData);
 
     doc.setFontSize(12.5);
     doc.setFontType("normal");
-    var lines = doc.splitTextToSize(report.report_status, 53);
+    var lines = doc.splitTextToSize(report.faculty_fullname, 53);
     var lineNum2 = lines.length;
     doc.text(70, rowHeightLabel, lines);
 
     doc.setFontSize(15);
     doc.setFontType("bold");
-    doc.text('Counselor\'s Note:', 130, rowHeightData);
+    doc.text('Subject:', 130, rowHeightData);
 
     doc.setFontSize(12.5);
     doc.setFontType("normal");
-    var lines = doc.splitTextToSize(report.counselor_note_view, 62);
+    var lines = doc.splitTextToSize(report.subject_name, 62);
     var lineNum3 = lines.length;
     doc.text(130, rowHeightLabel, lines);
 
     var rowLineNum = Math.max(lineNum1, lineNum2, lineNum3);
+    
+    rowHeightData = rowHeightData + 16 + (rowLineNum * 6);
+    rowHeightLabel = rowHeightData + 8;
+
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Status:', 15, rowHeightData);
+
+    doc.setFontSize(12.5);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.report_status, 53);
+    var lineNum1 = lines.length;
+    doc.text(15, rowHeightLabel, lines);
+
+    doc.setFontSize(15);
+    doc.setFontType("bold");
+    doc.text('Counselor\'s Note:', 70, rowHeightData);
+
+    doc.setFontSize(12);
+    doc.setFontType("normal");
+    var lines = doc.splitTextToSize(report.counselor_note_view, 122);
+    var lineNum2 = lines.length;
+    doc.text(70, rowHeightLabel, lines);
+
+
+    var rowLineNum = Math.max(lineNum1, lineNum2);
     
     rowHeightData = rowHeightData + 12 + (rowLineNum * 5);
     rowHeightLabel = rowHeightData + 8;
@@ -2761,6 +2834,8 @@ angular.module('aceWeb.controller', [])
   //init function which will retrieve all the data in rendering the summary chart
   $scope.getSummaryData = function()
   {
+    $scope.isLoading = true;
+
     var userDetails =
     {
       'email' : AuthService.getEmail(),

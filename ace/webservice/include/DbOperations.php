@@ -671,10 +671,10 @@ class DbOperation
     }
 
 
-    public function listShsReports($status)
+    public function listShsReports($status, $schoolYear)
     {
-        $stmt = $this->con->prepare("SELECT * FROM shs_report WHERE status=?");
-        $stmt->bind_param("i",$status);
+        $stmt = $this->con->prepare("SELECT * FROM shs_report WHERE status=? AND school_year=?");
+        $stmt->bind_param("is", $status, $schoolYear);
         $stmt->execute();
         $result = $stmt->get_result();
         $arrResult = array();
@@ -724,10 +724,10 @@ class DbOperation
     }
 
 
-    public function listCollegeReports($status)
+    public function listCollegeReports($status, $schoolYear)
     {
-        $stmt = $this->con->prepare("SELECT * FROM college_report WHERE status=?");
-        $stmt->bind_param("i",$status);
+        $stmt = $this->con->prepare("SELECT * FROM college_report WHERE status=? AND school_year=?");
+        $stmt->bind_param("is", $status, $schoolYear);
         $stmt->execute();
         $result = $stmt->get_result();
         $arrResult = array();

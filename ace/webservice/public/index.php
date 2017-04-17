@@ -445,27 +445,26 @@
 
     $status = 1;
     $email = $reportDetails->email;
+    $schoolYear = $reportDetails->schoolYear;
     $department = $db->getDepartment($email);
 
     if($department == 1)
     {
-      $reportsList = $db->listShsReports($status);
+      $reportsList = $db->listShsReports($status, $schoolYear);
     }
     else
     {
-      $reportsList = $db->listCollegeReports($status);
+      $reportsList = $db->listCollegeReports($status, $schoolYear);
     }
 
     for($counter=0; $counter<count($reportsList); $counter++)
     {
-
       $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
 
       for($ctr=0; $ctr<count($reasonArr); $ctr++)
       {
         $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
       }
-
     }
 
     $responseBody = array('reportsList' => json_encode($reportsList));
