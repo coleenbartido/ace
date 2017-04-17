@@ -1245,9 +1245,9 @@ angular.module('aceWeb.controller', [])
     $scope.newContactNum = $scope.contactNum;
   }
 
-  $scope.confirmContact = function(settingsForm2)
+  $scope.confirmContact = function(form)
   {
-    if(settingsForm2.$valid)
+    if(form.$valid)
     {
       $scope.saveBtn = "Saving";
       $scope.disableSaveBtn = true;
@@ -1271,19 +1271,14 @@ angular.module('aceWeb.controller', [])
         console.log(response);
 
         $scope.contactNum = $scope.newContactNum;
+
         $('#contactModal').modal('hide');
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
       },
       function(response)
       {
         console.log(response);
 
-        if(response.status == 400)
-        {
-          if(response.data.errMsg == 'Failed Change Contact')
-          {
-            //empty for now
-          }
-        }
       })
       .finally(function()
       {
@@ -1306,7 +1301,7 @@ angular.module('aceWeb.controller', [])
       $scope.settingsForm.userPassword.$setValidity('samePword', true);
     }
 
-    if(settingsForm.$valid) //validation if password and password confirmation field match
+    if(settingsForm.$valid)
     {
       $scope.saveBtn = "Saving";
       $scope.disableSaveBtn = true;
@@ -1337,6 +1332,7 @@ angular.module('aceWeb.controller', [])
         }
 
         $('#pwordModal').modal('hide');
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
       },
       function(response)
       {
@@ -1344,11 +1340,11 @@ angular.module('aceWeb.controller', [])
 
         if(response.status == 400)
         {
-          if(response.data.errMsg == 'Invalid password')
+          if(response.data.errorMsg == 'Invalid password')
           {
             $scope.settingsForm.oldPassword.$setValidity('invalidOldPword', false);
           }
-          if(response.data.errMsg == 'Invalid new password')
+          if(response.data.errorMsg == 'Invalid new password')
           {
             $scope.settingsForm.userPassword.$setValidity('samePword', false);
           }
@@ -1360,6 +1356,16 @@ angular.module('aceWeb.controller', [])
         $scope.disableSaveBtn = false;
       });
     }
+  }
+
+  $scope.showCustomModal = function(modalTitle, modalMsg)
+  {
+    BootstrapDialog.alert({
+      title: modalTitle,
+      message: modalMsg,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false   
+    });
   }
 
 }) //closing tag ng controller
@@ -2076,7 +2082,6 @@ angular.module('aceWeb.controller', [])
     rowHeightData = rowHeightData + 16 + (rowLineNum * 6);
     rowHeightLabel = rowHeightData + 8;
 
-
     doc.setFontSize(15);
     doc.setFontType("bold");
     doc.text('Status:', 15, rowHeightData);
@@ -2096,7 +2101,6 @@ angular.module('aceWeb.controller', [])
     var lines = doc.splitTextToSize(report.counselor_note_view, 122);
     var lineNum2 = lines.length;
     doc.text(70, rowHeightLabel, lines);
-
 
     var rowLineNum = Math.max(lineNum1, lineNum2);
     

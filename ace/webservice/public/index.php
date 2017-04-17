@@ -192,7 +192,7 @@
   });
 
 
-
+  /*
   $app->post('/changePassword', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $changePassDetails = json_decode(file_get_contents("php://input"));
@@ -213,7 +213,7 @@
     }
     return $response;
   });
-
+  */
 
 
   $app->post('/changePasswordInSettings', function (ServerRequestInterface $request, ResponseInterface $response)
@@ -230,16 +230,18 @@
     if($db->isPasswordValid($email, $pword, $oldPword) == "Valid Password")
     {
       $db->changePassword($email, $pword, $role);
-      $response = setSuccessResponse($response, 200);
+
+      $responseBody = array('successMsg' => 'Password successfully updated');
+      $response = setResponse($response, 200, $responseBody);
     }
     else if($db->isPasswordValid($email, $pword, $oldPword) == "Same Password")
     {
-      $responseBody = array('errMsg' => 'Invalid new password');
+      $responseBody = array('errorMsg' => 'Invalid new password');
       $response = setResponse($response, 400, $responseBody);
     }
     else
     {
-      $responseBody = array('errMsg' => 'Invalid password');
+      $responseBody = array('errorMsg' => 'Invalid password');
       $response = setResponse($response, 400, $responseBody);
     }
 
@@ -259,7 +261,8 @@
 
     if($db->changeContact($email, $contactNum))
     {
-      $response = setSuccessResponse($response, 200);
+      $responseBody = array('successMsg' => 'Contact number successfully updated');
+      $response = setResponse($response, 200, $responseBody);
     }
     else
     {

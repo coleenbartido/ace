@@ -128,7 +128,7 @@
           <form name="settingsForm2" class="form-horizontal custom-form" role="form" ng-submit="confirmContact(settingsForm2)" novalidate>
 
             <div class="form-group">
-              <label  class="col-md-12 control-label" for="newContactNumInput">Contact Number</label>
+              <label  class="col-md-12 control-label" for="newContactNumInput">Contact Number <i class="glyphicon glyphicon-question-sign" title="Must only have numbers, parenthesis, plus and minus symbol"></i></label>
               <div class="col-md-12">
                 <input type="text" class="form-control" id="newContactNumInput" name="newContactNum" ng-model="newContactNum" pattern="^[\d ()+-]+$" maxlength="20" required/>
               </div>
