@@ -339,10 +339,10 @@
   $app->post('/getAdminNotifList', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $accountDetails = json_decode(file_get_contents("php://input"));
-    
+
     $db = new DbOperation();
 
-    $email = $accountDetails->email;     
+    $email = $accountDetails->email;
     $department = $db->getDepartment($email);
 
     $uncounseledReportCount = $db->getUncounseledReportCount($department);
@@ -350,7 +350,7 @@
 
     $responseBody = array('uncounseledReportCount' => $uncounseledReportCount, 'newMessageCount' => $newMessageCount);
     $response = setResponse($response, 200, $responseBody);
-    
+
     return $response;
   });
 
@@ -382,7 +382,7 @@
       else
       {
         $adminList[$counter]['status'] = "PENDING";
-      }  
+      }
     }
 
     $responseBody = array('adminList' => json_encode($adminList));
@@ -396,19 +396,30 @@
   //lists faculty accounts
   $app->post('/listFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
   {
-    $adminDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $adminDetails->email;
-    $faculty = 3;
-    $status = 1;
 
     $db = new DbOperation();
 
-    $facultyList = $db->listAccounts($faculty, $status);
+    $userType = 3;
+
+    $facultyList = $db->listAccounts($userType);
 
     for($counter=0; $counter < count($facultyList); $counter++){
 
       $facultyList[$counter]['reported_count'] = $db->getReportCount($facultyList[$counter]['email']);
+
+      if($facultyList[$counter]['contact_number'] == null)
+      {
+        $facultyList[$counter]['contact_number'] = "N/A";
+      }
+
+      if($db->isAccountActive($facultyList[$counter]['email']))
+      {
+        $facultyList[$counter]['status'] = "ACTIVE";
+      }
+      else
+      {
+        $facultyList[$counter]['status'] = "PENDING";
+      }
     }
 
     $responseBody = array('facultyList' => json_encode($facultyList));
@@ -525,7 +536,7 @@
 
     if($db->emailExist($email) == true)
     {
-      $responseBody = array('errMsg' => 'Email exist');
+      $responseBody = array('errorMsg' => 'emailExist');
       $response = setResponse($response, 400, $responseBody);
     }
     else
@@ -536,6 +547,7 @@
       $subject = "Verify your ACE Program Account";
       $link = $_ENV['DOMAIN']->CLIENT_URL . "/accountsetup?email=" . $email . "&hashcode=" . $hashCode;
       $body =
+
       "Greetings! <br><br>An ACE Online Referral System account was created by the Administrator.
       <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
       <br><br><br>Thank you.";
@@ -543,7 +555,8 @@
       if($db->registerFaculty($email, $fName, $lName, $status, $userType, $hashCode))
       {
         sendEmail($email, $subject, $body);
-        $response = setSuccessResponse($response, 200);
+        $responseBody = array('successMsg' => 'Account successfully created');
+        $response = setResponse($response, 200, $responseBody);
       }
     }
 
@@ -609,12 +622,12 @@
 
     if(is_object($email))
     {
-      foreach($email->email as $user) 
+      foreach($email->email as $user)
       {
         $deleteSuccess = $db->deleteUser($user, $status);
       }
-    } 
-    else 
+    }
+    else
     {
       $deleteSuccess = $db->deleteUser($email, $status);
     }
@@ -637,25 +650,37 @@
 
   $app->post('/deleteFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
   {
-    $deleteFacultyAdminDetails = json_decode(file_get_contents("php://input"));
+    $deleteFacultyDetails = json_decode(file_get_contents("php://input"));
 
-    $email = $deleteFacultyAdminDetails->facultyList;
+    $email = $deleteFacultyDetails->facultyList;
     $status = 0;
+    $deleteSuccess = false;
 
     $db = new DbOperation();
 
-    if(is_object($email)){
+    if(is_object($email))
+    {
 
-      foreach($email->email as $user) {
-        $db->deleteUser($user, $status);
+      foreach($email->email as $user)
+      {
+        $deleteSuccess = $db->deleteUser($user, $status);
       }
 
-      $response = setSuccessResponse($response, 200);
+    }
+    else
+    {
+        $deleteSuccess = $db->deleteUser($email, $status);
+    }
 
-    } else {
-
-        $db->deleteUser($email, $status);
-        $response = setSuccessResponse($response, 200);
+    if($deleteSuccess)
+    {
+      $responseBody = array('successMsg' => 'Account(s) successfully deleted');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Failed to delete account(s)');
+      $response = setResponse($response, 200, $responseBody);
     }
 
     return $response;
@@ -703,12 +728,12 @@
 
     if(is_object($reports))
     {
-      foreach($reports->report_id as $report) 
+      foreach($reports->report_id as $report)
       {
         $deleteSuccess = $db->deleteReport($report);
       }
-    } 
-    else 
+    }
+    else
     {
       $deleteSuccess = $db->deleteReport($reports);
     }
