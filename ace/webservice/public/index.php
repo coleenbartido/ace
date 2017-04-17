@@ -336,6 +336,26 @@
 
 
 
+  $app->post('/getAdminNotifList', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $accountDetails = json_decode(file_get_contents("php://input"));
+    
+    $db = new DbOperation();
+
+    $email = $accountDetails->email;     
+    $department = $db->getDepartment($email);
+
+    $uncounseledReportCount = $db->getUncounseledReportCount($department);
+    $newMessageCount = $db->getNewMessageCount($email);
+
+    $responseBody = array('uncounseledReportCount' => $uncounseledReportCount, 'newMessageCount' => $newMessageCount);
+    $response = setResponse($response, 200, $responseBody);
+    
+    return $response;
+  });
+
+
+
   //lists admin accounts
   $app->post('/listAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
   {
@@ -1159,10 +1179,12 @@ $app->post('/getChartData', function (ServerRequestInterface $request, ResponseI
         $comment = null;
       }
 
-      if($db->updateStatus($reportId, $updateStatus, $comment, $isUpdated))
+      if($db->updateStatus($reportId, $updateStatus, $comment))
       {
         if($status != $updateStatus)
         {
+          $db->setReporAsUpdated($reportId, $isUpdated);
+
           $subject = "ACE Submitted Report Status";
           $link = $_ENV['DOMAIN']->CLIENT_URL;
           $body =

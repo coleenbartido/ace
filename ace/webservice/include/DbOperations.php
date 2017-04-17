@@ -182,6 +182,19 @@ class DbOperation
     }
 
 
+    public function getUncounseledReportCount($department)
+    {
+        $status = 1;
+        $stmt = $this->con->prepare("SELECT * FROM report WHERE report_status_id=? and status=? and department_id=?");
+        $stmt->bind_param("iii", $status, $status, $department);
+        $stmt->execute();
+        $stmt->store_result();
+        $num_rows = $stmt->num_rows;
+        $stmt->close();
+        return $num_rows;
+    }
+
+
     //EDIT TODAY
     public function changeContact($email, $contactNum)
     {
@@ -1024,10 +1037,10 @@ class DbOperation
     }
 
 
-    public function updateStatus($reportId, $updateStatus, $comment, $isUpdated)
+    public function updateStatus($reportId, $updateStatus, $comment)
     {
-      $stmt = $this->con->prepare("UPDATE report SET report_status_id=?, counselor_note=?, is_updated=? WHERE report_id=?");
-      $stmt->bind_param("isii", $updateStatus, $comment, $isUpdated , $reportId);
+      $stmt = $this->con->prepare("UPDATE report SET report_status_id=?, counselor_note=? WHERE report_id=?");
+      $stmt->bind_param("isi", $updateStatus, $comment, $reportId);
       $result = $stmt->execute();
       $stmt->close();
 
@@ -1035,8 +1048,22 @@ class DbOperation
       {
           return true;
       }
-        return false;
+      return false;
+    }
 
+
+    public function setReporAsUpdated($reportId, $isUpdated)
+    {
+      $stmt = $this->con->prepare("UPDATE report SET is_updated=? WHERE report_id=?");
+      $stmt->bind_param("ii", $isUpdated, $reportId);
+      $result = $stmt->execute();
+      $stmt->close();
+
+      if($result)
+      {
+          return true;
+      }
+      return false;
     }
 
 

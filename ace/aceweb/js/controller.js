@@ -483,8 +483,6 @@ angular.module('aceWeb.controller', [])
     if($rootScope.notifPoll)
       $interval.cancel($rootScope.notifPoll);
   })
-
-
 }) //controller
 
 
@@ -1377,26 +1375,69 @@ angular.module('aceWeb.controller', [])
 // <------------------------------ ADMIN CONTROLLERS ------------------------------------>
 
 
-.controller('AdminController', function(config, $scope, $http, $state, AuthService)
+.controller('AdminController', function(config, $scope, $http, $state, AuthService, $rootScope, $interval)
 {
-  $scope.initScope = function()
-  {
-    $scope.userName = AuthService.getName();
-  }
-
-  $scope.initScope();
-
   $scope.logout = function()
   {
     AuthService.logout();
   }
+
+  $rootScope.getNotif = function()
+  {
+    var accountDetails =
+    {
+      'email' : AuthService.getEmail()
+    }
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/getAdminNotifList',
+      data: accountDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)  
+    {
+      //for checking
+      console.log(response);
+
+      $rootScope.uncounseledReportCount = response.data.uncounseledReportCount;
+      $rootScope.newMessageCount = response.data.newMessageCount;
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
+
+  $scope.initScope = function()
+  {
+    $scope.userName = AuthService.getName();
+    $rootScope.getNotif();
+  }
+
+  $scope.initScope();
+
+  $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+
+  $scope.$on('$destroy',function()
+  {
+    if($rootScope.notifPoll)
+      $interval.cancel($rootScope.notifPoll);
+  })
+
 })
 
 
 // <------------------------------------------------------------------>
 
 
-.controller('ReportsController', function(config, $scope, $http, $state, $localStorage, AuthService)
+.controller('ReportsController', function(config, $scope, $http, $state, $localStorage, AuthService, $interval, $rootScope, $filter)
 {
   $scope.getSY = function()
   {
@@ -1922,6 +1963,7 @@ angular.module('aceWeb.controller', [])
   {
     if(form.$valid)
     {
+      $interval.cancel($rootScope.notifPoll);
       $scope.updateBtn = "Updating";
       $scope.disableUpdateBtn = true;
 
@@ -1946,8 +1988,9 @@ angular.module('aceWeb.controller', [])
         console.log(response);
 
         $scope.getReportList();
+        $rootScope.getNotif();
 
-        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);        
       },
       function(response)
       {
@@ -1961,6 +2004,7 @@ angular.module('aceWeb.controller', [])
         $('#noteModal').modal('hide');
         $scope.updateBtn = "Update";
         $scope.disableUpdateBtn = false;
+        $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
       });
     }
   }
