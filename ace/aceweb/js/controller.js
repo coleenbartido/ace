@@ -184,46 +184,39 @@ angular.module('aceWeb.controller', [])
 
   $scope.verifyURL = function()
   {
-    if($location.search()['email'] && $location.search()['hashcode'])
+    var verifyData =
     {
-      var verifyData =
-      {
-        'email' : $location.search()['email'],
-        'hashCode' : $location.search()['hashcode']
-      };
+      'email' : $location.search()['email'],
+      'hashcode' : $location.search()['hashcode']
+    };
 
-      $http({
-          method: 'GET',
-          url: config.apiUrl + '/verifyToken',
-          params: verifyData,
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      })
-      .then(function(response)
-      {
-        //for checking
-        console.log(response);
-
-        $scope.showResetPassForm = true;
-      },
-      function(response)
-      {
-        //for checking
-        console.log(response);
-
-        if(response.status == 400)
-        {
-          $state.go('errorInvalidLink');
-        }
-      })
-      .finally(function()
-      {
-
-      });
-    }
-    else
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/verifyToken',
+      data: verifyData,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
     {
-      $state.go('errorInvalidLink');
-    }
+      //for checking
+      console.log(response);
+
+      $scope.showResetPassForm = true;
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+      if(response.status == 400)
+      {
+        $state.go('errorInvalidLink');
+      }
+    })
+    .finally(function()
+    {
+
+    });  
   } //closing tag verifyURL
 
   $scope.confirmReset = function(loginForm)
@@ -241,7 +234,7 @@ angular.module('aceWeb.controller', [])
       var resetPassDetails =
       {
         'email' : $location.search()['email'],
-        'hashCode' : $location.search()['hashcode'],
+        'hashcode' : $location.search()['hashcode'],
         'pword' : $scope.userPassword
       };
 
@@ -289,6 +282,7 @@ angular.module('aceWeb.controller', [])
       }
     }
   }
+  
 }) //closing tag
 
 
@@ -2539,13 +2533,11 @@ angular.module('aceWeb.controller', [])
 
 .controller('ManageFacultyController', function(config, $scope, $http, $state, AuthService)
 {
-
   $scope.getFacultyList = function()
   {
     $http({
       method: 'POST',
       url: config.apiUrl + '/listFaculty',
-      //data: adminDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then(function(response)
@@ -2695,7 +2687,6 @@ angular.module('aceWeb.controller', [])
             $scope.getFacultyList();
 
             $scope.showCustomModal("SUCCESS", response.data.successMsg);
-
           },
           function(response)
           {
@@ -2706,7 +2697,6 @@ angular.module('aceWeb.controller', [])
             {
               $scope.showCustomModal("ERROR", response.data.errorMsg);
             }
-
           })
           .finally(function()
           {
@@ -2820,7 +2810,6 @@ angular.module('aceWeb.controller', [])
       closable: false
     });
   }
-
 
 })
 

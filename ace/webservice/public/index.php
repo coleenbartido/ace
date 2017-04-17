@@ -91,9 +91,10 @@
   {
     $resetDetails = json_decode(file_get_contents("php://input"));
 
-    $email = $resetDetails->email;
-
     $db = new DbOperation();
+
+    $email = $resetDetails->email;
+    $role = $db->getAccountRole($email);
 
     //check kung 1 yung status ng account
     if($db->emailExist($email) == false)
@@ -123,7 +124,7 @@
       sendEmail($email, $subject, $body);
 
       //UPDATE HASH, TOKEN_EXP
-      $db->forgotPassword($email, $hashCode, $timestamp);
+      $db->forgotPassword($email, $hashCode, $timestamp, $role);
 
       $response = setSuccessResponse($response, 200);
     }
@@ -132,16 +133,18 @@
 
 
 
-  $app->get('/verifyToken', function(ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/verifyToken', function(ServerRequestInterface $request, ResponseInterface $response)
   {
+    $requestObj = json_decode(file_get_contents("php://input"));
+
+    $email = $requestObj->email;
+    $hashCode = $requestObj->hashcode;
+
     $db = new DbOperation();
 
-    if(isset($_GET['email'], $_GET['hashCode'])) //server side validation if may email and hashCode parameter sa url
+    if(isset($email, $hashCode)) //server side validation if may email and hashCode parameter sa url
     {
-      $email = $_GET['email'];
-      $hashCode = $_GET['hashCode'];
-
-      if($db->isTokenExpired($email) == false && $db->isLinkValid($email, $hashCode) == true)
+      if($db->isTokenExpired($email) == false && $db->isLinkValid($email, $hashCode))
       {
         $response = setSuccessResponse($response, 200);
       }
@@ -165,15 +168,16 @@
   {
     $resetPassDetails = json_decode(file_get_contents("php://input"));
 
-    if(isset($resetPassDetails->email, $resetPassDetails->hashCode))
+    $db = new DbOperation();
+
+    $email = $resetPassDetails->email;
+    $hashCode = $resetPassDetails->hashcode;
+    $pword = $resetPassDetails->pword;
+    $role = $db->getAccountRole($email);
+
+    if(isset($email, $hashCode))
     {
-      $email = $resetPassDetails->email;
-      $hashCode = $resetPassDetails->hashCode;
-      $pword = $resetPassDetails->pword;
-
-      $db = new DbOperation();
-
-      if($db->isLinkValid($email, $hashCode) == true && $db->changePassword($email, $pword))
+      if($db->isLinkValid($email, $hashCode) && $db->changePassword($email, $pword, $role))
       {
         $response = setSuccessResponse($response, 200);
       }
@@ -191,29 +195,6 @@
     return $response;
   });
 
-
-  /*
-  $app->post('/changePassword', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $changePassDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $changePassDetails->email;
-    $pword = $changePassDetails->pword;
-
-    $db = new DbOperation();
-
-    if($db->changePassword($email, $pword))
-    {
-      $response = setSuccessResponse($response, 200);
-    }
-    else
-    {
-      $responseBody = array('errMsg' => 'Failed Change Password');
-      $response = setResponse($response, 400, $responseBody);
-    }
-    return $response;
-  });
-  */
 
 
   $app->post('/changePasswordInSettings', function (ServerRequestInterface $request, ResponseInterface $response)
@@ -424,8 +405,6 @@
 
     $responseBody = array('facultyList' => json_encode($facultyList));
     $response = setResponse($response, 200, $responseBody);
-
-    //echo json_encode($db->showMessages($email));
 
     return $response;
   });
@@ -660,16 +639,14 @@
 
     if(is_object($email))
     {
-
       foreach($email->email as $user)
       {
         $deleteSuccess = $db->deleteUser($user, $status);
       }
-
     }
     else
     {
-        $deleteSuccess = $db->deleteUser($email, $status);
+      $deleteSuccess = $db->deleteUser($email, $status);
     }
 
     if($deleteSuccess)

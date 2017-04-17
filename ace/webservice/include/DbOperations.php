@@ -42,8 +42,8 @@ class DbOperation
 
     public function isLinkValid($email, $hashCode)
     {
-        $stmt = $this->con->prepare("SELECT * FROM user WHERE email=? and hashCode=?");
-        $stmt->bind_param("ss", $email, $hashCode);
+        $stmt = $this->con->prepare("SELECT email FROM user WHERE email=? AND hashcode=? UNION SELECT email FROM superadmin_account WHERE email=? AND hashcode=?");
+        $stmt->bind_param("ssss", $email, $hashCode, $email, $hashCode);
         $stmt->execute();
         $stmt->store_result();
         $num_rows = $stmt->num_rows;
@@ -81,12 +81,21 @@ class DbOperation
     }
 
 
-    public function forgotPassword($email, $hashCode, $timestamp)
+    public function forgotPassword($email, $hashCode, $timestamp, $role)
     {
-        $stmt = $this->con->prepare("UPDATE user SET hashcode =?, token_exp=? WHERE email=?");
+        if($role == 1)
+        {
+            $stmt = $this->con->prepare("UPDATE superadmin_account SET hashcode =?, token_exp=? WHERE email=?");
+        }
+        else
+        {
+            $stmt = $this->con->prepare("UPDATE user SET hashcode =?, token_exp=? WHERE email=?");
+        }
+        
         $stmt->bind_param("sss",$hashCode, $timestamp, $email);
         $result = $stmt->execute();
         $stmt->close();
+
         if($result)
         {
             return true;
@@ -101,8 +110,8 @@ class DbOperation
         $date = getTimestamp();
         $currentDate= $date->format('Y-m-d H:i:s');
 
-        $stmt = $this->con->prepare("SELECT token_exp FROM user where email=?");
-        $stmt->bind_param("s", $email);
+        $stmt = $this->con->prepare("SELECT token_exp FROM user where email=? UNION SELECT token_exp FROM superadmin_account where email=?");
+        $stmt->bind_param("ss", $email, $email);
         $stmt->execute();
         $token = $stmt->get_result()->fetch_assoc();
 
@@ -129,18 +138,16 @@ class DbOperation
 
         if($role == 1)
         {
-            $stmt = $this->con->prepare("UPDATE superadmin_account SET hash=? WHERE email=?");
-            $stmt->bind_param("ss", $password, $email);
-            $result = $stmt->execute();
-            $stmt->close();
+            $stmt = $this->con->prepare("UPDATE superadmin_account SET hashcode=NULL, token_exp=NULL, hash=? WHERE email=?");
         }
         else
         {
-            $stmt = $this->con->prepare("UPDATE user SET hashcode=NULL, token_exp=NULL, hash=? WHERE email=?");
-            $stmt->bind_param("ss", $password, $email);
-            $result = $stmt->execute();
-            $stmt->close();
+            $stmt = $this->con->prepare("UPDATE user SET hashcode=NULL, token_exp=NULL, hash=? WHERE email=?");           
         }
+
+        $stmt->bind_param("ss", $password, $email);
+        $result = $stmt->execute();
+        $stmt->close();
 
         if($result)
         {
@@ -406,7 +413,7 @@ class DbOperation
 
     public function deleteUser($email, $status)
     {
-        $stmt = $this->con->prepare("UPDATE user SET status=?, hash = NULL, hashcode = NULL WHERE email=?");
+        $stmt = $this->con->prepare("UPDATE user SET status=?, hashcode = NULL WHERE email=?");
         $stmt->bind_param("is", $status, $email);
         $result = $stmt->execute();
         $stmt->close();
@@ -482,9 +489,9 @@ class DbOperation
     //lists accounts
     public function listAccounts($role)
     {
-
-        $stmt = $this->con->prepare("SELECT email, user_type_id, first_name, last_name, contact_number FROM user WHERE user_type_id=? AND (hashcode IS NOT NULL OR hash IS NOT NULL)");
-        $stmt->bind_param("i",$role);
+        $status = 1;
+        $stmt = $this->con->prepare("SELECT email, user_type_id, first_name, last_name, contact_number FROM user WHERE user_type_id=? AND (hashcode IS NOT NULL OR status=?)");
+        $stmt->bind_param("ii",$role, $status);
         $stmt->execute();
         $result= $stmt->get_result();
         $arrResult = array();
