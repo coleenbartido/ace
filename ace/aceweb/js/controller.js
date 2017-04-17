@@ -1823,9 +1823,6 @@ angular.module('aceWeb.controller', [])
           .finally(function()
           {
             $scope.deleteBtn = "Delete";
-
-            $scope.reportList.report_id = [];
-            $scope.mainCheckbox = false;
           });
         }
       }
@@ -3207,17 +3204,9 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      $scope.adminAccounts = JSON.parse(response.data.adminList);
-      $scope.totalItems = $scope.adminAccounts.length;
+      $scope.adminAccounts = JSON.parse(response.data.adminList);     
 
-      for(var counter=0; counter < $scope.adminAccounts.length; counter++)
-      {
-        //if contact is null
-        if($scope.adminAccounts[counter].contact_number == null)
-        {
-          $scope.adminAccounts[counter].contact_number = "N/A";
-        }
-      }
+      $scope.totalItems = $scope.adminAccounts.length;
     },
     function(response)
     {
@@ -3233,9 +3222,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
-    $scope.createBtn = "Create Account";
-    $scope.disableRegBtn = false;
-
+    $scope.deleteBtn = "Delete";
     $scope.searchBox = undefined;
     $scope.adminList = {};
     $scope.adminList.email = [];
@@ -3251,17 +3238,11 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
-  function indexOfId(array, email)
-  {
-    for (var i=0; i<array.length; i++)
-    {
-      if (array[i].email==email) return i;
-    }
-    return -1;
-  }
-
   $scope.showRegAdminModal = function()
   {
+    $scope.createBtn = "Create Account";
+    $scope.disableRegBtn = false;
+
     $scope.regAdminForm.$setPristine();
     $scope.regAdminForm.adminEmail.$setUntouched();
     $scope.regAdminForm.adminFirstName.$setUntouched();
@@ -3303,7 +3284,11 @@ angular.module('aceWeb.controller', [])
           //for checking
           console.log(response);
 
+          $scope.getAdminList();
+
           $('#adminRegModal').modal('hide');
+
+          $scope.showCustomModal("SUCCESS", response.data.successMsg);
         },
         function(response)
         {
@@ -3312,10 +3297,7 @@ angular.module('aceWeb.controller', [])
 
           if(response.status == 400)
           {
-            if(response.data.errMsg == 'Email exist')
-            {
-              $scope.regAdminForm.adminEmail.$setValidity('emailExist', false);
-            }
+            $scope.regAdminForm.adminEmail.$setValidity(response.data.errorMsg, false);
           }
         })
         .finally(function()
@@ -3327,7 +3309,6 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-
   $scope.deleteAdmin = function(email)
   {
     BootstrapDialog.confirm({
@@ -3336,12 +3317,14 @@ angular.module('aceWeb.controller', [])
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
       btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
+      btnOKLabel: $scope.deleteBtn,
       btnOKClass: 'btn-danger',
       callback: function(result)
       {
         if(result)
         {
+          $scope.deleteBtn = "Deleting";
+
           var adminDetails =
           {
             'adminList': email
@@ -3358,9 +3341,9 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            var emailIndex = indexOfId($scope.adminAccounts, email);
+            $scope.getAdminList();
 
-            $scope.adminAccounts.splice(emailIndex,1);
+            $scope.showCustomModal("SUCCESS", response.data.successMsg);
           },
           function(response)
           {
@@ -3369,17 +3352,12 @@ angular.module('aceWeb.controller', [])
 
             if(response.status == 400)
             {
-              if(response.data.errMsg == 'Cannot delete admin')
-              {
-                //empty for now
-              }
+              $scope.showCustomModal("ERROR", response.data.errorMsg);
             }
-
           })
           .finally(function()
           {
-            /*$scope.markMessageList.report_id = [];
-            $scope.mainCheckbox = false;*/
+            $scope.deleteBtn = "Delete";
           });
         }
       }
@@ -3394,16 +3372,17 @@ angular.module('aceWeb.controller', [])
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
       btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
+      btnOKLabel: $scope.deleteBtn,
       btnOKClass: 'btn-danger',
       callback: function(result)
       {
         if(result)
         {
+          $scope.deleteBtn = "Deleting";
+
           var adminDetails =
           {
             'adminList' : $scope.adminList
-            //'email': AuthService.getEmail()
           }
 
           $http({
@@ -3417,14 +3396,9 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            for(var counter=$scope.adminAccounts.length - 1; counter >= 0 ; counter--)
-            {
-              if($.inArray($scope.adminAccounts[counter].email, $scope.adminList.email) > -1)
-              {
-                $scope.adminAccounts.splice(counter,1);
-              }
-            }
-            //$rootScope.newMessageCount -= 1;
+            $scope.getAdminList();
+
+            $scope.showCustomModal("SUCCESS", response.data.successMsg);
           },
           function(response)
           {
@@ -3433,16 +3407,14 @@ angular.module('aceWeb.controller', [])
 
             if(response.status == 400)
             {
-              if(response.data.errMsg == 'Cannot delete admin')
-              {
-                //empty for now
-              }
+              $scope.showCustomModal("ERROR", response.data.errorMsg);
             }
-
           })
           .finally(function()
           {
-            //$scope.markMessageList.report_id = [];
+            $scope.deleteBtn = "Delete";
+
+            $scope.adminList.email = [];
             $scope.mainCheckbox = false;
           });
         }
@@ -3484,6 +3456,15 @@ angular.module('aceWeb.controller', [])
     return false;
   }
 
+  $scope.showCustomModal = function(modalTitle, modalMsg)
+  {
+    BootstrapDialog.alert({
+      title: modalTitle,
+      message: modalMsg,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false   
+    });
+  }
 })
 
 

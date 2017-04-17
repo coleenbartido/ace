@@ -362,14 +362,27 @@
     $db = new DbOperation();
 
     $userType = 2;
-    $status= 1;
 
-    $adminList = $db->listAccounts($userType, $status);
+    $adminList = $db->listAccounts($userType);
 
     for($counter=0; $counter < count($adminList); $counter++)
     {
       $departmentId = $db->getDepartment($adminList[$counter]['email']);
       $adminList[$counter]['department'] = $db->getDepartmentName($departmentId);
+
+      if($adminList[$counter]['contact_number'] == null)
+      {
+        $adminList[$counter]['contact_number'] = "N/A";
+      }
+
+      if($db->isAccountActive($adminList[$counter]['email']))
+      {
+        $adminList[$counter]['status'] = "ACTIVE";
+      }
+      else
+      {
+        $adminList[$counter]['status'] = "PENDING";
+      }  
     }
 
     $responseBody = array('adminList' => json_encode($adminList));
@@ -554,7 +567,7 @@
 
     if($db->emailExist($email) == true)
     {
-      $responseBody = array('errMsg' => 'Email exist');
+      $responseBody = array('errorMsg' => 'emailExist');
       $response = setResponse($response, 400, $responseBody);
     }
     else
@@ -573,7 +586,9 @@
       if($db->registerAdmin($email, $fName, $lName, $status, $userType, $hashCode, $department))
       {
         sendEmail($email, $subject, $body);
-        $response = setSuccessResponse($response, 200);
+
+        $responseBody = array('successMsg' => 'Account successfully created');
+        $response = setResponse($response, 200, $responseBody);
       }
     }
 
@@ -588,21 +603,31 @@
 
     $email = $deleteAdminDetails->adminList;
     $status = 0;
+    $deleteSuccess = false;
 
     $db = new DbOperation();
 
-    if(is_object($email)){
-
-      foreach($email->email as $user) {
-        $db->deleteUser($user, $status);
+    if(is_object($email))
+    {
+      foreach($email->email as $user) 
+      {
+        $deleteSuccess = $db->deleteUser($user, $status);
       }
+    } 
+    else 
+    {
+      $deleteSuccess = $db->deleteUser($email, $status);
+    }
 
-      $response = setSuccessResponse($response, 200);
-
-    } else {
-
-        $db->deleteUser($email, $status);
-        $response = setSuccessResponse($response, 200);
+    if($deleteSuccess)
+    {
+      $responseBody = array('successMsg' => 'Account(s) successfully deleted');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Failed to delete account(s)');
+      $response = setResponse($response, 200, $responseBody);
     }
 
     return $response;

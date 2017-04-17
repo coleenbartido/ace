@@ -38,11 +38,12 @@
 					<div class="panel-body manageContainer">
 
 							<table class="table table-inbox table-condensed">
-								<col width="50">
-								<col width="100">
-								<col width="100">
-								<col width="80">
-								<col width="80">
+								<col width="20">
+								<col width="110">
+								<col width="110">
+								<col width="55">
+								<col width="55">
+								<col width="40">
 								<col width="20">
 
 								<thead>
@@ -50,8 +51,9 @@
 											<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>
 											<th>EMAIL</th>
 											<th>NAME</th>
-											<th>CONTACT NUMBER</th>
-											<th><center>DEPARTMENT</center></th>
+											<th>CONTACT</th>
+											<th>DEPARTMENT</th>
+											<th>STATUS</th>	
 											<th><center>ACTION</center></th>
 									</tr>
 								</thead>
@@ -76,6 +78,10 @@
 
 											<td>														
 							            		{{admin.department}}														
+							        		</td>
+
+							        		<td>														
+							            		{{admin.status}}														
 							        		</td>
 
 											<td>

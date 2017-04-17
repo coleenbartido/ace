@@ -70,19 +70,14 @@ class DbOperation
     // not used
     public function isAccountActive($email)
     {
-        $stmt = $this->con->prepare("SELECT status FROM user WHERE email=?");
-        $stmt->bind_param("s",$email);
+        $stmt = $this->con->prepare("SELECT * FROM user WHERE email=? AND hash IS NOT NULL");
+        $stmt->bind_param("s", $email);
         $stmt->execute();
-        $active = $stmt->get_result()->fetch_assoc();
+        $stmt->store_result();
+        $num_rows = $stmt->num_rows;
         $stmt->close();
-        if($active['status'] == 0)
-        {
-          return false;
-        }
-        else
-        {
-          return true;
-        }
+
+        return $num_rows>0;
     }
 
 
@@ -411,15 +406,17 @@ class DbOperation
 
     public function deleteUser($email, $status)
     {
-           $stmt = $this->con->prepare("UPDATE user SET status=? WHERE email=?");
-           $stmt->bind_param("is",$status,$email);
-           $result = $stmt->execute();
-           $stmt->close();
-           if($result){
-               return true;
-             }
-           return false;
+        $stmt = $this->con->prepare("UPDATE user SET status=?, hash = NULL, hashcode = NULL WHERE email=?");
+        $stmt->bind_param("is", $status, $email);
+        $result = $stmt->execute();
+        $stmt->close();
+        if($result)
+        {
+            return true;
+        }
+        return false;
     }
+
 
     public function deleteStudent($studentId, $department, $status)
     {
@@ -483,11 +480,11 @@ class DbOperation
 
 
     //lists accounts
-    public function listAccounts($role, $status)
+    public function listAccounts($role)
     {
 
-        $stmt = $this->con->prepare("SELECT email, user_type_id, first_name, last_name, contact_number FROM user WHERE user_type_id=? and status=?");
-        $stmt->bind_param("ii",$role, $status);
+        $stmt = $this->con->prepare("SELECT email, user_type_id, first_name, last_name, contact_number FROM user WHERE user_type_id=? AND (hashcode IS NOT NULL OR hash IS NOT NULL)");
+        $stmt->bind_param("i",$role);
         $stmt->execute();
         $result= $stmt->get_result();
         $arrResult = array();
@@ -498,13 +495,9 @@ class DbOperation
         $stmt->close();
 
         return $arrResult;
-
     }
 
 
-    //checks if old password is same as the new password
-    //checks if the input for the old password is different from the password
-      //in the db
     public function isPasswordValid($email, $password, $oldPassword)
     {
       $stmt = $this->con->prepare("SELECT hash FROM user WHERE email=? UNION SELECT hash FROM superadmin_account WHERE email=?");
