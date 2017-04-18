@@ -1513,16 +1513,9 @@ angular.module('aceWeb.controller', [])
 
       $scope.SYList = JSON.parse(response.data.SYList);
 
-      if($scope.SYList.length != 0)
-      {
-        $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
-        $scope.getReportList();
-      }
-      else
-      {
-        $scope.isEmptySYList = true;
-        $scope.isLoading = false;
-      }
+      $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;      
+       
+      $scope.getReportList();   
     },
     function(response)
     {
@@ -1536,20 +1529,17 @@ angular.module('aceWeb.controller', [])
 
   $scope.getReportList = function()
   {
-
     var reportDetails =
     {
       'email' : AuthService.getEmail(),
       'schoolYear' : $scope.selectedSY
     }
-
     $http({
       method: 'POST',
       url: config.apiUrl + '/reports',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
-
     .then(function(response)
     {
       //for checking
@@ -1586,9 +1576,8 @@ angular.module('aceWeb.controller', [])
   $scope.initScope = function()
   {
     $scope.isLoading = true;
+    $scope.selectedSY = undefined;
     $scope.currentDateNum = Date.today().toString('MMddyy');
-    $scope.myFilter = 'subject_name';
-    $scope.searchPlacholder = 'Subject';
     $scope.searchBox = undefined;
     $scope.reportList = {};
     $scope.reportList.report_id = [];
@@ -1599,10 +1588,20 @@ angular.module('aceWeb.controller', [])
     $scope.currentPage = 1;
     $scope.itemsPerPage = 10;
 
-    $scope.getSY();
+    $scope.getSY();  
   } //scope initScope
 
   $scope.initScope();
+
+  $scope.reportPoll = $interval($scope.getSY, 3000);
+
+  $scope.$on('$destroy',function()
+  {
+    if($scope.reportPoll)
+    {
+      $interval.cancel($scope.reportPoll);
+    }
+  })
 
   $scope.disableActionBtn = function ()
   {
@@ -1664,30 +1663,6 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  $scope.changeFilterTo = function(filterProperty)
-  {
-    $scope.searchBox = undefined;
-
-    $scope.myFilter = filterProperty;
-
-    if(filterProperty == 'subject_name')
-    {
-      $scope.searchPlacholder = 'Subject';
-    }
-    else if(filterProperty == 'faculty_fullname')
-    {
-      $scope.searchPlacholder = 'Faculty Name';
-    }
-    else if(filterProperty == 'student_fullname')
-    {
-      $scope.searchPlacholder = 'Student Name';
-    }
-    else if(filterProperty == 'program')
-    {
-      $scope.searchPlacholder = 'Course';
-    }
-  }
-
   $scope.readReport = function(report)
   {
     var reportDetails =
@@ -1721,65 +1696,6 @@ angular.module('aceWeb.controller', [])
 
     });
   }
-
-//------------------------------------------- MODALS -----------------
-
-  $scope.viewReport = function(report)
-  {
-    $scope.selectedReport = report;
-    $scope.reasonList = report.report_reasons;
-    $scope.readReport();
-
-    if(report.counselor_note == null)
-    {
-      report.counselor_note_view = "N/A";
-    }
-    else
-    {
-      report.counselor_note_view = report.counselor_note;
-    }
-
-    if(report.referral_comment == null)
-    {
-      report.referral_comment_view = "N/A";
-    }
-    else
-    {
-      report.referral_comment_view = report.referral_comment;
-    }
-  }
-
-  $scope.updateStatus = function(report)
-  {
-    $scope.selectedReport = report;
-    $scope.status = report.report_status_id + "";
-
-    if(report.counselor_note != null)
-    {
-      $scope.comment = report.counselor_note;
-    }
-    else
-    {
-      $scope.comment = "";
-    }
-
-    $scope.updateBtn = "Update";
-    $scope.disableUpdateBtn = false;
-  }
-
-  $scope.createMessage = function(report)
-  {
-    $('#messageModal').modal('show');
-
-    $scope.selectedReport = report;
-    $scope.subject = "Referral for " + report.student_fullname + ": " + report.subject_name;
-    $scope.receiver = report.faculty_fullname;
-    $scope.composeEmail = "";
-    $scope.sendBtn = "Send";
-    $scope.disableSendBtn = false;
-  }
-
-//------------------------------------------- MODALS -----------------
 
   $scope.sendEmail = function(report, form)
   {
@@ -1844,7 +1760,9 @@ angular.module('aceWeb.controller', [])
         if(result)
         {
           $scope.deleteBtn = "Deleting";
-
+          $interval.cancel($rootScope.notifPoll);
+          $interval.cancel($scope.reportPoll);
+          
           var reportDetails =
           {
             'reportList' : report_id
@@ -1861,7 +1779,8 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            $scope.getReportList();
+            $scope.getSY();
+            $rootScope.getNotif();
 
             $scope.showCustomModal("SUCCESS", response.data.successMsg);
           },
@@ -1876,6 +1795,8 @@ angular.module('aceWeb.controller', [])
           .finally(function()
           {
             $scope.deleteBtn = "Delete";
+            $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+            $scope.reportPoll = $interval($scope.getSY, 3000);
           });
         }
       }
@@ -1899,6 +1820,8 @@ angular.module('aceWeb.controller', [])
         if(result)
         {
           $scope.deleteBtn = "Deleting";
+          $interval.cancel($rootScope.notifPoll);
+          $interval.cancel($scope.reportPoll);
 
           var facultyDetails =
           {
@@ -1916,7 +1839,8 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            $scope.getReportList();
+            $scope.getSY();
+            $rootScope.getNotif();
 
             $scope.showCustomModal("SUCCESS", response.data.successMsg);
           },
@@ -1936,6 +1860,8 @@ angular.module('aceWeb.controller', [])
 
             $scope.reportList.report_id = [];
             $scope.mainCheckbox = false;
+            $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+            $scope.reportPoll = $interval($scope.getSY, 3000);
           });
         }
       }
@@ -2013,9 +1939,11 @@ angular.module('aceWeb.controller', [])
   {
     if(form.$valid)
     {
-      $interval.cancel($rootScope.notifPoll);
       $scope.updateBtn = "Updating";
       $scope.disableUpdateBtn = true;
+
+      $interval.cancel($rootScope.notifPoll);
+      $interval.cancel($scope.reportPoll);
 
       var updateDetails =
       {
@@ -2037,7 +1965,7 @@ angular.module('aceWeb.controller', [])
       {
         console.log(response);
 
-        $scope.getReportList();
+        $scope.getSY();
         $rootScope.getNotif();
 
         $scope.showCustomModal("SUCCESS", response.data.successMsg);
@@ -2054,9 +1982,66 @@ angular.module('aceWeb.controller', [])
         $('#noteModal').modal('hide');
         $scope.updateBtn = "Update";
         $scope.disableUpdateBtn = false;
+
         $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+        $scope.reportPoll = $interval($scope.getSY, 3000);
       });
     }
+  }
+
+  $scope.viewReport = function(report)
+  {
+    $scope.selectedReport = report;
+    $scope.reasonList = report.report_reasons;
+    $scope.readReport();
+
+    if(report.counselor_note == null)
+    {
+      report.counselor_note_view = "N/A";
+    }
+    else
+    {
+      report.counselor_note_view = report.counselor_note;
+    }
+
+    if(report.referral_comment == null)
+    {
+      report.referral_comment_view = "N/A";
+    }
+    else
+    {
+      report.referral_comment_view = report.referral_comment;
+    }
+  }
+
+  $scope.updateStatus = function(report)
+  {
+    $scope.selectedReport = report;
+    $scope.status = report.report_status_id + "";
+
+    if(report.counselor_note != null)
+    {
+      $scope.comment = report.counselor_note;
+    }
+    else
+    {
+      $scope.comment = "";
+    }
+
+    $scope.updateBtn = "Update";
+    $scope.disableUpdateBtn = false;
+  }
+
+  $scope.createMessage = function(report)
+  {
+    $('#messageModal').modal('show');
+
+    $scope.selectedReport = report;
+    $scope.subject = "Referral for " + report.student_fullname + ": " + report.subject_name;
+    $scope.receiver = report.faculty_fullname;
+    $scope.composeEmail = "";
+    $scope.sendBtn = "Send";
+    $scope.disableSendBtn = false;
   }
 
   //export report to PDF
@@ -2614,6 +2599,7 @@ angular.module('aceWeb.controller', [])
 
       $scope.facultyAccounts = JSON.parse(response.data.facultyList);
       $scope.totalItems = $scope.facultyAccounts.length;
+      $scope.isLoading = false;
     },
     function(response)
     {
@@ -2630,6 +2616,8 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.isLoading = true;
+
     $scope.createBtn = "Create Account";
     $scope.disableRegBtn = false;
     $scope.deleteBtn = "Delete";
@@ -2642,7 +2630,7 @@ angular.module('aceWeb.controller', [])
     //for pagination
     $scope.maxSize = 5;
     $scope.currentPage = 1;
-    $scope.itemsPerPage = 10;
+    $scope.itemsPerPage = 8;
 
     $scope.getFacultyList();
   } //scope initScope
@@ -3257,6 +3245,7 @@ angular.module('aceWeb.controller', [])
 
       $scope.adminAccounts = JSON.parse(response.data.adminList);
       $scope.totalItems = $scope.adminAccounts.length;
+      $scope.isLoading = false;
     },
     function(response)
     {
@@ -3272,6 +3261,8 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.isLoading = true;
+
     $scope.createBtn = "Create Account";
     $scope.disableRegBtn = false;
     $scope.deleteBtn = "Delete";
@@ -3284,7 +3275,7 @@ angular.module('aceWeb.controller', [])
     //for pagination
     $scope.maxSize = 5;
     $scope.currentPage = 1;
-    $scope.itemsPerPage = 10;
+    $scope.itemsPerPage = 8;
 
     $scope.getAdminList();
   } //scope initScope

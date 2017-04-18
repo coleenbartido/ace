@@ -31,7 +31,7 @@
                     <span class="input-label">Student ID:</span>
 
                     <div class="style-select">
-                      <input name="studId" type="text" ng-Model="studId" uib-typeahead="students.student_id for students in getStudentInfo($viewValue)" typeahead-on-select="onSelect($item, $model, $label)" typeahead-min-length="6" class="form-control" id="studId" placeholder="ex. 2014-12345" pattern=".*(\d{4}-\d{5}).*" required>
+                      <input name="studId" type="text" ng-Model="studId" uib-typeahead="students.student_id for students in getStudentInfo($viewValue)" typeahead-on-select="onSelect($item, $model, $label)" typeahead-min-length="6" class="form-control" id="studId" placeholder="ex. 2014-12345" pattern="[0-9]{4}\-[0-9]{5}" required>
                       <div ng-messages="refForm.studId.$error" ng-show="(refForm.studId.$touched || refForm.$submitted) && !refForm.studId.$valid">
                         <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Must follow this format (XXXX-XXXXX)" data-toggle="tooltip" data-placement="auto"></span>
                         <span class="fa fa-exclamation-circle errspan" ng-message="required" title="Fill out this field!" data-toggle="tooltip" data-placement="auto"></span>

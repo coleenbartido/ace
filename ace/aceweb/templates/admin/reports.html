@@ -10,30 +10,12 @@
 <div>
 	<div ng-show="!isLoading">
 
-		<select ng-model="selectedSY" ng-change="getReportList()">
-	    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
-	    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
+		<select ng-model="selectedSY" ng-change="getReportList()" ng-selected="$last" ng-options="i.school_year as i.school_year for i in SYList">  	
 	    </select>
 
 		<div class="input-group">
 
-			<div class="input-group-btn search-panel">
-
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					<span id="search_concept">Search by</span>
-					<span class="caret"></span>
-				</button>
-
-				<ul class="dropdown-menu" role="menu">
-					<li><a href="javascript:void(0)" ng-click="changeFilterTo('subject_name')">Subject</a></li>
-					<li><a href="javascript:void(0)" ng-click="changeFilterTo('faculty_fullname')">Faculty Name</a></li>
-					<li><a href="javascript:void(0)" ng-click="changeFilterTo('student_fullname')">Student Name</a></li>
-					<li><a href="javascript:void(0)" ng-click="changeFilterTo('program')">Course</a></li>
-				</ul>
-
-			</div>
-
-			<input type="text" class="form-control" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}">
+			<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
 
 		</div>
 

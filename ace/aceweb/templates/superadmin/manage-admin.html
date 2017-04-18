@@ -6,45 +6,38 @@
 
 <body>
 
+<div ng-show="!isLoading">
+
 	<div class="banner">
 		<div class="button-container col-md-12">
 						<div class="searchBar pull-right">
-							<!--input type="text" class="sr-input" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}"-->
-							<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search "  style="font-family:Arial, FontAwesome" />
+							<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
 						</div>
-
-						<!--div id="wrap pull-right">
-						  <form action="" autocomplete="on">
-						  <input id="search" name="search" type="text" placeholder="Search" ng-model="searchBox"><input id="search_submit" value="Rechercher" type="submit">
-						  </form>
-						</div-->
 
 						<div class="register-button col-md-2">
 							<button type="button" data-toggle="modal" data-target="#adminRegModal" ng-click="showRegAdminModal()"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Administrator</button>
 						</div>
 
 						<div class="delete-button col-md-1">
-							<button type="button" ng-show="mainCheckbox" ng-click="deleteAdminList()" ng-disabled="disableDeleteBtn()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrators</button>
+							<button type="button" ng-click="deleteAdminList()" ng-disabled="disableDeleteBtn()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrators</button>
 						</div>
 		</div>
 
 		<img src="img/header1.png">
 	</div>
 
-
-	<!--div class="manageAdmin col-md-12" ng-submit="submitReferral()" name="refForm" id="refForm" novalidate-->
 	<div class="manageAdmin col-md-12 col-md-offset-0 formContainer">
 
 					<div class="panel-body manageContainer">
 
 							<table class="table table-inbox table-condensed">
-								<col width="50">
-								<col width="100">
-								<col width="200">
-								<col width="100">
+								<col width="15">
 								<col width="150">
-								<col width="80">
-								<col width="20">
+								<col width="150">
+								<col width="100">
+								<col width="100">
+								<col width="60">
+								<col width="30">
 
 								<tbody>
 									<tr class="header">
@@ -88,30 +81,43 @@
 
 											<td class="deleteButton">
 												<center>
-												<button type="button" class="btn btn-primary" ng-click="deleteAdmin(admin.email)"><span class="glyphicon glyphicon-trash"></span></button>
+												<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAdmin(admin.email)"><span class="glyphicon glyphicon-trash"></span></button>
 												</center>
 											</td>
 							    	</tr>
 
-							    	<tr class="noResult" ng-show="(adminAccounts | filter:searchBox).length == 0">
-										<td colspan="5"><center>NO RESULT</center></td>
+							    	<tr ng-show="(adminAccounts | filter:searchBox).length == 0">
+										<td colspan="7"><center>NO RESULT</center></td>
 									</tr>
 
 	 							</tbody>
 							</table>
 
-
-
-							<div class="page">
-								<center>
-										<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
-								</center>
-							</div>
+							<center>
+								<div class="custom-pagination">							
+									<ul class="custom-inner-pagination" uib-pagination total-items="(adminAccounts | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>		
+								</div>
+							</center>
 
 					</div>
 	</div>
 
+</div>
 
+<div class="sk-fading-circle" ng-hide="!isLoading">
+    <div class="sk-circle1 sk-circle"></div>
+    <div class="sk-circle2 sk-circle"></div>
+    <div class="sk-circle3 sk-circle"></div>
+    <div class="sk-circle4 sk-circle"></div>
+    <div class="sk-circle5 sk-circle"></div>
+    <div class="sk-circle6 sk-circle"></div>
+    <div class="sk-circle7 sk-circle"></div>
+    <div class="sk-circle8 sk-circle"></div>
+    <div class="sk-circle9 sk-circle"></div>
+    <div class="sk-circle10 sk-circle"></div>
+    <div class="sk-circle11 sk-circle"></div>
+    <div class="sk-circle12 sk-circle"></div>
+</div> <!-- spinner -->
 
 		<div id="adminRegModal" class="modal fade" role="dialog">
 		  	<div class="modal-dialog">
@@ -169,12 +175,11 @@
 				              </div>
 				            </div>
 				            <div ng-messages="regAdminForm.adminDepartment.$error" ng-show="regAdminForm.$submitted">
-				              <p class="invalid-text" ng-message="required">This field is required</p>
+				             	<p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="regBtn">
-											<button type="button" class="btn btn-default" data-dismiss="modal">{{cancelBtn}}</button>
-				              <button type="submit" class="btn btn-primary" ng-disabled="disableRegBtn">{{createBtn}}</button>
+				             	<button type="submit" class="btn btn-primary" ng-disabled="disableRegBtn">{{createBtn}}</button>
 				        	</div>
 
 				        </form>
@@ -186,50 +191,5 @@
 		  	</div>
 		</div><!-- modal closing tag -->
 
-</div><!-- div ng-Controller -->
-
 </body>
-<!--
 
- <div class="form-group">
-				              <label class="col-md-12 control-label">New Password</label>
-				              <div class="col-md-12">
-				                <input type="password" class="form-control" id="userPasswordInput" name="userPassword" ng-model="userPassword" ng-model-options="{allowInvalid: true}" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" required/>
-				              </div>
-				            </div>
-				            <div ng-messages="regAdminForm.userPassword.$error" ng-show="regAdminForm.$submitted">
-				              <p class="invalid-text" ng-message="samePword">Invalid password</p>
-				              <p class="invalid-text" ng-message="required">This field is required</p>
-				              <p class="invalid-text" ng-message="minlength">Must be atleast 8 characters</p>
-				              <p class="invalid-text" ng-message="pattern">Must be a combination of letters and numbers</p>
-				            </div>
-
-				            <div class="form-group">
-				              <label class="col-md-12 control-label">Confirm Password</label>
-				              <div class="col-md-12">
-				                <input type="password" class="form-control" id="userConfirmPasswordInput" name="userConfirmPassword" ng-model="userConfirmPassword" compare-to="userPassword" required/>
-				              </div>
-				            </div>
-				            <div ng-messages="regAdminForm.userConfirmPassword.$error" ng-show="regAdminForm.$submitted">
-				              <p class="invalid-text" ng-message="required">This field is required</p>
-				              <p class="invalid-text" ng-message="compareTo">Password don't match</p>
-				            </div>
-
-
-<label><b>Email: </b></label>
-				        <input type="email" placeholder="Email" ng-Model="adminEmail" required>
-								<br><br>
-				        <label><b>First Name: </b></label>
-				        <input type="text" placeholder="First Name" ng-Model="adminFirstName" required>
-								<br><br>
-				        <label><b>Last Name: </b></label>
-				        <input type="text" placeholder="Last Name" ng-Model="adminLastName" required>
-								<br><br>
-								<label><b>Department: </b></label>
-								<input type="radio" ng-Model="department" value="1"> Senior High School
-								<input type="radio" ng-Model="department" value="2"> College<br>
-
-			      	</div>
-			      	<div class="modal-footer">
-						<button type="button" class="btn btn-primary" ng-click="registerAdmin()">Submit</button>
-			      	</div>

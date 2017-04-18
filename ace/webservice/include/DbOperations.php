@@ -848,19 +848,26 @@ class DbOperation
 
     public function getSYList($department, $status)
     {
-      $stmt = $this->con->prepare("SELECT school_year FROM report WHERE department_id=? AND status=? GROUP BY school_year ORDER BY school_year ASC");
-      $stmt->bind_param("ii", $department, $status);
-      $stmt->execute();
-      $result= $stmt->get_result();
-      $arrResult = array();
-      while ($myrow = $result->fetch_assoc())
-      {
-        $arrResult[] = $myrow;
-      }
-      $stmt->close();
+        $stmt = $this->con->prepare("SELECT school_year FROM report WHERE department_id=? AND status=? GROUP BY school_year ORDER BY school_year ASC");
+        $stmt->bind_param("ii", $department, $status);
+        $stmt->execute();
+        $result= $stmt->get_result();
+        $arrResult = array();
+        
+        if($result->num_rows)
+        {
+            while ($myrow = $result->fetch_assoc())
+            {
+                $arrResult[] = $myrow;
+            } 
+        }
+        else
+        {
+            $arrResult[]['school_year'] = "No Records";
+        } 
 
-      return $arrResult;
-
+        $stmt->close();
+        return $arrResult;
     }
 
 
@@ -1019,16 +1026,15 @@ class DbOperation
 
     public function getReferralReasons($reportId)
     {
-        $stmt = $this->con->prepare("SELECT referral_reason FROM ((report INNER JOIN reason ON report.report_id=reason.report_id)
-            INNER JOIN report_reason ON reason.referral_reason_id=report_reason.referral_reason_id) WHERE report.report_id=?");
+        $stmt = $this->con->prepare("SELECT referral_reason FROM ((report INNER JOIN reason ON report.report_id=reason.report_id) INNER JOIN report_reason ON reason.referral_reason_id=report_reason.referral_reason_id) WHERE report.report_id=?");
 
         $stmt->bind_param("i",$reportId);
         $stmt->execute();
         $result = $stmt->get_result();
-        $num_rows = $stmt->num_rows;
+        
         $arrResult = array();
 
-        if($result->fetch_assoc())
+        if($result->num_rows)
         {
             while ($myrow = $result->fetch_assoc())
             {
@@ -1038,10 +1044,9 @@ class DbOperation
         else
         {
             $arrResult[]['referral_reason'] = "N/A";
-        }  
+        } 
 
         $stmt->close();
-
         return $arrResult;
     }
 

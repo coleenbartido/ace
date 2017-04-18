@@ -1,45 +1,51 @@
 <head>
 	<title>ACE Program | Manage Faculty</title>
 
-	<link rel="stylesheet" type="text/css" href="css/admin/manage-faculty.css">
+	<link rel="stylesheet" type="text/css" href="css/superadmin/manage-admin.css">
 </head>
 
 <body>
 
+<div ng-show="!isLoading">
+
 	<div class="banner">
 		<div class="button-container col-md-12">
-				<div class="searchBar col-md-3 pull-right">
-						<input type="text" class="form-control" ng-model="searchBox" placeholder="Search">
-				</div>
-		</div>
+						<div class="searchBar pull-right">
+							<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
+						</div>
 
-		<div class="register-button col-md-2">
-			<button type="button" data-toggle="modal" data-target="#facultyRegModal" ng-click="showRegFacultyModal()"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Faculty</button>
-		</div>
+						<div class="register-button col-md-2">
+							<button type="button" data-toggle="modal" data-target="#facultyRegModal" ng-click="showRegFacultyModal()"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Faculty</button>
+						</div>
 
-		<div class="delete-button col-md-2">
-			<button type="button" ng-click="deleteFacultyList()" ng-disabled="disableDeleteBtn()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Faculty</button>
+						<div class="delete-button col-md-1">
+							<button type="button" ng-click="deleteFacultyList()" ng-disabled="disableDeleteBtn()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Faculty</button>
+						</div>
 		</div>
 
 		<img src="img/header1.png">
 	</div>
 
-	<div class="manageFaculty col-md-12 col-md-offset-0 formContainer">
+	<div class="manageAdmin col-md-12 col-md-offset-0 formContainer">
 
 					<div class="panel-body manageContainer">
 
 							<table class="table table-inbox table-condensed">
-								<col width="20">
-								<col width="110">
-								<col width="110">
-								<col width="55">
-								<col width="55">
-								<col width="40">
-								<col width="20">
+								<col width="15">
+								<col width="150">
+								<col width="150">
+								<col width="100">
+								<col width="100">
+								<col width="60">
+								<col width="30">
 
-								<thead>
+								<tbody>
 									<tr class="header">
-											<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>
+											<th>
+												<center>
+													<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
+												</center>
+											</th>
 											<th>EMAIL</th>
 											<th>NAME</th>
 											<th>CONTACT</th>
@@ -47,10 +53,8 @@
 											<th>STATUS</th>
 											<th><center>ACTION</center></th>
 									</tr>
-								</thead>
 
-								<tbody>
-									<tr class="listFaculty" ng-repeat="faculty in facultyAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" ng-click="showPopup(message)">
+									<tr class="listAdmin" ng-repeat="faculty in facultyAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" ng-click="showPopup(message)">
 											<td>
 												<center><input type="checkbox" data-checklist-model="facultyList.email" data-checklist-value="faculty.email" checklist-change="updateMainCheckbox()" noclick></center>
 											</td>
@@ -75,33 +79,48 @@
 							            		{{faculty.status}}
 							        		</td>
 
-											<td>
+											<td class="deleteButton">
 												<center>
-												<button type="button" class="btn btn-primary" ng-click="deleteFaculty(faculty.email)" ><span class="glyphicon glyphicon-trash"></span></button>
+												<button type="button" class="btn btn-danger btn-xs" ng-click="deleteFaculty(faculty.email)"><span class="glyphicon glyphicon-trash"></span></button>
 												</center>
 											</td>
+
 							    	</tr>
 
 							    	<tr ng-show="(facultyAccounts | filter:searchBox).length == 0">
-										<td colspan="5"><center>NO RESULT</center></td>
+										<td colspan="7"><center>NO RESULT</center></td>
 									</tr>
 
 	 							</tbody>
 							</table>
 
-
-
-							<div class="page">
-								<center>
-										<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
-								</center>
-							</div>
+							<center>
+								<div class="custom-pagination">							
+									<ul class="custom-inner-pagination" uib-pagination total-items="(facultyAccounts | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+								</div>
+							</center>
 
 					</div>
 	</div>
 
+</div>
 
+<div class="sk-fading-circle" ng-hide="!isLoading">
+    <div class="sk-circle1 sk-circle"></div>
+    <div class="sk-circle2 sk-circle"></div>
+    <div class="sk-circle3 sk-circle"></div>
+    <div class="sk-circle4 sk-circle"></div>
+    <div class="sk-circle5 sk-circle"></div>
+    <div class="sk-circle6 sk-circle"></div>
+    <div class="sk-circle7 sk-circle"></div>
+    <div class="sk-circle8 sk-circle"></div>
+    <div class="sk-circle9 sk-circle"></div>
+    <div class="sk-circle10 sk-circle"></div>
+    <div class="sk-circle11 sk-circle"></div>
+    <div class="sk-circle12 sk-circle"></div>
+</div> <!-- spinner -->
 
+		
 		<div id="facultyRegModal" class="modal fade" role="dialog">
 		  	<div class="modal-dialog">
 
@@ -147,23 +166,6 @@
 				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
-										<!--
-				            <div class="form-group">
-				              <label  class="col-md-12 control-label" for="adminDepartmentInput">Department</label>
-				              <div class="col-md-12">
-				                <select class="form-control" id="adminDepartmentInput" name="adminDepartment" ng-model="adminDepartment" required>
-				                  <option disabled selected value>Select Department</option>
-							      <option value="1"> Senior High School</option>
-							      <option value="2"> College</option>
-							    </select>
-				              </div>
-
-				            </div>
-				            <div ng-messages="regAdminForm.adminDepartment.$error" ng-show="regAdminForm.$submitted">
-				              <p class="invalid-text" ng-message="required">This field is required</p>
-				            </div>
-									-->
-
 				            <div class="regBtn">
 				              <button type="submit" class="btn btn-primary" ng-disabled="disableRegBtn">{{createBtn}}</button>
 				        	</div>
@@ -176,7 +178,7 @@
 
 		  	</div>
 		</div><!-- modal closing tag -->
-
-</div><!-- div ng-Controller -->
+		
 
 </body>
+

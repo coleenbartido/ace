@@ -470,32 +470,41 @@
     $db = new DbOperation();
 
     $status = 1;
-    $email = $reportDetails->email;
-    $schoolYear = $reportDetails->schoolYear;
+    $email = $reportDetails->email;    
     $department = $db->getDepartment($email);
 
-    if($department == 1)
+    if(isset($reportDetails->schoolYear))
     {
-      $reportsList = $db->listShsReports($status, $schoolYear);
+      $schoolYear = $reportDetails->schoolYear;
+
+      if($department == 1)
+      {
+        $reportsList = $db->listShsReports($status, $schoolYear);
+      }
+      else
+      {
+        $reportsList = $db->listCollegeReports($status, $schoolYear);
+      }
+
+      for($counter=0; $counter<count($reportsList); $counter++)
+      {
+        $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
+
+        for($ctr=0; $ctr<count($reasonArr); $ctr++)
+        {
+          $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
+        }
+      }
+
+      $responseBody = array('reportsList' => json_encode($reportsList));
+      $response = setResponse($response, 200, $responseBody);
     }
     else
     {
-      $reportsList = $db->listCollegeReports($status, $schoolYear);
+      $responseBody = array('errorMsg' => "Failed to retrieve data");
+      $response = setResponse($response, 400, $responseBody);
     }
-
-    for($counter=0; $counter<count($reportsList); $counter++)
-    {
-      $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
-
-      for($ctr=0; $ctr<count($reasonArr); $ctr++)
-      {
-        $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
-      }
-    }
-
-    $responseBody = array('reportsList' => json_encode($reportsList));
-    $response = setResponse($response, 200, $responseBody);
-
+    
     return $response;
   });
 
@@ -1154,39 +1163,41 @@
   });
 
 
+
   $app->post('/getSYList', function (ServerRequestInterface $request, ResponseInterface $response)
-{
-  $accountDetails = json_decode(file_get_contents("php://input"));
+  {
+    $accountDetails = json_decode(file_get_contents("php://input"));
 
-  $db = new DbOperation();
+    $db = new DbOperation();
 
-  $email = $accountDetails->email;
-  $department = $db->getDepartment($email);
-  $status = 1;
+    $email = $accountDetails->email;
+    $department = $db->getDepartment($email);
+    $status = 1;
 
-  $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)));
+    $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)));
+    $response = setResponse($response, 200, $responseBody);
 
-  $response = setResponse($response, 200, $responseBody);
-  return $response;
-});
+    return $response;
+  });
 
 
-$app->post('/getChartData', function (ServerRequestInterface $request, ResponseInterface $response)
-{
-  $accountDetails = json_decode(file_get_contents("php://input"));
 
-  $db = new DbOperation();
+  $app->post('/getChartData', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $accountDetails = json_decode(file_get_contents("php://input"));
 
-  $email = $accountDetails->email;
-  $schoolYear = $accountDetails->schoolYear;
-  $department = $db->getDepartment($email);
-  $status = 1;
+    $db = new DbOperation();
 
-  $responseBody = array('department' => $department, 'termData' => json_encode($db->getTermData($department, $status, $schoolYear)), 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear)));
+    $email = $accountDetails->email;
+    $schoolYear = $accountDetails->schoolYear;
+    $department = $db->getDepartment($email);
+    $status = 1;
 
-  $response = setResponse($response, 200, $responseBody);
-  return $response;
-});
+    $responseBody = array('department' => $department, 'termData' => json_encode($db->getTermData($department, $status, $schoolYear)), 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear)));
+
+    $response = setResponse($response, 200, $responseBody);
+    return $response;
+  });
 
 
 
