@@ -814,9 +814,9 @@
     $reasons = $reportDetails->reason;
     $isActive = 1;
 
-    if($reasons[6]->check == true)
+    if($reasons[6]->check && isset($reasons[6]->value))
     {
-      $refComment = $reasons[6]->value;
+      $refComment = $reasons[6]->value;  
     }
     else
     {
@@ -829,23 +829,28 @@
     $first_name = $db->getLastName($email);
     $full_name = $first_name . "  " .$last_name;
 
-    $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons);
-    $db->insertStudent($studId, $department, $studFName, $studLName, $course, $year);
-    $db->updateReportCount($email);
+    if($db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons) && $db->insertStudent($studId, $department, $studFName, $studLName, $course, $year) && $db->updateReportCount($email))
+    {
+      $emailList = $db->getAdminAccounts($department, $isActive);
 
-    $emailList = $db->getAdminAccounts($department, $isActive);
+      $subject = "ACE Submitted Report";
+      $link = $_ENV['DOMAIN']->CLIENT_URL;
+      $body =
 
-    $subject = "ACE Submitted Report";
-    $link = $_ENV['DOMAIN']->CLIENT_URL;
-    $body =
+        "Greetings, <br><br>" . $full_name . " submitted a referral!
+        <br><br>To view the submitted report, login <a href=" . $link . ">here</a>.
+        <br><br><br>Thank you.";
 
-      "Greetings, <br><br>" . $full_name . " submitted a referral!
-      <br><br>To view the submitted report, login <a href=" . $link . ">here</a>.
-      <br><br><br>Thank you.";
+      sendEmail($emailList, $subject, $body);
 
-    sendEmail($emailList, $subject, $body);
-
-    $response = setSuccessResponse($response, 200);
+      $responseBody = array('successMsg' => "Referral form successfully submitted");
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => "Failed to submit the referral form");
+      $response = setResponse($response, 400, $responseBody);
+    }
 
     return $response;
   });

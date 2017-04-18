@@ -299,7 +299,7 @@ class DbOperation
 
         foreach ($reasons as $reason)
         {
-          if($reason->check == true && $reason->value != 0)
+          if($reason->check == true && isset($reason->value))
           {
             $stmt2 = $this->con->prepare("INSERT INTO reason(report_id, referral_reason_id) values(?, ?)");
             $stmt2->bind_param("ii", $report_id, $reason->value);
@@ -1019,20 +1019,29 @@ class DbOperation
 
     public function getReferralReasons($reportId)
     {
-        //$stmt = $this->con->prepare("SELECT referral_reason FROM reasons where report_id=?");
         $stmt = $this->con->prepare("SELECT referral_reason FROM ((report INNER JOIN reason ON report.report_id=reason.report_id)
             INNER JOIN report_reason ON reason.referral_reason_id=report_reason.referral_reason_id) WHERE report.report_id=?");
 
         $stmt->bind_param("i",$reportId);
         $stmt->execute();
         $result = $stmt->get_result();
-        //$stmt->close();
+        $num_rows = $stmt->num_rows;
         $arrResult = array();
-        while ($myrow = $result->fetch_assoc())
+
+        if($result->fetch_assoc())
         {
-            $arrResult[] = $myrow;
+            while ($myrow = $result->fetch_assoc())
+            {
+                $arrResult[] = $myrow;
+            } 
         }
+        else
+        {
+            $arrResult[]['referral_reason'] = "N/A";
+        }  
+
         $stmt->close();
+
         return $arrResult;
     }
 

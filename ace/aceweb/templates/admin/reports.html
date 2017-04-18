@@ -269,7 +269,8 @@
 												<div class="col-md-6">
 													<p class="reportFieldLabel"><b>Reason(s) for Referral: </b> 
 													<br>
-													<p ng-repeat="reason in reasonList" class="reportFieldData">{{$index + 1}}. {{reason}}</p>
+													<p ng-repeat="reason in reasonList" class="reportFieldData" ng-if="reason != 'N/A'">{{$index + 1}}. {{reason}}</p>
+													<p ng-repeat="reason in reasonList" class="reportFieldData" ng-if="reason == 'N/A'">{{reason}}</p>
 												</div>
 												<div class="col-md-6">
 													<p class="reportFieldLabel"><b>Other Reasons: </b> 
@@ -279,8 +280,6 @@
 											
 										</div>
 									</div>
-
-
 											
 								</div>
 								<div class="modal-footer">
@@ -290,7 +289,6 @@
 										
 								</div>
 							</div>
-
 						</div>
 				</div><!-- modal closing tag -->
 

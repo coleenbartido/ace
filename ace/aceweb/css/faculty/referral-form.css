@@ -55,28 +55,31 @@ body {
 
 .schoolYear, .schoolTerm, .subjName, .studentID, .department, .lastName, .firstName {
   padding-bottom: 20px;
-  /*padding-bottom: 14px;*/
 }
 
 .level, .courseProgram {
   padding-bottom: 5px;
 }
 
-input.ng-invalid.ng-touched, select.ng-invalid.ng-touched {
-    border: 2px solid red;
+input.ng-invalid.ng-touched, select.ng-invalid.ng-touched, .ng-submitted input.ng-invalid, .ng-submitted select.ng-invalid {
+  border: 2px solid red;
+}
+
+.invalidTextArea {
+  border: 2px solid red;
 }
 
 .error-message {
-    color: #EE1F34;
-    margin-bottom:-15px;
+  color: #EE1F34;
+  margin-bottom:-15px;
 }
 
 .errspan{
   float: right;
-    margin-right: 10px;
-    margin-top: -25px;
-    z-index: 2;
-    color: #EE1F34;
+  margin-right: 10px;
+  margin-top: -25px;
+  z-index: 2;
+  color: #EE1F34;
 }
 
 .style-select .errspan  {

@@ -488,6 +488,8 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.submitBtn = "Submit";
+    $scope.disableSubmitBtn = false;
     $scope.currentYear = new Date().getFullYear();
     $scope.firstSY = ($scope.currentYear - 1) + " - " + $scope.currentYear;
     $scope.secondSY = $scope.currentYear + " - " + ($scope.currentYear + 1);
@@ -543,47 +545,87 @@ angular.module('aceWeb.controller', [])
     $scope.checkedReasons = trues.length <= 0;
   }, true);
 
-  $scope.submitReferral=function()
+  $scope.submitReferral=function(form)
   {
-    var referralDetails =
+    if(form.$valid && !$scope.checkedReasons)
     {
-      'schoolYear' : $scope.schoolYear,
-      'email' : AuthService.getEmail(),
-      'schoolTerm' : $scope.schoolTerm,
-      'studId' : $scope.studId,
-      'studFName': $scope.studFName,
-      'studLName' : $scope.studLName,
-      'subjName' : $scope.subjName,
-      'department' : parseInt($scope.department),
-      'course' : $scope.course,
-      'year' : $scope.year,
-      'reason': $scope.reasons
-    };
+      if($scope.reasons[6].check && !$scope.reasons[6].value)
+      {
+        $scope.invalidOtherReason = true;
+        $scope.showCustomModal("ERROR", "Please specify the reason!");
+      }
+      else
+      {
+        $scope.submitBtn = "Submitting";
+        $scope.disableSubmitBtn = true;
 
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/referralForm',
-      data: referralDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-    })
-
-    .then(function(response)
+        var referralDetails =
+        {
+          'schoolYear' : $scope.schoolYear,
+          'email' : AuthService.getEmail(),
+          'schoolTerm' : $scope.schoolTerm,
+          'studId' : $scope.studId,
+          'studFName': $scope.studFName,
+          'studLName' : $scope.studLName,
+          'subjName' : $scope.subjName,
+          'department' : parseInt($scope.department),
+          'course' : $scope.course,
+          'year' : $scope.year,
+          'reason': $scope.reasons
+        };
+        $http({
+          method: 'POST',
+          url: config.apiUrl + '/referralForm',
+          data: referralDetails,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .then(function(response)
+        {
+          console.log(response);
+          $scope.resetForm();
+          $scope.showCustomModal("SUCCESS", response.data.successMsg);
+        },
+        function(response)
+        {
+          //for checking
+          console.log(response);
+          $scope.showCustomModal("ERROR", response.data.errorMsg);
+        })
+        .finally(function()
+        {
+          $scope.submitBtn = "Submit";
+          $scope.disableSubmitBtn = false;
+        });
+      }
+    }
+    else if(form.$valid && $scope.checkedReasons)
     {
-      console.log(response);
-      //console.log($scope.referralResponse['insertReport']);
-      //$state.go('login');
-    },
-    function(response)
-    {
-      //for checking
-      console.log(response);
+      $scope.showCustomModal("ERROR", "Please select a reason!");
+    }  
+  }
 
-    })
-    .finally(function()
+  $scope.updateOtherTextArea = function(model)
+  {
+    if(!model)
     {
+      $scope.invalidOtherReason = true;
+    }
+    else
+    {
+      $scope.invalidOtherReason = false;
+    }
+  }
 
-    });
+  $scope.updateOtherCheckbox = function(model)
+  {
+    if(model && !scope.reasons[6].value)
+    {
+      $scope.invalidOtherReason = true;
+    }
+    else
+    {
+      $scope.invalidOtherReason = false;
+    }
   }
 
   $scope.getStudentInfo = function(val)
@@ -619,7 +661,6 @@ angular.module('aceWeb.controller', [])
 
   $scope.onSelect = function ($item, $model, $label)
   {
-    console.log($item);
     $scope.studFName = $item.first_name;
     $scope.studLName = $item.last_name;
     $scope.department = '' + $item.department_id;
@@ -630,6 +671,7 @@ angular.module('aceWeb.controller', [])
   $scope.resetForm = function ()
   {
     $scope.refForm.$setUntouched();
+    $scope.refForm.$setPristine();
 
     $scope.schoolYear = undefined;
     $scope.schoolTerm = undefined;
@@ -640,8 +682,26 @@ angular.module('aceWeb.controller', [])
     $scope.course = undefined;
     $scope.year = undefined;
     $scope.department = undefined;
+    $scope.reasons[0].check = false;
+    $scope.reasons[1].check = false;
+    $scope.reasons[2].check = false;
+    $scope.reasons[3].check = false;
+    $scope.reasons[4].check = false;
+    $scope.reasons[5].check = false;
     $scope.reasons[6].check = false;
+    $scope.reasons[6].value = undefined;
   }
+
+  $scope.showCustomModal = function(modalTitle, modalMsg)
+  {
+    BootstrapDialog.alert({
+      title: modalTitle,
+      message: modalMsg,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false
+    });
+  }
+
 })
 
 
@@ -1476,7 +1536,6 @@ angular.module('aceWeb.controller', [])
 
   $scope.getReportList = function()
   {
-    $scope.isLoading = true;
 
     var reportDetails =
     {
@@ -2155,7 +2214,15 @@ angular.module('aceWeb.controller', [])
 
     for(var counter = 0; counter < report.report_reasons.length; counter++)
     {
-      var lines = doc.splitTextToSize(counter + 1 + ". " + report.report_reasons[counter], 181);
+      if(report.report_reasons[counter] == "N/A")
+      {
+        var lines = doc.splitTextToSize(report.report_reasons[counter], 181);
+      }
+      else
+      {
+        var lines = doc.splitTextToSize(counter + 1 + ". " + report.report_reasons[counter], 181);
+      }
+
       var lineNum = lines.length;
       lineCount += lineNum;
       doc.text(15, rowHeightLabel + 12 + (counter * lineNum * 6), lines);
@@ -2865,8 +2932,6 @@ angular.module('aceWeb.controller', [])
   //init function which will retrieve all the data in rendering the summary chart
   $scope.getSummaryData = function()
   {
-    $scope.isLoading = true;
-
     var userDetails =
     {
       'email' : AuthService.getEmail(),

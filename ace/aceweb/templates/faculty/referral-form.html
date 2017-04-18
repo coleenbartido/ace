@@ -6,7 +6,7 @@
 
 <body>
 
-      <form class="refForm col-md-12" ng-submit="submitReferral()" name="refForm" id="refForm" novalidate>
+      <form class="refForm col-md-12" ng-submit="submitReferral(refForm)" name="refForm" id="refForm" novalidate>
           <div class="row col-md-12 col-md-offset-0 formContainer">
 
               <div class="panel panel-default">
@@ -32,8 +32,8 @@
 
                     <div class="style-select">
                       <input name="studId" type="text" ng-Model="studId" uib-typeahead="students.student_id for students in getStudentInfo($viewValue)" typeahead-on-select="onSelect($item, $model, $label)" typeahead-min-length="6" class="form-control" id="studId" placeholder="ex. 2014-12345" pattern=".*(\d{4}-\d{5}).*" required>
-                      <div ng-messages="refForm.studId.$error" ng-show="refForm.studId.$touched && !refForm.studId.$valid">
-                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Invalid format!" data-toggle="tooltip" data-placement="auto"></span>
+                      <div ng-messages="refForm.studId.$error" ng-show="(refForm.studId.$touched || refForm.$submitted) && !refForm.studId.$valid">
+                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Must follow this format (XXXX-XXXXX)" data-toggle="tooltip" data-placement="auto"></span>
                         <span class="fa fa-exclamation-circle errspan" ng-message="required" title="Fill out this field!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>
@@ -50,9 +50,9 @@
                     <span class="input-label">Last Name:</span>
 
                     <div class="style-select">
-                      <input name="studLName" type="text" ng-Model="studLName" class="form-control" id="studLName" placeholder="ex. Dela Cruz" required>
-                      <div ng-messages="refForm.studLName.$error" ng-show="refForm.studLName.$touched && !refForm.studLName.$valid">
-                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Invalid format!" data-toggle="tooltip" data-placement="auto"></span>
+                      <input name="studLName" type="text" ng-Model="studLName" class="form-control" id="studLName" placeholder="ex. Dela Cruz" pattern="^[a-zA-Z ,.'-]+$" required>
+                      <div ng-messages="refForm.studLName.$error" ng-show="(refForm.studLName.$touched || refForm.$submitted) && !refForm.studLName.$valid">
+                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Must only have letters, space, and certain special characters (.  ,' -)" data-toggle="tooltip" data-placement="auto"></span>
                         <span class="fa fa-exclamation-circle errspan" ng-message="required" title="Fill out this field!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>
@@ -68,8 +68,9 @@
                     <span class="input-label">First Name:</span>
 
                     <div class="style-select">
-                      <input name="studFName" type="text" ng-Model="studFName" class="form-control" id="studFName" placeholder="ex. Juan Jr." required>
-                      <div ng-messages="refForm.studFName.$error" ng-show="refForm.studFName.$touched && !refForm.studFName.$valid">
+                      <input name="studFName" type="text" ng-Model="studFName" class="form-control" id="studFName" placeholder="ex. Juan Jr." pattern="^[a-zA-Z ,.'-]+$" required>
+                      <div ng-messages="refForm.studFName.$error" ng-show="(refForm.studFName.$touched || refForm.$submitted) && !refForm.studFName.$valid">
+                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Must only have letters, space, and certain special characters (.  ,' -)" data-toggle="tooltip" data-placement="auto"></span>
                         <span class="fa fa-exclamation-circle errspan" ng-message="required" title="Fill out this field!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>
@@ -92,7 +93,7 @@
                         <option value="{{thirdSY}}">{{thirdSY}}</option>
                       </select>
 
-                      <div ng-messages="refForm.schoolYear.$error" ng-show="refForm.schoolYear.$touched && !refForm.schoolYear.$valid">
+                      <div ng-messages="refForm.schoolYear.$error" ng-show="(refForm.schoolYear.$touched || refForm.$submitted) && !refForm.schoolYear.$valid">
                         <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>
@@ -115,7 +116,7 @@
                         <option value="3">3rd Term</option>
                       </select>
 
-                      <div ng-messages="refForm.schoolTerm.$error" ng-show="refForm.schoolTerm.$touched && !refForm.schoolTerm.$valid">
+                      <div ng-messages="refForm.schoolTerm.$error" ng-show="(refForm.schoolTerm.$touched || refForm.$submitted) && !refForm.schoolTerm.$valid">
                         <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>
@@ -132,7 +133,7 @@
 
                     <div class="style-select">
                       <input class="form-control" type="text" name="subjName" id="subjName" ng-Model="subjName" placeholder="ex. Core Java 1" required>
-                      <div ng-messages="refForm.subjName.$error" ng-show="refForm.subjName.$touched && !refForm.subjName.$valid">
+                      <div ng-messages="refForm.subjName.$error" ng-show="(refForm.subjName.$touched || refForm.$submitted) && !refForm.subjName.$valid">
                         <span class="fa fa-exclamation-circle errspan" ng-message="required" title="Fill out this field!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>
@@ -154,7 +155,7 @@
                         <option value="2">College</option>
                       </select>
 
-                      <div ng-messages="refForm.department.$error" ng-show="refForm.department.$touched && !refForm.department.$valid">
+                      <div ng-messages="refForm.department.$error" ng-show="(refForm.department.$touched || refForm.$submitted) && !refForm.department.$valid">
                         <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>
@@ -189,9 +190,7 @@
 
                       </select>
 
-                    
-
-                      <div ng-messages="refForm.year.$error" ng-show="refForm.year.$touched && !refForm.year.$valid">
+                      <div ng-messages="refForm.year.$error" ng-show="(refForm.year.$touched || refForm.$submitted) && !refForm.year.$valid">
                         <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
 
@@ -248,7 +247,7 @@
 
                       </select>
 
-                      <div ng-messages="refForm.course.$error" ng-show="refForm.course.$touched && !refForm.course.$valid">
+                      <div ng-messages="refForm.course.$error" ng-show="(refForm.course.$touched || refForm.$submitted) && !refForm.course.$valid">
                         <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="This field is required!" data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>        
@@ -304,11 +303,11 @@
 
                       <div class="col-md-6">
 
-                            <input type="checkbox" id="iba" ng-model="reasons[6].check" value="reasons[6].value">
-                            <label class="reason-label" for="iba">{{reasons[6].name}}</label>
+                        <input type="checkbox" id="iba" ng-change="updateOtherCheckbox(reasons[6].check)" ng-model="reasons[6].check" value="reasons[6].value">
+                        <label class="reason-label" for="iba">{{reasons[6].name}}</label>
 
                         <div class="col-md-12 otherReason">
-                          <textarea class="col-md-11" id="others" name="others" ng-disabled="!reasons[6].check" ng-model="reasons[6].value" maxlength="255" ng-trim="false"></textarea>
+                          <textarea class="col-md-11" ng-class="{invalidTextArea: invalidOtherReason}" ng-change="updateOtherTextArea(reasons[6].value)" id="others" name="others" ng-disabled="!reasons[6].check" ng-model="reasons[6].value" maxlength="255" ng-trim="false"></textarea>
                         </div>
                       </div>
 
@@ -326,11 +325,10 @@
 
                 <div class="btns pull-right">
                   <button class="resetBtn btn" type="reset" ng-click="resetForm()">Reset</button>
-                  <button id="refFormButton" class="submitBtn btn" type="submit" ng-disabled="refForm.$invalid || checkedReasons" title="Please complete the form" data-toggle="tooltip" data-placement="auto" tooltip>Submit</button>
+                  <button id="refFormButton" class="submitBtn btn" type="submit" ng-disabled="disableSubmitBtn">{{submitBtn}}</button>
                 </div>
 
               </div>
-
           </div>
       </form>
 </body>
