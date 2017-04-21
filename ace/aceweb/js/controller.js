@@ -1231,6 +1231,64 @@ angular.module('aceWeb.controller', [])
     }
   }
 
+  $scope.broadcastEmail = function()
+{
+  $scope.sendBtn = "Sending";
+  $scope.disableSendBtn = true;
+
+  if($scope.composeEmail != "" && $scope.composeEmail != undefined)
+  {
+    /*if($scope.selectedMessage.receiver_email == AuthService.getEmail())
+    {
+      $scope.sender = $scope.selectedMessage.receiver_email;
+      $scope.receiver = $scope.selectedMessage.sender_email;
+    }
+    else
+    {
+      $scope.sender = $scope.selectedMessage.sender_email;
+      $scope.receiver = $scope.selectedMessage.receiver_email;
+    }*/
+
+    if($scope.broadcastSubj == "" && $scope.broadcastSubj == undefined)
+    {
+      $scope.broadcastSubj = "(No Subject)";
+    }
+
+    var messageDetails =
+    {
+      'messageBody': $scope.composeEmail,
+      'messageSubj': $scope.broadcastSubj
+    }
+
+    $scope.composeEmail = "";
+    $scope.showLimit -= 1;
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/broadcastEmail',
+      data: messageDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      //for checking
+      console.log(response);
+
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
+
+}
+
 }) //closing tag controller
 
 

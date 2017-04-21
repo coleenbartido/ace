@@ -470,7 +470,7 @@
     $db = new DbOperation();
 
     $status = 1;
-    $email = $reportDetails->email;    
+    $email = $reportDetails->email;
     $department = $db->getDepartment($email);
 
     if(isset($reportDetails->schoolYear))
@@ -504,7 +504,7 @@
       $responseBody = array('errorMsg' => "Failed to retrieve data");
       $response = setResponse($response, 400, $responseBody);
     }
-    
+
     return $response;
   });
 
@@ -825,7 +825,7 @@
 
     if($reasons[6]->check && isset($reasons[6]->value))
     {
-      $refComment = $reasons[6]->value;  
+      $refComment = $reasons[6]->value;
     }
     else
     {
@@ -1253,7 +1253,33 @@
 
 
 
+  $app->post('/broadcastEmail', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $messageDetails = json_decode(file_get_contents("php://input"));
 
+    $body = $messageDetails->messageBody;
+    $subject = $messageDetails->messageSubj;
+    $userType = 3;
+    $status = 1;
+
+    $db = new DbOperation();
+
+    $receiver = $db->getFacultyAccounts($userType, $status);
+
+    //send Email
+    if(sendEmail($receiver, $subject, $body))
+    {
+      $responseBody = array('successMsg' => 'Message sent');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Message sending failed');
+      $response = setResponse($response, 400, $responseBody);
+    }
+
+    return $response;
+  });
 
 
 
