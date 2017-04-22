@@ -1552,6 +1552,7 @@ angular.module('aceWeb.controller', [])
         }
 
         $scope.currentSYSize = $scope.SYList.length;
+        $scope.subReports = $filter('filter')($scope.reports, {school_year: $scope.selectedSY});
       }
       else
       {
@@ -1605,6 +1606,18 @@ angular.module('aceWeb.controller', [])
     }
   })
 
+  $scope.$watch("reportList.report_id", function()
+  {   
+    if($scope.reports)
+    {
+      $scope.mainCheckbox = $scope.reportList.report_id.length == $scope.subReports.length;  
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
   $scope.updateSYList = function ()
   {
     $scope.reportList.report_id = [];
@@ -1626,22 +1639,10 @@ angular.module('aceWeb.controller', [])
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < ($filter('filter')($scope.reports, {school_year: $scope.selectedSY})).length; counter++)
+      for(var counter=0; counter < $scope.subReports.length; counter++)
       {
-        $scope.reportList.report_id.push($filter('filter')($scope.reports, {school_year: $scope.selectedSY})[counter].report_id);
+        $scope.reportList.report_id.push($scope.subReports[counter].report_id);
       }
-    }
-  }
-
-  $scope.updateMainCheckbox = function ()
-  {
-    if($scope.reportList.report_id.length == ($filter('filter')($scope.reports, {school_year: $scope.selectedSY})).length)
-    {
-      $scope.mainCheckbox = true;
-    }
-    else
-    {
-      $scope.mainCheckbox = false;
     }
   }
 
@@ -1649,11 +1650,11 @@ angular.module('aceWeb.controller', [])
   {
     $scope.reportList.report_id = [];
 
-    for(var counter=0; counter < $scope.reports.length; counter++)
+    for(var counter=0; counter < $scope.subReports.length; counter++)
     {
-      if($scope.reports[counter].is_read == 1)
+      if($scope.subReports[counter].is_read == 1)
       {
-        $scope.reportList.report_id.push($scope.reports[counter].report_id);
+        $scope.reportList.report_id.push($scope.subReports[counter].report_id);
       }
     }
   }
@@ -1662,11 +1663,11 @@ angular.module('aceWeb.controller', [])
   {
     $scope.reportList.report_id = [];
 
-    for(var counter=0; counter < $scope.reports.length; counter++)
+    for(var counter=0; counter < $scope.subReports.length; counter++)
     {
-      if($scope.reports[counter].is_read == 0)
+      if($scope.subReports[counter].is_read == 0)
       {
-        $scope.reportList.report_id.push($scope.reports[counter].report_id);
+        $scope.reportList.report_id.push($scope.subReports[counter].report_id);
       }
     }
   }
