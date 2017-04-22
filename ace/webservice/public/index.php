@@ -470,20 +470,16 @@
     $db = new DbOperation();
 
     $status = 1;
-    $email = $reportDetails->email;
+    $email = $reportDetails->email;    
     $department = $db->getDepartment($email);
-
-    if(isset($reportDetails->schoolYear))
-    {
-      $schoolYear = $reportDetails->schoolYear;
 
       if($department == 1)
       {
-        $reportsList = $db->listShsReports($status, $schoolYear);
+        $reportsList = $db->listShsReports($status);
       }
       else
       {
-        $reportsList = $db->listCollegeReports($status, $schoolYear);
+        $reportsList = $db->listCollegeReports($status);
       }
 
       for($counter=0; $counter<count($reportsList); $counter++)
@@ -498,13 +494,11 @@
 
       $responseBody = array('reportsList' => json_encode($reportsList));
       $response = setResponse($response, 200, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => "Failed to retrieve data");
-      $response = setResponse($response, 400, $responseBody);
-    }
-
+  
+      //$responseBody = array('errorMsg' => "Failed to retrieve data");
+      //$response = setResponse($response, 400, $responseBody);
+    
+    
     return $response;
   });
 

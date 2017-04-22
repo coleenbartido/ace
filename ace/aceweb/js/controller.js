@@ -1551,46 +1551,11 @@ angular.module('aceWeb.controller', [])
 
 .controller('ReportsController', function(config, $scope, $http, $state, $localStorage, AuthService, $interval, $rootScope, $filter)
 {
-  $scope.getSY = function()
-  {
-    var userDetails =
-    {
-      'email' : AuthService.getEmail()
-    }
-
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/getSYList',
-      data: userDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function(response)
-    {
-      //for checking
-      console.log(response);
-
-      $scope.SYList = JSON.parse(response.data.SYList);
-
-      $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
-
-      $scope.getReportList();
-    },
-    function(response)
-    {
-
-    })
-    .finally(function()
-    {
-
-    });
-  }
-
   $scope.getReportList = function()
   {
     var reportDetails =
     {
-      'email' : AuthService.getEmail(),
-      'schoolYear' : $scope.selectedSY
+      'email' : AuthService.getEmail()
     }
     $http({
       method: 'POST',
@@ -1601,23 +1566,40 @@ angular.module('aceWeb.controller', [])
     .then(function(response)
     {
       //for checking
-      console.log(response);
-
-      $scope.isLoading = false;
+      console.log(response);     
 
       $scope.reports = JSON.parse(response.data.reportsList);
 
-      for(var counter=0; counter < $scope.reports.length; counter++)
+      if($scope.reports.length > 0)
       {
-        //convert string date into javascript date object
-        strDate = $scope.reports[counter].report_date.replace(/-/g,'/');
-        $scope.reports[counter].report_date = new Date(strDate);
+        $scope.SYList = $filter('orderBy')($scope.reports, 'school_year', true);
+        $scope.SYList = $filter('unique')($scope.SYList, 'school_year');
+       
+        if(!$scope.initList || $scope.selectedSY == undefined || $scope.currentSYSize > $scope.SYList.length)
+        {
+          $scope.selectedSY = $scope.SYList[0].school_year;
+        }       
 
-        $scope.reports[counter].faculty_fullname = $scope.reports[counter].faculty_fname + " " + $scope.reports[counter].faculty_lname;
-        $scope.reports[counter].student_fullname = $scope.reports[counter].student_fname + " " + $scope.reports[counter].student_lname;
+        for(var counter=0; counter < $scope.reports.length; counter++)
+        {
+          //convert string date into javascript date object
+          strDate = $scope.reports[counter].report_date.replace(/-/g,'/');
+          $scope.reports[counter].report_date = new Date(strDate);
+
+          $scope.reports[counter].faculty_fullname = $scope.reports[counter].faculty_fname + " " + $scope.reports[counter].faculty_lname;
+          $scope.reports[counter].student_fullname = $scope.reports[counter].student_fname + " " + $scope.reports[counter].student_lname;
+        }
+
+        $scope.currentSYSize = $scope.SYList.length;
+      }
+      else
+      {
+        $scope.selectedSY = undefined;
       }
 
       $scope.totalItems = $scope.reports.length;
+      $scope.isLoading = false;
+      $scope.initList = true;
     },
     function(response)
     {
@@ -1634,7 +1616,8 @@ angular.module('aceWeb.controller', [])
   $scope.initScope = function()
   {
     $scope.isLoading = true;
-    $scope.selectedSY = undefined;
+    $scope.initList = false;
+    $scope.selectedSY = undefined;    
     $scope.currentDateNum = Date.today().toString('MMddyy');
     $scope.searchBox = undefined;
     $scope.reportList = {};
@@ -1644,14 +1627,14 @@ angular.module('aceWeb.controller', [])
     //for pagination
     $scope.maxSize = 5;
     $scope.currentPage = 1;
-    $scope.itemsPerPage = 10;
+    $scope.itemsPerPage = 8;
 
-    $scope.getSY();
+    $scope.getReportList();
   } //scope initScope
 
   $scope.initScope();
 
-  $scope.reportPoll = $interval($scope.getSY, 3000);
+  $scope.reportPoll = $interval($scope.getReportList, 3000);
 
   $scope.$on('$destroy',function()
   {
@@ -1837,7 +1820,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            $scope.getSY();
+            $scope.getReportList();
             $rootScope.getNotif();
 
             $scope.showCustomModal("SUCCESS", response.data.successMsg);
@@ -1854,7 +1837,7 @@ angular.module('aceWeb.controller', [])
           {
             $scope.deleteBtn = "Delete";
             $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
-            $scope.reportPoll = $interval($scope.getSY, 3000);
+            $scope.reportPoll = $interval($scope.getReportList, 3000);
           });
         }
       }
@@ -1897,7 +1880,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            $scope.getSY();
+            $scope.getReportList();
             $rootScope.getNotif();
 
             $scope.showCustomModal("SUCCESS", response.data.successMsg);
@@ -1919,7 +1902,7 @@ angular.module('aceWeb.controller', [])
             $scope.reportList.report_id = [];
             $scope.mainCheckbox = false;
             $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
-            $scope.reportPoll = $interval($scope.getSY, 3000);
+            $scope.reportPoll = $interval($scope.getReportList, 3000);
           });
         }
       }
@@ -2023,7 +2006,7 @@ angular.module('aceWeb.controller', [])
       {
         console.log(response);
 
-        $scope.getSY();
+        $scope.getReportList();
         $rootScope.getNotif();
 
         $scope.showCustomModal("SUCCESS", response.data.successMsg);
@@ -2042,7 +2025,7 @@ angular.module('aceWeb.controller', [])
         $scope.disableUpdateBtn = false;
 
         $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
-        $scope.reportPoll = $interval($scope.getSY, 3000);
+        $scope.reportPoll = $interval($scope.getReportList, 3000);
       });
     }
   }
