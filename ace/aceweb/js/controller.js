@@ -2942,14 +2942,14 @@ angular.module('aceWeb.controller', [])
       if($scope.SYList.length != 0)
       {
         $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
+
         $scope.getSummaryData();
       }
       else
       {
         $scope.isEmptySYList = true;
-        $scope.isLoading = false;
       }
-
+      $scope.isLoading = false;
     },
     function(response)
     {
@@ -2964,6 +2964,8 @@ angular.module('aceWeb.controller', [])
   //init function which will retrieve all the data in rendering the summary chart
   $scope.getSummaryData = function()
   {
+    $scope.isLoadingChart = true;
+
     var userDetails =
     {
       'email' : AuthService.getEmail(),
@@ -2981,15 +2983,12 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      $scope.isLoading = false;
-
       var dept = response.data.department;
       var termDataObj = JSON.parse(response.data.termData);
       var programDataObj = JSON.parse(response.data.programData);
       var levelDataObj = JSON.parse(response.data.levelData);
       var reasonDataObj = JSON.parse(response.data.reasonData);
       var statusDataObj = JSON.parse(response.data.statusData);
-      console.log(response.data.levelData);
 
       //labels
 
@@ -3038,13 +3037,14 @@ angular.module('aceWeb.controller', [])
     })
     .finally(function()
     {
-
+      $scope.isLoadingChart = false;
     });
   }
 
   $scope.initScope = function()
   {
     $scope.isLoading = true;
+    $scope.isLoadingChart = false;
     $scope.currentDate = Date.today().toString('dddd, MMMM d, yyyy');
     $scope.currentDateNum = Date.today().toString('MMddyy');
     $scope.isEmptySYList = false;
