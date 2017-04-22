@@ -1605,6 +1605,12 @@ angular.module('aceWeb.controller', [])
     }
   })
 
+  $scope.updateSYList = function ()
+  {
+    $scope.reportList.report_id = [];
+    $scope.mainCheckbox = false;
+  }
+
   $scope.disableActionBtn = function ()
   {
     if($scope.reportList.report_id == undefined || $scope.reportList.report_id.length == 0)
@@ -1620,16 +1626,16 @@ angular.module('aceWeb.controller', [])
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < $scope.reports.length; counter++)
+      for(var counter=0; counter < ($filter('filter')($scope.reports, {school_year: $scope.selectedSY})).length; counter++)
       {
-        $scope.reportList.report_id.push($scope.reports[counter].report_id);
+        $scope.reportList.report_id.push($filter('filter')($scope.reports, {school_year: $scope.selectedSY})[counter].report_id);
       }
     }
   }
 
   $scope.updateMainCheckbox = function ()
   {
-    if($scope.reportList.report_id.length == $scope.reports.length)
+    if($scope.reportList.report_id.length == ($filter('filter')($scope.reports, {school_year: $scope.selectedSY})).length)
     {
       $scope.mainCheckbox = true;
     }

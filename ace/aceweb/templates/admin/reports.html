@@ -9,8 +9,8 @@
 
 <div>
 	<div ng-show="!isLoading">
-	
-	    <select ng-model="selectedSY">
+		
+	    <select ng-model="selectedSY" ng-change="updateSYList()">
 	    	<option ng-show="SYList.length > 0" ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
 	    	<option ng-hide="SYList.length > 0" value="" selected="selected">No Records</option>
 	    </select>
