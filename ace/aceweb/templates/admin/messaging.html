@@ -53,21 +53,9 @@
                                    </button>
                                </div>
 
-                                 <form class="pull-right searchBy">
-                                   <input type="text" class="sr-input" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}">
-                                     <div class="btn-group hidden-phone">
-                                         <button class="btn btn-default dropdown-toggle" type="button" id="searchBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                          Search By
-                                          <span class="caret"></span>
-                                        </button>
-
-                                        <ul class="dropdown-menu" aria-labelledby="searchBy" role="menu" id="search">
-                                          <li><a href="javascript:void(0)" ng-click="changeFilterTo('sender_fullName')">Name</a></li>
-                                          <li><a href="javascript:void(0)" ng-click="changeFilterTo('message_subject')">Subject</a></li>
-                                          <li><a href="javascript:void(0)" ng-click="changeFilterTo('message_date')">Date</a></li>
-                                        </ul>
-                                     </div>
-                                 </form>
+                               <div class="pull-right">
+                                  <input type="text" class="sr-input" ng-model="searchBox" placeholder="Search">
+                               </div>
                              </div>
 
                          </div>
@@ -75,9 +63,9 @@
                       <div class="table-height">
                         <table class="table table-inbox table-hover">
                           <col width="50">
-                          <col width="120">
-                          <col width="330">
                           <col width="80">
+                          <col width="140">
+                          <col width="320">
                           <col width="50">
 
                           <thead>
@@ -86,11 +74,11 @@
 
                               <td></td>
 
+                              <td>DATE</td>
+
                               <td>FROM</td>
 
-                              <td>SUBJECT</td>
-
-                              <td>DATE</td>
+                              <td>SUBJECT</td>                             
 
                               <td><center>ACTION</center></td>
 
@@ -107,17 +95,17 @@
                                     </center>
                                 </td>
 
+                                <td class="view-message">
+                                  {{ message.message_date | date:"shortDate" }}
+                                </td>
+
                                 <td class="view-message dont-show">
                                   {{ message.sender_fullName }}
                                 </td>
 
                                 <td class="view-message">
                                   {{ message.message_subject }}
-                                </td>
-
-                                <td class="view-message">
-                                  {{ message.message_date | date:"shortDate" }}
-                                </td>
+                                </td>                             
 
                                 <td>
                                   <center>
@@ -147,30 +135,29 @@
         <div class="modal-dialog">
 
           <div class="modal-content">
+
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
                 <h4 class="modal-title custom-header-color">{{selectedMessage.message_subject}}</h4>
-            </div>
+              </div>
+
               <div class="modal-body">
-
-            <div id="scrollableDiv" scroll-glue load-more-data>
-
-              <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
-                <br ng-show="$first">
-                  <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
-                <br>
-                <br>
-                <p ng-bind-html="message.message_body|newline2br"></p>
-                <hr ng-hide="$last">
-                <br ng-show="$last">
+                <div id="scrollableDiv" scroll-glue load-more-data>
+                  <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
+                    <br ng-show="$first">
+                      <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
+                    <br>
+                    <br>
+                    <p ng-bind-html="message.message_body|newline2br"></p>
+                    <hr ng-hide="$last">
+                    <br ng-show="$last">
+                  </div>
+                </div>
+                <textarea id="customTextArea" rows="4" ng-model="composeEmail" ng-readonly="isSending"></textarea>
               </div>
 
-            </div>
-
-            <textarea id="customTextArea" rows="4" ng-model="composeEmail" ></textarea>
-              </div>
               <div class="modal-footer">
-            <button type="button" class="btn btn-primary" ng-click="sendEmail()">Reply</button>
+                <button type="button" class="btn btn-primary" ng-click="sendEmail()" ng-disabled="isSending">{{sendBtn}}</button>
               </div>
           </div>
 

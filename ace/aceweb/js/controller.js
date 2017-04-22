@@ -85,18 +85,17 @@ angular.module('aceWeb.controller', [])
         //error callback (handles all the error response 4xx status codes)
         console.log(response);
 
-        if(response.status == 400)
-        {
-          $scope.errMsg = response.data.errMsg;
-          $scope.incorrectInput = true;
-          $scope.userPassword = undefined;
-        }
+        $scope.errMsg = response.data.errMsg;
+        $scope.incorrectInput = true;
+        $scope.userPassword = undefined;
+
+        $scope.disableLogin = false;
+        $scope.loginText = "SIGN IN";
       })
       .finally(function()
       {
         //things to handle whether the response is success or not (ex: disable or hide loading)
-        $scope.disableLogin = false;
-        $scope.loginText = "SIGN IN";
+        
       })
     }
     else
@@ -166,8 +165,12 @@ angular.module('aceWeb.controller', [])
         if(response.status == 400)
         {
           $scope.errMsg = response.data.errMsg;
-          $scope.incorrectInput = true;
         }
+        else
+        {
+          $scope.errMsg = "Web service unavailable";
+        }
+        $scope.incorrectInput = true;
       })
       .finally(function()
       {
@@ -258,8 +261,13 @@ angular.module('aceWeb.controller', [])
 
         if(response.status == 400)
         {
-          $scope.incorrectInput = true;
+          $scope.errMsg = response.data.errMsg;
         }
+        else
+        {
+          $scope.errMsg = "Web service unavailable";
+        }
+        $scope.incorrectInput = true;
       })
       .finally(function()
       {
@@ -271,7 +279,6 @@ angular.module('aceWeb.controller', [])
     {
       if(loginForm.password.$invalid)
       {
-        //validation if password and password confirmation field dont match
         $scope.errMsg = "Invalid Password";
         $scope.invalidInput = true;
       }
@@ -429,7 +436,7 @@ angular.module('aceWeb.controller', [])
     AuthService.logout();
   }
 
-  $scope.getNotif = function()
+  $rootScope.getNotif = function()
   {
     var accountDetails =
     {
@@ -465,17 +472,19 @@ angular.module('aceWeb.controller', [])
   $scope.initScope = function()
   {
     $scope.userName = AuthService.getName();
-    $scope.getNotif();
+    $rootScope.getNotif;
   }
 
   $scope.initScope();
 
-  $rootScope.notifPoll = $interval($scope.getNotif, 3000);
+  $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
 
   $scope.$on('$destroy',function()
   {
     if($rootScope.notifPoll)
+    {
       $interval.cancel($rootScope.notifPoll);
+    }     
   })
 }) //controller
 
@@ -736,22 +745,6 @@ angular.module('aceWeb.controller', [])
         //convert string date into javascript date object
         strDate = $scope.messages[counter].message_date.replace(/-/g,'/');
         $scope.messages[counter].message_date = new Date(strDate);
-
-        //add fullname for each message
-        if($scope.messages[counter].sender_email == AuthService.getEmail())
-        {
-          $scope.messages[counter].sender_fullName = "Me";
-        }
-        else
-        {
-          $scope.messages[counter].sender_fullName = $scope.messages[counter].sender_fname + " " + $scope.messages[counter].sender_lname;
-        }
-
-        //if subject is null
-        if($scope.messages[counter].message_subject == null)
-        {
-          $scope.messages[counter].message_subject = "(No Subject)";
-        }
       }
 
       $scope.uniqueMessages = $filter('orderBy')($scope.messages, 'message_date', true);
@@ -764,7 +757,6 @@ angular.module('aceWeb.controller', [])
           $scope.uniqueMessages[counter].is_read = $scope.uniqueMessages[counter].is_read_sender;
         }
       }
-
     },
     function(response)
     {
@@ -780,9 +772,8 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.sendBtn = "Send";
     $scope.userEmail = AuthService.getEmail();
-    $scope.myFilter = 'sender_fullName';
-    $scope.searchPlacholder = 'Name';
     $scope.searchBox = undefined;
     $scope.markMessageList = {};
     $scope.markMessageList.report_id = [];
@@ -868,26 +859,6 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  $scope.changeFilterTo = function(filterProperty)
-  {
-    $scope.searchBox = undefined;
-
-    $scope.myFilter = filterProperty;
-
-    if(filterProperty == 'sender_fullName')
-    {
-      $scope.searchPlacholder = 'Name';
-    }
-    else if(filterProperty == 'message_subject')
-    {
-      $scope.searchPlacholder = 'Subject';
-    }
-    else if(filterProperty == 'message_date')
-    {
-      $scope.searchPlacholder = 'Date';
-    }
-  }
-
   $scope.markAsRead = function()
   {
     $interval.cancel($rootScope.notifPoll);
@@ -910,14 +881,8 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      for(var counter=0; counter < $scope.uniqueMessages.length; counter++)
-      {
-        if($.inArray($scope.uniqueMessages[counter].report_id, $scope.markMessageList.report_id) > -1 && $scope.uniqueMessages[counter].is_read == 0)
-        {
-          $scope.uniqueMessages[counter].is_read = 1;
-          $rootScope.newMessageCount -= 1;
-        }
-      }
+      $rootScope.getNotif();
+      $scope.getMessageList();
     },
     function(response)
     {
@@ -930,7 +895,7 @@ angular.module('aceWeb.controller', [])
       $scope.markMessageList.report_id = [];
       $scope.mainCheckbox = false;
       $scope.msgPoll = $interval($scope.getMessageList, 3000);
-      $rootScope.notifPoll = $interval($scope.getNotif, 3000);
+      $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
     });
   }
 
@@ -956,14 +921,8 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      for(var counter=0; counter < $scope.uniqueMessages.length; counter++)
-      {
-        if($.inArray($scope.uniqueMessages[counter].report_id, $scope.markMessageList.report_id) > -1 && $scope.uniqueMessages[counter].is_read == 1)
-        {
-          $scope.uniqueMessages[counter].is_read = 0;
-          $rootScope.newMessageCount += 1;
-        }
-      }
+      $rootScope.getNotif();
+      $scope.getMessageList();
     },
     function(response)
     {
@@ -976,7 +935,7 @@ angular.module('aceWeb.controller', [])
       $scope.markMessageList.report_id = [];
       $scope.mainCheckbox = false;
       $scope.msgPoll = $interval($scope.getMessageList, 3000);
-      $rootScope.notifPoll = $interval($scope.getNotif, 3000);
+      $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
     });
   }
 
@@ -1014,30 +973,24 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            for(var counter=$scope.uniqueMessages.length - 1; counter >= 0 ; counter--)
-            {
-              if($.inArray($scope.uniqueMessages[counter].report_id, $scope.markMessageList.report_id) > -1)
-              {
-                if($scope.uniqueMessages[counter].is_read == 0)
-                {
-                  $rootScope.newMessageCount -= 1;
-                }
-                $scope.uniqueMessages.splice(counter,1);
-              }
-            }
+            $rootScope.getNotif();
+            $scope.getMessageList();
+
+            $scope.showCustomModal("SUCCESS", response.data.successMsg);
           },
           function(response)
           {
             //for checking
             console.log(response);
 
+            $scope.showCustomModal("ERROR", response.data.errorMsg);          
           })
           .finally(function()
           {
             $scope.markMessageList.report_id = [];
             $scope.mainCheckbox = false;
             $scope.msgPoll = $interval($scope.getMessageList, 3000);
-            $rootScope.notifPoll = $interval($scope.getNotif, 3000);
+            $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
           });
         }
       }
@@ -1078,31 +1031,24 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            for(var counter=$scope.uniqueMessages.length - 1; counter >= 0 ; counter--)
-            {
-              if($scope.uniqueMessages[counter].report_id == message.report_id)
-              {
+            $rootScope.getNotif();
+            $scope.getMessageList();
 
-                if($scope.uniqueMessages[counter].is_read == 0)
-                {
-                  $rootScope.newMessageCount -= 1;
-                }
-                $scope.uniqueMessages.splice(counter,1);
-              }
-            }
+            $scope.showCustomModal("SUCCESS", response.data.successMsg);
           },
           function(response)
           {
             //for checking
             console.log(response);
 
+            $scope.showCustomModal("ERROR", response.data.errorMsg); 
           })
           .finally(function()
           {
             $scope.markMessageList.report_id = [];
             $scope.mainCheckbox = false;
             $scope.msgPoll = $interval($scope.getMessageList, 3000);
-            $rootScope.notifPoll = $interval($scope.getNotif, 3000);
+            $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
           });
         }
       }
@@ -1111,6 +1057,9 @@ angular.module('aceWeb.controller', [])
 
   $scope.readMessage = function()
   {
+    $interval.cancel($rootScope.notifPoll);
+    $interval.cancel($scope.msgPoll);
+
     var messageDetails =
     {
       'reportId' : $scope.selectedMessage.report_id,
@@ -1128,15 +1077,8 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
-      for(var counter=0; counter < $scope.uniqueMessages.length; counter++)
-      {
-        if($scope.uniqueMessages[counter].report_id == $scope.selectedMessage.report_id && $scope.uniqueMessages[counter].is_read == 0)
-        {
-          $scope.uniqueMessages[counter].is_read = 1;
-          $rootScope.newMessageCount -= 1;
-        }
-      }
-
+      $rootScope.getNotif();
+      $scope.getMessageList();
     },
     function(response)
     {
@@ -1146,7 +1088,8 @@ angular.module('aceWeb.controller', [])
     })
     .finally(function()
     {
-
+      $scope.msgPoll = $interval($scope.getMessageList, 3000);
+      $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
     });
   }
 
@@ -1183,6 +1126,11 @@ angular.module('aceWeb.controller', [])
   {
     if($scope.composeEmail != "" && $scope.composeEmail != undefined)
     {
+      $scope.sendBtn = "Sending";
+      $scope.isSending = true;
+      $interval.cancel($rootScope.notifPoll);
+      $interval.cancel($scope.msgPoll);
+
       if($scope.selectedMessage.receiver_email == AuthService.getEmail())
       {
         $scope.sender = $scope.selectedMessage.receiver_email;
@@ -1203,12 +1151,73 @@ angular.module('aceWeb.controller', [])
         'reportId': $scope.selectedMessage.report_id
       }
 
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/sendMessage',
+        data: messageDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $scope.composeEmail = "";
+        $scope.showLimit -= 1;
+        $rootScope.getNotif();
+        $scope.getMessageList();
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+      })
+      .finally(function()
+      {
+        $scope.sendBtn = "Send";
+        $scope.isSending = false;
+        $scope.msgPoll = $interval($scope.getMessageList, 3000);
+        $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+      });
+    }
+  }
+
+  $scope.broadcastEmail = function()
+  {
+    $scope.sendBtn = "Sending";
+    $scope.disableSendBtn = true;
+
+    if($scope.composeEmail != "" && $scope.composeEmail != undefined)
+    {
+      /*if($scope.selectedMessage.receiver_email == AuthService.getEmail())
+      {
+        $scope.sender = $scope.selectedMessage.receiver_email;
+        $scope.receiver = $scope.selectedMessage.sender_email;
+      }
+      else
+      {
+        $scope.sender = $scope.selectedMessage.sender_email;
+        $scope.receiver = $scope.selectedMessage.receiver_email;
+      }*/
+
+      if($scope.broadcastSubj == "" && $scope.broadcastSubj == undefined)
+      {
+        $scope.broadcastSubj = "(No Subject)";
+      }
+
+      var messageDetails =
+      {
+        'messageBody': $scope.composeEmail,
+        'messageSubj': $scope.broadcastSubj
+      }
+
       $scope.composeEmail = "";
       $scope.showLimit -= 1;
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/sendMessage',
+        url: config.apiUrl + '/broadcastEmail',
         data: messageDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -1231,63 +1240,15 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  $scope.broadcastEmail = function()
-{
-  $scope.sendBtn = "Sending";
-  $scope.disableSendBtn = true;
-
-  if($scope.composeEmail != "" && $scope.composeEmail != undefined)
+  $scope.showCustomModal = function(modalTitle, modalMsg)
   {
-    /*if($scope.selectedMessage.receiver_email == AuthService.getEmail())
-    {
-      $scope.sender = $scope.selectedMessage.receiver_email;
-      $scope.receiver = $scope.selectedMessage.sender_email;
-    }
-    else
-    {
-      $scope.sender = $scope.selectedMessage.sender_email;
-      $scope.receiver = $scope.selectedMessage.receiver_email;
-    }*/
-
-    if($scope.broadcastSubj == "" && $scope.broadcastSubj == undefined)
-    {
-      $scope.broadcastSubj = "(No Subject)";
-    }
-
-    var messageDetails =
-    {
-      'messageBody': $scope.composeEmail,
-      'messageSubj': $scope.broadcastSubj
-    }
-
-    $scope.composeEmail = "";
-    $scope.showLimit -= 1;
-
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/broadcastEmail',
-      data: messageDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function(response)
-    {
-      //for checking
-      console.log(response);
-
-    },
-    function(response)
-    {
-      //for checking
-      console.log(response);
-
-    })
-    .finally(function()
-    {
-
+    BootstrapDialog.alert({
+      title: modalTitle,
+      message: modalMsg,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false
     });
   }
-
-}
 
 }) //closing tag controller
 
@@ -1770,10 +1731,7 @@ angular.module('aceWeb.controller', [])
       },
       function(response)
       {
-        if(response.status == 400)
-        {
-          $scope.showCustomModal("ERROR", response.data.errorMsg);
-        }
+        $scope.showCustomModal("ERROR", response.data.errorMsg);
       })
       .finally(function()
       {
@@ -1827,11 +1785,7 @@ angular.module('aceWeb.controller', [])
           },
           function(response)
           {
-            //for checking
-            if(response.status == 400)
-            {
-              $scope.showCustomModal("ERROR", response.data.errorMsg);
-            }
+            $scope.showCustomModal("ERROR", response.data.errorMsg);
           })
           .finally(function()
           {
@@ -1890,10 +1844,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            if(response.status == 400)
-            {
-              $scope.showCustomModal("ERROR", response.data.errorMsg);
-            }
+            $scope.showCustomModal("ERROR", response.data.errorMsg);
           })
           .finally(function()
           {
@@ -2013,10 +1964,7 @@ angular.module('aceWeb.controller', [])
       },
       function(response)
       {
-        if(response.status == 400)
-        {
-          $scope.showCustomModal("ERROR", response.data.errorMsg);
-        }
+        $scope.showCustomModal("ERROR", response.data.errorMsg);
       })
       .finally(function()
       {
@@ -2381,15 +2329,6 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
-  /*function indexOfId(array, report_id)
-  {
-    for (var i=0; i<array.length; i++)
-    {
-      if (array[i].report_id==report_id) return i;
-    }
-    return -1;
-  }*/
-
   $scope.deleteStudent = function(student_id)
   {
     BootstrapDialog.confirm({
@@ -2431,11 +2370,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            if(response.status == 400)
-            {
-                $scope.showCustomModal("ERROR", response.data.errorMsg);
-            }
-
+            $scope.showCustomModal("ERROR", response.data.errorMsg);
           })
           .finally(function()
           {
@@ -2469,7 +2404,6 @@ angular.module('aceWeb.controller', [])
           var studentDetails =
           {
             'studentList' : $scope.studentList
-            //'email': AuthService.getEmail()
           }
 
           $http({
@@ -2493,11 +2427,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            if(response.status == 400)
-            {
-              $scope.showCustomModal("ERROR", response.data.errorMsg);
-            }
-
+            $scope.showCustomModal("ERROR", response.data.errorMsg);
           })
           .finally(function()
           {
@@ -2739,8 +2669,8 @@ angular.module('aceWeb.controller', [])
 
           if(response.status == 400)
           {
-              $scope.regFacultyForm.facultyEmail.$setValidity(response.data.errorMsg, false);
-          }
+            $scope.regFacultyForm.facultyEmail.$setValidity(response.data.errorMsg, false);
+          }  
         })
         .finally(function()
         {
@@ -2792,10 +2722,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            if(response.status == 400)
-            {
-              $scope.showCustomModal("ERROR", response.data.errorMsg);
-            }
+            $scope.showCustomModal("ERROR", response.data.errorMsg);
           })
           .finally(function()
           {
@@ -2848,11 +2775,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            if(response.status == 400)
-            {
-              $scope.showCustomModal("ERROR", response.data.errorMsg);
-            }
-
+            $scope.showCustomModal("ERROR", response.data.errorMsg);
           })
           .finally(function()
           {
@@ -3228,15 +3151,10 @@ angular.module('aceWeb.controller', [])
     },
     function(response)
     {
-
-      if(response.status == 400)
+      if(response.data.errMsg == 'Credentials invalid.')
       {
-        if(response.data.errMsg == 'Credentials invalid.')
-        {
-          alert("hELLO ANFBEjn")
-        }
+        alert("hELLO ANFBEjn")
       }
-
     })
     .finally(function()
     {
@@ -3438,10 +3356,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            if(response.status == 400)
-            {
-              $scope.showCustomModal("ERROR", response.data.errorMsg);
-            }
+            $scope.showCustomModal("ERROR", response.data.errorMsg);
           })
           .finally(function()
           {
@@ -3493,10 +3408,7 @@ angular.module('aceWeb.controller', [])
             //for checking
             console.log(response);
 
-            if(response.status == 400)
-            {
-              $scope.showCustomModal("ERROR", response.data.errorMsg);
-            }
+            $scope.showCustomModal("ERROR", response.data.errorMsg);
           })
           .finally(function()
           {

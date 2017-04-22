@@ -177,9 +177,17 @@
 
     if(isset($email, $hashCode))
     {
-      if($db->isLinkValid($email, $hashCode) && $db->changePassword($email, $pword, $role))
+      if($db->isLinkValid($email, $hashCode))
       {
-        $response = setSuccessResponse($response, 200);
+        if( $db->changePassword($email, $pword, $role))
+        {
+          $response = setSuccessResponse($response, 200);
+        }
+        else
+        {
+          $responseBody = array('errMsg' => 'Failed to change password');
+          $response = setResponse($response, 400, $responseBody);
+        }
       }
       else
       {
@@ -189,7 +197,7 @@
     }
     else
     {
-      $responseBody = array('errMsg' => 'Password already set');
+      $responseBody = array('errMsg' => 'Failed to change password');
       $response = setResponse($response, 400, $responseBody);
     }
     return $response;
@@ -473,32 +481,28 @@
     $email = $reportDetails->email;    
     $department = $db->getDepartment($email);
 
-      if($department == 1)
-      {
-        $reportsList = $db->listShsReports($status);
-      }
-      else
-      {
-        $reportsList = $db->listCollegeReports($status);
-      }
+    if($department == 1)
+    {
+      $reportsList = $db->listShsReports($status);
+    }
+    else
+    {
+      $reportsList = $db->listCollegeReports($status);
+    }
 
-      for($counter=0; $counter<count($reportsList); $counter++)
+    for($counter=0; $counter<count($reportsList); $counter++)
+    {
+      $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
+
+      for($ctr=0; $ctr<count($reasonArr); $ctr++)
       {
-        $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
-
-        for($ctr=0; $ctr<count($reasonArr); $ctr++)
-        {
-          $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
-        }
+        $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
       }
+    }
 
-      $responseBody = array('reportsList' => json_encode($reportsList));
-      $response = setResponse($response, 200, $responseBody);
-  
-      //$responseBody = array('errorMsg' => "Failed to retrieve data");
-      //$response = setResponse($response, 400, $responseBody);
-    
-    
+    $responseBody = array('reportsList' => json_encode($reportsList));
+    $response = setResponse($response, 200, $responseBody);
+   
     return $response;
   });
 
@@ -516,7 +520,7 @@
 
     $db = new DbOperation();
 
-    if($db->emailExist($email) == true)
+    if($db->emailExist($email))
     {
       $responseBody = array('errorMsg' => 'emailExist');
       $response = setResponse($response, 400, $responseBody);
@@ -560,7 +564,7 @@
 
     $db = new DbOperation();
 
-    if($db->emailExist($email) == true)
+    if($db->emailExist($email))
     {
       $responseBody = array('errorMsg' => 'emailExist');
       $response = setResponse($response, 400, $responseBody);
@@ -622,7 +626,7 @@
     else
     {
       $responseBody = array('errorMsg' => 'Failed to delete account(s)');
-      $response = setResponse($response, 200, $responseBody);
+      $response = setResponse($response, 400, $responseBody);
     }
 
     return $response;
@@ -660,7 +664,7 @@
     else
     {
       $responseBody = array('errorMsg' => 'Failed to delete account(s)');
-      $response = setResponse($response, 200, $responseBody);
+      $response = setResponse($response, 400, $responseBody);
     }
 
     return $response;
@@ -726,7 +730,7 @@
     else
     {
       $responseBody = array('errorMsg' => 'Failed to delete report(s)');
-      $response = setResponse($response, 200, $responseBody);
+      $response = setResponse($response, 400, $responseBody);
     }
 
     return $response;
@@ -871,10 +875,24 @@
 
     $messageList = $db->showMessages($email,$status);
 
-    for($counter=0; $counter < count($messageList); $counter++){
-
+    for($counter=0; $counter < count($messageList); $counter++)
+    {
       $messageList[$counter]['sender_fname'] = $db->getFirstName($messageList[$counter]['sender_email']);
       $messageList[$counter]['sender_lname'] = $db->getLastName($messageList[$counter]['sender_email']);
+
+      if($messageList[$counter]['sender_email'] == $email)
+      {
+        $messageList[$counter]['sender_fullName'] = "Me";
+      }
+      else
+      {
+        $messageList[$counter]['sender_fullName'] = $messageList[$counter]['sender_fname'] + " " + $messageList[$counter]['sender_lname'];
+      }
+
+      if($messageList[$counter]['message_subject'] == null)
+      {
+        $messageList[$counter]['message_subject'] = "(No Subject)";
+      }
     }
 
     $responseBody = array('messageList' => json_encode($messageList));
@@ -1032,21 +1050,31 @@
     $messageList = $messageDetails->markMessageList;
     $email = $messageDetails->email;
     $status = 0;
+    $deleteSuccess = false;
 
     $db = new DbOperation();
 
-    if(is_object($messageList)){
-
+    if(is_object($messageList))
+    {
       foreach ($messageList->report_id as $value)
       {
-        $db->deleteMessage($status, $value, $email);
+        $deleteSuccess = $db->deleteMessage($status, $value, $email);
       }
+    } 
+    else 
+    {
+      $deleteSuccess = $db->deleteMessage($status, $messageList, $email);
+    }
 
-      $response = setSuccessResponse($response, 200);
-    } else {
-
-      $db->deleteMessage($status, $messageList, $email);
-      $response = setSuccessResponse($response, 200);
+    if($deleteSuccess)
+    {
+      $responseBody = array('successMsg' => 'Message(s) successfully deleted');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Failed to delete message(s)');
+      $response = setResponse($response, 400, $responseBody);
     }
 
     return $response;
