@@ -863,10 +863,10 @@ class DbOperation
     }
 
 
-    public function markReportAsUnread($isRead, $reportId)
+    public function markUpdatedReport($status, $reportId)
     {
-        $stmt = $this->con->prepare("UPDATE report SET is_read=? WHERE report_id=?");
-        $stmt->bind_param("ii", $isRead, $reportId);
+        $stmt = $this->con->prepare("UPDATE report SET is_updated=? WHERE report_id=?");
+        $stmt->bind_param("ii", $status, $reportId);
         $result = $stmt->execute();
         $stmt->close();
 

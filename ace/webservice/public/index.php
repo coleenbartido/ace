@@ -1005,7 +1005,6 @@
     $reportDetails = json_decode(file_get_contents("php://input"));
 
     $reportList = $reportDetails->reportList;
-    //$email = $reportDetails->email;
     $isRead = 1;
 
     $db = new DbOperation();
@@ -1027,14 +1026,13 @@
     $reportDetails = json_decode(file_get_contents("php://input"));
 
     $reportList = $reportDetails->reportList;
-    //$email = $reportDetails->email;
     $isRead = 0;
 
     $db = new DbOperation();
 
     foreach ($reportList->report_id as $value)
     {
-      $db->markReportAsUnread($isRead, $value);
+      $db->markReport($isRead, $value);
     }
 
     $response = setSuccessResponse($response, 200);
@@ -1067,6 +1065,62 @@
       sendEmail($email, $subject, $body);
 
       $db->markReport($status, $reportId);
+    }
+
+    $response = setSuccessResponse($response, 200);
+
+    return $response;
+  });
+
+
+
+  $app->post('/markFacultyReport', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $reportDetails = json_decode(file_get_contents("php://input"));
+
+    $reportList = $reportDetails->reportId;
+    $status = 0;
+
+    $db = new DbOperation();
+
+    if(is_object($reportList))
+    {    
+      foreach ($reportList->report_id as $value)
+      {
+        $db->markUpdatedReport($status, $value);
+      }
+    }
+    else
+    {
+      $db->markUpdatedReport($status, $reportList);
+    }
+
+    $response = setSuccessResponse($response, 200);
+
+    return $response;
+  });
+
+
+
+  $app->post('/markFacultyReportAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $reportDetails = json_decode(file_get_contents("php://input"));
+
+    $reportList = $reportDetails->reportId;
+    $status = 1;
+
+    $db = new DbOperation();
+
+    if(is_object($reportList))
+    {    
+      foreach ($reportList->report_id as $value)
+      {
+        $db->markUpdatedReport($status, $value);
+      }
+    }
+    else
+    {
+      $db->markUpdatedReport($status, $reportList);
     }
 
     $response = setSuccessResponse($response, 200);

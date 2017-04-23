@@ -737,7 +737,7 @@ angular.module('aceWeb.controller', [])
     .then(function(response)
     {
       //for checking
-      console.log(response);
+      console.log(response);     
 
       $scope.reports = JSON.parse(response.data.reportsList);
 
@@ -745,11 +745,11 @@ angular.module('aceWeb.controller', [])
       {
         $scope.SYList = $filter('orderBy')($scope.reports, 'school_year', true);
         $scope.SYList = $filter('unique')($scope.SYList, 'school_year');
-
+       
         if(!$scope.initList || $scope.selectedSY == undefined || $scope.currentSYSize > $scope.SYList.length)
         {
           $scope.selectedSY = $scope.SYList[0].school_year;
-        }
+        }       
 
         for(var counter=0; counter < $scope.reports.length; counter++)
         {
@@ -786,7 +786,7 @@ angular.module('aceWeb.controller', [])
   {
     $scope.isLoading = true;
     $scope.initList = false;
-    $scope.selectedSY = undefined;
+    $scope.selectedSY = undefined;    
     $scope.searchBox = undefined;
     $scope.reportList = {};
     $scope.reportList.report_id = [];
@@ -813,12 +813,12 @@ angular.module('aceWeb.controller', [])
   })
 
   $scope.$watch("reportList.report_id", function()
-  {
+  {   
     $scope.mainCheckbox = false;
 
     if($scope.reports && $scope.filtered.length == $scope.reportList.report_id.length)
     {
-      $scope.mainCheckbox = true;
+      $scope.mainCheckbox = true;  
     }
     else
     {
@@ -827,13 +827,13 @@ angular.module('aceWeb.controller', [])
   }, true);
 
   $scope.$watch("searchBox", function()
-  {
-    $scope.reportList.report_id = [];
+  {   
+    $scope.reportList.report_id = [];  
     $scope.mainCheckbox = false;
 
     if($scope.reports && $scope.filtered.length == $scope.reportList.report_id.length && $scope.filtered.length != 0)
     {
-      $scope.mainCheckbox = true;
+      $scope.mainCheckbox = true;      
     }
     else
     {
@@ -899,15 +899,17 @@ angular.module('aceWeb.controller', [])
 
   $scope.markAsRead = function()
   {
+    $interval.cancel($rootScope.notifPoll);
+    $interval.cancel($scope.reportPoll);
+
     var reportDetails =
     {
-      'reportList' : $scope.reportList,
-      'email': AuthService.getEmail()
-    };
+      'reportId' : $scope.reportList
+    }
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markReport',
+      url: config.apiUrl + '/markFacultyReport',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -917,6 +919,7 @@ angular.module('aceWeb.controller', [])
       console.log(response);
 
       $scope.getReportList();
+      $rootScope.getNotif();
     },
     function(response)
     {
@@ -927,20 +930,25 @@ angular.module('aceWeb.controller', [])
     {
       $scope.reportList.report_id = [];
       $scope.mainCheckbox = false;
+
+      $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+      $scope.reportPoll = $interval($scope.getReportList, 3000);
     });
   }
 
   $scope.markAsUnread = function()
   {
+    $interval.cancel($rootScope.notifPoll);
+    $interval.cancel($scope.reportPoll);
+
     var reportDetails =
     {
-      'reportList' : $scope.reportList,
-      'email': AuthService.getEmail()
+      'reportId' : $scope.reportList
     }
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markReportAsUnread',
+      url: config.apiUrl + '/markFacultyReportAsUnread',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -950,6 +958,7 @@ angular.module('aceWeb.controller', [])
       console.log(response);
 
       $scope.getReportList();
+      $rootScope.getNotif();
     },
     function(response)
     {
@@ -961,40 +970,9 @@ angular.module('aceWeb.controller', [])
     {
       $scope.reportList.report_id = [];
       $scope.mainCheckbox = false;
-    });
-  }
 
-  $scope.readReport = function(report)
-  {
-    var reportDetails =
-    {
-      'reportId' : $scope.selectedReport.report_id,
-      'isRead': $scope.selectedReport.is_read,
-      'email' : $scope.selectedReport.email
-    }
-
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/readReport',
-      data: reportDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function(response)
-    {
-      //for checking
-      console.log(response);
-
-      $scope.getReportList();
-    },
-    function(response)
-    {
-      //for checking
-      console.log(response);
-
-    })
-    .finally(function()
-    {
-
+      $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+      $scope.reportPoll = $interval($scope.getReportList, 3000);
     });
   }
 
@@ -1002,7 +980,6 @@ angular.module('aceWeb.controller', [])
   {
     $scope.selectedReport = report;
     $scope.reasonList = report.report_reasons;
-    $scope.readReport();
 
     if(report.counselor_note == null)
     {
@@ -1020,6 +997,43 @@ angular.module('aceWeb.controller', [])
     else
     {
       report.referral_comment_view = report.referral_comment;
+    }
+
+    if($scope.selectedReport.is_updated == 1)
+    {
+      $interval.cancel($rootScope.notifPoll);
+      $interval.cancel($scope.reportPoll);
+
+      var reportDetails =
+      {
+        'reportId' : $scope.selectedReport.report_id
+      }
+
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/markFacultyReport',
+        data: reportDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $scope.getReportList();
+        $rootScope.getNotif();
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+      })
+      .finally(function()
+      {
+        $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+        $scope.reportPoll = $interval($scope.getReportList, 3000);
+      });
     }
   }
 
