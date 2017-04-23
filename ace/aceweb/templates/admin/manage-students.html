@@ -97,226 +97,132 @@
 								</tbody>
 
 							</table>
-						</div> <!-- table-height -->
 
+							<div class="page pull-right custom-pagination">
+								<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+							</div>
+
+						</div> <!-- table-height -->
 
 					</div>
 				</aside>
 		</div>
 
+		<!-- MODALS ------------------------------------------------------------------->
+					<!---   EDIT STUDENT  --------------------------------------------------->
 
-	</div>
+						<div id="editModal" class="modal fade" role="dialog">
+								<div class="modal-dialog">
+
+									<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+												<h4 class="modal-title custom-header-color">Edit Student Information</h4>
+										</div>
+											<div class="modal-body">
+
+													<p><b>Student ID Number: </b> <input type="textbox" ng-model="studId" name="studId" id="studId">
+													<p><b>Student Last Name: </b> <input type="textbox" ng-model="studLName" name="studLName" id="studLName">
+													<p><b>Student First Name: </b> <input type="textbox" ng-model="studFName" name="studFName" id="studFName">
+													<p><b>Course: </b>
+														<div class="style-select">
+															<select class="form-control" name="program" id="program" ng-model="program" required>
+
+		                                                    <!--
+															<optgroup ng-if="department==1">
+																<option ng-repeat='program in programList' value='{{ program.value }}' ng-selected="program.value == program">
+																	{{program.text}}
+																</option>
+															</optgroup>
+
+															<optgroup ng-if="department==2">
+																<option ng-repeat='course in courseList' value='{{ course.value }}'>
+																	{{course.text}}
+																</option>
+															</optgroup>
+		                                                    -->
 
 
-<!-- ------------------------------->
+																<optgroup label="Academic Tracks" ng-if="department==1">
+																	<option value="1">Humanities And Social Sciences</option>
+																	<option value="2">Accountancy Business And Management</option>
+																</optgroup>
 
-<div>
+																<optgroup label="Technical Vocational" ng-if="department==1">
+																	<option value="3">Computer Programming</option>
+																	<option value="4">Animation</option>
+																	<option value="5">Fashion Design</option>
+																</optgroup>
 
-
-
-
-	<div class="input-group">
-
-
-		<form class="pull-right searchBy">
-			<input type="text" class="sr-input" ng-model="searchBox[myFilter]" placeholder="{{searchPlacholder}}">
-				<div class="btn-group hidden-phone">
-						<button class="btn btn-default dropdown-toggle" type="button" id="searchBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						 Search By
-						 <span class="caret"></span>
-					 </button>
-
-					 <ul class="dropdown-menu" aria-labelledby="searchBy" role="menu" id="search">
-						 <li><a href="javascript:void(0)" ng-click="changeFilterTo('student_name')">Name</a></li>
-						 <li><a href="javascript:void(0)" ng-click="changeFilterTo('program')">Course / Program</a></li>
-				</div>
-		</form>
+																<optgroup label="Arts and Design Track" ng-if="department==1">
+																	<option value="6">Multimedia Arts</option>
+																</optgroup>
 
 
 
-		</div>
+																<optgroup label="School of Computing" ng-if="department==2">
+																	<option value="1">Software Engineering</option>
+																	<option value="2">Game Development</option>
+																	<option value="3">Web Development</option>
+																</optgroup>
 
-		<button class="btn btn-default" type="button" ng-disabled="disableActionBtn()" ng-click="deleteStudentList()">
-			Delete
-		</button>
+																<optgroup label="School of Design" ng-if="department==2">
+																	<option value="4">Animation</option>
+																	<option value="5">Multimedia Arts</option>
+																	<option value="6">Fashion Design</option>
+																</optgroup>
 
-    <button class="btn btn-default" type="button" ng-click="initScope()">
-		    Refresh
-		</button>
+																<optgroup label="School of Business" ng-if="department==2">
+																	<option value="7">Real Estate Management</option>
+																	<option value="8">Business Administration</option>
+																</optgroup>
 
-		<table class="table table-bordered table-condensed table-striped table-condensed table-hover">
-			<col width="130">
-			<col width="200">
-				<tbody>
-						<!-- APRIL -->
-						<tr>
 
-						</tr>
-						<!-- APRIL -->
-						<tr>
-							<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>
-							<th class="date">ID No. </th>
-							<th class="faculty">Name: </th>
-							<th class="course">Course: </th>
-							<th class="year"> Level: </th>
-							<th class="reportCount"> Report Count: </th>
-							<th class="student">Actions</th>
 
-						</tr>
+															</select>
+														</div>
 
-						<tr ng-repeat="student in students | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(student)">
-							<!-- APRIL -->
-							<td>
-								<center><input type="checkbox" data-checklist-model="studentList.student_id" data-checklist-value="student.student_id" checklist-change="updateMainCheckbox()" noclick></center>
-							</td>
-							<!-- APRIL -->
-							<td>
-								{{student.student_id}}
-							</td>
-							<td>
-								{{student.student_name }}
-							</td>
-              <td>
-								{{student.program}}
-							</td>
-							<td>
-								{{student.level}}
-							</td>
-							<td>
-								{{student.report_count}}
-							</td>
+													<p><b>Level: </b>
+														<div class="style-select">
+															<select class="form-control" name="level" id="level" ng-model="level" required>
 
-							<td>
-								<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" ng-click="showPopup(student)" >Edit</button>-->
-								<button type="button" class="btn btn-primary" ng-click="deleteStudent(student)" no-click><span class="glyphicon glyphicon-trash"></span></button>
-							</td>
-						</tr>
-				</tbody>
-			</table>
+		                                                        <!--
+																<optgroup ng-if="department==1">
+																	<option ng-repeat='grade in gradeList' value='{{ grade.value }}' ng-selected= '{{grade.value == level}}'>
+																		{{grade.text}}
+																	</option>
+																</optgroup>
 
-			<div ng-show="reports.length == 0">
-				<p>No Result</p>
-			</div>
+																<optgroup ng-if="department==2">
+																	<option ng-repeat='year in yearList' value='{{ year.value }}'>
+																		{{year.text}}
+																	</option>
+																</optgroup>
+		                                                        -->
 
-			<div>
-				<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
-			</div>
 
-<!-- MODALS ------------------------------------------------------------------->
-			<!---   EDIT STUDENT  --------------------------------------------------->
+																<option ng-if="department==1" value="1">Grade 11</option>
+																<option ng-if="department==1" value="2">Grade 12</option>
 
-				<div id="editModal" class="modal fade" role="dialog">
-						<div class="modal-dialog">
+																<option ng-if="department==2" value="1">First Year</option>
+																<option ng-if="department==2" value="2">Second Year</option>
+																<option ng-if="department==2" value="3">Third Year</option>
+																<option ng-if="department==2" value="4">Fourth Year</option>
 
-							<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-										<h4 class="modal-title custom-header-color">Edit Student Information</h4>
+
+															</select>
+														</div>
+
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-primary" ng-click="updateStudent()">Submit</button>
+											</div>
+									</div>
+
 								</div>
-									<div class="modal-body">
+						</div><!-- modal closing tag -->
 
-											<p><b>Student ID Number: </b> <input type="textbox" ng-model="studId" name="studId" id="studId">
-											<p><b>Student Last Name: </b> <input type="textbox" ng-model="studLName" name="studLName" id="studLName">
-											<p><b>Student First Name: </b> <input type="textbox" ng-model="studFName" name="studFName" id="studFName">
-											<p><b>Course: </b>
-												<div class="style-select">
-													<select class="form-control" name="program" id="program" ng-model="program" required>
+	</div><!--container col-md-12-->
 
-                                                    <!--
-													<optgroup ng-if="department==1">
-														<option ng-repeat='program in programList' value='{{ program.value }}' ng-selected="program.value == program">
-															{{program.text}}
-														</option>
-													</optgroup>
-
-													<optgroup ng-if="department==2">
-														<option ng-repeat='course in courseList' value='{{ course.value }}'>
-															{{course.text}}
-														</option>
-													</optgroup>
-                                                    -->
-
-
-														<optgroup label="Academic Tracks" ng-if="department==1">
-															<option value="1">Humanities And Social Sciences</option>
-															<option value="2">Accountancy Business And Management</option>
-														</optgroup>
-
-														<optgroup label="Technical Vocational" ng-if="department==1">
-															<option value="3">Computer Programming</option>
-															<option value="4">Animation</option>
-															<option value="5">Fashion Design</option>
-														</optgroup>
-
-														<optgroup label="Arts and Design Track" ng-if="department==1">
-															<option value="6">Multimedia Arts</option>
-														</optgroup>
-
-
-
-														<optgroup label="School of Computing" ng-if="department==2">
-															<option value="1">Software Engineering</option>
-															<option value="2">Game Development</option>
-															<option value="3">Web Development</option>
-														</optgroup>
-
-														<optgroup label="School of Design" ng-if="department==2">
-															<option value="4">Animation</option>
-															<option value="5">Multimedia Arts</option>
-															<option value="6">Fashion Design</option>
-														</optgroup>
-
-														<optgroup label="School of Business" ng-if="department==2">
-															<option value="7">Real Estate Management</option>
-															<option value="8">Business Administration</option>
-														</optgroup>
-
-
-
-													</select>
-												</div>
-
-											<p><b>Level: </b>
-												<div class="style-select">
-													<select class="form-control" name="level" id="level" ng-model="level" required>
-
-                                                        <!--
-														<optgroup ng-if="department==1">
-															<option ng-repeat='grade in gradeList' value='{{ grade.value }}' ng-selected= '{{grade.value == level}}'>
-																{{grade.text}}
-															</option>
-														</optgroup>
-
-														<optgroup ng-if="department==2">
-															<option ng-repeat='year in yearList' value='{{ year.value }}'>
-																{{year.text}}
-															</option>
-														</optgroup>
-                                                        -->
-
-
-														<option ng-if="department==1" value="1">Grade 11</option>
-														<option ng-if="department==1" value="2">Grade 12</option>
-
-														<option ng-if="department==2" value="1">First Year</option>
-														<option ng-if="department==2" value="2">Second Year</option>
-														<option ng-if="department==2" value="3">Third Year</option>
-														<option ng-if="department==2" value="4">Fourth Year</option>
-
-
-													</select>
-												</div>
-
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-primary" ng-click="updateStudent()">Submit</button>
-									</div>
-							</div>
-
-						</div>
-				</div><!-- modal closing tag -->
-
-
-</div>
 
 </body>
