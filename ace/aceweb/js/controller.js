@@ -2704,6 +2704,32 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
+  $scope.controlCheckbox = function ()
+  {
+    $scope.studentList.student_id = [];
+
+    if($scope.mainCheckbox)
+    {
+      for(var counter=0; counter < $scope.students.length; counter++)
+      {
+        $scope.studentList.student_id.push($scope.students[counter].student_id);
+      }
+    }
+  }
+
+
+  $scope.updateMainCheckbox = function ()
+  {
+    if($scope.students.student_id.length == $scope.students.length)
+    {
+      $scope.mainCheckbox = true;
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }
+
   $scope.deleteStudent = function(student_id)
   {
     BootstrapDialog.confirm({
@@ -2839,32 +2865,6 @@ angular.module('aceWeb.controller', [])
     //$scope.showLimit = -4;
   }
 
-
-  $scope.controlCheckbox = function ()
-  {
-    $scope.studentList.student_id = [];
-
-    if($scope.mainCheckbox)
-    {
-      for(var counter=0; counter < $scope.students.length; counter++)
-      {
-        $scope.studentList.student_id.push($scope.students[counter].id);
-      }
-    }
-  }
-
-
-  $scope.updateMainCheckbox = function ()
-  {
-    if($scope.students.id.length == $scope.students.length)
-    {
-      $scope.mainCheckbox = true;
-    }
-    else
-    {
-      $scope.mainCheckbox = false;
-    }
-  }
 
   $scope.updateStudent = function(){
     var studentDetails =

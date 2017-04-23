@@ -34,11 +34,15 @@
 
 						<div class="table-height">
 							<table class="table table-inbox table-hover">
+								<col width="20"> <!-- checkbox -->
+								<col width="50"> <!-- id no -->
+								<col width="100"> <!-- name -->
 								<col width="50">
-								<col width="80">
-								<col width="140">
-								<col width="320">
 								<col width="50">
+								<col width="20">
+								<col width="20">
+
+
 
 								<thead>
 
@@ -60,7 +64,7 @@
 									<tr ng-repeat="student in students | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(student)">
 										<td class="inbox-small-cells">
 												<center>
-													<input type="checkbox" data-checklist-model="studentList.student_id" data-checklist-value="student.student_id" checklist-change="updateMainCheckbox()" noclick>
+													<input type="checkbox" data-checklist-model="studentList.student_id" data-checklist-value="student.student_id" noclick>
 												</center>
 										</td>
 
