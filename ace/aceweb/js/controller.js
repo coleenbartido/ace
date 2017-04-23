@@ -454,6 +454,8 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
+      $scope.isLoading = false;
+
       $rootScope.referralUpdateCount = response.data.referralUpdateCount;
       $rootScope.newMessageCount = response.data.newMessageCount;
     },
@@ -471,8 +473,9 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.isLoading = true;
     $scope.userName = AuthService.getName();
-    $rootScope.getNotif;
+    $rootScope.getNotif();
   }
 
   $scope.initScope();
@@ -717,6 +720,324 @@ angular.module('aceWeb.controller', [])
 // <------------------------------------------------------------------>
 
 
+.controller('ReferralHistoryController', function(config, $scope, $http, $state, $localStorage, AuthService, $interval, $rootScope, $filter)
+{
+  $scope.getReportList = function()
+  {
+    var reportDetails =
+    {
+      'email' : AuthService.getEmail()
+    }
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/referralHistory',
+      data: reportDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      //for checking
+      console.log(response);     
+
+      $scope.reports = JSON.parse(response.data.reportsList);
+
+      if($scope.reports.length > 0)
+      {
+        $scope.SYList = $filter('orderBy')($scope.reports, 'school_year', true);
+        $scope.SYList = $filter('unique')($scope.SYList, 'school_year');
+       
+        if(!$scope.initList || $scope.selectedSY == undefined || $scope.currentSYSize > $scope.SYList.length)
+        {
+          $scope.selectedSY = $scope.SYList[0].school_year;
+        }       
+
+        for(var counter=0; counter < $scope.reports.length; counter++)
+        {
+          //convert string date into javascript date object
+          strDate = $scope.reports[counter].report_date.replace(/-/g,'/');
+          $scope.reports[counter].report_date = new Date(strDate);
+        }
+
+        $scope.currentSYSize = $scope.SYList.length;
+        $scope.subReports = $filter('filter')($scope.reports, {school_year: $scope.selectedSY});
+      }
+      else
+      {
+        $scope.selectedSY = undefined;
+      }
+
+      $scope.totalItems = $scope.reports.length;
+      $scope.isLoading = false;
+      $scope.initList = true;
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
+
+  $scope.initScope = function()
+  {
+    $scope.isLoading = true;
+    $scope.initList = false;
+    $scope.selectedSY = undefined;    
+    $scope.searchBox = undefined;
+    $scope.reportList = {};
+    $scope.reportList.report_id = [];
+    $scope.mainCheckbox = false;
+
+    //for pagination
+    $scope.maxSize = 5;
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 8;
+
+    $scope.getReportList();
+  } //scope initScope
+
+  $scope.initScope();
+
+  $scope.reportPoll = $interval($scope.getReportList, 3000);
+
+  $scope.$on('$destroy',function()
+  {
+    if($scope.reportPoll)
+    {
+      $interval.cancel($scope.reportPoll);
+    }
+  })
+
+  $scope.$watch("reportList.report_id", function()
+  {   
+    $scope.mainCheckbox = false;
+
+    if($scope.reports && $scope.filtered.length == $scope.reportList.report_id.length)
+    {
+      $scope.mainCheckbox = true;  
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
+  $scope.$watch("searchBox", function()
+  {   
+    $scope.reportList.report_id = [];  
+    $scope.mainCheckbox = false;
+
+    if($scope.reports && $scope.filtered.length == $scope.reportList.report_id.length && $scope.filtered.length != 0)
+    {
+      $scope.mainCheckbox = true;      
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
+  $scope.controlCheckbox = function ()
+  {
+    $scope.reportList.report_id = [];
+
+    if($scope.mainCheckbox)
+    {
+      for(var counter=0; counter < $scope.filtered.length; counter++)
+      {
+        $scope.reportList.report_id.push($scope.filtered[counter].report_id);
+      }
+    }
+  }
+
+  $scope.updateSYList = function ()
+  {
+    $scope.reportList.report_id = [];
+    $scope.mainCheckbox = false;
+    $scope.subReports = $filter('filter')($scope.reports, {school_year: $scope.selectedSY});
+    $scope.subReports = $filter('filter')($scope.subReports, $scope.searchBox);
+  }
+
+  $scope.disableActionBtn = function ()
+  {
+    if($scope.reportList.report_id == undefined || $scope.reportList.report_id.length == 0)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  $scope.selectAllRead = function ()
+  {
+    $scope.reportList.report_id = [];
+
+    for(var counter=0; counter < $scope.filtered.length; counter++)
+    {
+      if($scope.filtered[counter].is_updated == 0)
+      {
+        $scope.reportList.report_id.push($scope.filtered[counter].report_id);
+      }
+    }
+  }
+
+  $scope.selectAllUnread = function ()
+  {
+    $scope.reportList.report_id = [];
+
+    for(var counter=0; counter < $scope.filtered.length; counter++)
+    {
+      if($scope.filtered[counter].is_updated == 1)
+      {
+        $scope.reportList.report_id.push($scope.filtered[counter].report_id);
+      }
+    }
+  }
+
+  $scope.markAsRead = function()
+  {
+    var reportDetails =
+    {
+      'reportList' : $scope.reportList,
+      'email': AuthService.getEmail()
+    };
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/markReport',
+      data: reportDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+
+    .then(function(response)
+    {
+      console.log(response);
+
+      $scope.getReportList();
+    },
+    function(response)
+    {
+      console.log(response);
+      //for checking
+    })
+    .finally(function()
+    {
+      $scope.reportList.report_id = [];
+      $scope.mainCheckbox = false;
+    });
+  }
+
+  $scope.markAsUnread = function()
+  {
+    var reportDetails =
+    {
+      'reportList' : $scope.reportList,
+      'email': AuthService.getEmail()
+    }
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/markReportAsUnread',
+      data: reportDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      //for checking
+      console.log(response);
+
+      $scope.getReportList();
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+      $scope.reportList.report_id = [];
+      $scope.mainCheckbox = false;
+    });
+  }
+
+  $scope.readReport = function(report)
+  {
+    var reportDetails =
+    {
+      'reportId' : $scope.selectedReport.report_id,
+      'isRead': $scope.selectedReport.is_read,
+      'email' : $scope.selectedReport.email
+    }
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/readReport',
+      data: reportDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      //for checking
+      console.log(response);
+
+      $scope.getReportList();
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
+
+  $scope.viewReport = function(report)
+  {
+    $scope.selectedReport = report;
+    $scope.reasonList = report.report_reasons;
+    $scope.readReport();
+
+    if(report.counselor_note == null)
+    {
+      report.counselor_note_view = "N/A";
+    }
+    else
+    {
+      report.counselor_note_view = report.counselor_note;
+    }
+
+    if(report.referral_comment == null)
+    {
+      report.referral_comment_view = "N/A";
+    }
+    else
+    {
+      report.referral_comment_view = report.referral_comment;
+    }
+  }
+
+  $scope.showCustomModal = function(modalTitle, modalMsg)
+  {
+    BootstrapDialog.alert({
+      title: modalTitle,
+      message: modalMsg,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false
+    });
+  }
+}) //closing tag controller
+
+
+// <-------------------------------------------------------------------------------->
+
+
 .controller('MessagesController', function(config, $scope, $http, $state, $filter, $localStorage, AuthService, $interval, $filter, $rootScope)
 {
 
@@ -799,6 +1120,35 @@ angular.module('aceWeb.controller', [])
     }
   })
 
+  $scope.$watch("markMessageList.report_id", function()
+  {   
+    $scope.mainCheckbox = false;
+
+    if($scope.messages && $scope.filtered.length == $scope.markMessageList.report_id.length)
+    {
+      $scope.mainCheckbox = true;  
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
+  $scope.$watch("searchBox", function()
+  {   
+    $scope.markMessageList.report_id = [];
+    $scope.mainCheckbox = false;
+
+    if($scope.messages && $scope.filtered.length == $scope.markMessageList.report_id.length && $scope.filtered.length != 0)
+    {
+      $scope.mainCheckbox = true;      
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
   $scope.disableActionBtn = function ()
   {
     if($scope.markMessageList.report_id == undefined || $scope.markMessageList.report_id.length == 0)
@@ -814,22 +1164,10 @@ angular.module('aceWeb.controller', [])
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < $scope.uniqueMessages.length; counter++)
+      for(var counter=0; counter < $scope.filtered.length; counter++)
       {
-        $scope.markMessageList.report_id.push($scope.uniqueMessages[counter].report_id);
+        $scope.markMessageList.report_id.push($scope.filtered[counter].report_id);
       }
-    }
-  }
-
-  $scope.updateMainCheckbox = function ()
-  {
-    if($scope.markMessageList.report_id.length == $scope.uniqueMessages.length)
-    {
-      $scope.mainCheckbox = true;
-    }
-    else
-    {
-      $scope.mainCheckbox = false;
     }
   }
 
@@ -837,11 +1175,11 @@ angular.module('aceWeb.controller', [])
   {
     $scope.markMessageList.report_id = [];
 
-    for(var counter=0; counter < $scope.uniqueMessages.length; counter++)
+    for(var counter=0; counter < $scope.filtered.length; counter++)
     {
-      if($scope.uniqueMessages[counter].is_read == 1)
+      if($scope.filtered[counter].is_read == 1)
       {
-        $scope.markMessageList.report_id.push($scope.uniqueMessages[counter].report_id);
+        $scope.markMessageList.report_id.push($scope.filtered[counter].report_id);
       }
     }
   }
@@ -850,11 +1188,11 @@ angular.module('aceWeb.controller', [])
   {
     $scope.markMessageList.report_id = [];
 
-    for(var counter=0; counter < $scope.uniqueMessages.length; counter++)
+    for(var counter=0; counter < $scope.filtered.length; counter++)
     {
-      if($scope.uniqueMessages[counter].is_read == 0)
+      if($scope.filtered[counter].is_read == 0)
       {
-        $scope.markMessageList.report_id.push($scope.uniqueMessages[counter].report_id);
+        $scope.markMessageList.report_id.push($scope.filtered[counter].report_id);
       }
     }
   }
@@ -1099,6 +1437,8 @@ angular.module('aceWeb.controller', [])
     $scope.composeEmail = undefined;
     $scope.scrollOnTop = false;
     $scope.showLimit = -4;
+
+    $scope.readMessage();
   }
 
   $('#myModal').on('shown.bs.modal', function ()
@@ -1110,11 +1450,6 @@ angular.module('aceWeb.controller', [])
   $('#myModal').on('hide.bs.modal', function ()
   {
     $('#scrollableDiv').scrollTop($('#scrollableDiv')[0].scrollHeight);
-  })
-
-  $('#customTextArea').focus(function()
-  {
-    $scope.readMessage();
   })
 
   $scope.incrementShowLimit = function()
@@ -1473,6 +1808,8 @@ angular.module('aceWeb.controller', [])
       //for checking
       console.log(response);
 
+      $scope.isLoading = false;
+
       $rootScope.uncounseledReportCount = response.data.uncounseledReportCount;
       $rootScope.newMessageCount = response.data.newMessageCount;
     },
@@ -1490,6 +1827,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.isLoading = true;
     $scope.userName = AuthService.getName();
     $rootScope.getNotif();
   }
@@ -1546,9 +1884,6 @@ angular.module('aceWeb.controller', [])
           //convert string date into javascript date object
           strDate = $scope.reports[counter].report_date.replace(/-/g,'/');
           $scope.reports[counter].report_date = new Date(strDate);
-
-          $scope.reports[counter].faculty_fullname = $scope.reports[counter].faculty_fname + " " + $scope.reports[counter].faculty_lname;
-          $scope.reports[counter].student_fullname = $scope.reports[counter].student_fname + " " + $scope.reports[counter].student_lname;
         }
 
         $scope.currentSYSize = $scope.SYList.length;
@@ -1577,6 +1912,7 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope = function()
   {
+    $scope.sendBtn = "Send";
     $scope.isLoading = true;
     $scope.initList = false;
     $scope.selectedSY = undefined;    
@@ -1608,9 +1944,11 @@ angular.module('aceWeb.controller', [])
 
   $scope.$watch("reportList.report_id", function()
   {   
-    if($scope.reports)
+    $scope.mainCheckbox = false;
+
+    if($scope.reports && $scope.filtered.length == $scope.reportList.report_id.length)
     {
-      $scope.mainCheckbox = $scope.reportList.report_id.length == $scope.subReports.length;  
+      $scope.mainCheckbox = true;  
     }
     else
     {
@@ -1618,10 +1956,40 @@ angular.module('aceWeb.controller', [])
     }
   }, true);
 
+  $scope.$watch("searchBox", function()
+  {   
+    $scope.reportList.report_id = [];  
+    $scope.mainCheckbox = false;
+
+    if($scope.reports && $scope.filtered.length == $scope.reportList.report_id.length && $scope.filtered.length != 0)
+    {
+      $scope.mainCheckbox = true;      
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
+  $scope.controlCheckbox = function ()
+  {
+    $scope.reportList.report_id = [];
+
+    if($scope.mainCheckbox)
+    {
+      for(var counter=0; counter < $scope.filtered.length; counter++)
+      {
+        $scope.reportList.report_id.push($scope.filtered[counter].report_id);
+      }
+    }
+  }
+
   $scope.updateSYList = function ()
   {
     $scope.reportList.report_id = [];
     $scope.mainCheckbox = false;
+    $scope.subReports = $filter('filter')($scope.reports, {school_year: $scope.selectedSY});
+    $scope.subReports = $filter('filter')($scope.subReports, $scope.searchBox);
   }
 
   $scope.disableActionBtn = function ()
@@ -1633,28 +2001,15 @@ angular.module('aceWeb.controller', [])
     return false;
   }
 
-  $scope.controlCheckbox = function ()
-  {
-    $scope.reportList.report_id = [];
-
-    if($scope.mainCheckbox)
-    {
-      for(var counter=0; counter < $scope.subReports.length; counter++)
-      {
-        $scope.reportList.report_id.push($scope.subReports[counter].report_id);
-      }
-    }
-  }
-
   $scope.selectAllRead = function ()
   {
     $scope.reportList.report_id = [];
 
-    for(var counter=0; counter < $scope.subReports.length; counter++)
+    for(var counter=0; counter < $scope.filtered.length; counter++)
     {
-      if($scope.subReports[counter].is_read == 1)
+      if($scope.filtered[counter].is_updated == 0)
       {
-        $scope.reportList.report_id.push($scope.subReports[counter].report_id);
+        $scope.reportList.report_id.push($scope.filtered[counter].report_id);
       }
     }
   }
@@ -1663,11 +2018,11 @@ angular.module('aceWeb.controller', [])
   {
     $scope.reportList.report_id = [];
 
-    for(var counter=0; counter < $scope.subReports.length; counter++)
+    for(var counter=0; counter < $scope.filtered.length; counter++)
     {
-      if($scope.subReports[counter].is_read == 0)
+      if($scope.filtered[counter].is_updated == 1)
       {
-        $scope.reportList.report_id.push($scope.subReports[counter].report_id);
+        $scope.reportList.report_id.push($scope.filtered[counter].report_id);
       }
     }
   }
@@ -1711,7 +2066,7 @@ angular.module('aceWeb.controller', [])
     if(form.$valid)
     {
       $scope.sendBtn = "Sending";
-      $scope.disableSendBtn = true;
+      $scope.isSending = true;
 
       var messageDetails =
       {
@@ -1744,7 +2099,7 @@ angular.module('aceWeb.controller', [])
       {
         $('#messageModal').modal('hide');
         $scope.sendBtn = "Send";
-        $scope.disableSendBtn = false;
+        $scope.isSending = false;
       });
     }
   }
@@ -2618,8 +2973,6 @@ angular.module('aceWeb.controller', [])
 
   $scope.initScope();
 
-
-
   $scope.showRegFacultyModal = function()
   {
     $scope.createBtn = "Create Account";
@@ -2796,28 +3149,45 @@ angular.module('aceWeb.controller', [])
     });
   }
 
+  $scope.$watch("facultyList.email", function()
+  {   
+    $scope.mainCheckbox = false;
+
+    if($scope.facultyAccounts && $scope.filtered.length == $scope.facultyList.email.length)
+    {
+      $scope.mainCheckbox = true;  
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
+  $scope.$watch("searchBox", function()
+  {   
+    $scope.facultyList.email = [];  
+    $scope.mainCheckbox = false;
+
+    if($scope.facultyAccounts && $scope.filtered.length == $scope.facultyList.email.length && $scope.filtered.length != 0)
+    {
+      $scope.mainCheckbox = true;      
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
   $scope.controlCheckbox = function ()
   {
     $scope.facultyList.email = [];
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < $scope.facultyAccounts.length; counter++)
+      for(var counter=0; counter < $scope.filtered.length; counter++)
       {
-        $scope.facultyList.email.push($scope.facultyAccounts[counter].email);
+        $scope.facultyList.email.push($scope.filtered[counter].email);
       }
-    }
-  }
-
-  $scope.updateMainCheckbox = function ()
-  {
-    if($scope.facultyList.email.length == $scope.facultyAccounts.length)
-    {
-      $scope.mainCheckbox = true;
-    }
-    else
-    {
-      $scope.mainCheckbox = false;
     }
   }
 
@@ -3429,28 +3799,45 @@ angular.module('aceWeb.controller', [])
     });
   }
 
+  $scope.$watch("adminList.email", function()
+  {   
+    $scope.mainCheckbox = false;
+
+    if($scope.adminAccounts && $scope.filtered.length == $scope.adminList.email.length)
+    {
+      $scope.mainCheckbox = true;  
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
+  $scope.$watch("searchBox", function()
+  {   
+    $scope.adminList.email = []; 
+    $scope.mainCheckbox = false;
+
+    if($scope.adminAccounts && $scope.filtered.length == $scope.adminList.email.length && $scope.filtered.length != 0)
+    {
+      $scope.mainCheckbox = true;      
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
   $scope.controlCheckbox = function ()
   {
     $scope.adminList.email = [];
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < $scope.adminAccounts.length; counter++)
+      for(var counter=0; counter < $scope.filtered.length; counter++)
       {
-        $scope.adminList.email.push($scope.adminAccounts[counter].email);
+        $scope.adminList.email.push($scope.filtered[counter].email);
       }
-    }
-  }
-
-  $scope.updateMainCheckbox = function ()
-  {
-    if($scope.adminList.email.length == $scope.adminAccounts.length)
-    {
-      $scope.mainCheckbox = true;
-    }
-    else
-    {
-      $scope.mainCheckbox = false;
     }
   }
 

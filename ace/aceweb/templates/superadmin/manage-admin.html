@@ -7,7 +7,7 @@
 <body>
 
 <div ng-show="!isLoading">
-
+	
 	<div class="banner">
 		<div class="button-container col-md-12">
 						<div class="searchBar pull-right">
@@ -56,7 +56,7 @@
 
 									<tr class="listAdmin" ng-repeat="admin in adminAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" ng-click="showPopup(message)">
 											<td>
-												<center><input type="checkbox" data-checklist-model="adminList.email" data-checklist-value="admin.email" checklist-change="updateMainCheckbox()" noclick></center>
+												<center><input type="checkbox" data-checklist-model="adminList.email" data-checklist-value="admin.email" noclick></center>
 											</td>
 
 											<td>
@@ -86,7 +86,7 @@
 											</td>
 							    	</tr>
 
-							    	<tr ng-show="(adminAccounts | filter:searchBox).length == 0">
+							    	<tr ng-show="(filtered = (adminAccounts | filter:searchBox)).length == 0">
 										<td colspan="7"><center>NO RESULT</center></td>
 									</tr>
 
@@ -95,7 +95,7 @@
 
 							<center>
 								<div class="custom-pagination">							
-									<ul class="custom-inner-pagination" uib-pagination total-items="(adminAccounts | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>		
+									<ul class="custom-inner-pagination" uib-pagination total-items="(filtered = (adminAccounts | filter:searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>		
 								</div>
 							</center>
 

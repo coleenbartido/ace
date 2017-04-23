@@ -717,6 +717,7 @@ class DbOperation
       return $arrResult;
     }
 
+
     public function updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level)
     {
         $stmt = $this->con->prepare("UPDATE student SET student_id=?, last_name=?, first_name=? WHERE student_id=?");
@@ -753,6 +754,7 @@ class DbOperation
         return $arrResult;
     }
 
+
     public function listCollegeStudent($status)
     {
       $stmt = $this->con->prepare("SELECT * FROM college_view WHERE status=?");
@@ -768,6 +770,7 @@ class DbOperation
 
       return $arrResult;
     }
+
 
     public function updateCollegeStudent($studentId, $originalId,  $lastName, $firstName, $program, $level)
     {
@@ -786,6 +789,35 @@ class DbOperation
           return true;
       }
       return false;
+    }
+
+
+    public function getFacultyReferral($email)
+    {
+        $stmt = $this->con->prepare("SELECT report_id, email, student_id, report_status_id, report_status, report_date, subject_name, term, school_year, referral_comment, program, level, student_fname, student_lname FROM shs_report WHERE email=? UNION SELECT report_id, email, student_id, report_status_id, report_status, report_date, subject_name, term, school_year, referral_comment, program, level, student_fname, student_lname FROM college_report WHERE email=?");
+        $stmt->bind_param("ss", $email, $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $arrResult = array();
+        while ($myrow = $result->fetch_assoc())
+        {
+            $arrResult[] = $myrow;
+        }
+        $stmt->close();
+
+        return $arrResult;
+    }
+
+    
+    public function getUpdateStatus($reportId)
+    {
+        $stmt = $this->con->prepare("SELECT is_updated FROM report WHERE report_id=?");
+        $stmt->bind_param("s", $reportId);
+        $stmt->execute();
+        $accountRole = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $accountRole['is_updated'];
     }
 
 
@@ -830,6 +862,7 @@ class DbOperation
         return false;
     }
 
+
     public function markReportAsUnread($isRead, $reportId)
     {
         $stmt = $this->con->prepare("UPDATE report SET is_read=? WHERE report_id=?");
@@ -843,7 +876,6 @@ class DbOperation
         }
         return false;
     }
-
 
 
     public function getSYList($department, $status)

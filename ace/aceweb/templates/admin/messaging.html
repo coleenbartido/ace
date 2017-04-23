@@ -91,7 +91,7 @@
                             <tr class="messages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
                                 <td class="inbox-small-cells">
                                     <center>
-                                      <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" checklist-change="updateMainCheckbox()" noclick>
+                                      <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" noclick>
                                     </center>
                                 </td>
 
@@ -113,7 +113,7 @@
                                   </center>
                                 </td>
                             </tr>
-                            <tr class="noShow" ng-show="(uniqueMessages | filter:searchBox).length == 0">
+                            <tr class="noShow" ng-show="(filtered = (uniqueMessages | filter: searchBox)).length == 0">
                               <td colspan="5"><center>NO RESULT</center></td>
                             </tr>
                           </tbody>
@@ -121,7 +121,7 @@
                         </table>
 
                         <div class="page pull-right custom-pagination" ng-show="(uniqueMessages | filter:searchBox).length > 0">
-                          <ul uib-pagination total-items="(uniqueMessages | filter: searchBox).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+                          <ul uib-pagination total-items="(filtered = (uniqueMessages | filter: searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
                         </div>
 
                       </div>

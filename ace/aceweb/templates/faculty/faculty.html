@@ -6,7 +6,7 @@
 
     <body>
 
-        <div class="template-container" ng-show="referralUpdateCount!=null && newMessageCount!=null">
+        <div class="template-container" ng-show="!isLoading">
             <div class="row nav-bar">
                 <div class="col-md-12 nav-bar-col no-side-padding">
 
@@ -41,7 +41,13 @@
                         <li>
                             <a ui-sref="faculty.referralForm" class="referralTab">
                                 <i class="fa fa-pencil-square-o"></i>
-                                <span class="nav-text">Referral Form<span class="badge" ng-show="referralUpdateCount">{{referralUpdateCount}}</span></span>
+                                <span class="nav-text">Referral Form</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a ui-sref="faculty.referralHistory" class="historyTab">
+                                <i class="fa fa-envelope"></i>
+                                <span class="nav-text">Referral History<span class="badge" ng-show="referralUpdateCount">{{referralUpdateCount}}</span></span>
                             </a>
                         </li>
                         <li>
@@ -64,5 +70,20 @@
 
             </div>
         </div>
+
+        <div class="sk-fading-circle" ng-hide="!isLoading">
+            <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
+        </div> <!-- spinner -->
 
     </body>

@@ -72,7 +72,7 @@
 					</tr>
 				</thead>
 				<tbody>		
-						<tr ng-repeat="report in (filteredReports = (reports | filter: searchBox | filter: selectedSY | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage))" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_read == 1 ? 'info' : 'success'">
+						<tr ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_read == 1 ? 'info' : 'success'">
 							<td>
 								<center><input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick></center>
 							</td>
@@ -103,7 +103,7 @@
 							</td>
 						</tr>
 
-						<tr ng-show="(reports | filter: searchBox).length == 0">
+						<tr ng-show="(filtered = (subReports | filter: searchBox)).length == 0">
 							<td colspan="8"><center>NO RESULT</center></td>
 						</tr>
 
@@ -111,7 +111,7 @@
 		</table>
 
 		<div>
-			<ul uib-pagination total-items="(filteredReports = (reports | filter: searchBox | filter: selectedSY)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+			<ul uib-pagination total-items="(filtered = (subReports | filter: searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
 		</div>
 
 	</div>
@@ -159,13 +159,13 @@
 									    <div class="form-group">
 									        <label  class="col-md-12 control-label" for="composeEmail">Message</label>
 									        <div class="col-md-12">										
-												<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}" placeholder="Write a message..." maxlength="500" ng-trim="false" required></textarea>
+												<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}" ng-readonly="isSending" placeholder="Write a message..." maxlength="500" ng-trim="false" required></textarea>
 												<p class="pull-right">{{composeEmail.length}}/500</p>
 									        </div>
 									    </div>
 																		
 										<div class="modalBtn">
-									        <button type="submit" class="btn btn-primary" ng-disabled="disableSendBtn">{{sendBtn}}</button>
+									        <button type="submit" class="btn btn-primary" ng-disabled="isSending">{{sendBtn}}</button>
 									    </div>
 
 									</form>

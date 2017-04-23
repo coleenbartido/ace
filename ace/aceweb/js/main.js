@@ -66,11 +66,20 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
 
     .state('faculty.referralForm',
     {
-      url: '/referralform',
+      url: '/referral/form',
       templateUrl: 'templates/faculty/referral-form.html',
       loginRequired: true,
       accessLevel: 3,
       controller: 'ReferralFormController'
+    })
+
+    .state('faculty.referralHistory',
+    {
+      url: '/referral/history',
+      templateUrl: 'templates/faculty/referral-history.html',
+      loginRequired: true,
+      accessLevel: 3,
+      controller: 'ReferralHistoryController'
     })
 
     .state('faculty.messaging',

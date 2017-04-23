@@ -477,9 +477,9 @@
 
     $db = new DbOperation();
 
-    $status = 1;
     $email = $reportDetails->email;    
     $department = $db->getDepartment($email);
+    $status = 1;
 
     if($department == 1)
     {
@@ -492,6 +492,40 @@
 
     for($counter=0; $counter<count($reportsList); $counter++)
     {
+      $reportsList[$counter]['faculty_fullname'] = $reportsList[$counter]['faculty_fname'] . " " . $reportsList[$counter]['faculty_lname'];
+      $reportsList[$counter]['student_fullname'] = $reportsList[$counter]['student_fname'] . " " . $reportsList[$counter]['student_lname'];
+      
+      $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
+
+      for($ctr=0; $ctr<count($reasonArr); $ctr++)
+      {
+        $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
+      }
+    }
+
+    $responseBody = array('reportsList' => json_encode($reportsList));
+    $response = setResponse($response, 200, $responseBody);
+   
+    return $response;
+  });
+
+
+
+  $app->post('/referralHistory', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $reportDetails = json_decode(file_get_contents("php://input"));
+
+    $db = new DbOperation();
+
+    $email = $reportDetails->email;    
+
+    $reportsList = $db->getFacultyReferral($email);
+
+    for($counter=0; $counter<count($reportsList); $counter++)
+    {
+      $reportsList[$counter]['student_fullname'] = $reportsList[$counter]['student_fname'] . " " . $reportsList[$counter]['student_lname'];
+      $reportsList[$counter]['is_updated'] = $db->getUpdateStatus($reportsList[$counter]['report_id']);
+
       $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
 
       for($ctr=0; $ctr<count($reasonArr); $ctr++)
@@ -886,7 +920,7 @@
       }
       else
       {
-        $messageList[$counter]['sender_fullName'] = $messageList[$counter]['sender_fname'] + " " + $messageList[$counter]['sender_lname'];
+        $messageList[$counter]['sender_fullName'] = $messageList[$counter]['sender_fname'] . " " . $messageList[$counter]['sender_lname'];
       }
 
       if($messageList[$counter]['message_subject'] == null)
@@ -1023,7 +1057,6 @@
 
     if($isRead == 0)
     {
-
       $subject = "ACE Submitted Report Status";
       $link = $_ENV['DOMAIN']->CLIENT_URL;
       $body =
@@ -1108,7 +1141,7 @@
       $link = $_ENV['DOMAIN']->CLIENT_URL;
       $body =
 
-        "Greetings, <br><br>" . $first_name . " " . $last_name . " sent you a message regarding the referral that you have submitted!
+        "Greetings, <br><br>" . $first_name . " " . $last_name . " sent you a message regarding the referral that have been submitted!
         <br><br>To view the message, login <a href=" . $link . ">here</a>.
         <br><br><br>Thank you.";
 
