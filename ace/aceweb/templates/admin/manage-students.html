@@ -7,7 +7,113 @@
 
 <body>
 
+	<div class="container col-md-12">
+		<div class="student-box col-md-12">
+
+				<aside class="lg-side">
+					<div class="list-body">
+						<div class="student-option">
+							<div class="head">
+								<div class="chk-all">
+									 <input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
+								</div>
+
+								<div class="btn-group">
+										<button class="btn btn-default refresh" ng-disabled="disableActionBtn()" ng-click="deleteStudentList()">
+												<i class=" fa fa-trash-o"></i>
+												Delete
+										</button>
+								</div>
+
+								<div class="pull-right">
+									 <input type="text" class="sr-input" ng-model="searchBox" placeholder="Search">
+								</div>
+
+							</div> <!-- head -->
+						</div> <!-- mail option -->
+
+						<div class="table-height">
+							<table class="table table-inbox table-hover">
+								<col width="50">
+								<col width="80">
+								<col width="140">
+								<col width="320">
+								<col width="50">
+
+								<thead>
+
+									<tr class="title">
+
+										<td></td>
+										<td>ID NO.</td>
+										<td>NAME</td>
+										<td>COURSE</td>
+										<td>LEVEL</td>
+										<td>REPORT COUNT</td>
+										<td><center>ACTIONS</center></td>
+
+
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr ng-repeat="student in students | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(student)">
+										<td class="inbox-small-cells">
+												<center>
+													<input type="checkbox" data-checklist-model="studentList.student_id" data-checklist-value="student.student_id" checklist-change="updateMainCheckbox()" noclick>
+												</center>
+										</td>
+
+										<td class="view-message">
+											{{student.student_id}}
+										</td>
+
+										<td>
+											{{student.student_name }}
+										</td>
+
+			              <td>
+											{{student.program}}
+										</td>
+
+										<td>
+											{{student.level}}
+										</td>
+
+										<td>
+											{{student.report_count}}
+										</td>
+
+										<td>
+											<center>
+											<button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" ng-click="deleteStudent(student)" no-click><span class="fa fa-trash"></span></button>
+											</center>
+										</td>
+
+									</tr>
+									<tr class="noShow" ng-show="students.length ==0">
+										<td colspan="5"><center>NO RESULT</center></td>
+									</tr>
+								</tbody>
+
+							</table>
+						</div> <!-- table-height -->
+
+
+					</div>
+				</aside>
+		</div>
+
+
+	</div>
+
+
+<!-- ------------------------------->
+
 <div>
+
+
+
 
 	<div class="input-group">
 
@@ -27,24 +133,8 @@
 		</form>
 
 
-		</div>
-
-    <!-- APRIL -->
-		<!--
-		<div class="dropdown">
-
-		  	<button class="btn btn-default dropdown-toggle" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-		    	Action
-		    	<span class="caret"></span>
-		  	</button>
-
-		  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-					<li><a href="javascript:void(0)" ng-click="deleteStudentList()">Delete</a></li>
-		  	</ul>
 
 		</div>
-		-->
 
 		<button class="btn btn-default" type="button" ng-disabled="disableActionBtn()" ng-click="deleteStudentList()">
 			Delete

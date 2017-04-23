@@ -78,7 +78,7 @@
 
                               <td>FROM</td>
 
-                              <td>SUBJECT</td>                             
+                              <td>SUBJECT</td>
 
                               <td><center>ACTION</center></td>
 
@@ -105,7 +105,7 @@
 
                                 <td class="view-message">
                                   {{ message.message_subject }}
-                                </td>                             
+                                </td>
 
                                 <td>
                                   <center>
@@ -165,61 +165,70 @@
     </div>
 
     <div id="broadcastModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+    <div class="modal-dialog">
 
-          <div class="modal-content">
+      <div class="modal-content">
 
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-                <h4 class="modal-title custom-header-color">Broadcast Email to All Faculty</h4>
-              </div>
-
-              <div class="modal-body">
-
-                <!--
-                <div id="scrollableDiv" scroll-glue load-more-data>
-
-                  <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
-                      <br ng-show="$first">
-                        <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
-                      <br>
-                      <br>
-                      <p ng-bind-html="message.message_body|newline2br"></p>
-                      <hr ng-hide="$last">
-                      <br ng-show="$last">
-                  </div>
-
-                </div>
-                -->
-
-                <div class="form-group">
-                  <label  class="col-md-12 control-label" for="subject">Subject</label>
-
-                  <div class="col-md-12">
-                        <input type="textbox" placeholder="Subject" name="broadcastSubj" ng-model="broadcastSubj"  maxlength="20">
-                        <!--
-                        <textarea id="customTextArea" rows="1" name="subject" ng-model="subject" ng-model-options="{allowInvalid: true}" placeholder="Subject" maxlength="20" ng-trim="false"></textarea>
-                        -->
-                  </div>
-
-
-                  <label  class="col-md-12 control-label" for="composeEmail">Message</label>
-
-                  <div class="col-md-12" newline2br>
-                      <textarea id="customTextArea" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}" placeholder="Write a message..." maxlength="500" ng-trim="false" required></textarea>
-                      <p class="pull-right">{{composeEmail.length}}/500</p>
-                  </div>
-
-                </div>
-              </div>
-
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="broadcastEmail()">Reply</button>
-              </div>
-
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+            <h4 class="modal-title custom-header-color">Broadcast Email to All Faculty</h4>
           </div>
-        </div>
+
+          <div class="modal-body">
+
+            <!--
+            <div id="scrollableDiv" scroll-glue load-more-data>
+
+              <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
+                  <br ng-show="$first">
+                    <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
+                  <br>
+                  <br>
+                  <p ng-bind-html="message.message_body|newline2br"></p>
+                  <hr ng-hide="$last">
+                  <br ng-show="$last">
+              </div>
+
+            </div>
+            -->
+
+            <div class="form-group">
+
+              <label  class="col-md-12 control-label" for="receiver">To</label>
+              <div class="col-md-12">
+                <input type="text" class="form-control" id="receiver" name="receiver" value="All Faculty" readonly required/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label  class="col-md-12 control-label" for="subject">Subject</label>
+              <div class="col-md-12">
+                    <input type="textbox" class="form-control" id="subject" name="subject" placeholder="Subject"
+                    ng-model="subject"  maxlength="20" ng-readonly="isSending">
+                    <!--
+                    <textarea id="customTextArea" rows="1" name="subject" ng-model="subject" ng-model-options="{allowInvalid: true}" placeholder="Subject" maxlength="20" ng-trim="false"></textarea>
+                    -->
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label  class="col-md-12 control-label" for="composeEmail">Message</label>
+              <div class="col-md-12" newline2br>
+                  <textarea class="form-control" id="customTextArea" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}"
+                            placeholder="Write a message..." maxlength="500" ng-trim="false" ng-readonly="isSending" required></textarea>
+                  <p class="pull-right">{{composeEmail.length}}/500</p>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-disabled="disableSendBtn" ng-click="broadcastEmail()"> {{ sendBtn }}</button>
+          </div>
+
+      </div>
     </div>
+</div> <!-- broadcast modal--->
 
 </div>
 
