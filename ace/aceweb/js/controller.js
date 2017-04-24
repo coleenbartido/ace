@@ -2671,7 +2671,7 @@ angular.module('aceWeb')
 {
   $scope.getStudentList = function()
   {
-    var adminDetails =
+    var adminDetails = 
     {
       'email' : AuthService.getEmail()
     }
@@ -2782,7 +2782,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete this student?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons:
+      buttons: 
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -2845,7 +2845,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete selected student/s?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons:
+      buttons: 
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -2918,50 +2918,53 @@ angular.module('aceWeb')
     $scope.level = student.level_id + "";
   }
 
-  $scope.updateStudent = function()
+  $scope.updateStudent = function(form)
   {
-    $scope.updateBtn = "Updating";
-    $scope.disableUpdateBtn = true;
-
-    var studentDetails =
+    if(form.$valid)
     {
-      'email' : AuthService.getEmail(),
-      'originalId': $scope.originalId,
-      'studentId' : $scope.studId,
-      'lastName' : $scope.studLName,
-      'firstName' : $scope.studFName,
-      'program' : $scope.program,
-      'level' : $scope.level
-    };
+      $scope.updateBtn = "Updating";
+      $scope.disableUpdateBtn = true;
 
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/updateStudent',
-      data: studentDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function(response)
-    {
-      //for checking
-      console.log(response);
+      var studentDetails =
+      {
+        'email' : AuthService.getEmail(),
+        'originalId': $scope.originalId,
+        'studentId' : $scope.studId,
+        'lastName' : $scope.studLName,
+        'firstName' : $scope.studFName,
+        'program' : $scope.program,
+        'level' : $scope.level
+      };
 
-      $scope.getStudentList();
-      $('#editModal').modal('hide');
-      $scope.showCustomModal("SUCCESS", response.data.successMsg);
-    },
-    function(response)
-    {
-      //for checking
-      console.log(response);
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/updateStudent',
+        data: studentDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
 
-      $('#editModal').modal('hide');
-      $scope.showCustomModal("ERROR", response.data.errorMsg);
-    })
-    .finally(function()
-    {
-      $scope.updateBtn = "Update";
-      $scope.disableUpdateBtn = false;
-    });
+        $scope.getStudentList();
+        $('#editModal').modal('hide');
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $('#editModal').modal('hide');
+        $scope.showCustomModal("ERROR", response.data.errorMsg);
+      })
+      .finally(function()
+      {
+        $scope.updateBtn = "Update";
+        $scope.disableUpdateBtn = false;
+      });
+    }   
   }
 
   $scope.showCustomModal = function(modalTitle, modalMsg)

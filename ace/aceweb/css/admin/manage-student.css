@@ -547,3 +547,40 @@ ul {
     bottom: 0px;
     right: 20px;
 }
+
+
+/*-----for modal-------*/
+
+
+#editModal .modal-dialog {
+  width:450px;
+}
+
+.modal-body .form-horizontal .control-label {
+  text-align: left;
+  padding-bottom: 7px;
+}
+
+.custom-form {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.updateBtn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: right;
+}
+
+.invalid-text {
+  margin-top: -10px;
+  color: #f00;
+}
+
+form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
+  border:1px solid #f00;
+}
+
+.custom-modal-header {
+  font-size: 18px;
+}

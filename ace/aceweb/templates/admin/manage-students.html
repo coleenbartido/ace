@@ -104,7 +104,6 @@
 
 		<!-- MODALS -->
 					
-
 		<div id="editModal" class="modal fade" role="dialog">
 			<div class="modal-dialog">
 
@@ -112,79 +111,124 @@
 
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-						<h4 class="modal-title custom-header-color">Edit Student Information</h4>
+						<p class="modal-title custom-header-color custom-modal-header">Edit Student Information</p>
 					</div>
 
 					<div class="modal-body">
 
-						<p><b>Student ID Number: </b> <input type="textbox" ng-model="studId" name="studId" id="studId">
-						<p><b>Student Last Name: </b> <input type="textbox" ng-model="studLName" name="studLName" id="studLName">
-						<p><b>Student First Name: </b> <input type="textbox" ng-model="studFName" name="studFName" id="studFName">
-						<p><b>Course: </b>
-						<div class="style-select">
-							<select class="form-control" name="program" id="program" ng-model="program" required>
+						<form name="updateStudentForm" class="form-horizontal custom-form" role="form" ng-submit="updateStudent(updateStudentForm)" novalidate>
 
-								<optgroup label="Academic Tracks" ng-if="department==1">
-									<option value="1">Humanities And Social Sciences</option>
-									<option value="2">Accountancy Business And Management</option>
-								</optgroup>
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="studId">Student ID</label>
+				              <div class="col-md-12">
+				                <input type="text" class="form-control" id="studId" name="studId" ng-model="studId" pattern="[0-9]{4}\-[0-9]{5}" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="updateStudentForm.studId.$error" ng-show="updateStudentForm.$submitted">
+				              <p class="invalid-text" ng-message="pattern">Must follow this format (1234-56789)</p>
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
 
-								<optgroup label="Technical Vocational" ng-if="department==1">
-									<option value="3">Computer Programming</option>
-									<option value="4">Animation</option>
-									<option value="5">Fashion Design</option>
-								</optgroup>
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="studLName">Last Name</label>
+				              <div class="col-md-12">
+				                <input type="text" class="form-control" id="studLName" name="studLName" ng-model="studLName" pattern="^[a-zA-Z ,.'-]+$" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="updateStudentForm.studLName.$error" ng-show="updateStudentForm.$submitted">
+				              <p class="invalid-text" ng-message="pattern">Must only have letters, space, and certain special characters (.  ,' -)</p>
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
 
-								<optgroup label="Arts and Design Track" ng-if="department==1">
-									<option value="6">Multimedia Arts</option>
-								</optgroup>
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="studFName">First Name</label>
+				              <div class="col-md-12">
+				                <input type="text" class="form-control" id="studFName" name="studFName" ng-model="studFName" pattern="^[a-zA-Z ,.'-]+$" required/>
+				              </div>
+				            </div>
+				            <div ng-messages="updateStudentForm.studFName.$error" ng-show="updateStudentForm.$submitted">
+				              <p class="invalid-text" ng-message="pattern">Must only have letters, space, and certain special characters (.  ,' -)</p>
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
+
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="program">Program</label>
+				              <div class="col-md-12">
+				              	<select class="form-control" name="program" id="program" ng-model="program" required>
+
+									<optgroup label="Academic Tracks" ng-if="department==1">
+										<option value="1">Humanities And Social Sciences</option>
+										<option value="2">Accountancy Business And Management</option>
+									</optgroup>
+
+									<optgroup label="Technical Vocational" ng-if="department==1">
+										<option value="3">Computer Programming</option>
+										<option value="4">Animation</option>
+										<option value="5">Fashion Design</option>
+									</optgroup>
+
+									<optgroup label="Arts and Design Track" ng-if="department==1">
+										<option value="6">Multimedia Arts</option>
+									</optgroup>
 
 
-								<optgroup label="School of Computing" ng-if="department==2">
-									<option value="1">Software Engineering</option>
-									<option value="2">Game Development</option>
-									<option value="3">Web Development</option>
-								</optgroup>
+									<optgroup label="School of Computing" ng-if="department==2">
+										<option value="1">Software Engineering</option>
+										<option value="2">Game Development</option>
+										<option value="3">Web Development</option>
+									</optgroup>
 
-								<optgroup label="School of Design" ng-if="department==2">
-									<option value="4">Animation</option>
-									<option value="5">Multimedia Arts</option>
-									<option value="6">Fashion Design</option>
-								</optgroup>
+									<optgroup label="School of Design" ng-if="department==2">
+										<option value="4">Animation</option>
+										<option value="5">Multimedia Arts</option>
+										<option value="6">Fashion Design</option>
+									</optgroup>
 
-								<optgroup label="School of Business" ng-if="department==2">
-									<option value="7">Real Estate Management</option>
-									<option value="8">Business Administration</option>
-								</optgroup>
+									<optgroup label="School of Business" ng-if="department==2">
+										<option value="7">Real Estate Management</option>
+										<option value="8">Business Administration</option>
+									</optgroup>
 
-							</select>
-						</div>
+								</select>
+				              </div>
+				            </div>
+				            <div ng-messages="updateStudentForm.program.$error" ng-show="updateStudentForm.$submitted">
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
 
-						<p><b>Level: </b>
-						<div class="style-select">
-							<select class="form-control" name="level" id="level" ng-model="level" required>
+				            <div class="form-group">
+				              <label  class="col-md-12 control-label" for="level">Level</label>
+				              <div class="col-md-12">
+				              	<select class="form-control" name="level" id="level" ng-model="level" required>
 
-								<option ng-if="department==1" value="1">Grade 11</option>
-								<option ng-if="department==1" value="2">Grade 12</option>
+									<option ng-if="department==1" value="1">Grade 11</option>
+									<option ng-if="department==1" value="2">Grade 12</option>
 
-								<option ng-if="department==2" value="1">First Year</option>
-								<option ng-if="department==2" value="2">Second Year</option>
-								<option ng-if="department==2" value="3">Third Year</option>
-								<option ng-if="department==2" value="4">Fourth Year</option>
+									<option ng-if="department==2" value="1">First Year</option>
+									<option ng-if="department==2" value="2">Second Year</option>
+									<option ng-if="department==2" value="3">Third Year</option>
+									<option ng-if="department==2" value="4">Fourth Year</option>
 
-							</select>
-						</div>
+								</select>
+				              </div>
+				            </div>
+				            <div ng-messages="updateStudentForm.level.$error" ng-show="updateStudentForm.$submitted">
+				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				            </div>
 
-					</div>
+				            <div class="updateBtn">
+				            	<button type="submit" class="btn btn-primary" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
+				            </div>
+							
+				        </form> 
 
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" ng-click="updateStudent()" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
 					</div>
 
 				</div>
 
 			</div>		
 		</div><!-- modal closing tag -->
+
 
 	</div><!--container col-md-12-->
 
