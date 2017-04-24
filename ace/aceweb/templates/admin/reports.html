@@ -52,18 +52,16 @@
 
 		<table class="table table-bordered table-condensed table-striped table-condensed table-hover">
 			<col width="20">
-			<col width="60">
-			<col width="120">			
+			<col width="60">			
 			<col width="120">
 			<col width="120">
 			<col width="150">
 			<col width="80">
-			<col width="70">
+			<col width="60">
 				<thead>
 					<tr>
 						<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>
 						<th>DATE</th>
-						<th>SUBJECT</th>
 						<th>REPORTED BY</th>						
 						<th>NAME</th>
 						<th>COURSE</th>
@@ -78,9 +76,6 @@
 							</td>
 							<td>
 								{{ report.report_date | date : "MMM d, yyyy"}}
-							</td>
-							<td>
-								{{ report.subject_name }}
 							</td>
 							<td>
 								{{ report.faculty_fullname}}

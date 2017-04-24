@@ -2721,27 +2721,11 @@ angular.module('aceWeb')
 
   $scope.initScope();
 
-
-
-
-
-  $scope.controlCheckbox = function ()
+  $scope.$watch("studentList.student_id", function()
   {
-    $scope.studentList.student_id = [];
+    $scope.mainCheckbox = false;
 
-    if($scope.mainCheckbox)
-    {
-      for(var counter=0; counter < $scope.students.length; counter++)
-      {
-        $scope.studentList.student_id.push($scope.students[counter].student_id);
-      }
-    }
-  }
-
-
-  $scope.updateMainCheckbox = function ()
-  {
-    if($scope.students.student_id.length == $scope.students.length)
+    if($scope.students && $scope.filtered.length == $scope.studentList.student_id.length)
     {
       $scope.mainCheckbox = true;
     }
@@ -2749,10 +2733,35 @@ angular.module('aceWeb')
     {
       $scope.mainCheckbox = false;
     }
+  }, true);
+
+  $scope.$watch("searchBox", function()
+  {
+    $scope.studentList.student_id = [];
+    $scope.mainCheckbox = false;
+
+    if($scope.students && $scope.filtered.length == $scope.studentList.student_id.length && $scope.filtered.length != 0)
+    {
+      $scope.mainCheckbox = true;
+    }
+    else
+    {
+      $scope.mainCheckbox = false;
+    }
+  }, true);
+
+  $scope.controlCheckbox = function ()
+  {
+    $scope.studentList.student_id = [];
+
+    if($scope.mainCheckbox)
+    {
+      for(var counter=0; counter < $scope.filtered.length; counter++)
+      {
+        $scope.studentList.student_id.push($scope.filtered[counter].student_id);
+      }
+    }
   }
-
-
-
 
   $scope.disableDeleteBtn = function ()
   {
