@@ -1,5 +1,5 @@
 //DIRECTIVE MODULE
-angular.module('aceWeb.directive', [])
+angular.module('aceWeb')
 
 
 //<-------------------------------DIRECTIVE---------------------------------------------------->

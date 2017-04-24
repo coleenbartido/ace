@@ -1,5 +1,5 @@
 //CONTROLLER MODULE
-angular.module('aceWeb.controller', [])
+angular.module('aceWeb')
 
 
 .controller('AppCtrl', function($scope, $state, AUTH_EVENTS, AuthService)
