@@ -1395,9 +1395,17 @@
     $messageDetails = json_decode(file_get_contents("php://input"));
 
     $body = $messageDetails->messageBody;
-    $subject = $messageDetails->messageSubj;
     $userType = 3;
     $status = 1;
+
+    if(isset($messageDetails->messageSubj))
+    {
+      $subject = $messageDetails->messageSubj;
+    }
+    else
+    {
+      $subject = "";
+    }
 
     $db = new DbOperation();
 
@@ -1406,12 +1414,12 @@
     //send Email
     if(sendEmail($receiver, $subject, $body))
     {
-      $responseBody = array('successMsg' => 'Message sent');
+      $responseBody = array('successMsg' => 'Email sent');
       $response = setResponse($response, 200, $responseBody);
     }
     else
     {
-      $responseBody = array('errorMsg' => 'Message sending failed');
+      $responseBody = array('errorMsg' => 'Email sending failed');
       $response = setResponse($response, 400, $responseBody);
     }
 

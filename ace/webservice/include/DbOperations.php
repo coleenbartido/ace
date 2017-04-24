@@ -368,7 +368,8 @@ class DbOperation
       $user = $stmt->get_result()->fetch_assoc();
       $stmt->close();
 
-      if($user == null){
+      if($user == null)
+      {
         $user['first_name'] = "Super";
       }
 
@@ -385,7 +386,8 @@ class DbOperation
       $user = $stmt->get_result()->fetch_assoc();
       $stmt->close();
 
-      if($user == null){
+      if($user == null)
+      {
         $user['last_name'] = "Admin";
       }
 

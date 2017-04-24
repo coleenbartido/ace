@@ -1477,6 +1477,13 @@ angular.module('aceWeb')
     $scope.readMessage();
   }
 
+  $scope.showBroadcastModal = function()
+  {
+    $scope.broadcastEmailForm.$setPristine();
+    $scope.composeBroadcastEmail = "";
+    $scope.subject = undefined;
+  }
+
   $('#myModal').on('shown.bs.modal', function ()
   {
     $("#customTextArea").focus();
@@ -1554,32 +1561,14 @@ angular.module('aceWeb')
     }
   }
 
-  $scope.broadcastEmail = function()
+  $scope.broadcastEmail = function(form)
   {
-
-    if($scope.composeEmail != "" && $scope.composeEmail != undefined)
+    if(form.$valid)
     {
-      /*if($scope.selectedMessage.receiver_email == AuthService.getEmail())
-      {
-        $scope.sender = $scope.selectedMessage.receiver_email;
-        $scope.receiver = $scope.selectedMessage.sender_email;
-      }
-      else
-      {
-        $scope.sender = $scope.selectedMessage.sender_email;
-        $scope.receiver = $scope.selectedMessage.receiver_email;
-      }*/
-
       $scope.sendBtn = "Sending";
-      $scope.disableSendBtn = true;
       $scope.isSending = true;
 
-      if($scope.subject == "" && $scope.subject == undefined)
-      {
-        $scope.subject = "(No Subject)";
-      }
-
-      var str =  $scope.composeEmail;
+      var str =  $scope.composeBroadcastEmail;
       var emailBody = str.replace(new RegExp('\r?\n','g'), '<br />');
 
       var messageDetails =
@@ -1587,10 +1576,7 @@ angular.module('aceWeb')
         'messageBody': emailBody,
         'messageSubj': $scope.subject
       }
-
-      //$scope.disableComposeEmail =
-      //$scope.showLimit -= 1;
-
+     
       $http({
         method: 'POST',
         url: config.apiUrl + '/broadcastEmail',
@@ -1602,11 +1588,7 @@ angular.module('aceWeb')
         //for checking
         console.log(response);
 
-        $scope.composeEmail = undefined;
-        $scope.subject = undefined;
-
         $scope.showCustomModal("SUCCESS", response.data.successMsg);
-
       },
       function(response)
       {
@@ -1614,15 +1596,12 @@ angular.module('aceWeb')
         console.log(response);
 
         $scope.showCustomModal("ERROR", response.data.errorMsg);
-
       })
       .finally(function()
       {
         $('#broadcastModal').modal('hide');
-
         $scope.sendBtn = "Send";
         $scope.isSending = false;
-        $scope.disableSendBtn = false;
       });
     }
   }

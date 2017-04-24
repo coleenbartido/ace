@@ -9,56 +9,54 @@
   <div class="container col-md-12" ng-show="messages">
     <div class="mail-box col-md-12">
 
-                  <aside class="lg-side">
-                      <div class="inbox-body">
-                         <div class="mail-option">
-                             <div class="head">
-                               <div class="chk-all">
-                                 <input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
-                                  <div class="btn-group">
-                                     <a class="btn mini all" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                         <i class="fa fa-angle-down "></i>
-                                     </a>
-                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
-                                        <li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
-                                     </ul>
-                                 </div>
-                               </div>
+              <aside class="lg-side">
+                  <div class="inbox-body">
 
-                               <div class="btn-group hidden-phone">
-                                   <button class="btn btn-default dropdown-toggle action" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                       Action
-                                       <i class="fa fa-angle-down "></i>
-                                   </button>
-                                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                       <li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i>  Mark as Read</a></li>
-                                       <li><a href="javascript:void(0)" ng-click="markAsUnread()"><i class="fa fa-envelope"></i> Mark as Unread</a></li>
-                                       <li class="divider"></li>
-                                       <li><a href="javascript:void(0)" ng-click="deleteMessageList()"><i class="fa fa-trash-o"></i> Delete</a></li>
-                                   </ul>
-                               </div>
+                      <div class="mail-option">
+                        <div class="head">
 
-                               <div class="btn-group">
-                                   <button class="btn btn-default dropdown-toggle refresh" data-toggle="modal" data-target="#broadcastModal">
-                                       <i class=" fa fa-envelope"></i>
-                                       Broadcast
-                                   </button>
-                               </div>
+                          <div class="chk-all">
+                            <input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
+                            <div class="btn-group">
+                              <a class="btn mini all" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa fa-angle-down "></i>
+                              </a>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
+                                <li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
+                              </ul>
+                            </div>
+                          </div>
 
-                               <div class="btn-group">
-                                   <button class="btn btn-default dropdown-toggle refresh" data-original-title="Refresh" data-placement="top" ng-click="initScope()">
-                                       <i class=" fa fa-refresh"></i>
-                                       Refresh
-                                   </button>
-                               </div>
+                          <div class="btn-group hidden-phone">
+                            <button class="btn btn-default dropdown-toggle action" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                              Action
+                              <i class="fa fa-angle-down "></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                              <li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i>  Mark as Read</a></li>
+                              <li><a href="javascript:void(0)" ng-click="markAsUnread()"><i class="fa fa-envelope"></i> Mark as Unread</a></li>
+                              <li class="divider"></li>
+                              <li><a href="javascript:void(0)" ng-click="deleteMessageList()"><i class="fa fa-trash-o"></i> Delete</a></li>
+                            </ul>
+                          </div>
 
-                               <div class="pull-right">
-                                  <input type="text" class="sr-input" ng-model="searchBox" placeholder="Search">
-                               </div>
-                             </div>
+                          <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle refresh" data-toggle="modal" data-target="#broadcastModal" ng-click="showBroadcastModal()"><i class=" fa fa-envelope"></i> Broadcast</button>
+                          </div>
 
-                         </div>
+                          <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle refresh" data-original-title="Refresh" data-placement="top" ng-click="initScope()">
+                              <i class=" fa fa-refresh"></i>
+                              Refresh
+                            </button>
+                          </div>
+
+                          <div class="pull-right">
+                            <input type="text" class="sr-input" ng-model="searchBox" placeholder="Search">
+                          </div>
+                        </div>
+                      </div>
 
                       <div class="table-height">
                         <table class="table table-inbox table-hover">
@@ -128,7 +126,8 @@
 
                   </div>
               </aside>
-          </div>
+
+    </div>
 
 
     <div id="myModal" class="modal fade" role="dialog">
@@ -138,7 +137,7 @@
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-                <h4 class="modal-title custom-header-color">{{selectedMessage.message_subject}}</h4>
+                <p class="modal-title custom-header-color custom-modal-header">{{selectedMessage.message_subject}}</p>
               </div>
 
               <div class="modal-body">
@@ -166,75 +165,58 @@
     </div>
 
     <div id="broadcastModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
 
-      <div class="modal-content">
+        <div class="modal-dialog">
 
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-            <h4 class="modal-title custom-header-color">Broadcast Email to All Faculty</h4>
+          <div class="modal-content">
+
+              <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+                <p class="modal-title custom-header-color custom-modal-header">Broadcast Email</p>
+
+              </div>
+
+              <div class="modal-body">
+                <form name="broadcastEmailForm" class="form-horizontal custom-form" role="form" ng-submit="broadcastEmail(broadcastEmailForm)" novalidate>
+
+                  <div class="form-group">
+                    <label  class="col-md-12 control-label" for="receiver">To</label>
+                    <div class="col-md-12">
+                      <input type="text" class="form-control" id="receiver" name="receiver" value="All Faculty" readonly/>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label  class="col-md-12 control-label" for="subject">Subject</label>
+                    <div class="col-md-12">
+                          <input type="text" class="form-control" id="subject" name="subject" ng-model="subject" ng-readonly="isSending" placeholder="Write a subject...">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label  class="col-md-12 control-label" for="composeBroadcastEmail">Message</label>
+                    <div class="col-md-12" newline2br>
+                        <textarea class="form-control" id="customTextArea" rows="5" name="composeBroadcastEmail" ng-model="composeBroadcastEmail" ng-model-options="{allowInvalid: true}" ng-trim="false" placeholder="Write a message..." maxlength="500" ng-readonly="isSending" required></textarea>
+                        <p class="pull-right">{{composeBroadcastEmail.length}}/500</p>
+                    </div>
+                  </div>
+
+                  <div class="sendBtn">
+                    <button type="submit" class="btn btn-primary" ng-disabled="isSending">{{sendBtn}}</button>
+                  </div>
+
+                </form>
+              </div>
+
           </div>
 
-          <div class="modal-body">
+        </div>
 
-            <!--
-            <div id="scrollableDiv" scroll-glue load-more-data>
+    </div> <!-- broadcast modal-->
 
-              <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
-                  <br ng-show="$first">
-                    <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
-                  <br>
-                  <br>
-                  <p ng-bind-html="message.message_body|newline2br"></p>
-                  <hr ng-hide="$last">
-                  <br ng-show="$last">
-              </div>
 
-            </div>
-            -->
-
-            <div class="form-group">
-
-              <label  class="col-md-12 control-label" for="receiver">To</label>
-              <div class="col-md-12">
-                <input type="text" class="form-control" id="receiver" name="receiver" value="All Faculty" readonly required/>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label  class="col-md-12 control-label" for="subject">Subject</label>
-              <div class="col-md-12">
-                    <input type="textbox" class="form-control" id="subject" name="subject" placeholder="Subject"
-                    ng-model="subject"  maxlength="20" ng-readonly="isSending">
-                    <!--
-                    <textarea id="customTextArea" rows="1" name="subject" ng-model="subject" ng-model-options="{allowInvalid: true}" placeholder="Subject" maxlength="20" ng-trim="false"></textarea>
-                    -->
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label  class="col-md-12 control-label" for="composeEmail">Message</label>
-              <div class="col-md-12" newline2br>
-                  <textarea class="form-control" id="customTextArea" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}"
-                            placeholder="Write a message..." maxlength="500" ng-trim="false" ng-readonly="isSending" required></textarea>
-                  <p class="pull-right">{{composeEmail.length}}/500</p>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" ng-disabled="disableSendBtn" ng-click="broadcastEmail()"> {{ sendBtn }}</button>
-          </div>
-
-      </div>
-    </div>
-</div> <!-- broadcast modal--->
-
-</div>
-
-          <!-------------------------------------------------------->
-
+  </div>
 
   <div class="sk-fading-circle" ng-hide="messages">
       <div class="sk-circle1 sk-circle"></div>
