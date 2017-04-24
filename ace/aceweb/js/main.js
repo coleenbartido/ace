@@ -190,26 +190,6 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
     })
 
 
-    /*.state('admin.newFaculty',
-    {
-      url: '/admin/new/faculty',
-      templateUrl: 'templates/admin/new-faculty.html',
-      controller: 'FacultyController',
-      loginRequired: true,
-      accessLevel: 2
-    })
-
-    .state('admin.deleteFaculty',
-    {
-      url: '/admin/delete/faculty',
-      templateUrl: 'templates/admin/delete-faculty.html',
-      controller: 'FacultyController',
-      loginRequired: true,
-      accessLevel: 2
-    })*/
-
-
-
     //SUPERADMIN
     //<-------------------------------------------------------------------------->
 
@@ -244,28 +224,6 @@ angular.module('aceWeb', ['aceWeb.controller','aceWeb.directive','ui.router','ng
     {
       templateUrl: 'templates/common/404-inside.html'
     })
-
-
-    /*.state('superadmin.newAdmin',
-    {
-      url: '/superadmin/new/admin',
-      templateUrl: 'templates/superadmin/new-admin.html',
-      controller: 'AdminController',
-      loginRequired: true,
-      accessLevel: 1
-    })
-
-    .state('superadmin.deleteAdmin',
-    {
-      url: '/superadmin/delete/admin',
-      templateUrl: 'templates/superadmin/delete-admin.html',
-      controller: 'AdminController',
-      loginRequired: true,
-      accessLevel: 1
-
-    })*/
-
-
 
 
     $urlRouterProvider.otherwise(function($injector, $location)

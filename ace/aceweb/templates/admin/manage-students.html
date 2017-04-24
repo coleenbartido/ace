@@ -7,7 +7,7 @@
 
 <body>
 
-	<div class="container col-md-12">
+	<div class="container col-md-12" ng-show="!isLoading">
 		<div class="student-box col-md-12">
 
 				<aside class="lg-side">
@@ -19,10 +19,9 @@
 								</div>
 
 								<div class="btn-group">
-										<button class="btn btn-default refresh" ng-disabled="disableActionBtn()" ng-click="deleteStudentList()">
-												<i class=" fa fa-trash-o"></i>
-												Delete
-										</button>
+									<button class="btn btn-default refresh" ng-disabled="disableDeleteBtn()" ng-click="deleteStudentList()">
+										<i class=" fa fa-trash-o"></i>Delete
+									</button>
 								</div>
 
 								<div class="pull-right">
@@ -34,28 +33,23 @@
 
 						<div class="table-height">
 							<table class="table table-inbox table-hover">
-								<col width="20"> <!-- checkbox -->
-								<col width="50"> <!-- id no -->
-								<col width="100"> <!-- name -->
-								<col width="50">
-								<col width="50">
+								<col width="20"> 
+								<col width="50"> 
+								<col width="100"> 
+								<col width="50">							
 								<col width="20">
 								<col width="20">
-
-
 
 								<thead>
 
 									<tr class="title">
 
 										<td></td>
-										<td>ID NO.</td>
+										<td>STUDENT ID</td>
 										<td>NAME</td>
-										<td>COURSE</td>
-										<td>LEVEL</td>
+										<td>COURSE</td>									
 										<td>REPORT COUNT</td>
 										<td><center>ACTIONS</center></td>
-
 
 									</tr>
 								</thead>
@@ -63,9 +57,9 @@
 								<tbody>
 									<tr ng-repeat="student in students | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(student)">
 										<td class="inbox-small-cells">
-												<center>
-													<input type="checkbox" data-checklist-model="studentList.student_id" data-checklist-value="student.student_id" noclick>
-												</center>
+											<center>
+												<input type="checkbox" data-checklist-model="studentList.student_id" data-checklist-value="student.student_id" noclick>
+											</center>
 										</td>
 
 										<td class="view-message">
@@ -76,12 +70,8 @@
 											{{student.student_name }}
 										</td>
 
-			              <td>
+			              				<td>
 											{{student.program}}
-										</td>
-
-										<td>
-											{{student.level}}
 										</td>
 
 										<td>
@@ -90,20 +80,20 @@
 
 										<td>
 											<center>
-											<button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" ng-click="deleteStudent(student)" no-click><span class="fa fa-trash"></span></button>
+												<button type="button" class="btn btn-xs btn-danger" ng-click="deleteStudent(student)" noclick><span class="fa fa-trash"></span></button>
 											</center>
 										</td>
 
 									</tr>
-									<tr class="noShow" ng-show="students.length ==0">
-										<td colspan="5"><center>NO RESULT</center></td>
+									<tr class="noShow" ng-show="(filtered = (students | filter: searchBox)).length == 0">
+										<td colspan="6"><center>NO RESULT</center></td>
 									</tr>
 								</tbody>
 
 							</table>
 
 							<div class="page pull-right custom-pagination">
-								<ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
+								<ul uib-pagination total-items="(filtered = (students | filter: searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></ul>
 							</div>
 
 						</div> <!-- table-height -->
@@ -112,121 +102,105 @@
 				</aside>
 		</div>
 
-		<!-- MODALS ------------------------------------------------------------------->
-					<!---   EDIT STUDENT  --------------------------------------------------->
+		<!-- MODALS -->
+					
 
-						<div id="editModal" class="modal fade" role="dialog">
-								<div class="modal-dialog">
+		<div id="editModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
 
-									<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-												<h4 class="modal-title custom-header-color">Edit Student Information</h4>
-										</div>
-											<div class="modal-body">
+				<div class="modal-content">
 
-													<p><b>Student ID Number: </b> <input type="textbox" ng-model="studId" name="studId" id="studId">
-													<p><b>Student Last Name: </b> <input type="textbox" ng-model="studLName" name="studLName" id="studLName">
-													<p><b>Student First Name: </b> <input type="textbox" ng-model="studFName" name="studFName" id="studFName">
-													<p><b>Course: </b>
-														<div class="style-select">
-															<select class="form-control" name="program" id="program" ng-model="program" required>
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+						<h4 class="modal-title custom-header-color">Edit Student Information</h4>
+					</div>
 
-		                                                    <!--
-															<optgroup ng-if="department==1">
-																<option ng-repeat='program in programList' value='{{ program.value }}' ng-selected="program.value == program">
-																	{{program.text}}
-																</option>
-															</optgroup>
+					<div class="modal-body">
 
-															<optgroup ng-if="department==2">
-																<option ng-repeat='course in courseList' value='{{ course.value }}'>
-																	{{course.text}}
-																</option>
-															</optgroup>
-		                                                    -->
+						<p><b>Student ID Number: </b> <input type="textbox" ng-model="studId" name="studId" id="studId">
+						<p><b>Student Last Name: </b> <input type="textbox" ng-model="studLName" name="studLName" id="studLName">
+						<p><b>Student First Name: </b> <input type="textbox" ng-model="studFName" name="studFName" id="studFName">
+						<p><b>Course: </b>
+						<div class="style-select">
+							<select class="form-control" name="program" id="program" ng-model="program" required>
 
+								<optgroup label="Academic Tracks" ng-if="department==1">
+									<option value="1">Humanities And Social Sciences</option>
+									<option value="2">Accountancy Business And Management</option>
+								</optgroup>
 
-																<optgroup label="Academic Tracks" ng-if="department==1">
-																	<option value="1">Humanities And Social Sciences</option>
-																	<option value="2">Accountancy Business And Management</option>
-																</optgroup>
+								<optgroup label="Technical Vocational" ng-if="department==1">
+									<option value="3">Computer Programming</option>
+									<option value="4">Animation</option>
+									<option value="5">Fashion Design</option>
+								</optgroup>
 
-																<optgroup label="Technical Vocational" ng-if="department==1">
-																	<option value="3">Computer Programming</option>
-																	<option value="4">Animation</option>
-																	<option value="5">Fashion Design</option>
-																</optgroup>
-
-																<optgroup label="Arts and Design Track" ng-if="department==1">
-																	<option value="6">Multimedia Arts</option>
-																</optgroup>
+								<optgroup label="Arts and Design Track" ng-if="department==1">
+									<option value="6">Multimedia Arts</option>
+								</optgroup>
 
 
+								<optgroup label="School of Computing" ng-if="department==2">
+									<option value="1">Software Engineering</option>
+									<option value="2">Game Development</option>
+									<option value="3">Web Development</option>
+								</optgroup>
 
-																<optgroup label="School of Computing" ng-if="department==2">
-																	<option value="1">Software Engineering</option>
-																	<option value="2">Game Development</option>
-																	<option value="3">Web Development</option>
-																</optgroup>
+								<optgroup label="School of Design" ng-if="department==2">
+									<option value="4">Animation</option>
+									<option value="5">Multimedia Arts</option>
+									<option value="6">Fashion Design</option>
+								</optgroup>
 
-																<optgroup label="School of Design" ng-if="department==2">
-																	<option value="4">Animation</option>
-																	<option value="5">Multimedia Arts</option>
-																	<option value="6">Fashion Design</option>
-																</optgroup>
+								<optgroup label="School of Business" ng-if="department==2">
+									<option value="7">Real Estate Management</option>
+									<option value="8">Business Administration</option>
+								</optgroup>
 
-																<optgroup label="School of Business" ng-if="department==2">
-																	<option value="7">Real Estate Management</option>
-																	<option value="8">Business Administration</option>
-																</optgroup>
+							</select>
+						</div>
 
+						<p><b>Level: </b>
+						<div class="style-select">
+							<select class="form-control" name="level" id="level" ng-model="level" required>
 
+								<option ng-if="department==1" value="1">Grade 11</option>
+								<option ng-if="department==1" value="2">Grade 12</option>
 
-															</select>
-														</div>
+								<option ng-if="department==2" value="1">First Year</option>
+								<option ng-if="department==2" value="2">Second Year</option>
+								<option ng-if="department==2" value="3">Third Year</option>
+								<option ng-if="department==2" value="4">Fourth Year</option>
 
-													<p><b>Level: </b>
-														<div class="style-select">
-															<select class="form-control" name="level" id="level" ng-model="level" required>
+							</select>
+						</div>
 
-		                                                        <!--
-																<optgroup ng-if="department==1">
-																	<option ng-repeat='grade in gradeList' value='{{ grade.value }}' ng-selected= '{{grade.value == level}}'>
-																		{{grade.text}}
-																	</option>
-																</optgroup>
+					</div>
 
-																<optgroup ng-if="department==2">
-																	<option ng-repeat='year in yearList' value='{{ year.value }}'>
-																		{{year.text}}
-																	</option>
-																</optgroup>
-		                                                        -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" ng-click="updateStudent()" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
+					</div>
 
+				</div>
 
-																<option ng-if="department==1" value="1">Grade 11</option>
-																<option ng-if="department==1" value="2">Grade 12</option>
-
-																<option ng-if="department==2" value="1">First Year</option>
-																<option ng-if="department==2" value="2">Second Year</option>
-																<option ng-if="department==2" value="3">Third Year</option>
-																<option ng-if="department==2" value="4">Fourth Year</option>
-
-
-															</select>
-														</div>
-
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-primary" ng-click="updateStudent()">Submit</button>
-											</div>
-									</div>
-
-								</div>
-						</div><!-- modal closing tag -->
+			</div>		
+		</div><!-- modal closing tag -->
 
 	</div><!--container col-md-12-->
 
+	<div class="sk-fading-circle" ng-hide="!isLoading">
+      <div class="sk-circle1 sk-circle"></div>
+      <div class="sk-circle2 sk-circle"></div>
+      <div class="sk-circle3 sk-circle"></div>
+      <div class="sk-circle4 sk-circle"></div>
+      <div class="sk-circle5 sk-circle"></div>
+      <div class="sk-circle6 sk-circle"></div>
+      <div class="sk-circle7 sk-circle"></div>
+      <div class="sk-circle8 sk-circle"></div>
+      <div class="sk-circle9 sk-circle"></div>
+      <div class="sk-circle10 sk-circle"></div>
+      <div class="sk-circle11 sk-circle"></div>
+      <div class="sk-circle12 sk-circle"></div>
+  	</div> <!-- spinner -->
 
 </body>

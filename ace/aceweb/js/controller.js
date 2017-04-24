@@ -561,7 +561,7 @@ angular.module('aceWeb.controller', [])
   {
     if(form.$valid && !$scope.checkedReasons)
     {
-      if($scope.reasons[6].check && !$scope.reasons[6].value)
+      if($scope.reasons[6].check && $scope.reasons[6].value.length == 0)
       {
         $scope.invalidOtherReason = true;
         $scope.showCustomModal("ERROR", "Please specify the reason!");
@@ -620,7 +620,7 @@ angular.module('aceWeb.controller', [])
   {
     if(!model)
     {
-      $scope.invalidOtherReason = true;
+      $scope.invalidOtherReason = true; 
     }
     else
     {
@@ -628,16 +628,10 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  $scope.updateOtherCheckbox = function(model)
+  $scope.updateOtherCheckbox = function()
   {
-    if(model && !scope.reasons[6].value)
-    {
-      $scope.invalidOtherReason = true;
-    }
-    else
-    {
-      $scope.invalidOtherReason = false;
-    }
+    $scope.invalidOtherReason = false; 
+    $scope.reasons[6].value = undefined;
   }
 
   $scope.getStudentInfo = function(val)
@@ -1117,7 +1111,7 @@ angular.module('aceWeb.controller', [])
     //for pagination
     $scope.maxSize = 5;
     $scope.currentPage = 1;
-    $scope.itemsPerPage = 10;
+    $scope.itemsPerPage = 8;
 
     $scope.getMessageList();
   } //scope initScope
@@ -1293,18 +1287,22 @@ angular.module('aceWeb.controller', [])
 
   $scope.deleteMessageList = function()
   {
-    BootstrapDialog.confirm({
+    $scope.deleteBtn = "Delete";
+
+    BootstrapDialog.show({
       title: 'Delete Message',
       message: 'Are you sure you want to delete these messages?',
       type: BootstrapDialog.TYPE_PRIMARY,
-      closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      closable: false,    
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
+          $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
           $interval.cancel($rootScope.notifPoll);
           $interval.cancel($scope.msgPoll);
 
@@ -1343,26 +1341,41 @@ angular.module('aceWeb.controller', [])
             $scope.mainCheckbox = false;
             $scope.msgPoll = $interval($scope.getMessageList, 3000);
             $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+
+            $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
   }
 
   $scope.deleteMessage = function(message)
   {
-    BootstrapDialog.confirm({
+    $scope.deleteBtn = "Delete";
+
+    BootstrapDialog.show({
       title: 'Delete Message',
       message: 'Are you sure you want to delete this message?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: 'Delete',
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
+          $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
           $interval.cancel($rootScope.notifPoll);
           $interval.cancel($scope.msgPoll);
 
@@ -1397,13 +1410,22 @@ angular.module('aceWeb.controller', [])
           })
           .finally(function()
           {
-            $scope.markMessageList.report_id = [];
-            $scope.mainCheckbox = false;
             $scope.msgPoll = $interval($scope.getMessageList, 3000);
             $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
+            
+            $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
   }
 
@@ -2135,19 +2157,20 @@ angular.module('aceWeb.controller', [])
   {
     $scope.deleteBtn = "Delete";
 
-    BootstrapDialog.confirm({
+    BootstrapDialog.show({
       title: 'Delete Report',
       message: 'Are you sure you want to delete this report?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: $scope.deleteBtn,
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
           $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
           $interval.cancel($rootScope.notifPoll);
           $interval.cancel($scope.reportPoll);
 
@@ -2178,12 +2201,22 @@ angular.module('aceWeb.controller', [])
           })
           .finally(function()
           {
-            $scope.deleteBtn = "Delete";
             $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
             $scope.reportPoll = $interval($scope.getReportList, 3000);
+
+            $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
   }
 
@@ -2191,23 +2224,24 @@ angular.module('aceWeb.controller', [])
   {
     $scope.deleteBtn = "Delete";
 
-    BootstrapDialog.confirm({
+    BootstrapDialog.show({
       title: 'Delete Reports',
       message: 'Are you sure you want to delete selected reports?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: $scope.deleteBtn,
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
           $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
           $interval.cancel($rootScope.notifPoll);
           $interval.cancel($scope.reportPoll);
 
-          var facultyDetails =
+          var reportDetails =
           {
             'reportList' : $scope.reportList
           }
@@ -2215,7 +2249,7 @@ angular.module('aceWeb.controller', [])
           $http({
             method: 'POST',
             url: config.apiUrl + '/deleteReport',
-            data: facultyDetails,
+            data: reportDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
           .then(function(response)
@@ -2237,15 +2271,24 @@ angular.module('aceWeb.controller', [])
           })
           .finally(function()
           {
-            $scope.deleteBtn = "Delete";
-
             $scope.reportList.report_id = [];
             $scope.mainCheckbox = false;
             $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
             $scope.reportPoll = $interval($scope.getReportList, 3000);
+
+            $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
   }
 
@@ -2623,41 +2666,10 @@ angular.module('aceWeb.controller', [])
 
 .controller('ManageStudentController', function(config, $scope, $http, $state, AuthService)
 {
-
-  $scope.programList = [
-    { text: "Humanities and Social Sciences", value: 1 },
-    { text: "Accountancy, Business and Management", value: 2},
-    { text: "Computer Programming", value: 3 },
-    { text: "Animation", value: 4},
-    { text: "Fashion Design", value: 5 },
-    { text: "Multimedia Arts", value: 6},
-  ];
-
-  $scope.courseList = [
-    { text: "Software Engineering", value: 1 },
-    { text: "Game Development", value: 2},
-    { text: "Web Development", value: 3 },
-    { text: "Animation", value: 4},
-    { text: "Multimedia Arts", value: 5 },
-    { text: "Fashion Design", value: 6},
-    { text: "Real Estate Management", value: 7 },
-    { text: "Business Administration", value: 8}
-  ];
-
-  $scope.gradeList = [
-    { text: "Grade 11", value: 1 },
-    { text: "Grade 12", value: 2}
-  ];
-
-  $scope.yearList = [
-    { text: "First Year", value: 1 },
-    { text: "Second Year", value: 2},
-    { text: "Third Year", value: 3},
-    { text: "Fourth Year", value: 4}
-  ];
-
-  $scope.getStudentList = function(){
-    var adminDetails = {
+  $scope.getStudentList = function()
+  {
+    var adminDetails = 
+    {
       'email' : AuthService.getEmail()
     }
 
@@ -2673,15 +2685,7 @@ angular.module('aceWeb.controller', [])
       console.log(response);
 
       $scope.students = JSON.parse(response.data.studentList);
-      $scope.totalItems = $scope.students.length;
       $scope.isLoading = false;
-
-      for(var counter =0; counter < $scope.students.length; counter++){
-
-        $scope.students[counter].student_name = $scope.students[counter].first_name
-                + " " + $scope.students[counter].last_name;
-      }
-
     },
     function(response)
     {
@@ -2693,15 +2697,14 @@ angular.module('aceWeb.controller', [])
     {
 
     });
-
   }
 
   $scope.initScope = function()
   {
-
     $scope.isLoading = true;
-
     $scope.deleteBtn = "Delete";
+    $scope.updateBtn = "Update";
+    $scope.disableUpdateBtn = false;
 
     $scope.searchBox = undefined;
     $scope.studentList = {};
@@ -2717,6 +2720,10 @@ angular.module('aceWeb.controller', [])
   } //scope initScope
 
   $scope.initScope();
+
+
+
+
 
   $scope.controlCheckbox = function ()
   {
@@ -2744,25 +2751,39 @@ angular.module('aceWeb.controller', [])
     }
   }
 
-  $scope.deleteStudent = function(student_id)
+
+
+
+  $scope.disableDeleteBtn = function ()
   {
-    BootstrapDialog.confirm({
+    if($scope.studentList.student_id == undefined || $scope.studentList.student_id.length == 0)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  $scope.deleteStudent = function(student)
+  {
+    BootstrapDialog.show({
       title: 'Delete Student',
       message: 'Are you sure you want to delete this student?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: $scope.deleteBtn,
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
           $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
 
           var studentDetails =
           {
-            'studentId': student_id
+            'studentList': student.student_id,
+            'email' : AuthService.getEmail()
           }
 
           $http({
@@ -2789,42 +2810,49 @@ angular.module('aceWeb.controller', [])
           })
           .finally(function()
           {
-            /*$scope.markMessageList.report_id = [];
-            $scope.mainCheckbox = false;*/
-
             $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
-
   } // $scope.deleteAdmin
 
   $scope.deleteStudentList = function()
   {
-    BootstrapDialog.confirm({
+    BootstrapDialog.show({
       title: 'Delete Students',
       message: 'Are you sure you want to delete selected student/s?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: $scope.deleteBtn,
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
           $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
 
           var studentDetails =
           {
-            'studentList' : $scope.studentList
+            'studentList' : $scope.studentList,
+            'email' : AuthService.getEmail()
           }
 
           $http({
             method: 'POST',
             url: config.apiUrl + '/deleteStudent',
-            data: adminDetails,
+            data: studentDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
           .then(function(response)
@@ -2835,7 +2863,6 @@ angular.module('aceWeb.controller', [])
             $scope.getStudentList();
 
             $scope.showCustomModal("SUCCESS", response.data.successMsg);
-
           },
           function(response)
           {
@@ -2846,21 +2873,28 @@ angular.module('aceWeb.controller', [])
           })
           .finally(function()
           {
-            //$scope.markMessageList.report_id = [];
             $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
 
             $scope.studentList.student_id = [];
             $scope.mainCheckbox = false;
+
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
   }
 
   $scope.showPopup = function(student)
   {
-
-    console.log(student);
     $scope.selectedStudent = student;
 
     $scope.department = student.department_id;
@@ -2870,27 +2904,22 @@ angular.module('aceWeb.controller', [])
     $scope.studFName = student.first_name;
     $scope.program = student.program_id + "";
     $scope.level = student.level_id + "";
-
-    //$scope.defaultSelected = student.program_id;
-
-    //console.log($scope.selectedStudent);
-    //$scope.composeEmail = undefined;
-    //$scope.scrollOnTop = false;
-    //$scope.showLimit = -4;
   }
 
+  $scope.updateStudent = function()
+  {
+    $scope.updateBtn = "Updating";
+    $scope.disableUpdateBtn = true;
 
-  $scope.updateStudent = function(){
     var studentDetails =
     {
-        'email' : AuthService.getEmail(),
-        'originalId': $scope.originalId,
-        'studentId' : $scope.studId,
-        'lastName' : $scope.studLName,
-        'firstName' : $scope.studFName,
-        'program' : $scope.program,
-        'level' : $scope.level
-
+      'email' : AuthService.getEmail(),
+      'originalId': $scope.originalId,
+      'studentId' : $scope.studId,
+      'lastName' : $scope.studLName,
+      'firstName' : $scope.studFName,
+      'program' : $scope.program,
+      'level' : $scope.level
     };
 
     $http({
@@ -2898,46 +2927,39 @@ angular.module('aceWeb.controller', [])
       url: config.apiUrl + '/updateStudent',
       data: studentDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
     })
-
     .then(function(response)
     {
       //for checking
       console.log(response);
 
       $scope.getStudentList();
-
+      $('#editModal').modal('hide');
+      $scope.showCustomModal("SUCCESS", response.data.successMsg);
     },
-    //2/28
     function(response)
     {
       //for checking
       console.log(response);
 
-
+      $('#editModal').modal('hide');
+      $scope.showCustomModal("ERROR", response.data.errorMsg);
     })
     .finally(function()
     {
-      //$scope.composeEmail = undefined;
+      $scope.updateBtn = "Update";
+      $scope.disableUpdateBtn = false;
     });
   }
 
-
-  $scope.changeFilterTo = function(filterProperty)
+  $scope.showCustomModal = function(modalTitle, modalMsg)
   {
-    $scope.searchBox = undefined;
-
-    $scope.myFilter = filterProperty;
-
-    if(filterProperty == 'student_name')
-    {
-      $scope.searchPlacholder = 'Name';
-    }
-    else if(filterProperty == 'program')
-    {
-      $scope.searchPlacholder = 'Course / Program';
-    }
+    BootstrapDialog.alert({
+      title: modalTitle,
+      message: modalMsg,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false
+    });
   }
 
 })
@@ -3070,19 +3092,20 @@ angular.module('aceWeb.controller', [])
 
   $scope.deleteFaculty = function(email)
   {
-    BootstrapDialog.confirm({
+    BootstrapDialog.show({
       title: 'Delete Faculty',
       message: 'Are you sure you want to delete this faculty?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: $scope.deleteBtn,
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
           $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
 
           var facultyDetails =
           {
@@ -3114,28 +3137,37 @@ angular.module('aceWeb.controller', [])
           .finally(function()
           {
             $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
-
   } // $scope.deleteFaculty
 
   $scope.deleteFacultyList = function()
   {
-    BootstrapDialog.confirm({
+    BootstrapDialog.show({
       title: 'Delete Faculty Accounts',
       message: 'Are you sure you want to delete selected accounts?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: $scope.deleteBtn,
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
           $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
 
           var facultyDetails =
           {
@@ -3166,13 +3198,22 @@ angular.module('aceWeb.controller', [])
           })
           .finally(function()
           {
-            $scope.deleteBtn = "Delete";
-
             $scope.facultyList.email = [];
             $scope.mainCheckbox = false;
+
+            $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
   }
 
@@ -3721,19 +3762,20 @@ angular.module('aceWeb.controller', [])
 
   $scope.deleteAdmin = function(email)
   {
-    BootstrapDialog.confirm({
+    BootstrapDialog.show({
       title: 'Delete Administrator',
       message: 'Are you sure you want to delete this administrator?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: $scope.deleteBtn,
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
           $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
 
           var adminDetails =
           {
@@ -3765,27 +3807,37 @@ angular.module('aceWeb.controller', [])
           .finally(function()
           {
             $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
   } // $scope.deleteAdmin
 
   $scope.deleteAdminList = function()
   {
-    BootstrapDialog.confirm({
+    BootstrapDialog.show({
       title: 'Delete Administrators',
       message: 'Are you sure you want to delete selected accounts?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      btnCancelLabel: 'Cancel',
-      btnOKLabel: $scope.deleteBtn,
-      btnOKClass: 'btn-danger',
-      callback: function(result)
-      {
-        if(result)
+      buttons: 
+      [{
+        label: $scope.deleteBtn,
+        cssClass: 'btn-danger',
+        autospin: true,
+        action: function(dialogRef)
         {
           $scope.deleteBtn = "Deleting";
+          dialogRef.enableButtons(false);
 
           var adminDetails =
           {
@@ -3816,13 +3868,22 @@ angular.module('aceWeb.controller', [])
           })
           .finally(function()
           {
-            $scope.deleteBtn = "Delete";
-
             $scope.adminList.email = [];
             $scope.mainCheckbox = false;
+
+            $scope.deleteBtn = "Delete";
+            dialogRef.enableButtons(true);
+            dialogRef.close();
           });
         }
-      }
+      },
+      {
+        label: 'Cancel',
+        action: function(dialogRef)
+        {
+          dialogRef.close();
+        }
+      }]
     });
   }
 

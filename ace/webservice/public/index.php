@@ -424,23 +424,30 @@
   {
     $adminDetails = json_decode(file_get_contents("php://input"));
 
-    $email = $adminDetails->email;
-    $status = 1;
-
     $db = new DbOperation();
+
+    $email = $adminDetails->email;
+    $status = 1;   
     $department = $db->getDepartment($email);
 
-
-    if($department==1){
-      $responseBody = array('studentList' => json_encode($db->listShsStudent($status)));
-
-    } else {
-      $responseBody = array('studentList' => json_encode($db->listCollegeStudent($status)));
-
+    if($department==1)
+    {
+      $studentList = $db->listShsStudent($status);
+    } 
+    else 
+    {
+      $studentList = $db->listCollegeStudent($status);
     }
 
-    //echo json_encode($db->showMessages($email));
+    for($counter=0; $counter < count($studentList); $counter++)
+    {
+      $studentList[$counter]['department_id'] = $department;
+      $studentList[$counter]['student_name'] = $studentList[$counter]['first_name'] . " " . $studentList[$counter]['last_name'];
+    }
+
+    $responseBody = array('studentList' => json_encode($studentList));
     $response = setResponse($response, 200, $responseBody);
+
     return $response;
   });
 
@@ -709,26 +716,36 @@
   {
     $deleteStudentDetails = json_decode(file_get_contents("php://input"));
 
-    $student= $deleteStudentDetails->studentList;
+    $student = $deleteStudentDetails->studentList;
     $email = $deleteStudentDetails->email;
     $status = 0;
+    $deleteSuccess = false;
 
     $db = new DbOperation();
 
     $department = $db->getDepartment($email);
 
-    if(is_object($student)){
+    if(is_object($student))
+    {
+      foreach($student->student_id as $student) 
+      {
+        $deleteSuccess = $db->deleteStudent($student, $department, $status);
+      }    
+    } 
+    else 
+    {
+      $deleteSuccess = $db->deleteStudent($student, $department, $status);
+    }
 
-      foreach($student->student_id as $student) {
-        $db->deleteStudent($student, $department, $status);
-      }
-
-      $response = setSuccessResponse($response, 200);
-
-    } else {
-
-        $db->deleteStudent($student, $department, $status);
-        $response = setSuccessResponse($response, 200);
+    if($deleteSuccess)
+    {
+      $responseBody = array('successMsg' => 'Student(s) successfully deleted');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Failed to delete student(s)');
+      $response = setResponse($response, 400, $responseBody);
     }
 
     return $response;
@@ -870,7 +887,7 @@
     $first_name = $db->getLastName($email);
     $full_name = $first_name . "  " .$last_name;
 
-    if($db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons) && $db->insertStudent($studId, $department, $studFName, $studLName, $course, $year) && $db->updateReportCount($email))
+    if($db->insertStudent($studId, $department, $studFName, $studLName, $course, $year) && $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons) && $db->updateReportCount($email))
     {
       $emailList = $db->getAdminAccounts($department, $isActive);
 
@@ -1253,19 +1270,30 @@
     $firstName = $studentDetails->firstName;
     $program = $studentDetails->program;
     $level = $studentDetails->level;
-    //$status = 0;
+    $updateSuccess = false;
 
     $db = new DbOperation();
-    //print_r($studentDetails);
 
     $department = $db->getDepartment($email);
 
-    if($department == 1){
-      $db->updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
-      $response = setSuccessResponse($response, 200);
-    } else {
-      $db->updateCollegeStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
-      $response = setSuccessResponse($response, 200);
+    if($department == 1)
+    {
+      $updateSuccess = $db->updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
+    } 
+    else 
+    {
+      $updateSuccess = $db->updateCollegeStudent($studentId, $originalId, $lastName, $firstName, $program, $level);   
+    }
+
+    if($updateSuccess)
+    {
+      $responseBody = array('successMsg' => 'Student profile successfully updated');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Failed to update student profile');
+      $response = setResponse($response, 400, $responseBody);
     }
 
     return $response;

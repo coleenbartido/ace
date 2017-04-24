@@ -326,11 +326,11 @@ class DbOperation
 
         if($department==1)
         {
-          $stmt2 = $this->con->prepare("INSERT INTO shs_student(student_id, program_id, level) values(?, ?, ?) ON DUPLICATE KEY UPDATE program_id=?, level=?, report_count=report_count+1");
+          $stmt2 = $this->con->prepare("INSERT INTO shs_student(student_id, program_id, level) values(?, ?, ?) ON DUPLICATE KEY UPDATE program_id=?, level=?, report_count=report_count+1, status=1");
         }
         else
         {
-          $stmt2 = $this->con->prepare("INSERT INTO college_student(student_id, program_id, level) values(?, ?, ?) ON DUPLICATE KEY UPDATE program_id=?, level=?, report_count=report_count+1");
+          $stmt2 = $this->con->prepare("INSERT INTO college_student(student_id, program_id, level) values(?, ?, ?) ON DUPLICATE KEY UPDATE program_id=?, level=?, report_count=report_count+1, status=1");
         }
 
         $stmt2->bind_param("siiii", $studId, $course, $year, $course, $year);
@@ -427,14 +427,13 @@ class DbOperation
 
     public function deleteStudent($studentId, $department, $status)
     {
-        if($department == 1){
+        if($department == 1)
+        {
           $stmt = $this->con->prepare("UPDATE shs_student SET status=? WHERE student_id=?");
-
         }
         else
         {
           $stmt = $this->con->prepare("UPDATE college_student SET status=? WHERE student_id=?");
-
         }
 
         $stmt->bind_param("is",$status,$studentId);
@@ -721,12 +720,12 @@ class DbOperation
     public function updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level)
     {
         $stmt = $this->con->prepare("UPDATE student SET student_id=?, last_name=?, first_name=? WHERE student_id=?");
-        $stmt->bind_param("ssss",$studentId, $lastName, $firstName, $originalId);
+        $stmt->bind_param("ssss", $studentId, $lastName, $firstName, $originalId);
         $result = $stmt->execute();
         $stmt->close();
 
         $stmt2 = $this->con->prepare("UPDATE shs_student SET student_id=?, level=?, program_id=? WHERE student_id=?");
-        $stmt2->bind_param("siis",$studentId, $level, $program, $originalId);
+        $stmt2->bind_param("siis", $studentId, $level, $program, $originalId);
         $result2 = $stmt2->execute();
         $stmt2->close();
 
@@ -775,18 +774,18 @@ class DbOperation
     public function updateCollegeStudent($studentId, $originalId,  $lastName, $firstName, $program, $level)
     {
       $stmt = $this->con->prepare("UPDATE student SET student_id=?, last_name=?, first_name=? WHERE student_id=?");
-      $stmt->bind_param("ssss",$studentId, $lastName, $firstName, $originalId);
+      $stmt->bind_param("ssss", $studentId, $lastName, $firstName, $originalId);
       $result = $stmt->execute();
       $stmt->close();
 
       $stmt2 = $this->con->prepare("UPDATE college_student SET student_id=?, level=?, program_id=? WHERE student_id=?");
-      $stmt2->bind_param("siis",$studentId, $level, $program, $originalId);
+      $stmt2->bind_param("siis", $studentId, $level, $program, $originalId);
       $result2 = $stmt2->execute();
       $stmt2->close();
 
       if($result && $result2)
       {
-          return true;
+        return true;
       }
       return false;
     }

@@ -303,11 +303,11 @@
 
                       <div class="col-md-6">
 
-                        <input type="checkbox" id="iba" ng-change="updateOtherCheckbox(reasons[6].check)" ng-model="reasons[6].check" value="reasons[6].value">
+                        <input type="checkbox" id="iba" ng-change="updateOtherCheckbox()" ng-model="reasons[6].check" value="reasons[6].value">
                         <label class="reason-label" for="iba">{{reasons[6].name}}</label>
 
                         <div class="col-md-12 otherReason">
-                          <textarea class="col-md-11" ng-class="{invalidTextArea: invalidOtherReason}" ng-change="updateOtherTextArea(reasons[6].value)" id="others" name="others" ng-disabled="!reasons[6].check" ng-model="reasons[6].value" maxlength="255" ng-trim="false"></textarea>
+                          <textarea class="col-md-11" ng-class="{invalidTextArea: invalidOtherReason}" ng-change="updateOtherTextArea(reasons[6].value)" id="others" name="others" ng-disabled="!reasons[6].check" ng-model="reasons[6].value" maxlength="255"></textarea>
                         </div>
                       </div>
 
@@ -324,8 +324,10 @@
               <div class="buttons custom-btn-list col-md-12 col-md-offset-0">
 
                 <div class="btns pull-right">
-                  <button class="resetBtn btn" type="reset" ng-click="resetForm()">Reset</button>
+
                   <button id="refFormButton" class="submitBtn btn" type="submit" ng-disabled="disableSubmitBtn">{{submitBtn}}</button>
+                  <button class="resetBtn btn" type="reset" ng-click="resetForm()">Reset</button>
+                  
                 </div>
 
               </div>
