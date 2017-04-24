@@ -138,7 +138,8 @@
                 <div id="scrollableDiv" scroll-glue load-more-data>
                   <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
                     <br ng-show="$first">
-                      <strong>{{ message.sender_fullName }} {{ message.message_date | date:"shortDate" }}</strong>
+                      <strong class="pull-left">{{ message.sender_fullName }}</strong>
+                      <span class="pull-right">{{ message.message_date | date:"short" }}</span>
                     <br>
                     <br>
                     <p ng-bind-html="message.message_body|newline2br"></p>

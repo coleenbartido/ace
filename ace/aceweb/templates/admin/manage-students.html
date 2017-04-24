@@ -119,7 +119,7 @@
 						<form name="updateStudentForm" class="form-horizontal custom-form" role="form" ng-submit="updateStudent(updateStudentForm)" novalidate>
 
 				            <div class="form-group">
-				              <label  class="col-md-12 control-label" for="studId">Student ID</label>
+				              <label  class="col-md-12 control-label" for="studId">Student ID <i class="glyphicon glyphicon-question-sign" title="Must follow this format (1234-56789)"></i></label>
 				              <div class="col-md-12">
 				                <input type="text" class="form-control" id="studId" name="studId" ng-model="studId" pattern="[0-9]{4}\-[0-9]{5}" required/>
 				              </div>
@@ -130,7 +130,7 @@
 				            </div>
 
 				            <div class="form-group">
-				              <label  class="col-md-12 control-label" for="studLName">Last Name</label>
+				              <label  class="col-md-12 control-label" for="studLName">Last Name <i class="glyphicon glyphicon-question-sign" title="Must only have letters, space, and certain special characters (.  ,' -)"></i></label>
 				              <div class="col-md-12">
 				                <input type="text" class="form-control" id="studLName" name="studLName" ng-model="studLName" pattern="^[a-zA-Z ,.'-]+$" required/>
 				              </div>
@@ -141,7 +141,7 @@
 				            </div>
 
 				            <div class="form-group">
-				              <label  class="col-md-12 control-label" for="studFName">First Name</label>
+				              <label  class="col-md-12 control-label" for="studFName">First Name <i class="glyphicon glyphicon-question-sign" title="Must only have letters, space, and certain special characters (.  ,' -)"></i></label>
 				              <div class="col-md-12">
 				                <input type="text" class="form-control" id="studFName" name="studFName" ng-model="studFName" pattern="^[a-zA-Z ,.'-]+$" required/>
 				              </div>
