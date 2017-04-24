@@ -620,7 +620,7 @@ angular.module('aceWeb')
   {
     if(!model)
     {
-      $scope.invalidOtherReason = true; 
+      $scope.invalidOtherReason = true;
     }
     else
     {
@@ -630,7 +630,7 @@ angular.module('aceWeb')
 
   $scope.updateOtherCheckbox = function()
   {
-    $scope.invalidOtherReason = false; 
+    $scope.invalidOtherReason = false;
     $scope.reasons[6].value = undefined;
   }
 
@@ -731,7 +731,7 @@ angular.module('aceWeb')
     .then(function(response)
     {
       //for checking
-      console.log(response);     
+      console.log(response);
 
       $scope.reports = JSON.parse(response.data.reportsList);
 
@@ -739,11 +739,11 @@ angular.module('aceWeb')
       {
         $scope.SYList = $filter('orderBy')($scope.reports, 'school_year', true);
         $scope.SYList = $filter('unique')($scope.SYList, 'school_year');
-       
+
         if(!$scope.initList || $scope.selectedSY == undefined || $scope.currentSYSize > $scope.SYList.length)
         {
           $scope.selectedSY = $scope.SYList[0].school_year;
-        }       
+        }
 
         for(var counter=0; counter < $scope.reports.length; counter++)
         {
@@ -780,7 +780,7 @@ angular.module('aceWeb')
   {
     $scope.isLoading = true;
     $scope.initList = false;
-    $scope.selectedSY = undefined;    
+    $scope.selectedSY = undefined;
     $scope.searchBox = undefined;
     $scope.reportList = {};
     $scope.reportList.report_id = [];
@@ -807,12 +807,12 @@ angular.module('aceWeb')
   })
 
   $scope.$watch("reportList.report_id", function()
-  {   
+  {
     $scope.mainCheckbox = false;
 
     if($scope.reports && $scope.filtered.length == $scope.reportList.report_id.length)
     {
-      $scope.mainCheckbox = true;  
+      $scope.mainCheckbox = true;
     }
     else
     {
@@ -821,13 +821,13 @@ angular.module('aceWeb')
   }, true);
 
   $scope.$watch("searchBox", function()
-  {   
-    $scope.reportList.report_id = [];  
+  {
+    $scope.reportList.report_id = [];
     $scope.mainCheckbox = false;
 
     if($scope.reports && $scope.filtered.length == $scope.reportList.report_id.length && $scope.filtered.length != 0)
     {
-      $scope.mainCheckbox = true;      
+      $scope.mainCheckbox = true;
     }
     else
     {
@@ -1293,8 +1293,8 @@ angular.module('aceWeb')
       title: 'Delete Message',
       message: 'Are you sure you want to delete these messages?',
       type: BootstrapDialog.TYPE_PRIMARY,
-      closable: false,    
-      buttons: 
+      closable: false,
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -1367,7 +1367,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete this message?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -1412,7 +1412,7 @@ angular.module('aceWeb')
           {
             $scope.msgPoll = $interval($scope.getMessageList, 3000);
             $rootScope.notifPoll = $interval($rootScope.getNotif, 3000);
-            
+
             $scope.deleteBtn = "Delete";
             dialogRef.enableButtons(true);
             dialogRef.close();
@@ -1579,14 +1579,17 @@ angular.module('aceWeb')
         $scope.subject = "(No Subject)";
       }
 
+      var str =  $scope.composeEmail;
+      var emailBody = str.replace(new RegExp('\r?\n','g'), '<br />');
+
       var messageDetails =
       {
-        'messageBody': $scope.composeEmail,
+        'messageBody': emailBody,
         'messageSubj': $scope.subject
       }
 
       //$scope.disableComposeEmail =
-      $scope.showLimit -= 1;
+      //$scope.showLimit -= 1;
 
       $http({
         method: 'POST',
@@ -2162,7 +2165,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete this report?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -2229,7 +2232,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete selected reports?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -2668,7 +2671,7 @@ angular.module('aceWeb')
 {
   $scope.getStudentList = function()
   {
-    var adminDetails = 
+    var adminDetails =
     {
       'email' : AuthService.getEmail()
     }
@@ -2779,7 +2782,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete this student?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -2842,7 +2845,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete selected student/s?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -3106,7 +3109,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete this faculty?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -3168,7 +3171,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete selected accounts?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -3776,7 +3779,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete this administrator?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -3838,7 +3841,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete selected accounts?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
