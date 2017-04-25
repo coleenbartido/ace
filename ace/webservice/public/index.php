@@ -1428,6 +1428,68 @@
 
 
 
+  $app->get('/downloadUserManual', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $file = 'pdfFile.pdf';
+    $response = $response->withHeader('Content-Description', 'File Transfer')
+    ->withHeader('Content-Type', 'application/pdf')
+    ->withHeader('Content-Disposition', 'attachment;filename="'.basename($file).'"')
+    ->withHeader('Expires', '0')
+    ->withHeader('Cache-Control', 'must-revalidate')
+    ->withHeader('Pragma', 'public')
+    ->withHeader('Content-Length', filesize($file));
+
+    readfile($file);
+    return $response;
+  });
+
+  
+
+  $app->post('/downloadBackup', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $databaseDetails = json_decode(file_get_contents("php://input"));
+
+    $status = 1;
+    $email = $databaseDetails->email;
+    $password = $databaseDetails->password;
+
+    $db = new DbOperation();
+
+    if($db->loginUser($email, $password, $status))
+    {
+      $dbName = $_ENV['DB']->DB_NAME;
+      $dbHost = $_ENV['DB']->DB_HOST;
+      $dbUsername = $_ENV['DB']->DB_USERNAME;
+      $dbPassword = $_ENV['DB']->DB_PASSWORD;
+      $timestamp = getTimeStamp()->format('y-m-d_H-i');
+      $backupFile = $dbName . $timestamp . ".sql";
+
+      $command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
+
+      system($command, $ret_val);
+      
+      $response = $response->withHeader('Content-Description', 'File Transfer')
+      ->withHeader('Content-Type', 'application/octet-stream')
+      ->withHeader('Content-Disposition', 'attachment;filename="'.basename($backupFile).'"')
+      ->withHeader('Expires', '0')
+      ->withHeader('Cache-Control', 'must-revalidate')
+      ->withHeader('Pragma', 'public')
+      ->withHeader('Content-Length', filesize($backupFile));
+
+      readfile($backupFile);
+
+      unlink($backupFile);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Incorrect Email or Password');
+      $response = setResponse($response, 400, $responseBody);
+    }
+
+    return $response;
+  });
+  
+
 
 
 

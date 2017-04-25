@@ -3520,49 +3520,56 @@ angular.module('aceWeb')
 
 .controller('DatabaseController', function(config, $scope, $http, $state, $localStorage, AuthService)
 {
+  $scope.initScope = function()
+  {
+    $scope.currentDateNum = Date.today().toString('MM-dd-yy-HH-mm');
+  }
 
+  $scope.initScope();
+
+  $scope.downloadBackup = function()
+  {
+    var userDetails =
+    {
+      'email' : AuthService.getEmail(),
+      'password' : $scope.userPassword
+    }
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/downloadBackup',
+      data: userDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      //for checking
+      console.log(response);
+
+      var anchor = angular.element('<a/>');
+      anchor.attr({
+        href: 'data:attachment/sql;charset=utf-8,' + encodeURI(response.data),
+        target: '_blank',
+        download: 'ace_backup_' + $scope.currentDateNum + '.sql'
+      })[0].click();
+    },
+    function(response)
+    {
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
+
+  $scope.downloadUserManual = function()
+  {
+    $scope.downloadLink = config.apiUrl + '/downloadUserManual';
+  }
   // -------------------------------------
 
-  /*var t = '<div class="modal-header">'+
-        '<h1>This is the title</h1>'+
-        '</div>'+
-        '<div class="modal-body">'+
-        '<p>Enter a value to pass to <code>close</code> as the result: <input ng-model="result" /></p>'+
-        '</div>'+
-        '<div class="modal-footer">'+
-        '<button ng-click="close(result)" class="btn btn-primary" >Close</button>'+
-        '</div>';
-
-  var dialog = $dialog.dialog ({
-    backdrop: true,
-    keyboard: true,
-    backdropClick: true,
-    template:  t, // OR: templateUrl: 'path/to/view.html',
-    controller: 'TestDialogController'
-  });
-
-  $scope.$on('fileAdded', function (evt, file) {
-    alert('opening dialog');
-    dialog.open().then(function(result){
-      if(result) {
-        alert('dialog closed with result: ' + result);
-      }
-    });
-  });
-
-  $scope.open = function(){
-    dialog.open().then(function(result){
-      if(result) {
-        alert('dialog closed with result: ' + result);
-      }
-    });
-  };
-
-  function TestDialogController($scope, dialog){
-    $scope.close = function(result){
-      dialog.close(result);
-      };
-  } */
+  
 
   //------------------------------------------
 
@@ -3571,7 +3578,7 @@ angular.module('aceWeb')
     var userDetails =
     {
       'email' : AuthService.getEmail(),
-      'password' : $scope.userPassword,
+      'password' : $scope.userPassword
     }
 
     $http({

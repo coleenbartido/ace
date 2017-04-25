@@ -17,6 +17,9 @@
     <button class="btn btn-default" type="button" data-toggle="modal" data-target="#resetModal">
             Reset Database
     </button>
+    <a class="btn btn-default" type="button" ng-click="downloadUserManual()" target="_self" ng-href="{{downloadLink}}">
+            Download User Manual
+    </a>
 
 
 
@@ -36,7 +39,7 @@
         </div>
 
         <div class="modal-footer">
-      <button type="button" class="btn btn-primary" ng-click="databaseConfirmation()">Confirm</button>
+      <button type="button" class="btn btn-primary" ng-click="downloadBackup()">Confirm</button>
         </div>
       </div>
 

@@ -78,33 +78,6 @@
         return $date;
     }
 
-    function databaseBackup(){
-
-      $dbName = $_ENV['DB']->DB_NAME;
-      $dbHost = $_ENV['DB']->DB_HOST;
-      $dbUsername = $_ENV['DB']->DB_USERNAME;
-      $dbPassword = $_ENV['DB']->DB_PASSWORD;
-      $timestamp = getTimeStamp()->format('y-m-d_H-i');
-      $backupFile = $dbName . "(" .$timestamp . ").sql";
-
-      //$command = "mysqldump --opt -h $dbhost -u $dbuser -p $dbpass $dbname | gzip > $backupFile";
-      //$command = "C:/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername -p $dbPassword $dbName > $backupFile";
-      //$command = "/xampp/mysql/bin/ mysqldump --opt -h $dbHost -u $dbUsername -p $dbPassword $dbName > $backupFile";
-      $command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
-
-
-      //-r "/path/to/www/directory/sync/products.sql"
-
-      //C:/xampp/mysql/bin/mysqldump --opt -h localhost -u root -pPASSWORD ace > C:/text.sql
-      //-u root -p databasename
-
-      ///xampp/mysql/bin/mysqldump --opt -h localhost -u root ace > "C:\dbbkup.%DATE:/=%.bak"
-
-      $var = system($command, $ret_val);
-
-      return $var;
-
-    }
 
     function databaseRestore(){
 
