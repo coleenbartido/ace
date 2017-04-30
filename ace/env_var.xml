@@ -6,6 +6,12 @@
         <DB_HOST>localhost</DB_HOST> 
         <DB_NAME>ace</DB_NAME> 
     </db> 
+    <path>
+        <USER_MANUAL_PATH>../resources/user_manual/</USER_MANUAL_PATH>
+        <BACKUP_PATH>../resources/backup_archive/</BACKUP_PATH>
+        <COMMAND_PATH_BACKUP>/xampp/mysql/bin/mysqldump </COMMAND_PATH_BACKUP>
+        <COMMAND_PATH_RESTORE>/xampp/mysql/bin/mysql </COMMAND_PATH_RESTORE>
+    </path>
     <gmail_smtp> 
         <GMAIL_EMAIL>iacademyace@gmail.com</GMAIL_EMAIL> 
         <GMAIL_PWORD>HpBs9C0bads2FdOk+gcZdDXW+Zo9j6Jc23/kf5g2eaw=</GMAIL_PWORD> 

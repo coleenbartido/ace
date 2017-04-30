@@ -1428,9 +1428,23 @@
 
 
 
-  $app->get('/downloadUserManual', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->get('/downloadUserManual/{role}', function (ServerRequestInterface $request, ResponseInterface $response)
   {
-    $file = 'pdfFile.pdf';
+    $role = $request->getAttribute('role');
+
+    if($role == "1")
+    {
+      $file = $_ENV['PATH']->USER_MANUAL_PATH . 'superadmin_user_manual.pdf';
+    }
+    else if($role == "2")
+    {
+      $file = $_ENV['PATH']->USER_MANUAL_PATH . 'admin_user_manual.pdf';
+    }
+    else if($role == "3")
+    {
+      $file = $_ENV['PATH']->USER_MANUAL_PATH . 'faculty_user_manual.pdf';
+    }
+
     $response = $response->withHeader('Content-Description', 'File Transfer')
     ->withHeader('Content-Type', 'application/pdf')
     ->withHeader('Content-Disposition', 'attachment;filename="'.basename($file).'"')
@@ -1440,6 +1454,7 @@
     ->withHeader('Content-Length', filesize($file));
 
     readfile($file);
+   
     return $response;
   });
 
@@ -1455,40 +1470,167 @@
 
     $db = new DbOperation();
 
-    if($db->loginUser($email, $password, $status))
+    if($db->verifyAdminAccount($email, $password, $status))
     {
-      $dbName = $_ENV['DB']->DB_NAME;
-      $dbHost = $_ENV['DB']->DB_HOST;
-      $dbUsername = $_ENV['DB']->DB_USERNAME;
-      $dbPassword = $_ENV['DB']->DB_PASSWORD;
-      $timestamp = getTimeStamp()->format('y-m-d_H-i');
-      $backupFile = $dbName . $timestamp . ".sql";
+      $timestamp = getTimeStamp()->format('m-d-y-H-i');
+      $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
 
-      $command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
+      $backupFailed = backupDatabase($backupFile);
 
-      system($command, $ret_val);
-      
-      $response = $response->withHeader('Content-Description', 'File Transfer')
-      ->withHeader('Content-Type', 'application/octet-stream')
-      ->withHeader('Content-Disposition', 'attachment;filename="'.basename($backupFile).'"')
-      ->withHeader('Expires', '0')
-      ->withHeader('Cache-Control', 'must-revalidate')
-      ->withHeader('Pragma', 'public')
-      ->withHeader('Content-Length', filesize($backupFile));
+      if (!$backupFailed) 
+      {
+        $response = $response->withHeader('Content-Description', 'File Transfer')
+        ->withHeader('Content-Type', 'application/octet-stream')
+        ->withHeader('Content-Disposition', 'attachment;filename="'.basename($backupFile).'"')
+        ->withHeader('Expires', '0')
+        ->withHeader('Cache-Control', 'must-revalidate')
+        ->withHeader('Pragma', 'public')
+        ->withHeader('Content-Length', filesize($backupFile));
 
-      readfile($backupFile);
+        readfile($backupFile);
 
-      unlink($backupFile);
+        unlink($backupFile);
+      } 
+      else 
+      {
+        $responseBody = array('errorMsg' => 'Failed to create a backup file');
+        $response = setResponse($response, 400, $responseBody);
+      }
     }
     else
     {
-      $responseBody = array('errorMsg' => 'Incorrect Email or Password');
+      $responseBody = array('errorMsg' => 'Incorrect Password');
       $response = setResponse($response, 400, $responseBody);
     }
 
     return $response;
   });
   
+
+  
+  $app->post('/resetDatabase', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $databaseDetails = json_decode(file_get_contents("php://input"));
+
+    $status = 1;
+    $email = $databaseDetails->email;
+    $password = $databaseDetails->password;
+
+    $db = new DbOperation();
+
+    if($db->verifyAdminAccount($email, $password, $status))
+    {
+      $timestamp = getTimeStamp()->format('m-d-y-H-i');
+      $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
+
+      $backupFailed = backupDatabase($backupFile);
+    
+      if($db->resetDatabase())
+      {
+        $responseBody = array('successMsg' => 'Database successfully reset');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Failed to reset the database');
+        $response = setResponse($response, 400, $responseBody);
+      }
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Incorrect Password');
+      $response = setResponse($response, 400, $responseBody);
+    }
+
+    return $response;
+  });
+
+
+  
+  $app->post('/verifyAdminAccount', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $databaseDetails = json_decode(file_get_contents("php://input"));
+
+    $status = 1;
+    $email = $databaseDetails->email;
+    $password = $databaseDetails->password;
+
+    $db = new DbOperation();
+
+    if($db->verifyAdminAccount($email, $password, $status))
+    {
+      $response = setSuccessResponse($response, 200);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Incorrect Password');
+      $response = setResponse($response, 400, $responseBody);
+    }
+
+    return $response;
+  });
+
+
+
+  $app->post('/restoreBackup', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $status = 1;
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $restoreFile = $_FILES["file"]["name"];
+
+    $db = new DbOperation();
+
+    if($db->verifyAdminAccount($email, $password, $status))
+    {     
+      $file_parts = pathinfo($restoreFile);
+
+      if($file_parts['extension'] == "sql")
+      {
+        if(filesize($restoreFile) == 0)
+        {
+          $responseBody = array('errorMsg' => 'Empty backup file');
+          $response = setResponse($response, 400, $responseBody);
+        }
+        else
+        {
+          $dbName = $_ENV['DB']->DB_NAME; 
+          $dbUsername = $_ENV['DB']->DB_USERNAME;
+          $dbPword = $_ENV['DB']->DB_PASSWORD;
+          $timestamp = getTimeStamp()->format('m-d-y-H-i');
+          $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
+      
+          $backupFailed = backupDatabase($backupFile);
+
+          $command = $_ENV['PATH']->COMMAND_PATH_RESTORE . "-u $dbUsername --password=$dbPword $dbName < $restoreFile";
+          exec($command, $output, $restoreFailed);
+
+          if (!$restoreFailed) 
+          {
+            $responseBody = array('successMsg' => "Backup file successfully restored");
+            $response = setResponse($response, 200, $responseBody);
+          } 
+          else 
+          {
+            $responseBody = array('errorMsg' => 'Failed to restore backup file');
+            $response = setResponse($response, 400, $responseBody);
+          }
+        }
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Invalid backup file');
+        $response = setResponse($response, 400, $responseBody);
+      }
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Authentication failed');
+      $response = setResponse($response, 400, $responseBody);
+    }
+
+    return $response;
+  });
 
 
 

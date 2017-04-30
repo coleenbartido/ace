@@ -3,19 +3,19 @@
 
     function setResponse($response, $statusCode, $responseBody)
     {
-        header('Content-Type: application/json');
-        header("Access-Control-Allow-Origin: *");
+      header('Content-Type: application/json');
+      header("Access-Control-Allow-Origin: *");
 
-        return $response->withStatus($statusCode)->withJson($responseBody);
+      return $response->withStatus($statusCode)->withJson($responseBody);
     }
 
 
     function setSuccessResponse($response, $statusCode)
     {
-        header('Content-Type: application/json');
-        header("Access-Control-Allow-Origin: *");
+      header('Content-Type: application/json');
+      header("Access-Control-Allow-Origin: *");
 
-        return $response->withStatus($statusCode);
+      return $response->withStatus($statusCode);
     }
 
 
@@ -55,49 +55,40 @@
 
     function randStrGen()
     {
-        $len = 5;
-        $result = "";
-        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        $charArray = str_split($chars);
+      $len = 5;
+      $result = "";
+      $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+      $charArray = str_split($chars);
 
-        for($i = 0; $i < $len; $i++)
-        {
-            $randItem = array_rand($charArray);
-            $result .= "".$charArray[$randItem];
-        }
+      for($i = 0; $i < $len; $i++)
+      {
+        $randItem = array_rand($charArray);
+        $result .= "".$charArray[$randItem];
+      }
 
-        return $result;
+      return $result;
     }
 
 
     function getTimestamp()
     {
-        $date = new DateTime();
-        $date->setTimezone(new DateTimeZone('Asia/Manila'));
+      $date = new DateTime();
+      $date->setTimezone(new DateTimeZone('Asia/Manila'));
 
-        return $date;
+      return $date;
     }
 
 
-    function databaseRestore(){
-
+    function backupDatabase($backupFile)
+    {
       $dbName = $_ENV['DB']->DB_NAME;
       $dbHost = $_ENV['DB']->DB_HOST;
       $dbUsername = $_ENV['DB']->DB_USERNAME;
-      $dbPassword = $_ENV['DB']->DB_PASSWORD;
-      $timestamp = getTimeStamp()->format('y-m-d_H-i');
-      $backupFile = $dbName . "(" .$timestamp . ").sql";
+      $command = $_ENV['PATH']->COMMAND_PATH_BACKUP . "--opt -h $dbHost -u $dbUsername $dbName > $backupFile";
 
-      //database backup
-      //$command = "/xampp/mysql/bin/mysqldump --opt -h $dbHost -u $dbUsername $dbName > $backupFile";
+      exec($command, $output, $return);
 
-      //database restore
-      $command = "mysql -u $dbUsername -p $dbName < filename.sql";
-
-      $var = system($command, $ret_val);
-
-      return $var;
-
+      return $return;
     }
 
 

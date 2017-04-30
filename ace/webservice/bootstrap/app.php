@@ -11,6 +11,7 @@
 
 	$env_var = simplexml_load_file("../../env_var.xml");
 	$_ENV['DB'] = $env_var->db;
+	$_ENV['PATH'] = $env_var->path;
   	$_ENV['GMAIL'] = $env_var->gmail_smtp;
   	$_ENV['DOMAIN'] = $env_var->domain;
   	$_ENV['KEY'] = $env_var->key;

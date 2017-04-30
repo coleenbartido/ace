@@ -436,6 +436,11 @@ angular.module('aceWeb')
     AuthService.logout();
   }
 
+  $scope.downloadUserManual = function()
+  {
+    $scope.downloadLink = config.apiUrl + '/downloadUserManual/' + AuthService.getRole();
+  }
+
   $rootScope.getNotif = function()
   {
     var accountDetails =
@@ -1761,13 +1766,6 @@ angular.module('aceWeb')
       {
         console.log(response);
 
-        $scope.pwordLength = "";
-
-        for(var counter = 0; counter < $scope.userPassword.length; counter++)
-        {
-          $scope.pwordLength += '•';
-        }
-
         $('#pwordModal').modal('hide');
         $scope.showCustomModal("SUCCESS", response.data.successMsg);
       },
@@ -1819,6 +1817,11 @@ angular.module('aceWeb')
   $scope.logout = function()
   {
     AuthService.logout();
+  }
+
+  $scope.downloadUserManual = function()
+  {
+    $scope.downloadLink = config.apiUrl + '/downloadUserManual/' + AuthService.getRole();
   }
 
   $rootScope.getNotif = function()
@@ -3522,91 +3525,259 @@ angular.module('aceWeb')
 {
   $scope.initScope = function()
   {
-    $scope.currentDateNum = Date.today().toString('MM-dd-yy-HH-mm');
+    $scope.verifyBtn = "Verify";
+    $scope.restoreBtn = "Restore";
+    $scope.currentDateNum = new Date().toString('MM-dd-yy-HH-mm');  
   }
 
   $scope.initScope();
 
-  $scope.downloadBackup = function()
+  $scope.showModal = function(form)
   {
-    var userDetails =
-    {
-      'email' : AuthService.getEmail(),
-      'password' : $scope.userPassword
-    }
+    $scope.isNotAuthenticated = false;
+    $scope.invalidFile = false;
+    $scope.isFileEmpty = false;
+    $scope.isNoFile = false;
 
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/downloadBackup',
-      data: userDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function(response)
-    {
-      //for checking
-      console.log(response);
-
-      var anchor = angular.element('<a/>');
-      anchor.attr({
-        href: 'data:attachment/sql;charset=utf-8,' + encodeURI(response.data),
-        target: '_blank',
-        download: 'ace_backup_' + $scope.currentDateNum + '.sql'
-      })[0].click();
-    },
-    function(response)
-    {
-
-    })
-    .finally(function()
-    {
-
-    });
+    angular.element("input[type='file']").val(null);
+    $scope.file = undefined;
+    $scope.userPassword = undefined;
+    form.$setPristine();
+    form.userPassword.$setUntouched();
   }
 
-  $scope.downloadUserManual = function()
+  $scope.setValidPassword = function(form)
   {
-    $scope.downloadLink = config.apiUrl + '/downloadUserManual';
+    form.userPassword.$setValidity('incorrectPword', true);
   }
-  // -------------------------------------
 
-  
-
-  //------------------------------------------
-
-  $scope.databaseConfirmation = function(){
-
-    var userDetails =
+  $scope.downloadBackup = function(form)
+  {
+    if(form.$valid)
     {
-      'email' : AuthService.getEmail(),
-      'password' : $scope.userPassword
-    }
+      $scope.disableVerifyBtn = true;
+      $scope.verifyBtn = "Verifying";
 
-    $http({
-      method: 'POST',
-      url: config.apiUrl + '/databaseConfirm',
-      data: userDetails,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function(response)
-    {
-      //for checking
-      console.log(response);
-
-      alert('Valid');
-
-    },
-    function(response)
-    {
-      if(response.data.errMsg == 'Credentials invalid.')
+      var userDetails =
       {
-        alert("hELLO ANFBEjn")
+        'email' : AuthService.getEmail(),
+        'password' : $scope.userPassword
       }
-    })
-    .finally(function()
-    {
-        $scope.userPassword = undefined;
-    });
 
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/downloadBackup',
+        data: userDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        var anchor = angular.element('<a/>');
+        anchor.attr({
+          href: 'data:attachment/sql;charset=utf-8,' + encodeURI(response.data),
+          target: '_blank',
+          download: 'ace_backup_' + $scope.currentDateNum + '.sql'
+        })[0].click();
+
+        $('#backupModal').modal('hide');
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+        if(response.data.errorMsg == "Incorrect Password")
+        {
+          $scope.userPassword = undefined;
+          $scope.backupForm.userPassword.$setValidity('incorrectPword', false);
+        }
+        else
+        {
+          $('#backupModal').modal('hide');
+          $scope.showCustomModal("ERROR", response.data.errorMsg);
+        }
+      })
+      .finally(function()
+      {
+        $scope.disableVerifyBtn = false;
+        $scope.verifyBtn = "Verify";
+      });
+    } 
+  }
+
+  $scope.resetDatabase = function(form)
+  {
+    if(form.$valid)
+    {
+      $scope.disableVerifyBtn = true;
+      $scope.verifyBtn = "Verifying";
+
+      var userDetails =
+      {
+        'email' : AuthService.getEmail(),
+        'password' : $scope.userPassword
+      }
+
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/resetDatabase',
+        data: userDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $('#resetModal').modal('hide');
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+        if(response.data.errorMsg == "Incorrect Password")
+        {
+          $scope.userPassword = undefined;
+          $scope.resetForm.userPassword.$setValidity('incorrectPword', false);
+        }
+        else
+        {
+          $('#resetModal').modal('hide');
+          $scope.showCustomModal("ERROR", response.data.errorMsg);
+        }
+      })
+      .finally(function()
+      {
+        $scope.disableVerifyBtn = false;
+        $scope.verifyBtn = "Verify";
+      });
+    }
+  }
+
+  $scope.restoreBackup = function(form)
+  {
+    if(form.$valid)
+    {
+      $scope.disableVerifyBtn = true;
+      $scope.verifyBtn = "Verifying";
+
+      var userDetails =
+      {
+        'email' : AuthService.getEmail(),
+        'password' : $scope.userPassword
+      }
+
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/verifyAdminAccount',
+        data: userDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $('#restoreModal').modal('hide');
+        $('#fileUploadModal').modal('show');
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $scope.userPassword = undefined;
+        $scope.restoreForm.userPassword.$setValidity('incorrectPword', false);
+      })
+      .finally(function()
+      {
+        $scope.disableVerifyBtn = false;
+        $scope.verifyBtn = "Verify";
+      });
+    }
+  }
+
+  $scope.uploadFile = function(form)
+  {
+    if($scope.file)
+    {
+      $scope.disableRestoreBtn = true;
+      $scope.restoreBtn = "Restoring";
+
+      var fd = new FormData();
+      fd.append('file', $scope.file);
+      fd.append('email', AuthService.getEmail());
+      fd.append('password', $scope.userPassword);
+
+      $http.post(config.apiUrl + '/restoreBackup', fd, {
+        transformRequest: angular.identity,
+        headers: {'Content-Type': undefined,'Process-Data': false}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $('#fileUploadModal').modal('hide');
+
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+        if(response.data.errorMsg == "Authentication failed")
+        {
+          $scope.isNotAuthenticated = true;
+        }
+        else if(response.data.errorMsg == "Invalid backup file")
+        {
+          $scope.invalidFile = true;
+        }
+        else if(response.data.errorMsg == "Empty backup file")
+        {
+          $scope.isFileEmpty = true;
+        }     
+        else
+        {
+          $('#fileUploadModal').modal('hide');
+          $scope.showCustomModal("ERROR", response.data.errorMsg);
+        }     
+      })
+      .finally(function()
+      {
+        $scope.disableRestoreBtn = false;
+        $scope.restoreBtn = "Restore";
+      });
+    }
+    else
+    {
+      $scope.isNoFile = true;
+    }
+  }
+
+  $scope.fileNameChanged = function() 
+  {
+    $scope.isNotAuthenticated = false;
+    $scope.invalidFile = false;
+    $scope.isFileEmpty = false;
+    $scope.isNoFile = false;
+  }
+
+  $scope.showCustomModal = function(modalTitle, modalMsg)
+  {
+    BootstrapDialog.alert({
+      title: modalTitle,
+      message: modalMsg,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      closable: false
+    });
   }
 }) //closing tag controller
 
@@ -3619,17 +3790,22 @@ angular.module('aceWeb')
 
 .controller('SuperAdminController', function(config, $scope, $http, $state, AuthService)
 {
+  $scope.logout = function()
+  {
+    AuthService.logout();
+  }
+
+  $scope.downloadUserManual = function()
+  {
+    $scope.downloadLink = config.apiUrl + '/downloadUserManual/' + AuthService.getRole();
+  }
+
   $scope.initScope = function()
   {
     $scope.userName = AuthService.getName();
   }
 
   $scope.initScope();
-
-  $scope.logout = function()
-  {
-    AuthService.logout();
-  }
 })
 
 

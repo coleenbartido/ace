@@ -28,6 +28,23 @@ class DbOperation
     }
 
 
+    public function verifyAdminAccount($email, $pword, $status)
+    {
+        $userType = 2;
+        $stmt = $this->con->prepare("SELECT hash FROM user WHERE email=? and status=? and user_type_id=?");
+        $stmt->bind_param("sii", $email, $status, $userType);
+        $stmt->execute();
+        $account = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if(password_verify($pword, $account['hash']))
+        {
+            return true;
+        }
+        return false;
+    }
+
+
     public function getAccountRole($email)
     {
         $stmt = $this->con->prepare("SELECT user_type_id FROM user WHERE email=? UNION SELECT user_type_id FROM superadmin_account WHERE email=?");
@@ -1204,12 +1221,27 @@ class DbOperation
     }
 
 
+    public function resetDatabase()
+    {
+        $sqlEmptyStudent = "DELETE FROM student";
+        $sqlEmptyMessage = "TRUNCATE TABLE message";
+        $sqlEmptyReport = "TRUNCATE TABLE report";
+        $sqlEmptyReason = "TRUNCATE TABLE reason";
+        $sqlEmptyFaculty = "UPDATE faculty_account SET reported_count=0";
 
+        $emptyStudentResult = $this->con->query($sqlEmptyStudent);
+        $emptyMessageResult = $this->con->query($sqlEmptyMessage);
+        $emptyReportResult = $this->con->query($sqlEmptyReport);
+        $emptyReasonResult = $this->con->query($sqlEmptyReason);
+        $emptyFacultyResult = $this->con->query($sqlEmptyFaculty);
 
+        $this->con->close();
 
-
-
-
-
+        if($emptyStudentResult && $emptyMessageResult && $emptyReportResult && $emptyReasonResult && $emptyFacultyResult)
+        {
+            return true;
+        }
+        return false;
+    }
 
 }

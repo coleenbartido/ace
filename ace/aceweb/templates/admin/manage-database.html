@@ -5,97 +5,170 @@
 </head>
 
 <body>
-  <h1>MANAGE DATABASE</h1>
 
   <div>
-    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#backupModal">
+    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#backupModal" ng-click="showModal(backupForm)">
             Backup Database
     </button>
-    <button class="btn btn-default" type="file" data-toggle="modal" data-target="#restoreModal" file-dialog>
-            Restore Database
-    </button>
-    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#resetModal">
+
+    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#resetModal" ng-click="showModal(resetForm)">
             Reset Database
     </button>
-    <a class="btn btn-default" type="button" ng-click="downloadUserManual()" target="_self" ng-href="{{downloadLink}}">
-            Download User Manual
-    </a>
 
+    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#restoreModal" ng-click="showModal(restoreForm)">
+            Restore Database
+    </button>
 
 
     <div id="backupModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
-      <div class="modal-content">
+        <div class="modal-content">
 
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-          <h4 class="modal-title">Backup Database</h4>
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+            <h4 class="modal-title custom-header-color">Backup Database</h4>
+          </div>
+
+          <div class="modal-body">
+            <form name="backupForm" class="form-horizontal custom-form" role="form" ng-submit="downloadBackup(backupForm)" novalidate>
+
+              <div class="form-group">
+                <label  class="col-md-12 control-label" for="userPassword">Password</label>
+                <div class="col-md-12">
+                  <input type="password" class="form-control" id="userPassword" name="userPassword" ng-model="userPassword" ng-change="setValidPassword(backupForm)" required/>
+                </div>
+              </div>
+              <div ng-messages="backupForm.userPassword.$error" ng-show="backupForm.$submitted">
+                <p class="invalid-text" ng-message="incorrectPword">Invalid password</p>
+                <p class="invalid-text" ng-message="required">This field is required</p>         
+              </div>
+
+              <div class="verifyBtn">
+                <button type="submit" class="btn btn-primary" ng-disabled="disableVerifyBtn">{{verifyBtn}}</button>
+              </div>
+
+            </form>
+          </div>
+
         </div>
 
-        <div class="modal-body">
-          <p>Please enter password to confirm backup of the current database:</p>
-          <input type="text" placeholder="Password" ng-Model="userPassword">
-        </div>
-
-        <div class="modal-footer">
-      <button type="button" class="btn btn-primary" ng-click="downloadBackup()">Confirm</button>
-        </div>
       </div>
+    </div><!-- modal closing tag -->
+
+
+    <div id="resetModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+            <h4 class="modal-title custom-header-color">Reset Database</h4>
+          </div>
+
+          <div class="modal-body">
+            <form name="resetForm" class="form-horizontal custom-form" role="form" ng-submit="resetDatabase(resetForm)" novalidate>
+
+              <div class="form-group">
+                <label  class="col-md-12 control-label" for="userPassword">Password</label>
+                <div class="col-md-12">
+                  <input type="password" class="form-control" id="userPassword" name="userPassword" ng-model="userPassword" ng-change="setValidPassword(resetForm)" required/>
+                </div>
+              </div>
+              <div ng-messages="resetForm.userPassword.$error" ng-show="resetForm.$submitted">
+                <p class="invalid-text" ng-message="incorrectPword">Invalid password</p>
+                <p class="invalid-text" ng-message="required">This field is required</p>         
+              </div>
+
+              <div class="verifyBtn">
+                <button type="submit" class="btn btn-primary" ng-disabled="disableVerifyBtn">{{verifyBtn}}</button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
 
       </div>
-    </div> 
+    </div><!-- modal closing tag -->
+
+
+    <div id="restoreModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+            <h4 class="modal-title custom-header-color">Restore Database</h4>
+          </div>
+
+          <div class="modal-body">
+            <form name="restoreForm" class="form-horizontal custom-form" role="form" ng-submit="restoreBackup(restoreForm)" novalidate>
+
+              <div class="form-group">
+                <label  class="col-md-12 control-label" for="userPassword">Password</label>
+                <div class="col-md-12">
+                  <input type="password" class="form-control" id="userPassword" name="userPassword" ng-model="userPassword" ng-change="setValidPassword(restoreForm)" required/>
+                </div>
+              </div>
+              <div ng-messages="restoreForm.userPassword.$error" ng-show="restoreForm.$submitted">
+                <p class="invalid-text" ng-message="incorrectPword">Invalid password</p>
+                <p class="invalid-text" ng-message="required">This field is required</p>         
+              </div>
+
+              <div class="verifyBtn">
+                <button type="submit" class="btn btn-primary" ng-disabled="disableVerifyBtn">{{verifyBtn}}</button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div><!-- modal closing tag -->
+
+
+    <div id="fileUploadModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+            <h4 class="modal-title custom-header-color">Upload Backup File</h4>
+          </div>
+
+          <div class="modal-body">
+            <form name="uploadForm" class="form-horizontal custom-form" role="form" ng-submit="uploadFile(uploadForm)" novalidate>
+
+              <div class="form-group">
+                <div class="col-md-12">
+                  <input type="file" class="form-control" id="file" name="file" file-model="file" onchange="angular.element(this).scope().fileNameChanged()"/>
+                </div>
+              </div>
+              <div ng-messages="uploadForm.$submitted">             
+                <p class="invalid-text" ng-show="isNoFile">No file selected</p> 
+                <p class="invalid-text" ng-show="invalidFile">Invalid file format</p> 
+                <p class="invalid-text" ng-show="isFileEmpty">Empty file</p> 
+                <p class="invalid-text" ng-show="isNotAuthenticated">Authentication failed</p>         
+              </div>
+
+              <div class="verifyBtn">
+                <button type="submit" class="btn btn-primary" ng-disabled="disableRestoreBtn">{{restoreBtn}}</button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div><!-- modal closing tag -->
+
 
 </body>
 
-  <!--
 
-  <div id="restoreModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title">Restore Database</h4>
-      </div>
-
-      <div class="modal-body">
-        <p>Please enter password to confirm restoration of d</p>
-        <input type="text" placeholder="Password" ng-Model="userPassword">
-      </div>
-
-      <div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="">Confirm</button>
-      </div>
-    </div>
-
-    </div>
-  </div>
-
-  restore database modal --->
-
-  <div id="resetModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title">Reset Database</h4>
-      </div>
-
-      <div class="modal-body">
-        <label><b>Enter Password:</b></label>
-        <input type="password" placeholder="Password" ng-Model="userPassword">
-      </div>
-
-      <div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="databaseConfirmation()">Confirm</button>
-      </div>
-    </div>
-
-    </div>
-  </div> <!--- reset database modal --->
-
-</div>

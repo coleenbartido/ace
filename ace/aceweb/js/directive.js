@@ -120,16 +120,20 @@ angular.module('aceWeb')
 // <----------------------------------------------------------------------------------->
 
 
-.directive('fileDialog', [function() {
+.directive('fileModel', ['$parse', function ($parse) {
     return {
-        restrict: 'A',
-        scope: true,
-        link: function (scope, element, attr) {
-            element.bind('change', function (evt) {
-                scope.$emit('fileAdded', evt.target.files[0]);
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+        var model = $parse(attrs.fileModel);
+        var modelSetter = model.assign;
+
+        element.bind('change', function(){
+            scope.$apply(function(){
+                modelSetter(scope, element[0].files[0]);
             });
-        }
-    };
+        });
+    }
+   };
 }])
 
 

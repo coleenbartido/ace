@@ -15,3 +15,32 @@ body {
   padding-left: 25px;
   text-decoration: none;
 }
+
+.modal-dialog {
+  width:400px;
+}
+
+.modal-body .form-horizontal .control-label {
+  text-align: left;
+  padding-bottom: 7px;
+}
+
+.custom-form {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.verifyBtn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: right;
+}
+
+.invalid-text {
+  margin-top: -10px;
+  color: #f00;
+}
+
+form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
+  border:1px solid #f00;
+}
