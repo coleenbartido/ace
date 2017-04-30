@@ -1577,17 +1577,15 @@
     $status = 1;
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $restoreFile = $_FILES["file"]["name"];
+    $restoreFile = $_FILES["file"]["tmp_name"];
 
     $db = new DbOperation();
 
     if($db->verifyAdminAccount($email, $password, $status))
-    {     
-      $file_parts = pathinfo($restoreFile);
-
-      if($file_parts['extension'] == "sql")
+    {        
+      if(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION) == "sql")
       {
-        if(filesize($restoreFile) == 0)
+        if($_FILES["file"]["size"] == 0)
         {
           $responseBody = array('errorMsg' => 'Empty backup file');
           $response = setResponse($response, 400, $responseBody);
