@@ -3521,7 +3521,7 @@ angular.module('aceWeb')
 // <------------------------------------------------------------------>
 
 
-.controller('DatabaseController', function(config, $scope, $http, $state, $localStorage, AuthService)
+.controller('DatabaseController', function(config, $scope, $http, $state, $localStorage, AuthService, $timeout)
 {
   $scope.initScope = function()
   {
@@ -3575,12 +3575,15 @@ angular.module('aceWeb')
         //for checking
         console.log(response);
 
-        var anchor = angular.element('<a/>');
-        anchor.attr({
-          href: 'data:attachment/sql;charset=utf-8,' + encodeURI(response.data),
-          target: '_blank',
-          download: 'ace_backup_' + $scope.currentDateNum + '.sql'
-        })[0].click();
+        var anchor = document.createElement('a');
+        anchor.href = 'data:attachment/sql;charset=utf-8,' + encodeURI(response.data);
+        anchor.target = '_blank';
+        anchor.download = 'ace_backup_' + $scope.currentDateNum + '.sql';
+        document.body.appendChild(anchor);
+        anchor.click();
+        $timeout(function () {
+           anchor.remove();
+        }, 50);
 
         $('#backupModal').modal('hide');
       },
@@ -3702,7 +3705,7 @@ angular.module('aceWeb')
     }
   }
 
-  $scope.uploadFile = function(form)
+  $scope.uploadFile = function()
   {
     if($scope.file)
     {
