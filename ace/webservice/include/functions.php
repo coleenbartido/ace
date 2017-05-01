@@ -91,5 +91,26 @@
       return $return;
     }
 
+    function logToFile($email, $msg)
+    {
+      $db = new DbOperation();
+
+      $timestamp = getTimestamp()->format('Y-m-d H:i:s');
+      $role = $db->getAccountRole($email);
+
+      if($role == 1)
+      {
+        $name = "Super Admin";
+      }
+      else
+      {
+        $name = $db->getFirstName($email) . " " . $db->getLastName($email);
+      }
+
+      $fh = fopen('log.txt', 'a');
+      fwrite($fh, "[" . $timestamp . "]" . " " . $name . " " . $msg . PHP_EOL);
+      fclose($fh);
+    }
+
 
 ?>

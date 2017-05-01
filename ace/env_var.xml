@@ -9,8 +9,8 @@
     <path>
         <USER_MANUAL_PATH>../resources/user_manual/</USER_MANUAL_PATH>
         <BACKUP_PATH>../resources/backup_archive/</BACKUP_PATH>
-        <COMMAND_PATH_BACKUP>/xampp/mysql/bin/mysqldump </COMMAND_PATH_BACKUP>
-        <COMMAND_PATH_RESTORE>/xampp/mysql/bin/mysql </COMMAND_PATH_RESTORE>
+        <COMMAND_PATH_BACKUP>C:\xampp\mysql\bin\mysqldump </COMMAND_PATH_BACKUP>
+        <COMMAND_PATH_RESTORE>C:\xampp\mysql\bin\mysql </COMMAND_PATH_RESTORE>
     </path>
     <gmail_smtp> 
         <GMAIL_EMAIL>iacademyace@gmail.com</GMAIL_EMAIL> 

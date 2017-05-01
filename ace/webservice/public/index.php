@@ -74,6 +74,8 @@
         'HS256'
       );
 
+      logToFile($email, "has login to the system");
+
       $responseBody = array('token' => $jwt);
       $response = setResponse($response, 200, $responseBody);
     }
@@ -1490,6 +1492,8 @@
         readfile($backupFile);
 
         unlink($backupFile);
+
+        logToFile($email, "has successfully download a copy of the database");
       } 
       else 
       {
@@ -1527,6 +1531,8 @@
     
       if($db->resetDatabase())
       {
+        logToFile($email, "has successfully reset the database");
+
         $responseBody = array('successMsg' => 'Database successfully reset');
         $response = setResponse($response, 200, $responseBody);
       }
@@ -1605,6 +1611,8 @@
 
           if (!$restoreFailed) 
           {
+            logToFile($email, "has successfully restored the database");
+
             $responseBody = array('successMsg' => "Backup file successfully restored");
             $response = setResponse($response, 200, $responseBody);
           } 
