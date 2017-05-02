@@ -1581,7 +1581,7 @@ angular.module('aceWeb')
         'messageBody': emailBody,
         'messageSubj': $scope.subject
       }
-     
+
       $http({
         method: 'POST',
         url: config.apiUrl + '/broadcastEmail',
@@ -2653,7 +2653,7 @@ angular.module('aceWeb')
 {
   $scope.getStudentList = function()
   {
-    var adminDetails = 
+    var adminDetails =
     {
       'email' : AuthService.getEmail()
     }
@@ -2764,7 +2764,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete this student?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -2827,7 +2827,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete selected student/s?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -2946,7 +2946,7 @@ angular.module('aceWeb')
         $scope.updateBtn = "Update";
         $scope.disableUpdateBtn = false;
       });
-    }   
+    }
   }
 
   $scope.showCustomModal = function(modalTitle, modalMsg)
@@ -3003,6 +3003,7 @@ angular.module('aceWeb')
     $scope.createBtn = "Create Account";
     $scope.disableRegBtn = false;
     $scope.deleteBtn = "Delete";
+    $scope.updateBtn = "Update";
 
     $scope.searchBox = undefined;
     $scope.facultyList = {};
@@ -3018,6 +3019,64 @@ angular.module('aceWeb')
   } //scope initScope
 
   $scope.initScope();
+
+  $scope.showPopup = function(faculty)
+	{
+			$scope.selectedFaculty = faculty;
+
+			$scope.email = faculty.email;
+			$scope.lastName = faculty.last_name;
+			$scope.firstName = faculty.first_name;
+			$scope.userType = faculty.user_type_id;
+
+  }
+
+  $scope.updateFaculty = function(form)
+  {
+    if(form.$valid)
+    {
+      $scope.updateBtn = "Updating";
+      $scope.disableUpdateBtn = true;
+
+      var facultyDetails =
+      {
+        'email': $scope.email,
+        'lastName' : $scope.lastName,
+        'firstName' : $scope.firstName,
+        'userType':  $scope.userType
+      };
+
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/updateAccount',
+        data: facultyDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $scope.getFacultyList();
+        $('#editModal').modal('hide');
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $('#editModal').modal('hide');
+        $scope.showCustomModal("ERROR", response.data.errorMsg);
+      })
+      .finally(function()
+      {
+        $scope.updateBtn = "Update";
+        $scope.disableUpdateBtn = false;
+      });
+    }
+  }
+
 
   $scope.showRegFacultyModal = function()
   {
@@ -3527,7 +3586,7 @@ angular.module('aceWeb')
   {
     $scope.verifyBtn = "Verify";
     $scope.restoreBtn = "Restore";
-    $scope.currentDateNum = new Date().toString('MM-dd-yy-HH-mm');  
+    $scope.currentDateNum = new Date().toString('MM-dd-yy-HH-mm');
   }
 
   $scope.initScope();
@@ -3608,7 +3667,7 @@ angular.module('aceWeb')
         $scope.disableVerifyBtn = false;
         $scope.verifyBtn = "Verify";
       });
-    } 
+    }
   }
 
   $scope.resetDatabase = function(form)
@@ -3746,12 +3805,12 @@ angular.module('aceWeb')
         else if(response.data.errorMsg == "Empty backup file")
         {
           $scope.isFileEmpty = true;
-        }     
+        }
         else
         {
           $('#fileUploadModal').modal('hide');
           $scope.showCustomModal("ERROR", response.data.errorMsg);
-        }     
+        }
       })
       .finally(function()
       {
@@ -3765,7 +3824,7 @@ angular.module('aceWeb')
     }
   }
 
-  $scope.fileNameChanged = function() 
+  $scope.fileNameChanged = function()
   {
     $scope.isNotAuthenticated = false;
     $scope.invalidFile = false;
@@ -3853,6 +3912,7 @@ angular.module('aceWeb')
     $scope.createBtn = "Create Account";
     $scope.disableRegBtn = false;
     $scope.deleteBtn = "Delete";
+    $scope.updateBtn = "Update";
 
     $scope.searchBox = undefined;
     $scope.adminList = {};
@@ -3868,6 +3928,64 @@ angular.module('aceWeb')
   } //scope initScope
 
   $scope.initScope();
+
+  $scope.showPopup = function(admin)
+  {
+    $scope.selectedAdmin = admin;
+
+    $scope.email = admin.email;
+    $scope.lastName = admin.last_name;
+    $scope.firstName = admin.first_name;
+    $scope.userType = admin.user_type_id;
+
+  }
+
+  $scope.updateAdmin = function(form)
+  {
+    if(form.$valid)
+    {
+      $scope.updateBtn = "Updating";
+      $scope.disableUpdateBtn = true;
+
+      var adminDetails =
+      {
+        'email': $scope.email,
+        'lastName' : $scope.lastName,
+        'firstName' : $scope.firstName,
+        'userType':  $scope.userType
+      };
+
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/updateAccount',
+        data: adminDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $scope.getAdminList();
+        $('#editModal').modal('hide');
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $('#editModal').modal('hide');
+        $scope.showCustomModal("ERROR", response.data.errorMsg);
+      })
+      .finally(function()
+      {
+        $scope.updateBtn = "Update";
+        $scope.disableUpdateBtn = false;
+      });
+    }
+  }
+
 
   $scope.showRegAdminModal = function()
   {

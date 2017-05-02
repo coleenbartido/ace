@@ -429,14 +429,14 @@
     $db = new DbOperation();
 
     $email = $adminDetails->email;
-    $status = 1;   
+    $status = 1;
     $department = $db->getDepartment($email);
 
     if($department==1)
     {
       $studentList = $db->listShsStudent($status);
-    } 
-    else 
+    }
+    else
     {
       $studentList = $db->listCollegeStudent($status);
     }
@@ -486,7 +486,7 @@
 
     $db = new DbOperation();
 
-    $email = $reportDetails->email;    
+    $email = $reportDetails->email;
     $department = $db->getDepartment($email);
     $status = 1;
 
@@ -503,7 +503,7 @@
     {
       $reportsList[$counter]['faculty_fullname'] = $reportsList[$counter]['faculty_fname'] . " " . $reportsList[$counter]['faculty_lname'];
       $reportsList[$counter]['student_fullname'] = $reportsList[$counter]['student_fname'] . " " . $reportsList[$counter]['student_lname'];
-      
+
       $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
 
       for($ctr=0; $ctr<count($reasonArr); $ctr++)
@@ -514,7 +514,7 @@
 
     $responseBody = array('reportsList' => json_encode($reportsList));
     $response = setResponse($response, 200, $responseBody);
-   
+
     return $response;
   });
 
@@ -526,7 +526,7 @@
 
     $db = new DbOperation();
 
-    $email = $reportDetails->email;    
+    $email = $reportDetails->email;
 
     $reportsList = $db->getFacultyReferral($email);
 
@@ -545,7 +545,7 @@
 
     $responseBody = array('reportsList' => json_encode($reportsList));
     $response = setResponse($response, 200, $responseBody);
-   
+
     return $response;
   });
 
@@ -729,12 +729,12 @@
 
     if(is_object($student))
     {
-      foreach($student->student_id as $student) 
+      foreach($student->student_id as $student)
       {
         $deleteSuccess = $db->deleteStudent($student, $department, $status);
-      }    
-    } 
-    else 
+      }
+    }
+    else
     {
       $deleteSuccess = $db->deleteStudent($student, $department, $status);
     }
@@ -1103,7 +1103,7 @@
     $db = new DbOperation();
 
     if(is_object($reportList))
-    {    
+    {
       foreach ($reportList->report_id as $value)
       {
         $db->markUpdatedReport($status, $value);
@@ -1131,7 +1131,7 @@
     $db = new DbOperation();
 
     if(is_object($reportList))
-    {    
+    {
       foreach ($reportList->report_id as $value)
       {
         $db->markUpdatedReport($status, $value);
@@ -1166,8 +1166,8 @@
       {
         $deleteSuccess = $db->deleteMessage($status, $value, $email);
       }
-    } 
-    else 
+    }
+    else
     {
       $deleteSuccess = $db->deleteMessage($status, $messageList, $email);
     }
@@ -1281,10 +1281,10 @@
     if($department == 1)
     {
       $updateSuccess = $db->updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
-    } 
-    else 
+    }
+    else
     {
-      $updateSuccess = $db->updateCollegeStudent($studentId, $originalId, $lastName, $firstName, $program, $level);   
+      $updateSuccess = $db->updateCollegeStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
     }
 
     if($updateSuccess)
@@ -1300,6 +1300,55 @@
 
     return $response;
   });
+
+
+
+  $app->post('/updateAccount', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $accountDetails = json_decode(file_get_contents("php://input"));
+
+    $email = $accountDetails->email;
+    $lastName = $accountDetails->lastName;
+    $firstName = $accountDetails->firstName;
+    $userType = $accountDetails->userType;
+
+    $updateSuccess = false;
+
+    $db = new DbOperation();
+
+    $updateSuccess = $db->updateAccount($email, $lastName, $firstName);
+
+    if($updateSuccess)
+    {
+      if($userType == 2)
+      {
+        $message = 'Administrator profile successfully updated';
+      }
+      else
+      {
+          $message = 'Faculty profile successfully updated';
+      }
+      $responseBody = array('successMsg' => $message );
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      if($userType == 2)
+      {
+        $message = 'Failed to update administrator profile';
+      }
+      else
+      {
+          $message = 'Failed to update faculty profile';
+      }
+      $responseBody = array('errorMsg' => $message );
+
+      $response = setResponse($response, 400, $responseBody);
+    }
+
+    return $response;
+  });
+
 
 
 
@@ -1456,11 +1505,11 @@
     ->withHeader('Content-Length', filesize($file));
 
     readfile($file);
-   
+
     return $response;
   });
 
-  
+
 
   $app->post('/downloadBackup', function (ServerRequestInterface $request, ResponseInterface $response)
   {
@@ -1479,7 +1528,7 @@
 
       $backupFailed = backupDatabase($backupFile);
 
-      if (!$backupFailed) 
+      if (!$backupFailed)
       {
         $response = $response->withHeader('Content-Description', 'File Transfer')
         ->withHeader('Content-Type', 'application/octet-stream')
@@ -1494,8 +1543,8 @@
         unlink($backupFile);
 
         logToFile($email, "has successfully download a copy of the database");
-      } 
-      else 
+      }
+      else
       {
         $responseBody = array('errorMsg' => 'Failed to create a backup file');
         $response = setResponse($response, 400, $responseBody);
@@ -1509,9 +1558,9 @@
 
     return $response;
   });
-  
 
-  
+
+
   $app->post('/resetDatabase', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $databaseDetails = json_decode(file_get_contents("php://input"));
@@ -1528,7 +1577,7 @@
       $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
 
       $backupFailed = backupDatabase($backupFile);
-    
+
       if($db->resetDatabase())
       {
         logToFile($email, "has successfully reset the database");
@@ -1552,7 +1601,7 @@
   });
 
 
-  
+
   $app->post('/verifyAdminAccount', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $databaseDetails = json_decode(file_get_contents("php://input"));
@@ -1588,7 +1637,7 @@
     $db = new DbOperation();
 
     if($db->verifyAdminAccount($email, $password, $status))
-    {        
+    {
       if(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION) == "sql")
       {
         if($_FILES["file"]["size"] == 0)
@@ -1598,25 +1647,25 @@
         }
         else
         {
-          $dbName = $_ENV['DB']->DB_NAME; 
+          $dbName = $_ENV['DB']->DB_NAME;
           $dbUsername = $_ENV['DB']->DB_USERNAME;
           $dbPword = $_ENV['DB']->DB_PASSWORD;
           $timestamp = getTimeStamp()->format('m-d-y-H-i');
           $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
-      
+
           $backupFailed = backupDatabase($backupFile);
 
           $command = $_ENV['PATH']->COMMAND_PATH_RESTORE . "-u $dbUsername --password=$dbPword $dbName < $restoreFile";
           exec($command, $output, $restoreFailed);
 
-          if (!$restoreFailed) 
+          if (!$restoreFailed)
           {
             logToFile($email, "has successfully restored the database");
 
             $responseBody = array('successMsg' => "Backup file successfully restored");
             $response = setResponse($response, 200, $responseBody);
-          } 
-          else 
+          }
+          else
           {
             $responseBody = array('errorMsg' => 'Failed to restore backup file');
             $response = setResponse($response, 400, $responseBody);

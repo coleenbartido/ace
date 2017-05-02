@@ -108,7 +108,7 @@ class DbOperation
         {
             $stmt = $this->con->prepare("UPDATE user SET hashcode =?, token_exp=? WHERE email=?");
         }
-        
+
         $stmt->bind_param("sss",$hashCode, $timestamp, $email);
         $result = $stmt->execute();
         $stmt->close();
@@ -159,7 +159,7 @@ class DbOperation
         }
         else
         {
-            $stmt = $this->con->prepare("UPDATE user SET hashcode=NULL, token_exp=NULL, hash=? WHERE email=?");           
+            $stmt = $this->con->prepare("UPDATE user SET hashcode=NULL, token_exp=NULL, hash=? WHERE email=?");
         }
 
         $stmt->bind_param("ss", $password, $email);
@@ -826,7 +826,7 @@ class DbOperation
         return $arrResult;
     }
 
-    
+
     public function getUpdateStatus($reportId)
     {
         $stmt = $this->con->prepare("SELECT is_updated FROM report WHERE report_id=?");
@@ -903,18 +903,18 @@ class DbOperation
         $stmt->execute();
         $result= $stmt->get_result();
         $arrResult = array();
-        
+
         if($result->num_rows)
         {
             while ($myrow = $result->fetch_assoc())
             {
                 $arrResult[] = $myrow;
-            } 
+            }
         }
         else
         {
             $arrResult[]['school_year'] = "No Records";
-        } 
+        }
 
         $stmt->close();
         return $arrResult;
@@ -1081,7 +1081,7 @@ class DbOperation
         $stmt->bind_param("i",$reportId);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         $arrResult = array();
 
         if($result->num_rows)
@@ -1089,12 +1089,12 @@ class DbOperation
             while ($myrow = $result->fetch_assoc())
             {
                 $arrResult[] = $myrow;
-            } 
+            }
         }
         else
         {
             $arrResult[]['referral_reason'] = "N/A";
-        } 
+        }
 
         $stmt->close();
         return $arrResult;
@@ -1238,6 +1238,20 @@ class DbOperation
         $this->con->close();
 
         if($emptyStudentResult && $emptyMessageResult && $emptyReportResult && $emptyReasonResult && $emptyFacultyResult)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public function updateAccount($email, $lastName, $firstName)
+    {
+        $stmt = $this->con->prepare("UPDATE user SET last_name=?, first_name=? WHERE email=?");
+        $stmt->bind_param("sss", $lastName, $firstName, $email);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if($result)
         {
             return true;
         }
