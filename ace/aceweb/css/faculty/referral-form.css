@@ -27,10 +27,10 @@ body {
 .refForm .panel-heading {
   /*background-color: #2D323E;*/
   background-color: #10326F;
-  padding: 12px 12px;
+  padding: 15px 15px;
   color: white;
   border-radius: 0px 0px;
-  height: 6vh;
+  height: 7vh;
 }
 
 .panel-heading h1{
@@ -42,78 +42,36 @@ body {
   margin-top: -1px;
 }
 
-.panel-body .input-label{
-  font-family: acre-regular;
-  font-size: 14px;
-}
-
 .style-select select, .style-select input{
   border: 2px solid #10326F;
   border-radius: 0px 0px;
+
 }
 
 .refForm span{
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
 }
 
 .schoolYear, .schoolTerm, .subjName, .studentID, .department, .lastName, .firstName {
-  padding-bottom: 16px;
+  padding-bottom: 20px;
 }
 
 .level, .courseProgram {
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 }
 
 input.ng-invalid.ng-touched, select.ng-invalid.ng-touched, .ng-submitted input.ng-invalid, .ng-submitted select.ng-invalid {
-  border: 2px solid #EE1F34;
+  border: 2px solid red;
 }
 
 .invalidTextArea {
-  border: 2px solid #EE1F34;
+  border: 2px solid red;
 }
 
 .error-message {
-  color: white;
+  color: #EE1F34;
   margin-bottom:-15px;
-  padding-left:5px;
-  background-color: #EE1F34;
-  width: 100%;
-  text-align: center;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 2px #1E1E1E;
-}
-
-.error-pattern{
-  color: white;
-  margin-bottom:-15px;
-  padding-left:5px;
-  background-color: #EE1F34;
-  width: 100%;
-  text-align: center;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 2px #1E1E1E;
-}
-
-.error-pattern-name{
-  color: white;
-  margin-bottom:-15px;
-  padding-left:5px;
-  background-color: #EE1F34;
-  width: 100%;
-  text-align: center;
-  font-size: 9.3px;
-  text-shadow: 1px 1px 2px #1E1E1E;
-}
-
-.error-message-term-year{
-  color: white;
-  margin-bottom:-15px;
-  padding-left:5px;
-  background-color: #EE1F34;
-  width: 100%;
-  text-align: center;
-  text-shadow: 1px 1px 2px #1E1E1E;
 }
 
 .errspan{
@@ -144,20 +102,14 @@ input.ng-invalid.ng-touched, select.ng-invalid.ng-touched, .ng-submitted input.n
 /*--------------REASON FOR REFERRAL--------------*/
 
 .reason-label {
-  font-family: acre-regular;
-  font-size: 14px;
-  padding-bottom: 5px;
+  font-size: 11.5px;
 }
 
 textarea {
   resize: none;
   height: 15vh;
-  border: 2px solid #10326F;
+  border: solid 2px;
   padding-top: 10px;
-}
-
-.row input[type="checkbox"]{
-
 }
 
 /*--------------Buttons--------------*/
@@ -169,6 +121,27 @@ textarea {
 .buttons button{
   border-radius: 0px;
   font-size: 15px;
+}
+
+.panel-heading .historyBtn{
+  margin-top: -15px;
+  margin-right: -15px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  z-index: 2;
+  border-radius: 0 0;
+  border: solid 2px #10326F;
+  background-color: #10326F;
+  color: #ffffff;
+  height: 7.2vh;
+}
+
+.panel-heading button{
+  font-size: 1.8vh;
+}
+
+.panel-heading .historyBtn:hover{
+  background-color: #091e42;
 }
 
 .buttons .resetBtn{
@@ -222,86 +195,4 @@ textarea {
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
-}
-
-
-
-
-
-
-
-input[type="checkbox"] {
-    height: 18px;
-    width: 18px;
-    vertical-align: middle;
-    margin: 0 0.4em 0.4em 0;
-    border: 1px solid #10326F;
-
-    -webkit-appearance: none;
-    -webkit-transition: box-shadow 200ms;
-
-}
-
-/* border radius for checkbox */
-input[type="checkbox"] {
-    -webkit-border-radius:2px;
-    border-radius:2px;
-}
-
-input[type="checkbox"]:hover {
-    background-color: #e7eaf0;
-    border: 2px solid #10326F;
-}
-
-
-/* hover state */
-input[type="checkbox"]:not(:disabled):hover {
-    border-color:#007dc6;
-}
-
-/* active state */
-input[type="checkbox"]:active:not(:disabled) {
-    border-color:#007dc6;
-}
-
-/* focus state */
-input[type="checkbox"]:focus {
-    outline:none;
-
-}
-
-/* input checked border color */
-input[type="checkbox"]:checked {
-    border-color:#007dc6;
-    background-color: #007dc6;
-}
-
-
-/* checkbox checked */
-input[type="checkbox"]:checked:before {
-content: '';
-display: block;
-width: 6px;
-height: 9px;
-border: solid #fff;
-border-width: 0 2px 2px 0;
--webkit-transform: rotate(45deg);
-transform: rotate(45deg);
-margin-left: 4px;
-margin-top: 1px;
-}
-
-/* disabled input */
-input:disabled {
-opacity: .6;
-box-shadow: none;
-background: rgba(0, 0, 0, 0.1);
-box-shadow:none;
-}
-
-/* style label for disabled input */
-input:disabled + label {
-opacity: .6;
-cursor:default;
--webkit-user-select: none;
 }
