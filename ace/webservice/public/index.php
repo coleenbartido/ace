@@ -75,7 +75,7 @@
         'HS256'
       );
 
-      logToFile($email, "has login to the system");
+      logToFile($email, "logged in to the system");
 
       $responseBody = array('token' => $jwt);
       $response = setResponse($response, 200, $responseBody);
@@ -515,11 +515,16 @@
       if($userType == 2)
       {
         $message = 'Administrator profile successfully updated';
+        $logMessage = "has successfully updated administrator profile.";
       }
       else
       {
-          $message = 'Faculty profile successfully updated';
+        $message = 'Faculty profile successfully updated';
+        $logMessage = "has successfully updated faculty profile.";
       }
+
+      logToFile($email, $logMessage);
+
       $responseBody = array('successMsg' => $message );
       $response = setResponse($response, 200, $responseBody);
     }
@@ -664,6 +669,8 @@
           <br><br><br>Thank you.";
 
         sendEmail($emailList, $subject, $body);
+
+        logToFile($email, "has successfully submitted a referral.");
 
         $responseBody = array('successMsg' => "Referral form successfully submitted");
         $response = setResponse($response, 200, $responseBody);
@@ -882,6 +889,9 @@
 
       if($deleteSuccess)
       {
+
+        logToFile($email, "has  successfully deleted student record/s.");
+
         $responseBody = array('successMsg' => 'Student(s) successfully deleted');
         $response = setResponse($response, 200, $responseBody);
       }
@@ -924,6 +934,8 @@
 
       if($updateSuccess)
       {
+        logToFile($email, "has successfully updated student record/s.");
+
         $responseBody = array('successMsg' => 'Student profile successfully updated');
         $response = setResponse($response, 200, $responseBody);
       }
@@ -1015,6 +1027,8 @@
             sendEmail($email, $subject, $body);
           }
 
+          logToFile($email, "has successfully updated the status of a report.");
+
           $responseBody = array('successMsg' => 'Report status successfully updated');
           $response = setResponse($response, 200, $responseBody);
         }
@@ -1060,6 +1074,8 @@
 
         //send Email
         sendEmail($receiver, $subject, $body);
+
+        logToFile($email, "has successfully sent a message.");
 
         $responseBody = array('successMsg' => 'Message sent');
         $response = setResponse($response, 200, $responseBody);
@@ -1171,6 +1187,8 @@
 
       if($deleteSuccess)
       {
+        logToFile($email, "has successfully deleted report/s.");
+
         $responseBody = array('successMsg' => 'Report(s) successfully deleted');
         $response = setResponse($response, 200, $responseBody);
       }
@@ -1217,6 +1235,9 @@
         if($db->registerFaculty($email, $fName, $lName, $status, $userType, $hashCode))
         {
           sendEmail($email, $subject, $body);
+
+          logToFile($email, "has successfully created a faculty account.");
+
           $responseBody = array('successMsg' => 'Account successfully created');
           $response = setResponse($response, 200, $responseBody);
         }
@@ -1250,6 +1271,9 @@
 
       if($deleteSuccess)
       {
+
+        logToFile($email, "has successfully deleted a faculty account/s.");
+
         $responseBody = array('successMsg' => 'Account(s) successfully deleted');
         $response = setResponse($response, 200, $responseBody);
       }
@@ -1506,6 +1530,9 @@
       //send Email
       if(sendEmail($receiver, $subject, $body))
       {
+
+        logToFile($email, "has successfully sent a broadcast email to all faculty.");
+
         $responseBody = array('successMsg' => 'Email sent');
         $response = setResponse($response, 200, $responseBody);
       }
@@ -1592,6 +1619,8 @@
         if($db->registerAdmin($email, $fName, $lName, $status, $userType, $hashCode, $department))
         {
           sendEmail($email, $subject, $body);
+
+          logToFile($email, "has successfully created an administrator account.");
 
           $responseBody = array('successMsg' => 'Account successfully created');
           $response = setResponse($response, 200, $responseBody);
