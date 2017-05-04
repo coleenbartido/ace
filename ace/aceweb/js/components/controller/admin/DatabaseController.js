@@ -7,7 +7,7 @@ angular.module('aceWeb')
   {
     $scope.verifyBtn = "Verify";
     $scope.restoreBtn = "Restore";
-    $scope.currentDateNum = new Date().toString('MM-dd-yy-HH-mm');  
+    $scope.currentDateNum = new Date().toString('MM-dd-yy-HH-mm');
   }
 
   $scope.initScope();
@@ -46,7 +46,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/downloadBackup',
+        url: config.apiUrl + '/auth/downloadBackup',
         data: userDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -88,7 +88,7 @@ angular.module('aceWeb')
         $scope.disableVerifyBtn = false;
         $scope.verifyBtn = "Verify";
       });
-    } 
+    }
   }
 
   $scope.resetDatabase = function(form)
@@ -106,7 +106,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/resetDatabase',
+        url: config.apiUrl + '/auth/resetDatabase',
         data: userDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -157,7 +157,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/verifyAdminAccount',
+        url: config.apiUrl + '/auth/verifyAdminAccount',
         data: userDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -197,7 +197,7 @@ angular.module('aceWeb')
       fd.append('email', AuthService.getEmail());
       fd.append('password', $scope.userPassword);
 
-      $http.post(config.apiUrl + '/restoreBackup', fd, {
+      $http.post(config.apiUrl + '/auth/restoreBackup', fd, {
         transformRequest: angular.identity,
         headers: {'Content-Type': undefined,'Process-Data': false}
       })
@@ -226,12 +226,12 @@ angular.module('aceWeb')
         else if(response.data.errorMsg == "Empty backup file")
         {
           $scope.isFileEmpty = true;
-        }     
+        }
         else
         {
           $('#fileUploadModal').modal('hide');
           $scope.showCustomModal("ERROR", response.data.errorMsg);
-        }     
+        }
       })
       .finally(function()
       {
@@ -245,7 +245,7 @@ angular.module('aceWeb')
     }
   }
 
-  $scope.fileNameChanged = function() 
+  $scope.fileNameChanged = function()
   {
     $scope.isNotAuthenticated = false;
     $scope.invalidFile = false;

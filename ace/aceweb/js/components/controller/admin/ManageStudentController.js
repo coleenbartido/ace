@@ -5,14 +5,14 @@ angular.module('aceWeb')
 {
   $scope.getStudentList = function()
   {
-    var adminDetails = 
+    var adminDetails =
     {
       'email' : AuthService.getEmail()
     }
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/listStudent',
+      url: config.apiUrl + '/auth/listStudent',
       data: adminDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -116,7 +116,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete this student?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -134,7 +134,7 @@ angular.module('aceWeb')
 
           $http({
             method: 'POST',
-            url: config.apiUrl + '/deleteStudent',
+            url: config.apiUrl + '/auth/deleteStudent',
             data: studentDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
@@ -179,7 +179,7 @@ angular.module('aceWeb')
       message: 'Are you sure you want to delete selected student/s?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
-      buttons: 
+      buttons:
       [{
         label: $scope.deleteBtn,
         cssClass: 'btn-danger',
@@ -197,7 +197,7 @@ angular.module('aceWeb')
 
           $http({
             method: 'POST',
-            url: config.apiUrl + '/deleteStudent',
+            url: config.apiUrl + '/auth/deleteStudent',
             data: studentDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
@@ -272,7 +272,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/updateStudent',
+        url: config.apiUrl + '/auth/updateStudent',
         data: studentDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -298,7 +298,7 @@ angular.module('aceWeb')
         $scope.updateBtn = "Update";
         $scope.disableUpdateBtn = false;
       });
-    }   
+    }
   }
 
   $scope.showCustomModal = function(modalTitle, modalMsg)

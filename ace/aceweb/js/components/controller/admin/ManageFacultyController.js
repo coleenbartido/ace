@@ -7,7 +7,7 @@ angular.module('aceWeb')
   {
     $http({
       method: 'POST',
-      url: config.apiUrl + '/listFaculty',
+      url: config.apiUrl + '/auth/listFaculty',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
     .then(function(response)
@@ -84,7 +84,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/updateAccount',
+        url: config.apiUrl + '/auth/updateAccount',
         data: facultyDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -148,7 +148,7 @@ angular.module('aceWeb')
 
         $http({
           method: 'POST',
-          url: config.apiUrl + '/registerFaculty',
+          url: config.apiUrl + '/auth/registerFaculty',
           data: registerDetails,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
@@ -206,7 +206,7 @@ angular.module('aceWeb')
 
           $http({
             method: 'POST',
-            url: config.apiUrl + '/deleteFaculty',
+            url: config.apiUrl + '/auth/deleteFaculty',
             data: facultyDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
@@ -268,7 +268,7 @@ angular.module('aceWeb')
 
           $http({
             method: 'POST',
-            url: config.apiUrl + '/deleteFaculty',
+            url: config.apiUrl + '/auth/deleteFaculty',
             data: facultyDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })

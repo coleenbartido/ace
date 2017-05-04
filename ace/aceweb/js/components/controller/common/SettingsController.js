@@ -11,7 +11,7 @@ angular.module('aceWeb')
     }
     $http({
       method: 'POST',
-      url: config.apiUrl + '/getContactNum',
+      url: config.apiUrl + '/auth/getContactNum',
       data: accountDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -76,7 +76,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/changeContact',
+        url: config.apiUrl + '/auth/changeContact',
         data: changeContactDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -131,7 +131,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/changePasswordInSettings',
+        url: config.apiUrl + '/auth/changePasswordInSettings',
         data: changePassDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })

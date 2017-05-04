@@ -10,7 +10,7 @@ angular.module('aceWeb')
 
   $scope.downloadUserManual = function()
   {
-    $scope.downloadLink = config.apiUrl + '/downloadUserManual/' + AuthService.getRole();
+    $scope.downloadLink = config.apiUrl + '/auth/downloadUserManual/' + AuthService.getRole();
   }
 
   $rootScope.getNotif = function()
@@ -22,7 +22,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/getNotifList',
+      url: config.apiUrl + '/auth/getNotifList',
       data: accountDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -66,4 +66,4 @@ angular.module('aceWeb')
       $interval.cancel($rootScope.notifPoll);
     }
   })
-}) 
+})

@@ -93,7 +93,7 @@ angular.module('aceWeb')
         };
         $http({
           method: 'POST',
-          url: config.apiUrl + '/referralForm',
+          url: config.apiUrl + '/auth/referralForm',
           data: referralDetails,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
@@ -148,7 +148,7 @@ angular.module('aceWeb')
     }
     return $http({
       method: 'POST',
-      url: config.apiUrl + '/getStudentInfo',
+      url: config.apiUrl + '/auth/getStudentInfo',
       data: studentInfo,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })

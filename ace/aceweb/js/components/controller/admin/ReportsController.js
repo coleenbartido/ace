@@ -11,7 +11,7 @@ angular.module('aceWeb')
     }
     $http({
       method: 'POST',
-      url: config.apiUrl + '/reports',
+      url: config.apiUrl + '/auth/reports',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -191,7 +191,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/readReport',
+      url: config.apiUrl + '/auth/readReport',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -231,7 +231,7 @@ angular.module('aceWeb')
       }
       $http({
         method: 'POST',
-        url: config.apiUrl + '/sendMessage',
+        url: config.apiUrl + '/auth/sendMessage',
         data: messageDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -285,7 +285,7 @@ angular.module('aceWeb')
 
           $http({
             method: 'POST',
-            url: config.apiUrl + '/deleteReport',
+            url: config.apiUrl + '/auth/deleteReport',
             data: reportDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
@@ -352,7 +352,7 @@ angular.module('aceWeb')
 
           $http({
             method: 'POST',
-            url: config.apiUrl + '/deleteReport',
+            url: config.apiUrl + '/auth/deleteReport',
             data: reportDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
@@ -406,7 +406,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markReport',
+      url: config.apiUrl + '/auth/markReport',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -439,7 +439,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markReportAsUnread',
+      url: config.apiUrl + '/auth/markReportAsUnread',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -484,7 +484,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/updateStatus',
+        url: config.apiUrl + '/auth/updateStatus',
         data: updateDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })

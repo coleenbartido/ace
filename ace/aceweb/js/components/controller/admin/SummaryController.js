@@ -13,7 +13,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/getSYList',
+      url: config.apiUrl + '/auth/getSYList',
       data: userDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -59,7 +59,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/getChartData',
+      url: config.apiUrl + '/auth/getChartData',
       data: userDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })

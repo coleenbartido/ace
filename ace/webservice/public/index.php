@@ -22,7 +22,8 @@
   });
 
 
-  //new
+  //----------------------------------------- COMMON FUNCTIONALITIES ----------------------------------------------------//
+
   $app->post('/login', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $loginDetails = json_decode(file_get_contents("php://input")); //php://input is a read-only stream that allows you to read raw data from the request body. json_decode function takes a JSON string and converts it into a PHP array or object
@@ -207,589 +208,6 @@
 
 
 
-  $app->post('/changePasswordInSettings', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $changePassDetails = json_decode(file_get_contents("php://input"));
-
-    $db = new DbOperation();
-
-    $email = $changePassDetails->email;
-    $pword = $changePassDetails->pword;
-    $oldPword = $changePassDetails->oldPword;
-    $role = $db->getAccountRole($email);
-
-    if($db->isPasswordValid($email, $pword, $oldPword) == "Valid Password")
-    {
-      $db->changePassword($email, $pword, $role);
-
-      $responseBody = array('successMsg' => 'Password successfully updated');
-      $response = setResponse($response, 200, $responseBody);
-    }
-    else if($db->isPasswordValid($email, $pword, $oldPword) == "Same Password")
-    {
-      $responseBody = array('errorMsg' => 'Invalid new password');
-      $response = setResponse($response, 400, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Invalid password');
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/changeContact', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $changeContactDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $changeContactDetails->email;
-    $contactNum = $changeContactDetails->contactNum;
-
-    $db = new DbOperation();
-
-    if($db->changeContact($email, $contactNum))
-    {
-      $responseBody = array('successMsg' => 'Contact number successfully updated');
-      $response = setResponse($response, 200, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errMsg' => 'Failed Change Contact');
-      $response = setResponse($response, 400, $responseBody);
-    }
-    return $response;
-  });
-
-
-
-  $app->post('/getPwordLength', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $accountDetails->email;
-    $tempPword = "";
-
-    $db = new DbOperation();
-
-    if($db->getPwordLength($email))
-    {
-      for($counter=0; $counter < $db->getPwordLength($email); $counter++)
-      {
-        $tempPword .= "•";
-      }
-      $responseBody = array('pwordLength' => $tempPword);
-      $response = setResponse($response, 200, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/getContactNum', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $accountDetails->email;
-
-    $db = new DbOperation();
-
-    if($db->getContactNum($email))
-    {
-      $responseBody = array('contactNum' => $db->getContactNum($email));
-      $response = setResponse($response, 200, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/getNotifList', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $accountDetails->email;
-
-    $db = new DbOperation();
-
-    $referralUpdateCount = $db->getReferralUpdateCount($email);
-    $newMessageCount = $db->getNewMessageCount($email);
-
-    $responseBody = array('referralUpdateCount' => $referralUpdateCount, 'newMessageCount' => $newMessageCount);
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  $app->post('/getAdminNotifList', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
-
-    $db = new DbOperation();
-
-    $email = $accountDetails->email;
-    $department = $db->getDepartment($email);
-
-    $uncounseledReportCount = $db->getUncounseledReportCount($department);
-    $newMessageCount = $db->getNewMessageCount($email);
-
-    $responseBody = array('uncounseledReportCount' => $uncounseledReportCount, 'newMessageCount' => $newMessageCount);
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  //lists admin accounts
-  $app->post('/listAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $db = new DbOperation();
-
-    $userType = 2;
-
-    $adminList = $db->listAccounts($userType);
-
-    for($counter=0; $counter < count($adminList); $counter++)
-    {
-      $departmentId = $db->getDepartment($adminList[$counter]['email']);
-      $adminList[$counter]['department'] = $db->getDepartmentName($departmentId);
-
-      if($adminList[$counter]['contact_number'] == null)
-      {
-        $adminList[$counter]['contact_number'] = "N/A";
-      }
-
-      if($db->isAccountActive($adminList[$counter]['email']))
-      {
-        $adminList[$counter]['status'] = "ACTIVE";
-      }
-      else
-      {
-        $adminList[$counter]['status'] = "PENDING";
-      }
-    }
-
-    $responseBody = array('adminList' => json_encode($adminList));
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  //lists faculty accounts
-  $app->post('/listFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-
-    $db = new DbOperation();
-
-    $userType = 3;
-
-    $facultyList = $db->listAccounts($userType);
-
-    for($counter=0; $counter < count($facultyList); $counter++){
-
-      $facultyList[$counter]['reported_count'] = $db->getReportCount($facultyList[$counter]['email']);
-
-      if($facultyList[$counter]['contact_number'] == null)
-      {
-        $facultyList[$counter]['contact_number'] = "N/A";
-      }
-
-      if($db->isAccountActive($facultyList[$counter]['email']))
-      {
-        $facultyList[$counter]['status'] = "ACTIVE";
-      }
-      else
-      {
-        $facultyList[$counter]['status'] = "PENDING";
-      }
-    }
-
-    $responseBody = array('facultyList' => json_encode($facultyList));
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  //lists students
-  $app->post('/listStudent', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $adminDetails = json_decode(file_get_contents("php://input"));
-
-    $db = new DbOperation();
-
-    $email = $adminDetails->email;
-    $status = 1;
-    $department = $db->getDepartment($email);
-
-    if($department==1)
-    {
-      $studentList = $db->listShsStudent($status);
-    }
-    else
-    {
-      $studentList = $db->listCollegeStudent($status);
-    }
-
-    for($counter=0; $counter < count($studentList); $counter++)
-    {
-      $studentList[$counter]['department_id'] = $department;
-      $studentList[$counter]['student_name'] = $studentList[$counter]['first_name'] . " " . $studentList[$counter]['last_name'];
-    }
-
-    $responseBody = array('studentList' => json_encode($studentList));
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  //typeahead (autocomplete)
-  $app->post('/getStudentInfo', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $studentInfo = json_decode(file_get_contents("php://input"));
-
-    $studId = $studentInfo->studId;
-
-    $db = new DbOperation();
-
-    $studInfoList = $db->getStudentInfo($studId);
-
-    for($counter=0; $counter < count($studInfoList); $counter++)
-    {
-      $studInfoList[$counter]['level'] = $db->getStudentLevel($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
-      $studInfoList[$counter]['program'] = $db->getStudentProgram($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
-    }
-
-    $responseBody = array('studInfoList' => json_encode($studInfoList));
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  $app->post('/reports', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $db = new DbOperation();
-
-    $email = $reportDetails->email;
-    $department = $db->getDepartment($email);
-    $status = 1;
-
-    if($department == 1)
-    {
-      $reportsList = $db->listShsReports($status);
-    }
-    else
-    {
-      $reportsList = $db->listCollegeReports($status);
-    }
-
-    for($counter=0; $counter<count($reportsList); $counter++)
-    {
-      $reportsList[$counter]['faculty_fullname'] = $reportsList[$counter]['faculty_fname'] . " " . $reportsList[$counter]['faculty_lname'];
-      $reportsList[$counter]['student_fullname'] = $reportsList[$counter]['student_fname'] . " " . $reportsList[$counter]['student_lname'];
-
-      $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
-
-      for($ctr=0; $ctr<count($reasonArr); $ctr++)
-      {
-        $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
-      }
-    }
-
-    $responseBody = array('reportsList' => json_encode($reportsList));
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  $app->post('/referralHistory', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $db = new DbOperation();
-
-    $email = $reportDetails->email;
-
-    $reportsList = $db->getFacultyReferral($email);
-
-    for($counter=0; $counter<count($reportsList); $counter++)
-    {
-      $reportsList[$counter]['student_fullname'] = $reportsList[$counter]['student_fname'] . " " . $reportsList[$counter]['student_lname'];
-      $reportsList[$counter]['is_updated'] = $db->getUpdateStatus($reportsList[$counter]['report_id']);
-
-      $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
-
-      for($ctr=0; $ctr<count($reasonArr); $ctr++)
-      {
-        $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
-      }
-    }
-
-    $responseBody = array('reportsList' => json_encode($reportsList));
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  $app->post('/registerFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $registerDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $registerDetails->email;
-    $fName = $registerDetails->fName;
-    $lName = $registerDetails->lName;
-    $status = 0;
-    $userType = 3;
-
-    $db = new DbOperation();
-
-    if($db->emailExist($email))
-    {
-      $responseBody = array('errorMsg' => 'emailExist');
-      $response = setResponse($response, 400, $responseBody);
-    }
-    else
-    {
-      $result = randStrGen();
-      $hashCode = hash('sha256', $result);
-
-      $subject = "Verify your ACE Program Account";
-      $link = $_ENV['DOMAIN']->CLIENT_URL . "/accountsetup?email=" . $email . "&hashcode=" . $hashCode;
-      $body =
-
-      "Greetings! <br><br>An ACE Online Referral System account was created by the Administrator.
-      <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
-      <br><br><br>Thank you.";
-
-      if($db->registerFaculty($email, $fName, $lName, $status, $userType, $hashCode))
-      {
-        sendEmail($email, $subject, $body);
-        $responseBody = array('successMsg' => 'Account successfully created');
-        $response = setResponse($response, 200, $responseBody);
-      }
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/registerAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $registerDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $registerDetails->email;
-    $fName = $registerDetails->fName;
-    $lName = $registerDetails->lName;
-    $department = $registerDetails->department;
-    $status = 0;
-    $userType = 2;
-
-    $db = new DbOperation();
-
-    if($db->emailExist($email))
-    {
-      $responseBody = array('errorMsg' => 'emailExist');
-      $response = setResponse($response, 400, $responseBody);
-    }
-    else
-    {
-      $result = randStrGen();
-      $hashCode = hash('sha256', $result);
-
-      $subject = "Verify your ACE Program Account";
-      $link = $_ENV['DOMAIN']->CLIENT_URL . "/accountsetup?email=" . $email . "&hashcode=" . $hashCode;
-      $body =
-
-      "Greetings! <br><br>An ACE Online Referral System account was created by the Super Administrator.
-      <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
-      <br><br><br>Thank you.";
-
-      if($db->registerAdmin($email, $fName, $lName, $status, $userType, $hashCode, $department))
-      {
-        sendEmail($email, $subject, $body);
-
-        $responseBody = array('successMsg' => 'Account successfully created');
-        $response = setResponse($response, 200, $responseBody);
-      }
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/deleteAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $deleteAdminDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $deleteAdminDetails->adminList;
-    $status = 0;
-    $deleteSuccess = false;
-
-    $db = new DbOperation();
-
-    if(is_object($email))
-    {
-      foreach($email->email as $user)
-      {
-        $deleteSuccess = $db->deleteUser($user, $status);
-      }
-    }
-    else
-    {
-      $deleteSuccess = $db->deleteUser($email, $status);
-    }
-
-    if($deleteSuccess)
-    {
-      $responseBody = array('successMsg' => 'Account(s) successfully deleted');
-      $response = setResponse($response, 200, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Failed to delete account(s)');
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/deleteFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $deleteFacultyDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $deleteFacultyDetails->facultyList;
-    $status = 0;
-    $deleteSuccess = false;
-
-    $db = new DbOperation();
-
-    if(is_object($email))
-    {
-      foreach($email->email as $user)
-      {
-        $deleteSuccess = $db->deleteUser($user, $status);
-      }
-    }
-    else
-    {
-      $deleteSuccess = $db->deleteUser($email, $status);
-    }
-
-    if($deleteSuccess)
-    {
-      $responseBody = array('successMsg' => 'Account(s) successfully deleted');
-      $response = setResponse($response, 200, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Failed to delete account(s)');
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-  $app->post('/deleteStudent', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $deleteStudentDetails = json_decode(file_get_contents("php://input"));
-
-    $student = $deleteStudentDetails->studentList;
-    $email = $deleteStudentDetails->email;
-    $status = 0;
-    $deleteSuccess = false;
-
-    $db = new DbOperation();
-
-    $department = $db->getDepartment($email);
-
-    if(is_object($student))
-    {
-      foreach($student->student_id as $student)
-      {
-        $deleteSuccess = $db->deleteStudent($student, $department, $status);
-      }
-    }
-    else
-    {
-      $deleteSuccess = $db->deleteStudent($student, $department, $status);
-    }
-
-    if($deleteSuccess)
-    {
-      $responseBody = array('successMsg' => 'Student(s) successfully deleted');
-      $response = setResponse($response, 200, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Failed to delete student(s)');
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-  $app->post('/deleteReport', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $deleteReportDetails = json_decode(file_get_contents("php://input"));
-
-    $reports = $deleteReportDetails->reportList;
-    $deleteSuccess = false;
-
-    $db = new DbOperation();
-
-    if(is_object($reports))
-    {
-      foreach($reports->report_id as $report)
-      {
-        $deleteSuccess = $db->deleteReport($report);
-      }
-    }
-    else
-    {
-      $deleteSuccess = $db->deleteReport($reports);
-    }
-
-    if($deleteSuccess)
-    {
-      $responseBody = array('successMsg' => 'Report(s) successfully deleted');
-      $response = setResponse($response, 200, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Failed to delete report(s)');
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
   $app->get('/verify', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $db = new DbOperation();
@@ -857,67 +275,9 @@
 
 
 
-  $app->post('/referralForm', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
+  //------------ Messages not applicable for Super Admin
 
-    $email = $reportDetails->email;
-    $studId = $reportDetails->studId;
-    $department = $reportDetails->department;
-    $studFName = $reportDetails->studFName;
-    $studLName = $reportDetails->studLName;
-    $subjName = $reportDetails->subjName;
-    $schoolTerm = $reportDetails->schoolTerm;
-    $schoolYear = $reportDetails->schoolYear;
-    $course = $reportDetails->course;
-    $year = $reportDetails->year;
-    $reasons = $reportDetails->reason;
-    $isActive = 1;
-
-    if($reasons[6]->check && isset($reasons[6]->value))
-    {
-      $refComment = $reasons[6]->value;
-    }
-    else
-    {
-      $refComment = NULL;
-    }
-
-    $db = new DbOperation();
-
-    $last_name = $db->getFirstName($email);
-    $first_name = $db->getLastName($email);
-    $full_name = $first_name . "  " .$last_name;
-
-    if($db->insertStudent($studId, $department, $studFName, $studLName, $course, $year) && $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons) && $db->updateReportCount($email))
-    {
-      $emailList = $db->getAdminAccounts($department, $isActive);
-
-      $subject = "ACE Submitted Report";
-      $link = $_ENV['DOMAIN']->CLIENT_URL;
-      $body =
-
-        "Greetings, <br><br>" . $full_name . " submitted a referral!
-        <br><br>To view the submitted report, login <a href=" . $link . ">here</a>.
-        <br><br><br>Thank you.";
-
-      sendEmail($emailList, $subject, $body);
-
-      $responseBody = array('successMsg' => "Referral form successfully submitted");
-      $response = setResponse($response, 200, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => "Failed to submit the referral form");
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/messages', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/auth/messages', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $messageDetails = json_decode(file_get_contents("php://input"));
 
@@ -955,8 +315,7 @@
   });
 
 
-
-  $app->post('/markAsRead', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/auth/markAsRead', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $messageDetails = json_decode(file_get_contents("php://input"));
 
@@ -978,7 +337,7 @@
 
 
 
-  $app->post('/markAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/auth/markAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $messageDetails = json_decode(file_get_contents("php://input"));
 
@@ -1000,7 +359,7 @@
 
 
 
-  $app->post('/readMessage', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/auth/readMessage', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $messageDetails = json_decode(file_get_contents("php://input"));
 
@@ -1018,138 +377,7 @@
   });
 
 
-
-  $app->post('/markReport', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $reportList = $reportDetails->reportList;
-    $isRead = 1;
-
-    $db = new DbOperation();
-
-    foreach ($reportList->report_id as $value)
-    {
-      $db->markReport($isRead, $value);
-    }
-
-    $response = setSuccessResponse($response, 200);
-
-    return $response;
-  });
-
-
-
-  $app->post('/markReportAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $reportList = $reportDetails->reportList;
-    $isRead = 0;
-
-    $db = new DbOperation();
-
-    foreach ($reportList->report_id as $value)
-    {
-      $db->markReport($isRead, $value);
-    }
-
-    $response = setSuccessResponse($response, 200);
-
-    return $response;
-  });
-
-
-
-  $app->post('/readReport', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $reportId = $reportDetails->reportId;
-    $email = $reportDetails->email;
-    $isRead = $reportDetails->isRead;
-    $status = 1;
-
-    $db = new DbOperation();
-
-    if($isRead == 0)
-    {
-      $subject = "ACE Submitted Report Status";
-      $link = $_ENV['DOMAIN']->CLIENT_URL;
-      $body =
-        "The report you submitted has been read by the administrator.
-        <br><br>
-        If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
-
-      sendEmail($email, $subject, $body);
-
-      $db->markReport($status, $reportId);
-    }
-
-    $response = setSuccessResponse($response, 200);
-
-    return $response;
-  });
-
-
-
-  $app->post('/markFacultyReport', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $reportList = $reportDetails->reportId;
-    $status = 0;
-
-    $db = new DbOperation();
-
-    if(is_object($reportList))
-    {
-      foreach ($reportList->report_id as $value)
-      {
-        $db->markUpdatedReport($status, $value);
-      }
-    }
-    else
-    {
-      $db->markUpdatedReport($status, $reportList);
-    }
-
-    $response = setSuccessResponse($response, 200);
-
-    return $response;
-  });
-
-
-
-  $app->post('/markFacultyReportAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $reportDetails = json_decode(file_get_contents("php://input"));
-
-    $reportList = $reportDetails->reportId;
-    $status = 1;
-
-    $db = new DbOperation();
-
-    if(is_object($reportList))
-    {
-      foreach ($reportList->report_id as $value)
-      {
-        $db->markUpdatedReport($status, $value);
-      }
-    }
-    else
-    {
-      $db->markUpdatedReport($status, $reportList);
-    }
-
-    $response = setSuccessResponse($response, 200);
-
-    return $response;
-  });
-
-
-
-  $app->post('/deleteMessage', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/auth/deleteMessage', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $messageDetails = json_decode(file_get_contents("php://input"));
 
@@ -1188,122 +416,86 @@
 
 
 
-  $app->post('/sendMessage', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/auth/changePasswordInSettings', function (ServerRequestInterface $request, ResponseInterface $response)
   {
-    $messageDetails = json_decode(file_get_contents("php://input"));
-
-    $report_id = $messageDetails->reportId;
-    $sender = $messageDetails->sender;
-    $receiver = $messageDetails->receiver;
-    $message = $messageDetails->messageBody;
-    $subject = $messageDetails->messageSubj;
-    $isRead = 0;
-    $status = 1;
-
-    $date = getTimestamp();
-    $timestamp = $date->format('Y-m-d H:i:s');
+    $changePassDetails = json_decode(file_get_contents("php://input"));
 
     $db = new DbOperation();
 
-    $last_name = $db->getFirstName($sender);
-    $first_name = $db->getLastName($sender);
+    $email = $changePassDetails->email;
+    $pword = $changePassDetails->pword;
+    $oldPword = $changePassDetails->oldPword;
+    $role = $db->getAccountRole($email);
 
-    if($db->insertMessage($report_id, $sender, $receiver, $message, $subject, $isRead, $status, $timestamp))
+    if($db->isPasswordValid($email, $pword, $oldPword) == "Valid Password")
     {
-      $subject = "ACE Message";
-      $link = $_ENV['DOMAIN']->CLIENT_URL;
-      $body =
+      $db->changePassword($email, $pword, $role);
 
-        "Greetings, <br><br>" . $first_name . " " . $last_name . " sent you a message regarding the referral that have been submitted!
-        <br><br>To view the message, login <a href=" . $link . ">here</a>.
-        <br><br><br>Thank you.";
+      $responseBody = array('successMsg' => 'Password successfully updated');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else if($db->isPasswordValid($email, $pword, $oldPword) == "Same Password")
+    {
+      $responseBody = array('errorMsg' => 'Invalid new password');
+      $response = setResponse($response, 400, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errorMsg' => 'Invalid password');
+      $response = setResponse($response, 400, $responseBody);
+    }
 
-      //send Email
-      sendEmail($receiver, $subject, $body);
+    return $response;
+  });
 
-      $responseBody = array('successMsg' => 'Message sent');
+  //------- Change Contact not applicable for Super Administrator
+
+  $app->post('/auth/changeContact', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $changeContactDetails = json_decode(file_get_contents("php://input"));
+
+    $email = $changeContactDetails->email;
+    $contactNum = $changeContactDetails->contactNum;
+
+    $db = new DbOperation();
+
+    if($db->changeContact($email, $contactNum))
+    {
+      $responseBody = array('successMsg' => 'Contact number successfully updated');
       $response = setResponse($response, 200, $responseBody);
     }
     else
     {
-      $responseBody = array('errorMsg' => 'Message sending failed');
+      $responseBody = array('errMsg' => 'Failed Change Contact');
       $response = setResponse($response, 400, $responseBody);
     }
-
     return $response;
   });
 
 
+  //------- Get Contact Number not applicable for Super Administrator Module
 
-  $app->post('/databaseConfirm', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->post('/auth/getContactNum', function (ServerRequestInterface $request, ResponseInterface $response)
   {
-    $databaseDetails = json_decode(file_get_contents("php://input"));
+    $accountDetails = json_decode(file_get_contents("php://input"));
 
-    $status = 1;
-    $email = $databaseDetails->email;
-    $password = $databaseDetails->password;
+    $email = $accountDetails->email;
 
     $db = new DbOperation();
 
-    if($db->loginUser($email, $password, $status))
+    if($db->getContactNum($email))
     {
-      databaseBackup();
-      $response = setSuccessResponse($response, 200);
-    }
-    else
-    {
-      $responseBody = array('errMsg' => 'Incorrect Email or Password');
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/updateStudent', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $studentDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $studentDetails->email;
-    $studentId = $studentDetails->studentId;
-    $originalId = $studentDetails->originalId;
-    $lastName = $studentDetails->lastName;
-    $firstName = $studentDetails->firstName;
-    $program = $studentDetails->program;
-    $level = $studentDetails->level;
-    $updateSuccess = false;
-
-    $db = new DbOperation();
-
-    $department = $db->getDepartment($email);
-
-    if($department == 1)
-    {
-      $updateSuccess = $db->updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
-    }
-    else
-    {
-      $updateSuccess = $db->updateCollegeStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
-    }
-
-    if($updateSuccess)
-    {
-      $responseBody = array('successMsg' => 'Student profile successfully updated');
+      $responseBody = array('contactNum' => $db->getContactNum($email));
       $response = setResponse($response, 200, $responseBody);
     }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Failed to update student profile');
-      $response = setResponse($response, 400, $responseBody);
-    }
 
     return $response;
   });
 
 
 
-  $app->post('/updateAccount', function (ServerRequestInterface $request, ResponseInterface $response)
+  //used to edit faculty or administrator's information (ex. name)
+  $app->post('/auth/updateAccount', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $accountDetails = json_decode(file_get_contents("php://input"));
 
@@ -1351,135 +543,7 @@
 
 
 
-
-  $app->post('/getSYList', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
-
-    $db = new DbOperation();
-
-    $email = $accountDetails->email;
-    $department = $db->getDepartment($email);
-    $status = 1;
-
-    $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)));
-    $response = setResponse($response, 200, $responseBody);
-
-    return $response;
-  });
-
-
-
-  $app->post('/getChartData', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
-
-    $db = new DbOperation();
-
-    $email = $accountDetails->email;
-    $schoolYear = $accountDetails->schoolYear;
-    $department = $db->getDepartment($email);
-    $status = 1;
-
-    $responseBody = array('department' => $department, 'termData' => json_encode($db->getTermData($department, $status, $schoolYear)), 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear)));
-
-    $response = setResponse($response, 200, $responseBody);
-    return $response;
-  });
-
-
-
-  $app->post('/updateStatus', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-      $updateDetails = json_decode(file_get_contents("php://input"));
-
-      $db = new DbOperation();
-
-      $email = $updateDetails->email;
-      $reportId = $updateDetails->reportId;
-      $status = $updateDetails->prevReportStatus;
-      $updateStatus = $updateDetails->reportStatus;
-      $isUpdated = 1;
-
-      if(isset($updateDetails->comment) && $updateDetails->comment != "")
-      {
-        $comment = $updateDetails->comment;
-      }
-      else
-      {
-        $comment = null;
-      }
-
-      if($db->updateStatus($reportId, $updateStatus, $comment))
-      {
-        if($status != $updateStatus)
-        {
-          $db->setReporAsUpdated($reportId, $isUpdated);
-
-          $subject = "ACE Submitted Report Status";
-          $link = $_ENV['DOMAIN']->CLIENT_URL;
-          $body =
-            "The administrator updated the status of your submitted report from " . $db->getReportStatusName($status) . " to " . $db->getReportStatusName($updateStatus) . ".
-            <br><br>
-            If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
-
-          //send Email
-          sendEmail($email, $subject, $body);
-        }
-
-        $responseBody = array('successMsg' => 'Report status successfully updated');
-        $response = setResponse($response, 200, $responseBody);
-      }
-      else
-      {
-        $responseBody = array('errorMsg' => 'Report status failed to update');
-        $response = setResponse($response, 400, $responseBody);
-      }
-
-      return $response;
-  });
-
-
-
-  $app->post('/broadcastEmail', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $messageDetails = json_decode(file_get_contents("php://input"));
-
-    $body = $messageDetails->messageBody;
-    $userType = 3;
-    $status = 1;
-
-    if(isset($messageDetails->messageSubj))
-    {
-      $subject = $messageDetails->messageSubj;
-    }
-    else
-    {
-      $subject = "";
-    }
-
-    $db = new DbOperation();
-
-    $receiver = $db->getFacultyAccounts($userType, $status);
-
-    //send Email
-    if(sendEmail($receiver, $subject, $body))
-    {
-      $responseBody = array('successMsg' => 'Email sent');
-      $response = setResponse($response, 200, $responseBody);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Email sending failed');
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-
-  $app->get('/downloadUserManual/{role}', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->get('/auth/downloadUserManual/{role}', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $role = $request->getAttribute('role');
 
@@ -1509,234 +573,1070 @@
     return $response;
   });
 
+    //----------------------------------------- FACULTY FUNCTIONALITIES  ----------------------------------------------------//
+    //---------------------------- functionalities that use the faculty controller ------------------------------------------//
 
-
-  $app->post('/downloadBackup', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $databaseDetails = json_decode(file_get_contents("php://input"));
-
-    $status = 1;
-    $email = $databaseDetails->email;
-    $password = $databaseDetails->password;
-
-    $db = new DbOperation();
-
-    if($db->verifyAdminAccount($email, $password, $status))
+    $app->post('/auth/getNotifList', function (ServerRequestInterface $request, ResponseInterface $response)
     {
-      $timestamp = getTimeStamp()->format('m-d-y-H-i');
-      $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
+      $accountDetails = json_decode(file_get_contents("php://input"));
 
-      $backupFailed = backupDatabase($backupFile);
+      $email = $accountDetails->email;
 
-      if (!$backupFailed)
+      $db = new DbOperation();
+
+      $referralUpdateCount = $db->getReferralUpdateCount($email);
+      $newMessageCount = $db->getNewMessageCount($email);
+
+      $responseBody = array('referralUpdateCount' => $referralUpdateCount, 'newMessageCount' => $newMessageCount);
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
+
+
+    //typeahead (autocomplete)
+    $app->post('/auth/getStudentInfo', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $studentInfo = json_decode(file_get_contents("php://input"));
+
+      $studId = $studentInfo->studId;
+
+      $db = new DbOperation();
+
+      $studInfoList = $db->getStudentInfo($studId);
+
+      for($counter=0; $counter < count($studInfoList); $counter++)
       {
-        $response = $response->withHeader('Content-Description', 'File Transfer')
-        ->withHeader('Content-Type', 'application/octet-stream')
-        ->withHeader('Content-Disposition', 'attachment;filename="'.basename($backupFile).'"')
-        ->withHeader('Expires', '0')
-        ->withHeader('Cache-Control', 'must-revalidate')
-        ->withHeader('Pragma', 'public')
-        ->withHeader('Content-Length', filesize($backupFile));
+        $studInfoList[$counter]['level'] = $db->getStudentLevel($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
+        $studInfoList[$counter]['program'] = $db->getStudentProgram($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
+      }
 
-        readfile($backupFile);
+      $responseBody = array('studInfoList' => json_encode($studInfoList));
+      $response = setResponse($response, 200, $responseBody);
 
-        unlink($backupFile);
+      return $response;
+    });
 
-        logToFile($email, "has successfully download a copy of the database");
+
+
+    $app->post('/auth/referralForm', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $reportDetails = json_decode(file_get_contents("php://input"));
+
+      $email = $reportDetails->email;
+      $studId = $reportDetails->studId;
+      $department = $reportDetails->department;
+      $studFName = $reportDetails->studFName;
+      $studLName = $reportDetails->studLName;
+      $subjName = $reportDetails->subjName;
+      $schoolTerm = $reportDetails->schoolTerm;
+      $schoolYear = $reportDetails->schoolYear;
+      $course = $reportDetails->course;
+      $year = $reportDetails->year;
+      $reasons = $reportDetails->reason;
+      $isActive = 1;
+
+      if($reasons[6]->check && isset($reasons[6]->value))
+      {
+        $refComment = $reasons[6]->value;
       }
       else
       {
-        $responseBody = array('errorMsg' => 'Failed to create a backup file');
-        $response = setResponse($response, 400, $responseBody);
+        $refComment = NULL;
       }
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Incorrect Password');
-      $response = setResponse($response, 400, $responseBody);
-    }
 
-    return $response;
-  });
+      $db = new DbOperation();
 
+      $last_name = $db->getFirstName($email);
+      $first_name = $db->getLastName($email);
+      $full_name = $first_name . "  " .$last_name;
 
-
-  $app->post('/resetDatabase', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $databaseDetails = json_decode(file_get_contents("php://input"));
-
-    $status = 1;
-    $email = $databaseDetails->email;
-    $password = $databaseDetails->password;
-
-    $db = new DbOperation();
-
-    if($db->verifyAdminAccount($email, $password, $status))
-    {
-      $timestamp = getTimeStamp()->format('m-d-y-H-i');
-      $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
-
-      $backupFailed = backupDatabase($backupFile);
-
-      if($db->resetDatabase())
+      if($db->insertStudent($studId, $department, $studFName, $studLName, $course, $year) && $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons) && $db->updateReportCount($email))
       {
-        logToFile($email, "has successfully reset the database");
+        $emailList = $db->getAdminAccounts($department, $isActive);
 
-        $responseBody = array('successMsg' => 'Database successfully reset');
+        $subject = "ACE Submitted Report";
+        $link = $_ENV['DOMAIN']->CLIENT_URL;
+        $body =
+
+          "Greetings, <br><br>" . $full_name . " submitted a referral!
+          <br><br>To view the submitted report, login <a href=" . $link . ">here</a>.
+          <br><br><br>Thank you.";
+
+        sendEmail($emailList, $subject, $body);
+
+        $responseBody = array('successMsg' => "Referral form successfully submitted");
         $response = setResponse($response, 200, $responseBody);
       }
       else
       {
-        $responseBody = array('errorMsg' => 'Failed to reset the database');
+        $responseBody = array('errorMsg' => "Failed to submit the referral form");
         $response = setResponse($response, 400, $responseBody);
       }
-    }
-    else
+
+      return $response;
+    });
+
+
+    $app->post('/auth/referralHistory', function (ServerRequestInterface $request, ResponseInterface $response)
     {
-      $responseBody = array('errorMsg' => 'Incorrect Password');
-      $response = setResponse($response, 400, $responseBody);
-    }
+      $reportDetails = json_decode(file_get_contents("php://input"));
 
-    return $response;
-  });
+      $db = new DbOperation();
 
+      $email = $reportDetails->email;
 
+      $reportsList = $db->getFacultyReferral($email);
 
-  $app->post('/verifyAdminAccount', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $databaseDetails = json_decode(file_get_contents("php://input"));
-
-    $status = 1;
-    $email = $databaseDetails->email;
-    $password = $databaseDetails->password;
-
-    $db = new DbOperation();
-
-    if($db->verifyAdminAccount($email, $password, $status))
-    {
-      $response = setSuccessResponse($response, 200);
-    }
-    else
-    {
-      $responseBody = array('errorMsg' => 'Incorrect Password');
-      $response = setResponse($response, 400, $responseBody);
-    }
-
-    return $response;
-  });
-
-
-
-  $app->post('/restoreBackup', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $status = 1;
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $restoreFile = $_FILES["file"]["tmp_name"];
-
-    $db = new DbOperation();
-
-    if($db->verifyAdminAccount($email, $password, $status))
-    {
-      if(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION) == "sql")
+      for($counter=0; $counter<count($reportsList); $counter++)
       {
-        if($_FILES["file"]["size"] == 0)
+        $reportsList[$counter]['student_fullname'] = $reportsList[$counter]['student_fname'] . " " . $reportsList[$counter]['student_lname'];
+        $reportsList[$counter]['is_updated'] = $db->getUpdateStatus($reportsList[$counter]['report_id']);
+
+        $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
+
+        for($ctr=0; $ctr<count($reasonArr); $ctr++)
         {
-          $responseBody = array('errorMsg' => 'Empty backup file');
-          $response = setResponse($response, 400, $responseBody);
+          $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
         }
-        else
+      }
+
+      $responseBody = array('reportsList' => json_encode($reportsList));
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/markFacultyReport', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $reportDetails = json_decode(file_get_contents("php://input"));
+
+      $reportList = $reportDetails->reportId;
+      $status = 0;
+
+      $db = new DbOperation();
+
+      if(is_object($reportList))
+      {
+        foreach ($reportList->report_id as $value)
         {
-          $dbName = $_ENV['DB']->DB_NAME;
-          $dbUsername = $_ENV['DB']->DB_USERNAME;
-          $dbPword = $_ENV['DB']->DB_PASSWORD;
-          $timestamp = getTimeStamp()->format('m-d-y-H-i');
-          $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
-
-          $backupFailed = backupDatabase($backupFile);
-
-          $command = $_ENV['PATH']->COMMAND_PATH_RESTORE . "-u $dbUsername --password=$dbPword $dbName < $restoreFile";
-          exec($command, $output, $restoreFailed);
-
-          if (!$restoreFailed)
-          {
-            logToFile($email, "has successfully restored the database");
-
-            $responseBody = array('successMsg' => "Backup file successfully restored");
-            $response = setResponse($response, 200, $responseBody);
-          }
-          else
-          {
-            $responseBody = array('errorMsg' => 'Failed to restore backup file');
-            $response = setResponse($response, 400, $responseBody);
-          }
+          $db->markUpdatedReport($status, $value);
         }
       }
       else
       {
-        $responseBody = array('errorMsg' => 'Invalid backup file');
+        $db->markUpdatedReport($status, $reportList);
+      }
+
+      $response = setSuccessResponse($response, 200);
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/markFacultyReportAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $reportDetails = json_decode(file_get_contents("php://input"));
+
+      $reportList = $reportDetails->reportId;
+      $status = 1;
+
+      $db = new DbOperation();
+
+      if(is_object($reportList))
+      {
+        foreach ($reportList->report_id as $value)
+        {
+          $db->markUpdatedReport($status, $value);
+        }
+      }
+      else
+      {
+        $db->markUpdatedReport($status, $reportList);
+      }
+
+      $response = setSuccessResponse($response, 200);
+
+      return $response;
+    });
+
+
+    //----------------------------------------- ADMINISTRATOR FUNCTIONALITIES -----------------------------------------------//
+    //---------------------------- functionalities that use the administrator controller ------------------------------------//
+
+    $app->post('/auth/getAdminNotifList', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $accountDetails = json_decode(file_get_contents("php://input"));
+
+      $db = new DbOperation();
+
+      $email = $accountDetails->email;
+      $department = $db->getDepartment($email);
+
+      $uncounseledReportCount = $db->getUncounseledReportCount($department);
+      $newMessageCount = $db->getNewMessageCount($email);
+
+      $responseBody = array('uncounseledReportCount' => $uncounseledReportCount, 'newMessageCount' => $newMessageCount);
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
+
+
+    //lists faculty accounts
+    $app->post('/auth/listFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+
+      $db = new DbOperation();
+
+      $userType = 3;
+
+      $facultyList = $db->listAccounts($userType);
+
+      for($counter=0; $counter < count($facultyList); $counter++){
+
+        $facultyList[$counter]['reported_count'] = $db->getReportCount($facultyList[$counter]['email']);
+
+        if($facultyList[$counter]['contact_number'] == null)
+        {
+          $facultyList[$counter]['contact_number'] = "N/A";
+        }
+
+        if($db->isAccountActive($facultyList[$counter]['email']))
+        {
+          $facultyList[$counter]['status'] = "ACTIVE";
+        }
+        else
+        {
+          $facultyList[$counter]['status'] = "PENDING";
+        }
+      }
+
+      $responseBody = array('facultyList' => json_encode($facultyList));
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
+
+
+    //lists students
+    $app->post('/auth/listStudent', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $adminDetails = json_decode(file_get_contents("php://input"));
+
+      $db = new DbOperation();
+
+      $email = $adminDetails->email;
+      $status = 1;
+      $department = $db->getDepartment($email);
+
+      if($department==1)
+      {
+        $studentList = $db->listShsStudent($status);
+      }
+      else
+      {
+        $studentList = $db->listCollegeStudent($status);
+      }
+
+      for($counter=0; $counter < count($studentList); $counter++)
+      {
+        $studentList[$counter]['department_id'] = $department;
+        $studentList[$counter]['student_name'] = $studentList[$counter]['first_name'] . " " . $studentList[$counter]['last_name'];
+      }
+
+      $responseBody = array('studentList' => json_encode($studentList));
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
+
+
+    $app->post('/auth/deleteStudent', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $deleteStudentDetails = json_decode(file_get_contents("php://input"));
+
+      $student = $deleteStudentDetails->studentList;
+      $email = $deleteStudentDetails->email;
+      $status = 0;
+      $deleteSuccess = false;
+
+      $db = new DbOperation();
+
+      $department = $db->getDepartment($email);
+
+      if(is_object($student))
+      {
+        foreach($student->student_id as $student)
+        {
+          $deleteSuccess = $db->deleteStudent($student, $department, $status);
+        }
+      }
+      else
+      {
+        $deleteSuccess = $db->deleteStudent($student, $department, $status);
+      }
+
+      if($deleteSuccess)
+      {
+        $responseBody = array('successMsg' => 'Student(s) successfully deleted');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Failed to delete student(s)');
         $response = setResponse($response, 400, $responseBody);
       }
-    }
-    else
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/updateStudent', function (ServerRequestInterface $request, ResponseInterface $response)
     {
-      $responseBody = array('errorMsg' => 'Authentication failed');
-      $response = setResponse($response, 400, $responseBody);
-    }
+      $studentDetails = json_decode(file_get_contents("php://input"));
 
-    return $response;
-  });
+      $email = $studentDetails->email;
+      $studentId = $studentDetails->studentId;
+      $originalId = $studentDetails->originalId;
+      $lastName = $studentDetails->lastName;
+      $firstName = $studentDetails->firstName;
+      $program = $studentDetails->program;
+      $level = $studentDetails->level;
+      $updateSuccess = false;
+
+      $db = new DbOperation();
+
+      $department = $db->getDepartment($email);
+
+      if($department == 1)
+      {
+        $updateSuccess = $db->updateShsStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
+      }
+      else
+      {
+        $updateSuccess = $db->updateCollegeStudent($studentId, $originalId, $lastName, $firstName, $program, $level);
+      }
+
+      if($updateSuccess)
+      {
+        $responseBody = array('successMsg' => 'Student profile successfully updated');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Failed to update student profile');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
 
 
 
+    $app->post('/auth/reports', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $reportDetails = json_decode(file_get_contents("php://input"));
+
+      $db = new DbOperation();
+
+      $email = $reportDetails->email;
+      $department = $db->getDepartment($email);
+      $status = 1;
+
+      if($department == 1)
+      {
+        $reportsList = $db->listShsReports($status);
+      }
+      else
+      {
+        $reportsList = $db->listCollegeReports($status);
+      }
+
+      for($counter=0; $counter<count($reportsList); $counter++)
+      {
+        $reportsList[$counter]['faculty_fullname'] = $reportsList[$counter]['faculty_fname'] . " " . $reportsList[$counter]['faculty_lname'];
+        $reportsList[$counter]['student_fullname'] = $reportsList[$counter]['student_fname'] . " " . $reportsList[$counter]['student_lname'];
+
+        $reasonArr = $db->getReferralReasons($reportsList[$counter]['report_id']);
+
+        for($ctr=0; $ctr<count($reasonArr); $ctr++)
+        {
+          $reportsList[$counter]['report_reasons'][$ctr] = $reasonArr[$ctr]['referral_reason'];
+        }
+      }
+
+      $responseBody = array('reportsList' => json_encode($reportsList));
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
 
 
-
-
-
-
-
-
-// <------------------------------------------------------------------------------------------------------------------------->
-
-    //for testing lang yung mga code sa baba
-    $app->get('/users', function () {
-
-        $status = 1;
+    $app->post('/auth/updateStatus', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $updateDetails = json_decode(file_get_contents("php://input"));
 
         $db = new DbOperation();
 
-        $response = $db->sampleFunc($status);
+        $email = $updateDetails->email;
+        $reportId = $updateDetails->reportId;
+        $status = $updateDetails->prevReportStatus;
+        $updateStatus = $updateDetails->reportStatus;
+        $isUpdated = 1;
 
-        $key = "example_key";
-        $token = array(
-            "iss" => "http://example.org",
-            "aud" => "http://example.com",
-            "iat" => 1356999524,
-            "nbf" => 1357000000
-        );
+        if(isset($updateDetails->comment) && $updateDetails->comment != "")
+        {
+          $comment = $updateDetails->comment;
+        }
+        else
+        {
+          $comment = null;
+        }
 
-        /**
-         * IMPORTANT:
-         * You must specify supported algorithms for your application. See
-         * https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40
-         * for a list of spec-compliant algorithms.
-         */
-        $jwt = JWT::encode($token, $key);
-        $decoded_jwt = JWT::decode($jwt, $key, array('HS256'));
+        if($db->updateStatus($reportId, $updateStatus, $comment))
+        {
+          if($status != $updateStatus)
+          {
+            $db->setReporAsUpdated($reportId, $isUpdated);
 
-        //print_r($decoded_jwt);
+            $subject = "ACE Submitted Report Status";
+            $link = $_ENV['DOMAIN']->CLIENT_URL;
+            $body =
+              "The administrator updated the status of your submitted report from " . $db->getReportStatusName($status) . " to " . $db->getReportStatusName($updateStatus) . ".
+              <br><br>
+              If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
 
-        /*
-         NOTE: This will now be an object instead of an associative array. To get
-         an associative array, you will need to cast it as such:
-        */
+            //send Email
+            sendEmail($email, $subject, $body);
+          }
 
-        //$decoded_array = (array) $decoded;
+          $responseBody = array('successMsg' => 'Report status successfully updated');
+          $response = setResponse($response, 200, $responseBody);
+        }
+        else
+        {
+          $responseBody = array('errorMsg' => 'Report status failed to update');
+          $response = setResponse($response, 400, $responseBody);
+        }
 
-        header('Content-Type: application/json');
-        echo json_encode($decoded_jwt);
-        //echo $response;
+        return $response;
+    });
+
+
+    $app->post('/auth/sendMessage', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $messageDetails = json_decode(file_get_contents("php://input"));
+
+      $report_id = $messageDetails->reportId;
+      $sender = $messageDetails->sender;
+      $receiver = $messageDetails->receiver;
+      $message = $messageDetails->messageBody;
+      $subject = $messageDetails->messageSubj;
+      $isRead = 0;
+      $status = 1;
+
+      $date = getTimestamp();
+      $timestamp = $date->format('Y-m-d H:i:s');
+
+      $db = new DbOperation();
+
+      $last_name = $db->getFirstName($sender);
+      $first_name = $db->getLastName($sender);
+
+      if($db->insertMessage($report_id, $sender, $receiver, $message, $subject, $isRead, $status, $timestamp))
+      {
+        $subject = "ACE Message";
+        $link = $_ENV['DOMAIN']->CLIENT_URL;
+        $body =
+
+          "Greetings, <br><br>" . $first_name . " " . $last_name . " sent you a message regarding the referral that have been submitted!
+          <br><br>To view the message, login <a href=" . $link . ">here</a>.
+          <br><br><br>Thank you.";
+
+        //send Email
+        sendEmail($receiver, $subject, $body);
+
+        $responseBody = array('successMsg' => 'Message sent');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Message sending failed');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/markReport', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $reportDetails = json_decode(file_get_contents("php://input"));
+
+      $reportList = $reportDetails->reportList;
+      $isRead = 1;
+
+      $db = new DbOperation();
+
+      foreach ($reportList->report_id as $value)
+      {
+        $db->markReport($isRead, $value);
+      }
+
+      $response = setSuccessResponse($response, 200);
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/markReportAsUnread', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $reportDetails = json_decode(file_get_contents("php://input"));
+
+      $reportList = $reportDetails->reportList;
+      $isRead = 0;
+
+      $db = new DbOperation();
+
+      foreach ($reportList->report_id as $value)
+      {
+        $db->markReport($isRead, $value);
+      }
+
+      $response = setSuccessResponse($response, 200);
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/readReport', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $reportDetails = json_decode(file_get_contents("php://input"));
+
+      $reportId = $reportDetails->reportId;
+      $email = $reportDetails->email;
+      $isRead = $reportDetails->isRead;
+      $status = 1;
+
+      $db = new DbOperation();
+
+      if($isRead == 0)
+      {
+        $subject = "ACE Submitted Report Status";
+        $link = $_ENV['DOMAIN']->CLIENT_URL;
+        $body =
+          "The report you submitted has been read by the administrator.
+          <br><br>
+          If you wish to submit another report, login <a href=" . $link . ">here</a>. Thank you.";
+
+        sendEmail($email, $subject, $body);
+
+        $db->markReport($status, $reportId);
+      }
+
+      $response = setSuccessResponse($response, 200);
+
+      return $response;
+    });
+
+
+    $app->post('/auth/deleteReport', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $deleteReportDetails = json_decode(file_get_contents("php://input"));
+
+      $reports = $deleteReportDetails->reportList;
+      $deleteSuccess = false;
+
+      $db = new DbOperation();
+
+      if(is_object($reports))
+      {
+        foreach($reports->report_id as $report)
+        {
+          $deleteSuccess = $db->deleteReport($report);
+        }
+      }
+      else
+      {
+        $deleteSuccess = $db->deleteReport($reports);
+      }
+
+      if($deleteSuccess)
+      {
+        $responseBody = array('successMsg' => 'Report(s) successfully deleted');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Failed to delete report(s)');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+    $app->post('/auth/registerFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $registerDetails = json_decode(file_get_contents("php://input"));
+
+      $email = $registerDetails->email;
+      $fName = $registerDetails->fName;
+      $lName = $registerDetails->lName;
+      $status = 0;
+      $userType = 3;
+
+      $db = new DbOperation();
+
+      if($db->emailExist($email))
+      {
+        $responseBody = array('errorMsg' => 'emailExist');
+        $response = setResponse($response, 400, $responseBody);
+      }
+      else
+      {
+        $result = randStrGen();
+        $hashCode = hash('sha256', $result);
+
+        $subject = "Verify your ACE Program Account";
+        $link = $_ENV['DOMAIN']->CLIENT_URL . "/accountsetup?email=" . $email . "&hashcode=" . $hashCode;
+        $body =
+
+        "Greetings! <br><br>An ACE Online Referral System account was created by the Administrator.
+        <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
+        <br><br><br>Thank you.";
+
+        if($db->registerFaculty($email, $fName, $lName, $status, $userType, $hashCode))
+        {
+          sendEmail($email, $subject, $body);
+          $responseBody = array('successMsg' => 'Account successfully created');
+          $response = setResponse($response, 200, $responseBody);
+        }
+      }
+
+      return $response;
+    });
+
+
+    $app->post('/auth/deleteFaculty', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $deleteFacultyDetails = json_decode(file_get_contents("php://input"));
+
+      $email = $deleteFacultyDetails->facultyList;
+      $status = 0;
+      $deleteSuccess = false;
+
+      $db = new DbOperation();
+
+      if(is_object($email))
+      {
+        foreach($email->email as $user)
+        {
+          $deleteSuccess = $db->deleteUser($user, $status);
+        }
+      }
+      else
+      {
+        $deleteSuccess = $db->deleteUser($email, $status);
+      }
+
+      if($deleteSuccess)
+      {
+        $responseBody = array('successMsg' => 'Account(s) successfully deleted');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Failed to delete account(s)');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+
+
+    $app->post('/auth/verifyAdminAccount', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $databaseDetails = json_decode(file_get_contents("php://input"));
+
+      $status = 1;
+      $email = $databaseDetails->email;
+      $password = $databaseDetails->password;
+
+      $db = new DbOperation();
+
+      if($db->verifyAdminAccount($email, $password, $status))
+      {
+        $response = setSuccessResponse($response, 200);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Incorrect Password');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/downloadBackup', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $databaseDetails = json_decode(file_get_contents("php://input"));
+
+      $status = 1;
+      $email = $databaseDetails->email;
+      $password = $databaseDetails->password;
+
+      $db = new DbOperation();
+
+      if($db->verifyAdminAccount($email, $password, $status))
+      {
+        $timestamp = getTimeStamp()->format('m-d-y-H-i');
+        $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
+
+        $backupFailed = backupDatabase($backupFile);
+
+        if (!$backupFailed)
+        {
+          $response = $response->withHeader('Content-Description', 'File Transfer')
+          ->withHeader('Content-Type', 'application/octet-stream')
+          ->withHeader('Content-Disposition', 'attachment;filename="'.basename($backupFile).'"')
+          ->withHeader('Expires', '0')
+          ->withHeader('Cache-Control', 'must-revalidate')
+          ->withHeader('Pragma', 'public')
+          ->withHeader('Content-Length', filesize($backupFile));
+
+          readfile($backupFile);
+
+          unlink($backupFile);
+
+          logToFile($email, "has successfully download a copy of the database");
+        }
+        else
+        {
+          $responseBody = array('errorMsg' => 'Failed to create a backup file');
+          $response = setResponse($response, 400, $responseBody);
+        }
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Incorrect Password');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/resetDatabase', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $databaseDetails = json_decode(file_get_contents("php://input"));
+
+      $status = 1;
+      $email = $databaseDetails->email;
+      $password = $databaseDetails->password;
+
+      $db = new DbOperation();
+
+      if($db->verifyAdminAccount($email, $password, $status))
+      {
+        $timestamp = getTimeStamp()->format('m-d-y-H-i');
+        $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
+
+        $backupFailed = backupDatabase($backupFile);
+
+        if($db->resetDatabase())
+        {
+          logToFile($email, "has successfully reset the database");
+
+          $responseBody = array('successMsg' => 'Database successfully reset');
+          $response = setResponse($response, 200, $responseBody);
+        }
+        else
+        {
+          $responseBody = array('errorMsg' => 'Failed to reset the database');
+          $response = setResponse($response, 400, $responseBody);
+        }
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Incorrect Password');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/restoreBackup', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $status = 1;
+      $email = $_POST['email'];
+      $password = $_POST['password'];
+      $restoreFile = $_FILES["file"]["tmp_name"];
+
+      $db = new DbOperation();
+
+      if($db->verifyAdminAccount($email, $password, $status))
+      {
+        if(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION) == "sql")
+        {
+          if($_FILES["file"]["size"] == 0)
+          {
+            $responseBody = array('errorMsg' => 'Empty backup file');
+            $response = setResponse($response, 400, $responseBody);
+          }
+          else
+          {
+            $dbName = $_ENV['DB']->DB_NAME;
+            $dbUsername = $_ENV['DB']->DB_USERNAME;
+            $dbPword = $_ENV['DB']->DB_PASSWORD;
+            $timestamp = getTimeStamp()->format('m-d-y-H-i');
+            $backupFile = $_ENV['PATH']->BACKUP_PATH . "ace_backup_" . $timestamp . ".sql";
+
+            $backupFailed = backupDatabase($backupFile);
+
+            $command = $_ENV['PATH']->COMMAND_PATH_RESTORE . "-u $dbUsername --password=$dbPword $dbName < $restoreFile";
+            exec($command, $output, $restoreFailed);
+
+            if (!$restoreFailed)
+            {
+              logToFile($email, "has successfully restored the database");
+
+              $responseBody = array('successMsg' => "Backup file successfully restored");
+              $response = setResponse($response, 200, $responseBody);
+            }
+            else
+            {
+              $responseBody = array('errorMsg' => 'Failed to restore backup file');
+              $response = setResponse($response, 400, $responseBody);
+            }
+          }
+        }
+        else
+        {
+          $responseBody = array('errorMsg' => 'Invalid backup file');
+          $response = setResponse($response, 400, $responseBody);
+        }
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Authentication failed');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+
+    //------------------- GET SUMMARY -----------//
+
+    $app->post('/auth/getSYList', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $accountDetails = json_decode(file_get_contents("php://input"));
+
+      $db = new DbOperation();
+
+      $email = $accountDetails->email;
+      $department = $db->getDepartment($email);
+      $status = 1;
+
+      $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)));
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/getChartData', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $accountDetails = json_decode(file_get_contents("php://input"));
+
+      $db = new DbOperation();
+
+      $email = $accountDetails->email;
+      $schoolYear = $accountDetails->schoolYear;
+      $department = $db->getDepartment($email);
+      $status = 1;
+
+      $responseBody = array('department' => $department, 'termData' => json_encode($db->getTermData($department, $status, $schoolYear)), 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear)));
+
+      $response = setResponse($response, 200, $responseBody);
+      return $response;
+    });
+
+
+
+    $app->post('/auth/broadcastEmail', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $messageDetails = json_decode(file_get_contents("php://input"));
+
+      $body = $messageDetails->messageBody;
+      $userType = 3;
+      $status = 1;
+
+      if(isset($messageDetails->messageSubj))
+      {
+        $subject = $messageDetails->messageSubj;
+      }
+      else
+      {
+        $subject = "";
+      }
+
+      $db = new DbOperation();
+
+      $receiver = $db->getFacultyAccounts($userType, $status);
+
+      //send Email
+      if(sendEmail($receiver, $subject, $body))
+      {
+        $responseBody = array('successMsg' => 'Email sent');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Email sending failed');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+    //----------------------------------------- SUPER ADMINISTRATOR FUNCTIONALITIES -----------------------------------------//
+    //---------------------------- functionalities that use the super administrator controller -----------------------------//
+
+    //lists admin accounts
+    $app->post('/auth/listAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $db = new DbOperation();
+
+      $userType = 2;
+
+      $adminList = $db->listAccounts($userType);
+
+      for($counter=0; $counter < count($adminList); $counter++)
+      {
+        $departmentId = $db->getDepartment($adminList[$counter]['email']);
+        $adminList[$counter]['department'] = $db->getDepartmentName($departmentId);
+
+        if($adminList[$counter]['contact_number'] == null)
+        {
+          $adminList[$counter]['contact_number'] = "N/A";
+        }
+
+        if($db->isAccountActive($adminList[$counter]['email']))
+        {
+          $adminList[$counter]['status'] = "ACTIVE";
+        }
+        else
+        {
+          $adminList[$counter]['status'] = "PENDING";
+        }
+      }
+
+      $responseBody = array('adminList' => json_encode($adminList));
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
+
+
+    $app->post('/auth/registerAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $registerDetails = json_decode(file_get_contents("php://input"));
+
+      $email = $registerDetails->email;
+      $fName = $registerDetails->fName;
+      $lName = $registerDetails->lName;
+      $department = $registerDetails->department;
+      $status = 0;
+      $userType = 2;
+
+      $db = new DbOperation();
+
+      if($db->emailExist($email))
+      {
+        $responseBody = array('errorMsg' => 'emailExist');
+        $response = setResponse($response, 400, $responseBody);
+      }
+      else
+      {
+        $result = randStrGen();
+        $hashCode = hash('sha256', $result);
+
+        $subject = "Verify your ACE Program Account";
+        $link = $_ENV['DOMAIN']->CLIENT_URL . "/accountsetup?email=" . $email . "&hashcode=" . $hashCode;
+        $body =
+
+        "Greetings! <br><br>An ACE Online Referral System account was created by the Super Administrator.
+        <br><br>Click <a href=" . $link . ">here</a> to set your password and contact number.
+        <br><br><br>Thank you.";
+
+        if($db->registerAdmin($email, $fName, $lName, $status, $userType, $hashCode, $department))
+        {
+          sendEmail($email, $subject, $body);
+
+          $responseBody = array('successMsg' => 'Account successfully created');
+          $response = setResponse($response, 200, $responseBody);
+        }
+      }
+
+      return $response;
+    });
+
+
+
+    $app->post('/auth/deleteAdmin', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $deleteAdminDetails = json_decode(file_get_contents("php://input"));
+
+      $email = $deleteAdminDetails->adminList;
+      $status = 0;
+      $deleteSuccess = false;
+
+      $db = new DbOperation();
+
+      if(is_object($email))
+      {
+        foreach($email->email as $user)
+        {
+          $deleteSuccess = $db->deleteUser($user, $status);
+        }
+      }
+      else
+      {
+        $deleteSuccess = $db->deleteUser($email, $status);
+      }
+
+      if($deleteSuccess)
+      {
+        $responseBody = array('successMsg' => 'Account(s) successfully deleted');
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => 'Failed to delete account(s)');
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
     });
 
 

@@ -13,7 +13,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/messages',
+      url: config.apiUrl + '/auth/messages',
       data: messageDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -173,7 +173,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markAsRead',
+      url: config.apiUrl + '/auth/markAsRead',
       data: messageDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -213,7 +213,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markAsUnread',
+      url: config.apiUrl + '/auth/markAsUnread',
       data: messageDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -269,7 +269,7 @@ angular.module('aceWeb')
 
           $http({
             method: 'POST',
-            url: config.apiUrl + '/deleteMessage',
+            url: config.apiUrl + '/auth/deleteMessage',
             data: messageDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
@@ -342,7 +342,7 @@ angular.module('aceWeb')
 
           $http({
             method: 'POST',
-            url: config.apiUrl + '/deleteMessage',
+            url: config.apiUrl + '/auth/deleteMessage',
             data: messageDetails,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
@@ -397,7 +397,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/readMessage',
+      url: config.apiUrl + '/auth/readMessage',
       data: messageDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -486,7 +486,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/sendMessage',
+        url: config.apiUrl + '/auth/sendMessage',
         data: messageDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -531,10 +531,10 @@ angular.module('aceWeb')
         'messageBody': emailBody,
         'messageSubj': $scope.subject
       }
-     
+
       $http({
         method: 'POST',
-        url: config.apiUrl + '/broadcastEmail',
+        url: config.apiUrl + '/auth/broadcastEmail',
         data: messageDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })

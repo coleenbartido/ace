@@ -11,7 +11,7 @@ angular.module('aceWeb')
     }
     $http({
       method: 'POST',
-      url: config.apiUrl + '/referralHistory',
+      url: config.apiUrl + '/auth/referralHistory',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -190,7 +190,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markFacultyReport',
+      url: config.apiUrl + '/auth/markFacultyReport',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -229,7 +229,7 @@ angular.module('aceWeb')
 
     $http({
       method: 'POST',
-      url: config.apiUrl + '/markFacultyReportAsUnread',
+      url: config.apiUrl + '/auth/markFacultyReportAsUnread',
       data: reportDetails,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -292,7 +292,7 @@ angular.module('aceWeb')
 
       $http({
         method: 'POST',
-        url: config.apiUrl + '/markFacultyReport',
+        url: config.apiUrl + '/auth/markFacultyReport',
         data: reportDetails,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -327,4 +327,4 @@ angular.module('aceWeb')
       closable: false
     });
   }
-}) 
+})
