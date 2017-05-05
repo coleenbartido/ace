@@ -10,7 +10,7 @@ angular.module('aceWeb')
     {
       'email' : AuthService.getEmail()
     }
-    console.log($scope.userDepartment);
+    
     $http({
       method: 'POST',
       url: config.apiUrl + '/auth/getSYList',
@@ -75,6 +75,9 @@ angular.module('aceWeb')
       var reasonDataObj = JSON.parse(response.data.reasonData);
       var statusDataObj = JSON.parse(response.data.statusData);
 
+      //color of bars
+      $scope.datasetOverride = [{ backgroundColor: ['#10326F','#10326F','#10326F','#10326F','#10326F','#10326F','#10326F','#10326F','#10326F'] }];
+   
       //labels
       if(dept == 1)
       {
@@ -134,6 +137,15 @@ angular.module('aceWeb')
     $scope.isEmptySYList = false;
 
     $scope.getSY();
+
+    Chart.plugins.register({
+      beforeDraw: function(chartInstance) 
+      {
+        var ctx = chartInstance.chart.ctx;
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+      }
+    });
   } //scope initScope
 
   $scope.initScope();
@@ -217,21 +229,15 @@ angular.module('aceWeb')
 
   //download pdf function
   $scope.downloadPDF = function(chartId)
-  {
-    html2canvas($("#" + chartId),
-    {
-      background: "#ffffff",
-      onrendered: function(canvas)
-      {
-        var sy = $scope.selectedSY.split(/\s*-\s*/);
-        var myImage = canvas.toDataURL("image/jpeg");
+  {    
+    var sy = $scope.selectedSY.split(/\s*-\s*/);
 
-        var doc = new jsPDF('landscape');
+    var myImage = document.getElementById(chartId).toDataURL('image/jpeg', 1.0);
 
-        doc.addImage(myImage, 'JPEG', 23, 15, 250, 160);
-        doc.save(chartId + '_chart_' + $scope.currentDateNum + '_' + sy[0] + sy[1] + '.pdf');
-      }
-    });
+    var doc = new jsPDF('landscape');
+        
+    doc.addImage(myImage, 'JPEG', 23, 15, 250, 160);
+    doc.save(chartId + '_chart_' + $scope.currentDateNum + '_' + sy[0] + sy[1] + '.pdf');  
   }
 
 })

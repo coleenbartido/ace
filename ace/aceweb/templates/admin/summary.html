@@ -18,7 +18,7 @@
 		  <uib-tab index="0" heading="Term">
 		  	<div ng-show="!isLoadingChart">
 			  	<div class="col-md-11">	  		
-					<canvas id="term" class="chart chart-bar" chart-data="termData" chart-labels="termLabels" chart-series="series" chart-options="termOptions">
+					<canvas id="term" class="chart chart-bar" chart-data="termData" chart-labels="termLabels" chart-series="series" chart-options="termOptions" chart-dataset-override="datasetOverride">
 					</canvas>
 				</div>							
 				<a class="btn btn-info" id="downloadImg1" ng-click="downloadImage($event, 'term')">Save as Image</a>
@@ -44,7 +44,7 @@
 		  <uib-tab index="1" heading="Program">
 		  	<div ng-show="!isLoadingChart">
 			  	<div class="col-md-11">
-					<canvas id="program" class="chart chart-bar" chart-data="programData" chart-labels="programLabels" chart-series="series" chart-options="programOptions">
+					<canvas id="program" class="chart chart-bar" chart-data="programData" chart-labels="programLabels" chart-series="series" chart-options="programOptions" chart-dataset-override="datasetOverride">
 					</canvas>
 				</div>
 				<a class="btn btn-info" id="downloadImg2" ng-click="downloadImage($event, 'program')">Save as Image</a>
@@ -70,7 +70,7 @@
 		  <uib-tab index="2" heading="Grade/Year Level">
 		  	<div ng-show="!isLoadingChart">
 			  	<div class="col-md-11">
-					<canvas id="level" class="chart chart-bar" chart-data="levelData" chart-labels="levelLabels" chart-series="series" chart-options="levelOptions">
+					<canvas id="level" class="chart chart-bar" chart-data="levelData" chart-labels="levelLabels" chart-series="series" chart-options="levelOptions" chart-dataset-override="datasetOverride">
 					</canvas>
 				</div>
 				<a class="btn btn-info" id="downloadImg3" ng-click="downloadImage($event, 'level')">Save as Image</a>
@@ -96,7 +96,7 @@
 		  <uib-tab index="3" heading="Reason">
 		  	<div ng-show="!isLoadingChart">
 				<div class="col-md-11">
-					<canvas id="reason" class="chart chart-bar" chart-data="reasonData" chart-labels="reasonLabels" chart-series="series" chart-options="reasonOptions">
+					<canvas id="reason" class="chart chart-bar" chart-data="reasonData" chart-labels="reasonLabels" chart-series="series" chart-options="reasonOptions" chart-dataset-override="datasetOverride">
 					</canvas>
 				</div>
 				<a class="btn btn-info" id="downloadImg4" ng-click="downloadImage($event, 'reason')">Save as Image</a>
@@ -122,7 +122,7 @@
 		  <uib-tab index="4" heading="Report Status">
 		  	<div ng-show="!isLoadingChart">
 				<div class="col-md-11">
-					<canvas id="status" class="chart chart-bar" chart-data="statusData" chart-labels="statusLabels" chart-series="series" chart-options="statusOptions">
+					<canvas id="status" class="chart chart-bar" chart-data="statusData" chart-labels="statusLabels" chart-series="series" chart-options="statusOptions" chart-dataset-override="datasetOverride">
 					</canvas>
 				</div>
 				<a class="btn btn-info" id="downloadImg5" ng-click="downloadImage($event, 'status')">Save as Image</a>
