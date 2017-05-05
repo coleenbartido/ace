@@ -52,6 +52,7 @@ angular.module('aceWeb')
   {
     $scope.isLoading = true;
     $scope.userName = AuthService.getName();
+    $scope.userDepartment = AuthService.getDepartment();
     $rootScope.getNotif();
   }
 

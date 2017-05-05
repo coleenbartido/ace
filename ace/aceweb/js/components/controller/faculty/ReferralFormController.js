@@ -50,9 +50,11 @@ angular.module('aceWeb')
   {
     $scope.refForm.year.$setUntouched();
     $scope.refForm.course.$setUntouched();
-
+    $scope.refForm.schoolTerm.$setUntouched();
+    
     $scope.year = undefined;
     $scope.course = undefined;
+    $scope.schoolTerm = undefined;
   }
 
   $scope.$watch("reasons", function(n, o)
@@ -67,7 +69,7 @@ angular.module('aceWeb')
   {
     if(form.$valid && !$scope.checkedReasons)
     {
-      if($scope.reasons[6].check && $scope.reasons[6].value.length == 0)
+      if($scope.reasons[6].check && !$scope.reasons[6].value)
       {
         $scope.invalidOtherReason = true;
         $scope.showCustomModal("ERROR", "Please specify the reason!");

@@ -10,7 +10,7 @@ angular.module('aceWeb')
     {
       'email' : AuthService.getEmail()
     }
-
+    console.log($scope.userDepartment);
     $http({
       method: 'POST',
       url: config.apiUrl + '/auth/getSYList',
@@ -76,24 +76,23 @@ angular.module('aceWeb')
       var statusDataObj = JSON.parse(response.data.statusData);
 
       //labels
-
       if(dept == 1)
       {
         $scope.programLabels = [['','Humanities And','Social Sciences'],['','Accountancy Business','And Management'],['','Computer','Programming'],'Animation','Fashion Design','Multimedia Arts'];
         $scope.levelLabels = ['Grade 11','Grade 12'];
+        $scope.termLabels = ['First Term','Second Term'];
       }
       else
       {
         $scope.programLabels = [['','Software','Engineering'],['','Game','Development'],['','Web','Development'],'Animation',['','Multimedia','Arts And Design'],['','Fashion','Design'],['','Real Estate','Management'],['','Business','Administration']];
         $scope.levelLabels = ['First Year','Second Year','Third Year','Fourth Year'];
+        $scope.termLabels = ['First Term','Second Term','Third Term'];
       }
-
-      $scope.termLabels = ['First Term','Second Term','Third Term'];
+    
       $scope.reasonLabels = ['Absent or Late','Underachieving','Failing','Plans to Transfer','Violent/Disruptive','Emotional Distress','Others'];
       $scope.statusLabels = ['Uncounseled','In Progress','Counseled'];
 
       //data
-
       $scope.termData = [[]];
       $scope.programData = [[]];
       $scope.levelData = [[]];

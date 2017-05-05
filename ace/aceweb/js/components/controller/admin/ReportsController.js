@@ -578,7 +578,7 @@ angular.module('aceWeb')
     var rowHeightLabel = 38;
 
     doc.setFontSize(26);
-    doc.setFont("courier");
+    doc.setFont("helvetica");
     doc.setFontType("bold");
     doc.text('REPORT DETAILS', 68, 16);
 

@@ -56,7 +56,7 @@
             <div class="form-group">
               <label  class="col-md-12 control-label" for="oldPasswordInput">Old Password</label>
               <div class="col-md-12">
-                <input type="password" class="form-control" id="oldPasswordInput" name="oldPassword" ng-model="oldPassword" required/>
+                <input type="password" class="form-control" id="oldPasswordInput" name="oldPassword" ng-model="oldPassword" ng-change="setValidOldPassword(settingsForm)" required/>
               </div>
             </div>
             <div ng-messages="settingsForm.oldPassword.$error" ng-show="settingsForm.$submitted">
@@ -67,7 +67,7 @@
             <div class="form-group">
               <label class="col-md-12 control-label">New Password <i class="glyphicon glyphicon-question-sign" title="Must have at least 8 alphanumeric characters"></i></label>
               <div class="col-md-12">
-                <input type="password" class="form-control" id="userPasswordInput" name="userPassword" ng-model="userPassword" ng-model-options="{allowInvalid: true}" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" required/>
+                <input type="password" class="form-control" id="userPasswordInput" name="userPassword" ng-model="userPassword" ng-model-options="{allowInvalid: true}" ng-change="setValidCurrentPassword(settingsForm)" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" required/>
               </div>
             </div>
             <div ng-messages="settingsForm.userPassword.$error" ng-show="settingsForm.$submitted">  

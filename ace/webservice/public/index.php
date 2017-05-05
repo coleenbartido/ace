@@ -41,10 +41,17 @@
       $issuedAt   = time();
       $serverName = "ACE";
       $role = $db->getAccountRole($email);
+      $department = "";
 
       if($role == 1)
       {
         $name = "Super Admin";
+      }
+      else if($role == 2)
+      {
+        $name = $db->getFirstName($email) . " " . $db->getLastName($email);
+        $departmentId = $db->getDepartment($email);
+        $department = $db->getDepartmentName($departmentId);
       }
       else
       {
@@ -64,7 +71,8 @@
         [                            // Data related to the signer user
           'email' => $email,         // User name
           'role' => $role,
-          'name' => $name
+          'name' => $name,
+          'department' => $department
         ]
       ];
 

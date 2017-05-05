@@ -100,11 +100,11 @@
 
       if($role == 1)
       {
-        $name = "Super Admin";
+        $name = $db->getAccountRoleName($role);
       }
       else
       {
-        $name = $db->getFirstName($email) . " " . $db->getLastName($email);
+        $name = $db->getFirstName($email) . " " . $db->getLastName($email) . " (" . $db->getAccountRoleName($role) . ")";
       }
 
       $fh = fopen('log.txt', 'a');

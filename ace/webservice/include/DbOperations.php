@@ -57,6 +57,18 @@ class DbOperation
     }
 
 
+    public function getAccountRoleName($role)
+    {
+        $stmt = $this->con->prepare("SELECT user_type FROM user_type WHERE user_type_id=?");
+        $stmt->bind_param("i", $role);
+        $stmt->execute();
+        $accountRole = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $accountRole['user_type'];
+    }
+
+
     public function isLinkValid($email, $hashCode)
     {
         $stmt = $this->con->prepare("SELECT email FROM user WHERE email=? AND hashcode=? UNION SELECT email FROM superadmin_account WHERE email=? AND hashcode=?");
@@ -925,8 +937,17 @@ class DbOperation
     {
       $terms = array(1, 2, 3);
 
-      $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as firstTermCount, (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as secondTermCount, (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as thirdTermCount");
-      $stmt->bind_param("iiisiiisiiis", $terms[0], $department, $status, $schoolYear, $terms[1], $department, $status, $schoolYear, $terms[2], $department, $status, $schoolYear);
+      if($department == 1)
+      {
+        $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as firstTermCount, (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as secondTermCount");
+        $stmt->bind_param("iiisiiis", $terms[0], $department, $status, $schoolYear, $terms[1], $department, $status, $schoolYear);     
+      }
+      else
+      {
+        $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as firstTermCount, (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as secondTermCount, (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as thirdTermCount");
+        $stmt->bind_param("iiisiiisiiis", $terms[0], $department, $status, $schoolYear, $terms[1], $department, $status, $schoolYear, $terms[2], $department, $status, $schoolYear);     
+      }
+
       $stmt->execute();
       $result= $stmt->get_result();
       $arrResult = array();
