@@ -412,6 +412,7 @@ angular.module('aceWeb', ['oc.lazyLoad','ui.router','ngStorage','ngMessages','ui
   var email = '';
   var role = '';
   var name = '';
+  var department = '';
 
   function getPayLoad()
   {
@@ -431,6 +432,7 @@ angular.module('aceWeb', ['oc.lazyLoad','ui.router','ngStorage','ngMessages','ui
     email = '';
     role = '';
     name = '';
+    department = '';
     $http.defaults.headers.common.Authorization = '';
     $localStorage.$reset();
   }
@@ -463,6 +465,16 @@ angular.module('aceWeb', ['oc.lazyLoad','ui.router','ngStorage','ngMessages','ui
     }
 
     return name
+  }
+
+  this.getDepartment = function ()
+  {
+    if(getPayLoad())
+    {
+      department = getPayLoad().data.department;
+    }
+
+    return department
   }
 
   this.storeUserCredentials = function (token)

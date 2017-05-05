@@ -107,16 +107,6 @@ angular.module('aceWeb')
   //compares old password to new password
   $scope.changePassword = function(settingsForm)
   {
-    if(settingsForm.userPassword.$valid && settingsForm.userConfirmPassword.$valid)
-    {
-      $scope.settingsForm.oldPassword.$setValidity('invalidOldPword', true);
-    }
-
-    if(settingsForm.oldPassword.$valid && settingsForm.userConfirmPassword.$valid)
-    {
-      $scope.settingsForm.userPassword.$setValidity('samePword', true);
-    }
-
     if(settingsForm.$valid)
     {
       $scope.saveBtn = "Saving";
@@ -165,6 +155,16 @@ angular.module('aceWeb')
         $scope.disableSaveBtn = false;
       });
     }
+  }
+
+  $scope.setValidCurrentPassword = function(form)
+  {
+    form.userPassword.$setValidity('samePword', true);
+  }
+
+  $scope.setValidOldPassword = function(form)
+  {
+    form.oldPassword.$setValidity('invalidOldPword', true);
   }
 
   $scope.showCustomModal = function(modalTitle, modalMsg)
