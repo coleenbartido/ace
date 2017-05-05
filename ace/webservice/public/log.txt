@@ -58,3 +58,10 @@
 [2017-05-05 11:22:55] yuiop hjkl (Administrator) logged in to the system
 [2017-05-05 11:23:23] zxcvb asdfg (Administrator) logged in to the system
 [2017-05-05 11:23:45] zxcvb asdfg (Administrator) has successfully reset the database
+[2017-05-05 11:48:36] P J (Faculty Member) logged in to the system
+[2017-05-05 11:48:59] P J (Faculty Member) has successfully submitted a referral.
+[2017-05-05 11:49:13] yuiop hjkl (Administrator) logged in to the system
+[2017-05-05 11:55:07] yuiop hjkl (Administrator) logged in to the system
+[2017-05-05 11:57:15] yuiop hjkl (Administrator) logged in to the system
+[2017-05-05 12:01:15] yuiop hjkl (Administrator) logged in to the system
+[2017-05-05 12:05:36] yuiop hjkl (Administrator) logged in to the system
