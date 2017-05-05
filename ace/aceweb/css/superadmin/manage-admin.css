@@ -136,7 +136,7 @@ body {
   width: 100%;
   background-color: white;
   height: 497px;
-  
+
 }
 
 .manageContainer .header{
@@ -150,6 +150,10 @@ body {
 
 .manageContainer .header th{
   padding-top: 14px;
+}
+
+.manageContainer .header:hover{
+  background-color: #cfd6e2;
 }
 
 .manageContainer .listAdmin{
@@ -202,7 +206,7 @@ form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
   font-size: 11px;
 }
 
-.custom-pagination { 
+.custom-pagination {
   position: absolute;
   margin-left: auto;
   margin-right: auto;
@@ -215,5 +219,3 @@ form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
   margin-top: 0px;
   margin-bottom: -4px;
 }
-
-
