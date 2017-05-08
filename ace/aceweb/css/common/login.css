@@ -144,6 +144,15 @@ form.ng-submitted input.ng-invalid {
     border-bottom: 5px solid #628a2c;
 }
 
+.form-group .button:hover{
+  background-color: #7eb238;
+}
+
+.form-group .button:active{
+  background-color: #628a2c;
+  border-bottom: 5px solid #8CC63F;
+}
+
 .form-group .button span {
     display: inline-block;
     position: relative;
@@ -170,6 +179,10 @@ form.ng-submitted input.ng-invalid {
     opacity: 1;
     right: 0;
 }
+
+
+
+
 
 .form-group .forgotPass {
     display: block;
