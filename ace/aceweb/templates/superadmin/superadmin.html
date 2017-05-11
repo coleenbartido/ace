@@ -1,4 +1,116 @@
 <head>
+  <link rel="stylesheet" href="css/superadmin/superadmin.css">
+  <link rel="stylesheet" href="css/common/template/AdminLTE.css">
+</head>
+
+<body>
+
+</body class="fixed">
+
+      <div class="template-container">
+          <div class="row nav-bar">
+              <div class="col-md-12 nav-bar-col no-side-padding">
+                <header class="main-header">
+                  <a href="#" class="logo">
+                    <!--span class="logo-mini"><b>A</b>CE</span-->
+                    <span class="logo-lg"><img src="img/ace1.png"</span>
+                  </a>
+
+                  <nav class="navbar navbar-static-top">
+                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </a>
+
+                    <div class="navbar-custom-menu">
+                      <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="img/user.png" class="user-image" alt="User Image">
+                            <span class="hidden-xs"><b>{{userName}}</b></span>
+                          </a>
+
+                          <ul class="dropdown-menu">
+                            <li class="user-header">
+                              <img src="img/user.png" class="img-circle" alt="User Image">
+
+                              <p>
+                                {{userName}}
+                                <!--small>{{userDepartment}}</small-->
+                              </p>
+                            </li>
+
+                            <li class="user-footer">
+                              <div class="pull-left">
+                                <a href="#" class="btn btn-default btn-flat">Help</a>
+                              </div>
+                              <div class="pull-right" ng-click="logout()">
+                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                              </div>
+                            </li>
+
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                  </nav>
+                </header>
+              </div>
+          </div>
+
+
+
+          <!-- =============================================== -->
+          <div class="row menu-content-row">
+
+
+          <aside class="main-sidebar">
+            <section class="sidebar">
+              <!--div class="user-panel">
+                <div class="image">
+                  <img src="img/aceLogo.png" class="img-circle" alt="ACE Logo">
+                </div>
+
+                <div class="pull-left info">
+                  <p>{{userName}}</p>
+                </div>
+              </div-->
+
+              <ul class="navi list-unstyled">
+                <!--li class="header">MAIN NAVIGATION</li-->
+
+                <li class="treeview">
+                  <a ui-sref="superadmin.manageAdmin" class="manageAdminTab">
+                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                      <span class="nav-text">Manage Administrator
+                          <span class="badge" ng-show="referralUpdateCount">{{referralUpdateCount}}</span>
+                      </span>
+                  </a>
+                </li>
+
+                <li>
+                  <a ui-sref="superadmin.settings" class="settingTab">
+                      <i class="fa fa-cog"></i>
+                      <span class="nav-text">Settings</span>
+                  </a>
+                </li>
+            </ul>
+            </section>
+          </aside>
+          <div class="content-wrapper" >
+        <div class="col-md-12 content-col no-side-padding" ui-view></div>
+      </div>
+
+    </div>
+
+
+      <script src="js/components/app.min.js"></script>
+</body>
+
+<!--head>
     <link rel="stylesheet" type="text/css" href="css/superadmin/superadmin.css">
 </head>
 
@@ -17,7 +129,7 @@
                   <i class="fa fa-sign-out" aria-hidden="true"></i>
               </a-->
 
-          <div class="col-md-3 col-md-offset-6 pull-right">
+<!--          <div class="col-md-3 col-md-offset-6 pull-right">
             <ul class="nav navbar-nav">
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{userName}} <span class="caret"></span></a>
@@ -64,4 +176,4 @@
       </div>
   </div>
 
-</body>
+</body-->

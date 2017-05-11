@@ -10,17 +10,11 @@ body {
 }
 
 .manageAdminTab {
-  background: #122143 none repeat scroll 0 0;
-  border-left: 5px solid #5584ff;
-  padding-left: 25px;
+  background: #152F41 none repeat scroll 0 0;
+  border-left: 5px solid #44d3af;
+  padding-left: 20px;
   text-decoration: none;
-}
-
-.manageFacultyTab {
-  background: #122143 none repeat scroll 0 0;
-  border-left: 5px solid #5584ff;
-  padding-left: 25px;
-  text-decoration: none;
+  color: #ffffff;
 }
 
 /*----------------------------*/
@@ -30,11 +24,16 @@ body {
     height: 30vh;
     margin-top: -5vh;
     z-index: -1;
-    position: relative;
+    position: static;
     -ms-user-select: none;      /* IE 10+ */
    -moz-user-select: none;     /* Firefox all */
    -webkit-user-select: none;  /* Chrome all / Safari all */
    user-select: none;          /* Likely future */
+   image-rendering: -moz-pixelated;         /* Firefox */
+   image-rendering:   -o-pixelated;         /* Opera */
+   image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+   image-rendering: pixelated;
+   -ms-interpolation-mode: nearest-neighbor;
 }
 
 .register-button button{
@@ -46,7 +45,6 @@ body {
     color: white;
     height: 50px;
     width: 200px;
-    margin-left: 5vh;
     margin-top: 4vh;
     font-size: 13px;
     position: absolute;
@@ -60,11 +58,13 @@ body {
     color: white;
     height: 50px;
     width: 200px;
-    margin-left: 10vh;
     margin-top: 4vh;
     font-size: 13px;
     position: absolute;
 }
+
+
+
 
 .banner .searchBar input[type='text']{
     border-radius: 0px 0px;
@@ -140,7 +140,7 @@ body {
 }
 
 .manageContainer .header{
-  background-color: #cfd6e2;
+  background-color: #b9cde9;
   border-bottom: 2px solid black;
   height: 43px;
   font-size: 12px;
@@ -152,9 +152,6 @@ body {
   padding-top: 14px;
 }
 
-.manageContainer .header:hover{
-  background-color: #cfd6e2;
-}
 
 .manageContainer .listAdmin{
   border-bottom: 2px solid gray;
@@ -218,4 +215,21 @@ form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
 .custom-inner-pagination {
   margin-top: 0px;
   margin-bottom: -4px;
+}
+
+
+.manageAdmin .manageContainer .table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #dfe9f5;
+    font-weight: bold;
+}
+.manageAdmin .manageContainer .table{
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.manageAdmin .manageContainer .table th{
+  border-bottom: black solid 2px;
+}
+
+.manageAdmin .manageContainer .table td{
+  border-bottom: gray solid 2px;
 }

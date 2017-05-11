@@ -1,6 +1,5 @@
 <head>
 	<title>ACE Program | Manage Administrators</title>
-
 	<link rel="stylesheet" type="text/css" href="css/superadmin/manage-admin.css">
 </head>
 
@@ -14,12 +13,12 @@
 							<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
 						</div>
 
-						<div class="register-button col-md-2">
-							<button type="button" data-toggle="modal" data-target="#adminRegModal" ng-click="showRegAdminModal()"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Administrator</button>
+						<div class="register-button col-md-1 col-md-offset-0">
+							<button class="btn-responsive" type="button" data-toggle="modal" data-target="#adminRegModal" ng-click="showRegAdminModal()"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Administrator</button>
 						</div>
 
-						<div class="delete-button col-md-1">
-							<button type="button" ng-click="deleteAdminList()" ng-disabled="disableDeleteBtn()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrators</button>
+						<div class="delete-button col-md-1 col-md-offset-1">
+							<button class="btn-responsive" type="button" ng-click="deleteAdminList()" ng-hide="disableDeleteBtn()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrators</button>
 						</div>
 		</div>
 
@@ -28,9 +27,9 @@
 
 	<div class="manageAdmin col-md-12 col-md-offset-0 formContainer">
 
-					<div class="panel-body manageContainer">
+					<div class="col-md-12 panel-body manageContainer table-responsive">
 
-							<table class="table table-condensed table-hover">
+							<table class="col-md-12 table table-condensed table-hover ">
 								<col width="15">
 								<col width="150">
 								<col width="150">
@@ -39,20 +38,24 @@
 								<col width="60">
 								<col width="30">
 
-								<tbody>
+								<thead>
 									<tr class="header">
 											<th>
 												<center>
 													<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
 												</center>
 											</th>
-											<th>EdfghjkMAIL</th>
+											<th>EMAIL</th>
 											<th>NAME</th>
 											<th>CONTACT</th>
 											<th>DEPARTMENT</th>
 											<th>STATUS</th>
 											<th><center>ACTION</center></th>
 									</tr>
+								</thead>
+								<tbody>
+
+
 
 									<tr class="listAdmin" ng-repeat="admin in adminAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(admin)">
 											<td>
@@ -202,7 +205,8 @@
 
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-						<p class="modal-title custom-header-color custom-modal-header">Edit Administrator Information</p>
+						<!--p class="modal-title custom-header-color custom-modal-header">Edit Administrator Information</p-->
+						<h4 class="modal-title custom-header-color">Edit {{admin.first_name}} {{admin.last_name}} Information</h4>
 					</div>
 
 					<div class="modal-body">
