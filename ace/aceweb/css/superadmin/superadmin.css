@@ -138,7 +138,7 @@ a:focus, a:hover, a {
 /*------------------------------side menu----------------------->*/
 
 aside{
-  background: #0e2b62;
+  background: #1B4678;
   height: 10px;
   position: relative;
   margin: 0;
@@ -165,7 +165,7 @@ aside{
 
 .navi a:hover {
     background: #152f41 none repeat scroll 0 0;
-    border-left: 5px solid #44d3af;
+    border-left: 5px solid #57d5a4;
     padding-left: 20px;
     text-decoration: none;
 	  -webkit-transition: all 0.1s ease;
@@ -173,6 +173,10 @@ aside{
     -o-transition: all 0.1s ease;
     transition: all 0.1s ease;
     color: #ffffff;
+}
+
+.navi a:focus{
+  color:#ffffff;
 }
 
 .navi i {

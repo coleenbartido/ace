@@ -2443,13 +2443,20 @@ a:focus {
 .nav > li > a:focus {
   color: white;
   font-size: 12px;
-  background-color: #0b234d;
+  background-color: #152f41;
+}
+
+.nav > li > a:focus, .nav > li > a:active,{
+  background-color: #152f41;
+}
+.nav > li.selected{
+  background-color: #152f41;
 }
 /* NAV PILLS */
 .nav-pills > li > a {
   border-radius: 0;
   border-top: 3px solid transparent;
-  color: #444;
+  color: #ffffff;
 }
 .nav-pills > li > a > .fa,
 .nav-pills > li > a > .glyphicon,
@@ -2459,7 +2466,7 @@ a:focus {
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  border-top-color: #3c8dbc;
+  border-top-color: #ffffff;
 }
 .nav-pills > li.active > a {
   font-weight: 600;

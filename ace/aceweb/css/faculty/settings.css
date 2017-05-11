@@ -10,10 +10,11 @@ body {
 }
 
 .settingTab {
-  background: #122143 none repeat scroll 0 0;
-  border-left: 5px solid #5584ff;
-  padding-left: 25px;
+  background: #152F41 none repeat scroll 0 0;
+  border-left: 5px solid #57d5a4;
+  padding-left: 15px;
   text-decoration: none;
+  color: #ffffff;
 }
 
 /*----------------------------*/
@@ -92,5 +93,3 @@ hr {
 form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
   border:1px solid #f00;
 }
-
-
