@@ -556,7 +556,7 @@
 
 
 
-  $app->get('/auth/downloadUserManual/{role}', function (ServerRequestInterface $request, ResponseInterface $response)
+  $app->get('/downloadUserManual/{role}', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $role = $request->getAttribute('role');
 

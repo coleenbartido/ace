@@ -10,7 +10,7 @@ angular.module('aceWeb')
 
   $scope.downloadUserManual = function()
   {
-    $scope.downloadLink = config.apiUrl + '/auth/downloadUserManual/' + AuthService.getRole();
+    $scope.downloadLink = config.apiUrl + '/downloadUserManual/' + AuthService.getRole();
   }
 
   $scope.initScope = function()
