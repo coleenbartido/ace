@@ -1,0 +1,104 @@
+@font-face {
+    font-family: acre-regular;
+    src: url('../../fonts/acre-regular.ttf');
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    /*background: url(../../img/05.jpg) no-repeat center center fixed;*/
+    background-color: #F2F3F5;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-weight: 500;
+    font-size: 1.05em;
+    font-family: gotham-book;
+}
+
+/*--------------------------*/
+
+.container{
+  margin: 50px auto;
+  width: 500px;
+  /*border: 2px solid;*/
+  /*border-bottom: 3px solid #7CA988;*/
+}
+
+.container img{
+  width: auto;
+  height: auto;
+}
+
+.container .article h2{
+  font-family: gotham-bold;
+  color: #314E55;
+  font-size: 90px;
+  letter-spacing: 5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.container .article p{
+  font-family: acre-regular;
+  color: #314E55;
+  font-size: 20px;
+  font-weight: 100;
+}
+
+.container .sign-in button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 80px;
+    width: 300px;
+    height: 50px;
+    background-color: #8CC63F;
+    outline: none;
+    border: 0;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 16px;
+    font-style: bold;
+    text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    box-sizing: border-box;
+    border-bottom: 5px solid #628a2c;
+}
+
+.container .sign-in button:hover{
+  background-color: #7eb238;
+}
+
+.container .sign-in button:active{
+  background-color: #628a2c;
+  border-bottom: 5px solid #8CC63F;
+}
+
+.container .sign-in span {
+    display: inline-block;
+    position: relative;
+    transition: 0.2s;
+    color: white;
+}
+
+.container .sign-in span:after {
+    content: "\f015";
+    font-family: FontAwesome;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: 10px;
+    transition: 0.2s;
+    color: white;
+}
+
+.container .sign-in button:hover span {
+    padding-right: 25px;
+}
+
+.container .sign-in button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
