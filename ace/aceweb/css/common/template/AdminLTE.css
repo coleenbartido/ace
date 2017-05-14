@@ -291,11 +291,11 @@ a:focus {
 
 .main-header .logo .logo-lg img {
   height: 40px;
-  width: 150px;
-  image-rendering: -moz-pixelated;         /* Firefox */
-  image-rendering:   -o-pixelated;         /* Opera */
+  width: 180px;
+  image-rendering: -moz-auto;         /* Firefox */
+  image-rendering:   -o-auto;         /* Opera */
   image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
-  image-rendering: pixelated;
+  image-rendering: auto;
   -ms-interpolation-mode: nearest-neighbor;
 }
 
