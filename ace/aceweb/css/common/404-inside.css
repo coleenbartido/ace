@@ -27,14 +27,14 @@ body {
 /*--------------------------*/
 
 .container{
-  margin-top: 5%;
+  margin-top: 8%;
   /*border: 2px solid;*/
   /*border-bottom: 3px solid #7CA988;*/
 }
 
 .container img{
-  width: 300px;
-  height: 400px;
+  width: 200px;
+  height: 300px;
   display: inline-block;
 }
 
@@ -45,7 +45,7 @@ body {
 .container .message h2{
   font-family: gotham-bold;
   color: #568362;
-  font-size: 90px;
+  font-size: 50px;
   text-align: left;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
@@ -53,15 +53,15 @@ body {
 .container .message p{
   font-family: acre-regular;
   color: #60926d;
-  font-size: 20px;
+  font-size: 14px;
   text-align: left;
 }
 
 .container .sign-in button {
     display: block;
-    margin: 0 auto;
-    margin-top: 10%;
-    width: 80%;
+    margin-top: 15%;
+    float: left;
+    width: 50%;
     height: 50px;
     background-color: #8CC63F;
     outline: none;
@@ -93,7 +93,7 @@ body {
 }
 
 .container .sign-in span:after {
-    content: "\f015";
+    content: "\f0e2";
     font-family: FontAwesome;
     position: absolute;
     opacity: 0;
@@ -108,97 +108,6 @@ body {
 }
 
 .container .sign-in button:hover span:after {
-    opacity: 1;
-    right: 0;
-}
-
-/*.container img{
-  width: 210px;
-  height: 300px;
-  margin-top: 2%;
-  margin-bottom: -10px;
-  border-style: solid;
-}
-
-.message{
-  width: 100%;
-}
-
-.message h3 {
-  font-family: gotham-bold;
-  color: #293c2e;
-  letter-spacing: 3px;
-  /*text-shadow: 0.1em 0.1em 0.2em rgba(0, 0, 0, 0.5);*/
-}
-
-/*.message p{
-  padding-bottom: 5px;
-  line-height: 30px;
-  font-size: 15px;
-  color: #ffffff;
-  font-size: 20px;
-  margin-top: 20px;
-  text-shadow: 0.1em 0.1em 0.2em rgba(0, 0, 0, 0.7);
-}
-
-.message .go-back{
-  color: #7CA988;
-}
-
-.message .go-back:hover{
-
-}
-
-.form-group .control .button {
-    display: block;
-    margin: 0 auto;
-    width: 50%;
-    height: 50px;
-    background-color: #8CC63F;
-    outline: none;
-    border: 0;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 16px;
-    font-style: bold;
-    text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    box-sizing: border-box;
-    border-bottom: 5px solid #628a2c;
-}
-
-.form-group .button:hover{
-  background-color: #7eb238;
-}
-
-.form-group .button:active{
-  background-color: #628a2c;
-  border-bottom: 5px solid #8CC63F;
-}
-
-.form-group .button span {
-    display: inline-block;
-    position: relative;
-    transition: 0.2s;
-    color: white;
-}
-
-.form-group .button span:after {
-    content: "\f090";
-    font-family: FontAwesome;
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: 10px;
-    transition: 0.2s;
-    color: white;
-}
-
-.form-group .button:hover span {
-    padding-right: 25px;
-}
-
-.form-group .button:hover span:after {
     opacity: 1;
     right: 0;
 }

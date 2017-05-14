@@ -8,21 +8,27 @@
 
 <body>
 
-    <div class="container">
+    <div class="container col-md-8 col-md-offset-2">
+      <center>
+        <img src="img/404.png" />
 
-        <div class="header col-md-1">
-          <h1>OOPS!</h1>
-        </div>
-
-        <div class="text col-md-7">
+        <div class="message">
+          <h2 class="form-group">SORRY!</h2>
           <p>
-            We can't seem to find the page you're looking for.
+              We can't seem to find the page you're looking for.<br />
+              You could head straight back to our sign in page<br />
+              by clicking the button below.
           </p>
-        </div>
 
-        <div class="box col-md-offset-4">
-            <img src="img/404.png">
+          <a class="sign-in" ui-sref="login">
+            <button type="submit">
+                <span>
+                    BACK TO SIGN IN PAGE
+                </span>
+            </button>
+          </a>
         </div>
+      </center>
 
     </div>
 
