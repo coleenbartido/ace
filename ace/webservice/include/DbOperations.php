@@ -444,7 +444,7 @@ class DbOperation
 
     public function deleteUser($email, $status)
     {
-        $stmt = $this->con->prepare("UPDATE user SET status=?, hashcode = NULL WHERE email=?");
+        $stmt = $this->con->prepare("UPDATE user SET status=?, hash = NULL, hashcode = NULL WHERE email=?");
         $stmt->bind_param("is", $status, $email);
         $result = $stmt->execute();
         $stmt->close();
@@ -940,12 +940,12 @@ class DbOperation
       if($department == 1)
       {
         $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as firstTermCount, (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as secondTermCount");
-        $stmt->bind_param("iiisiiis", $terms[0], $department, $status, $schoolYear, $terms[1], $department, $status, $schoolYear);     
+        $stmt->bind_param("iiisiiis", $terms[0], $department, $status, $schoolYear, $terms[1], $department, $status, $schoolYear);
       }
       else
       {
         $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as firstTermCount, (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as secondTermCount, (SELECT COUNT(*) FROM report WHERE term=? AND department_id=? AND status=? AND school_year=?) as thirdTermCount");
-        $stmt->bind_param("iiisiiisiiis", $terms[0], $department, $status, $schoolYear, $terms[1], $department, $status, $schoolYear, $terms[2], $department, $status, $schoolYear);     
+        $stmt->bind_param("iiisiiisiiis", $terms[0], $department, $status, $schoolYear, $terms[1], $department, $status, $schoolYear, $terms[2], $department, $status, $schoolYear);
       }
 
       $stmt->execute();
