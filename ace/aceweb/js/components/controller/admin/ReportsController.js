@@ -280,6 +280,7 @@ angular.module('aceWeb')
 
           var reportDetails =
           {
+            'userEmail' : AuthService.getEmail(),
             'reportList' : report_id
           }
 
@@ -347,6 +348,7 @@ angular.module('aceWeb')
 
           var reportDetails =
           {
+            'userEmail' : AuthService.getEmail(),
             'reportList' : $scope.reportList
           }
 
@@ -475,6 +477,7 @@ angular.module('aceWeb')
 
       var updateDetails =
       {
+        'userEmail' : AuthService.getEmail(),
         'email' : report.email,
         'reportId' : report.report_id,
         'prevReportStatus' : report.report_status_id,

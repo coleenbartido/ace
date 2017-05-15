@@ -1004,6 +1004,7 @@
 
         $db = new DbOperation();
 
+        $userEmail = $updateDetails->userEmail;
         $email = $updateDetails->email;
         $reportId = $updateDetails->reportId;
         $status = $updateDetails->prevReportStatus;
@@ -1036,7 +1037,7 @@
             sendEmail($email, $subject, $body);
           }
 
-          logToFile($email, "has successfully updated the status of a report.");
+          logToFile($userEmail, "has successfully updated the status of a report.");
 
           $responseBody = array('successMsg' => 'Report status successfully updated');
           $response = setResponse($response, 200, $responseBody);
@@ -1177,6 +1178,7 @@
     {
       $deleteReportDetails = json_decode(file_get_contents("php://input"));
 
+      $userEmail = $deleteReportDetails->userEmail;
       $reports = $deleteReportDetails->reportList;
       $deleteSuccess = false;
 
@@ -1196,7 +1198,7 @@
 
       if($deleteSuccess)
       {
-        logToFile($email, "has successfully deleted report/s.");
+        logToFile($userEmail, "has successfully deleted report/s.");
 
         $responseBody = array('successMsg' => 'Report(s) successfully deleted');
         $response = setResponse($response, 200, $responseBody);
@@ -1521,6 +1523,7 @@
     {
       $messageDetails = json_decode(file_get_contents("php://input"));
 
+      $userEmail = $messageDetails->userEmail;
       $body = $messageDetails->messageBody;
       $userType = 3;
       $status = 1;
@@ -1542,7 +1545,7 @@
       if(sendEmail($receiver, $subject, $body))
       {
 
-        logToFile($email, "has successfully sent a broadcast email to all faculty.");
+        logToFile($userEmail, "has successfully sent a broadcast email to all faculty.");
 
         $responseBody = array('successMsg' => 'Email sent');
         $response = setResponse($response, 200, $responseBody);

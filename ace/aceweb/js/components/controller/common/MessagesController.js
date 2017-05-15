@@ -528,6 +528,7 @@ angular.module('aceWeb')
 
       var messageDetails =
       {
+        'userEmail' : AuthService.getEmail(),
         'messageBody': emailBody,
         'messageSubj': $scope.subject
       }
@@ -571,4 +572,4 @@ angular.module('aceWeb')
     });
   }
 
-}) 
+})
