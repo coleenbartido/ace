@@ -76,6 +76,7 @@ angular.module('aceWeb')
 
       var adminDetails =
       {
+        'userEmail' : AuthService.getEmail(),
         'email': $scope.email,
         'lastName' : $scope.lastName,
         'firstName' : $scope.firstName,
@@ -143,6 +144,7 @@ angular.module('aceWeb')
 
         var registerDetails =
         {
+          'userEmail' : AuthService.getEmail(),
           'email' : $scope.adminEmail,
           'fName' : $scope.adminFirstName,
           'lName' : $scope.adminLastName,
@@ -204,6 +206,7 @@ angular.module('aceWeb')
 
           var adminDetails =
           {
+            'userEmail' : AuthService.getEmail(),
             'adminList': email
           }
 
@@ -266,6 +269,7 @@ angular.module('aceWeb')
 
           var adminDetails =
           {
+            'userEmail' : AuthService.getEmail(),
             'adminList' : $scope.adminList
           }
 

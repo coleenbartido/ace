@@ -76,6 +76,7 @@ angular.module('aceWeb')
 
       var facultyDetails =
       {
+        'userEmail' : AuthService.getEmail(),
         'email': $scope.email,
         'lastName' : $scope.lastName,
         'firstName' : $scope.firstName,
@@ -141,6 +142,7 @@ angular.module('aceWeb')
 
         var registerDetails =
         {
+          'userEmail' : AuthService.getEmail(),
           'email' : $scope.facultyEmail,
           'fName' : $scope.facultyFirstName,
           'lName' : $scope.facultyLastName
@@ -201,6 +203,7 @@ angular.module('aceWeb')
 
           var facultyDetails =
           {
+            'userEmail' : AuthService.getEmail(),
             'facultyList': email
           }
 
@@ -263,6 +266,7 @@ angular.module('aceWeb')
 
           var facultyDetails =
           {
+            'userEmail' : AuthService.getEmail(),
             'facultyList' : $scope.facultyList
           }
 

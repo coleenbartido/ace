@@ -507,6 +507,7 @@
   {
     $accountDetails = json_decode(file_get_contents("php://input"));
 
+    $userEmail = $accountDetails->userEmail;
     $email = $accountDetails->email;
     $lastName = $accountDetails->lastName;
     $firstName = $accountDetails->firstName;
@@ -531,7 +532,7 @@
         $logMessage = "has successfully updated faculty profile.";
       }
 
-      logToFile($email, $logMessage);
+      logToFile($userEmail, $logMessage);
 
       $responseBody = array('successMsg' => $message );
       $response = setResponse($response, 200, $responseBody);
@@ -1083,7 +1084,7 @@
         //send Email
         sendEmail($receiver, $subject, $body);
 
-        logToFile($email, "has successfully sent a message.");
+        logToFile($sender, "has successfully sent a message.");
 
         $responseBody = array('successMsg' => 'Message sent');
         $response = setResponse($response, 200, $responseBody);
@@ -1214,6 +1215,7 @@
     {
       $registerDetails = json_decode(file_get_contents("php://input"));
 
+      $userEmail = $registerDetails->userEmail;
       $email = $registerDetails->email;
       $fName = $registerDetails->fName;
       $lName = $registerDetails->lName;
@@ -1244,7 +1246,7 @@
         {
           sendEmail($email, $subject, $body);
 
-          logToFile($email, "has successfully created a faculty account.");
+          logToFile($userEmail, "has successfully created a faculty account.");
 
           $responseBody = array('successMsg' => 'Account successfully created');
           $response = setResponse($response, 200, $responseBody);
@@ -1259,6 +1261,7 @@
     {
       $deleteFacultyDetails = json_decode(file_get_contents("php://input"));
 
+      $userEmail = $deleteFacultyDetails->userEmail;
       $email = $deleteFacultyDetails->facultyList;
       $status = 0;
       $deleteSuccess = false;
@@ -1280,7 +1283,7 @@
       if($deleteSuccess)
       {
 
-        logToFile($email, "has successfully deleted a faculty account/s.");
+        logToFile($userEmail, "has successfully deleted faculty account/s.");
 
         $responseBody = array('successMsg' => 'Account(s) successfully deleted');
         $response = setResponse($response, 200, $responseBody);
@@ -1597,6 +1600,7 @@
     {
       $registerDetails = json_decode(file_get_contents("php://input"));
 
+      $userEmail = $registerDetails->userEmail;
       $email = $registerDetails->email;
       $fName = $registerDetails->fName;
       $lName = $registerDetails->lName;
@@ -1628,7 +1632,7 @@
         {
           sendEmail($email, $subject, $body);
 
-          logToFile($email, "has successfully created an administrator account.");
+          logToFile($userEmail, "has successfully created an administrator account.");
 
           $responseBody = array('successMsg' => 'Account successfully created');
           $response = setResponse($response, 200, $responseBody);
@@ -1644,6 +1648,7 @@
     {
       $deleteAdminDetails = json_decode(file_get_contents("php://input"));
 
+      $userEmail = $deleteAdminDetails->userEmail;
       $email = $deleteAdminDetails->adminList;
       $status = 0;
       $deleteSuccess = false;
@@ -1664,6 +1669,8 @@
 
       if($deleteSuccess)
       {
+        logToFile($userEmail, "has successfully deleted administrator account/s.");
+
         $responseBody = array('successMsg' => 'Account(s) successfully deleted');
         $response = setResponse($response, 200, $responseBody);
       }
