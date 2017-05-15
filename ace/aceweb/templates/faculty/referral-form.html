@@ -57,7 +57,7 @@
                     <div class="style-select">
                       <input name="studLName" type="text" ng-Model="studLName" class="form-control" id="studLName" placeholder="Ex. Dela Cruz" pattern="^[a-zA-Z ,.'-]+$" required>
                       <div ng-messages="refForm.studLName.$error" ng-show="(refForm.studLName.$touched || refForm.$submitted) && !refForm.studLName.$valid">
-                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Allowsakdfhskdjfhed characters: a-z, A-Z, space and (.,'-)" data-toggle="tooltip" data-placement="auto"></span>
+                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Allows characters: a-z, A-Z, space and (.,'-)" data-toggle="tooltip" data-placement="auto"></span>
                         <span class="fa fa-exclamation-circle errspan" ng-message="required" title="Please fill out this field." data-toggle="tooltip" data-placement="auto"></span>
                       </div>
                     </div>
