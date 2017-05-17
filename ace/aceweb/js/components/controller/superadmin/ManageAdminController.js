@@ -190,7 +190,7 @@ angular.module('aceWeb')
   $scope.deleteAdmin = function(email)
   {
     BootstrapDialog.show({
-      title: 'Delete Administrator',
+      title: '<i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrator',
       message: 'Are you sure you want to delete this administrator?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,
@@ -253,7 +253,7 @@ angular.module('aceWeb')
   $scope.deleteAdminList = function()
   {
     BootstrapDialog.show({
-      title: 'Delete Administrators',
+      title: '<i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrators',
       message: 'Are you sure you want to delete selected accounts?',
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: false,

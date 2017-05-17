@@ -93,14 +93,16 @@
 										<td colspan="7"><center>NO RESULT</center></td>
 									</tr>
 
+									<center>
+										<div class="custom-pagination">
+											<ul class="custom-inner-pagination" uib-pagination total-items="(filtered = (adminAccounts | filter:searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+										</div>
+									</center>
+
 	 							</tbody>
 							</table>
 
-							<center>
-								<div class="custom-pagination">
-									<ul class="custom-inner-pagination" uib-pagination total-items="(filtered = (adminAccounts | filter:searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
-								</div>
-							</center>
+
 
 					</div>
 	</div>
@@ -130,7 +132,7 @@
 			    <div class="modal-content">
 			      	<div class="modal-header">
 			        	<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-			        	<h4 class="modal-title custom-header-color">Register Administrator</h4>
+			        	<h3 class="modal-title custom-header-color"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Administrator</h3>
 			     	</div>
 			      	<div class="modal-body">
 
@@ -206,7 +208,7 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
 						<!--p class="modal-title custom-header-color custom-modal-header">Edit Administrator Information</p-->
-						<h4 class="modal-title custom-header-color">Edit {{admin.first_name}} {{admin.last_name}} Information</h4>
+						<h3 class="modal-title custom-header-color"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Administrator's Information</h3>
 					</div>
 
 					<div class="modal-body">
