@@ -14,15 +14,15 @@
 						</div>
 
 						<div class="register-button col-md-1 col-md-offset-0">
-							<button class="btn-responsive" type="button" data-toggle="modal" data-target="#adminRegModal" ng-click="showRegAdminModal()"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Administrator</button>
+							<button class="btn" type="button" data-toggle="modal" data-target="#adminRegModal" ng-click="showRegAdminModal()"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Administrator</button>
 						</div>
 
 						<div class="delete-button col-md-1 col-md-offset-1">
-							<button class="btn-responsive" type="button" ng-click="deleteAdminList()" ng-hide="disableDeleteBtn()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrators</button>
+							<button class="btn" type="button" ng-click="deleteAdminList()" ng-hide="disableDeleteBtn()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrators</button>
 						</div>
 		</div>
 
-		<img src="img/header1.png">
+		<img src="img/header1.png" class="img-responsive">
 	</div>
 
 	<div class="manageAdmin col-md-12 col-md-offset-0 formContainer">
@@ -242,7 +242,7 @@
 										</div>
 
 										<div class="updateBtn">
-											<button type="submit" class="btn btn-primary" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
+											<button type="submit" class="btn btn-primary pull-right" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
 										</div>
 
 								</form>

@@ -38,17 +38,17 @@
                               <img src="img/user.png" class="img-circle" alt="User Image">
 
                               <p>
-                                {{userName}}
+                                {{userName}} Account
                                 <!--small>{{userDepartment}}</small-->
                               </p>
                             </li>
 
                             <li class="user-footer">
                               <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Help</a>
+                                <a type="button" class="btn btn-default btn-flat" ng-click="downloadUserManual()" target="_self" ng-href="{{downloadLink}}">Help <i class="fa fa-question" aria-hidden="true"></i></a>
                               </div>
                               <div class="pull-right" ng-click="logout()">
-                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                <a href="#" class="btn btn-default btn-flat" >Sign out <i class="fa fa-sign-out" aria-hidden="true"></i></a>
                               </div>
                             </li>
 

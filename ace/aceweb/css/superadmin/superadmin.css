@@ -165,7 +165,7 @@ aside{
 
 .navi a:hover {
     background: #152f41 none repeat scroll 0 0;
-    border-left: 5px solid #57d5a4;
+      border-left: 5px solid #FFA500;
     padding-left: 20px;
     text-decoration: none;
 	  -webkit-transition: all 0.1s ease;
@@ -181,12 +181,13 @@ aside{
 
 .navi i {
     color: #539BBE;
+
 }
 
 .navi .fa {
     vertical-align: middle;
     padding-right: 5px;
-    font-size: 20px;;
+    font-size: 20px;
 }
 
 .navi .nav-text {
@@ -196,7 +197,7 @@ aside{
 
 .navi .nav-text .badge {
     float: right;
-    background-color: red;
+    background-color: #EF5068;
     margin-top: 0.7px;
     font-size: 12px;
     width: auto;
