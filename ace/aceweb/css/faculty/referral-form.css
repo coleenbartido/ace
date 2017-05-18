@@ -10,8 +10,8 @@ body {
 }
 
 .referralTab {
-  background: #122143 none repeat scroll 0 0;
-  border-left: 5px solid #5584ff;
+  background: #152F41 none repeat scroll 0 0;
+  border-left: 5px solid #ff7f00;
   padding-left: 25px;
   text-decoration: none;
 }
@@ -138,6 +138,11 @@ input.ng-invalid.ng-touched, select.ng-invalid.ng-touched, .ng-submitted input.n
   font-size: 16px;
 }
 
+.refForm .formContainer .studentID .style-select .dropdown-menu{
+  max-height: 150px;
+   overflow-y: auto;
+   margin-top: -3px;
+}
 
 /*--------------REASON FOR REFERRAL--------------*/
 

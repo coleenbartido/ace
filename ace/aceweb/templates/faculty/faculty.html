@@ -1,92 +1,219 @@
-    <head>
+<head>
+    <!-- link rel="stylesheet" type="text/css" href="css/faculty/faculty.css"-->
+    <link rel="stylesheet" href="css/superadmin/superadmin.css">
+    <link rel="stylesheet" href="css/common/template/AdminLTE.css">
+</head>
 
-        <link rel="stylesheet" type="text/css" href="css/faculty/faculty.css">
+<body>
 
-    </head>
+  <div class="template-container" ng-show="!isLoading">
+      <div class="row nav-bar">
+          <div class="col-md-12 nav-bar-col no-side-padding">
+            <header class="main-header">
+              <a href="#" class="logo">
+                <!--span class="logo-mini"><b>A</b>CE</span-->
+                <span class="logo-lg"><img src="img/ace-logo.png"</span>
+              </a>
 
-    <body>
+              <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </a>
 
-        <div class="template-container" ng-show="!isLoading">
-            <div class="row nav-bar">
-                <div class="col-md-12 nav-bar-col no-side-padding">
+                <div class="navbar-custom-menu">
+                  <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
 
-                    <img src="img/logo1.jpg">
-                    <p>ACE Program<br />Online Referral System</p>
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="img/user.png" class="user-image" alt="User Image">
+                        <span class="hidden-xs"><b>{{userName}}</b></span>
+                      </a>
 
-                    <!--a ui-sref="login" ng-click="logout()">
-                        <i class="fa fa-sign-out" aria-hidden="true"></i>
-                    </a-->
+                      <ul class="dropdown-menu">
+                        <li class="user-header">
+                          <img src="img/user.png" class="img-circle" alt="User Image">
 
-                    <ul class="nav navbar-nav navbar-right">
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {{userName}} <span class="caret"></span></a>
-                        <ul class="dropdown-menu setting" role="menu">
-                          <li>
-                            <a class="btn btn-default" type="button" ng-click="downloadUserManual()" target="_self" ng-href="{{downloadLink}}">
-                                Help
-                            </a>
-                            <a ui-sref="login" ng-click="logout()">
-                                Logout
-                                <i class="fa fa-sign-out" aria-hidden="true"></i>
-                            </a>                       
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
+                          <p>
+                            {{userName}}
+                            <small>Faculty Account</small>
+                          </p>
+                        </li>
 
+                        <li class="user-footer">
+                          <div class="pull-left">
+                            <a type="button" class="btn btn-default btn-flat" ng-click="downloadUserManual()" target="_self" ng-href="{{downloadLink}}">Help <i class="fa fa-question" aria-hidden="true"></i></a>
+                          </div>
+                          <div class="pull-right" ng-click="logout()">
+                            <a href="#" class="btn btn-default btn-flat" >Sign out <i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                          </div>
+                        </li>
+
+                      </ul>
+                    </li>
+                  </ul>
                 </div>
+              </nav>
+            </header>
+          </div>
+      </div>
+
+
+
+      <!-- =============================================== -->
+      <div class="row menu-content-row">
+
+
+      <aside class="main-sidebar">
+        <section class="sidebar">
+          <!--div class="user-panel">
+            <div class="image">
+              <img src="img/aceLogo.png" class="img-circle" alt="ACE Logo">
             </div>
 
-            <div class="row menu-content-row">
+            <div class="pull-left info">
+              <p>{{userName}}</p>
+            </div>
+          </div-->
 
-                <div class="col-md-2 menu-col no-side-padding">
-                    <ul class="navi list-unstyled">
-                        <li>
-                            <a ui-sref="faculty.referralForm" class="referralTab">
-                                <i class="fa fa-pencil-square-o"></i>
-                                <span class="nav-text">Referral Form</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a ui-sref="faculty.referralHistory" class="historyTab">
-                                <i class="fa fa-history"></i>
-                                <span class="nav-text">Referral History<span class="badge" ng-show="referralUpdateCount">{{referralUpdateCount}}</span></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a ui-sref="faculty.messaging" class="messageTab">
-                                <i class="fa fa-envelope"></i>
-                                <span class="nav-text">Messages <span class="badge" ng-show="newMessageCount">{{newMessageCount}}</span></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a ui-sref="faculty.settings" class="settingTab">
-                                <i class="fa fa-cog"></i>
-                                <span class="nav-text">Settings</span>
-                            </a>
-                        </li>
+          <ul class="navi list-unstyled">
+            <!--li class="header">MAIN NAVIGATION</li-->
+
+            <li class="treeview">
+              <a ui-sref="faculty.referralForm" class="referralTab">
+                  <i class="fa fa-pencil-square-o"></i>
+                  <span class="nav-text">Referral Form</span>
+              </a>
+            </li>
+            <li class="treeview">
+                <a ui-sref="faculty.referralHistory" class="historyTab">
+                    <i class="fa fa-history"></i>
+                    <span class="nav-text">Referral History<span class="badge" ng-show="referralUpdateCount">{{referralUpdateCount}}</span></span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a ui-sref="faculty.messaging" class="messageTab">
+                    <i class="fa fa-envelope"></i>
+                    <span class="nav-text">Messages <span class="badge" ng-show="newMessageCount">{{newMessageCount}}</span></span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a ui-sref="faculty.settings" class="settingTab">
+                    <i class="fa fa-cog"></i>
+                    <span class="nav-text">Settings</span>
+                </a>
+            </li>
+        </ul>
+        </section>
+      </aside>
+      <div class="content-wrapper" >
+    <div class="col-md-12 content-col no-side-padding" ui-view></div>
+  </div>
+
+  </div>
+
+
+  <!--div class="sk-fading-circle" ng-hide="messages">
+    <div class="sk-circle1 sk-circle"></div>
+    <div class="sk-circle2 sk-circle"></div>
+    <div class="sk-circle3 sk-circle"></div>
+    <div class="sk-circle4 sk-circle"></div>
+    <div class="sk-circle5 sk-circle"></div>
+    <div class="sk-circle6 sk-circle"></div>
+    <div class="sk-circle7 sk-circle"></div>
+    <div class="sk-circle8 sk-circle"></div>
+    <div class="sk-circle9 sk-circle"></div>
+    <div class="sk-circle10 sk-circle"></div>
+    <div class="sk-circle11 sk-circle"></div>
+    <div class="sk-circle12 sk-circle"></div>
+  </div> <!-- spinner -->
+
+  <script src="js/components/app.min.js"></script>
+  </body>
+
+    <!--div class="template-container" ng-show="!isLoading">
+        <div class="row nav-bar">
+            <div class="col-md-12 nav-bar-col no-side-padding">
+
+                <img src="img/logo1.jpg">
+                <p>ACE Program<br />Online Referral System</p>
+
+                <!--a ui-sref="login" ng-click="logout()">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                </a-->
+
+<!--                <ul class="nav navbar-nav navbar-right">
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {{userName}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu setting" role="menu">
+                      <li>
+                        <a class="btn btn-default" type="button" ng-click="downloadUserManual()" target="_self" ng-href="{{downloadLink}}">
+                            Help
+                        </a>
+                        <a ui-sref="login" ng-click="logout()">
+                            Logout
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        </a>
+                      </li>
                     </ul>
-
-                </div>
-
-                <div class="col-md-10 content-col no-side-padding" ui-view></div>
+                  </li>
+                </ul>
 
             </div>
         </div>
 
-        <div class="sk-fading-circle" ng-hide="!isLoading">
-            <div class="sk-circle1 sk-circle"></div>
-            <div class="sk-circle2 sk-circle"></div>
-            <div class="sk-circle3 sk-circle"></div>
-            <div class="sk-circle4 sk-circle"></div>
-            <div class="sk-circle5 sk-circle"></div>
-            <div class="sk-circle6 sk-circle"></div>
-            <div class="sk-circle7 sk-circle"></div>
-            <div class="sk-circle8 sk-circle"></div>
-            <div class="sk-circle9 sk-circle"></div>
-            <div class="sk-circle10 sk-circle"></div>
-            <div class="sk-circle11 sk-circle"></div>
-            <div class="sk-circle12 sk-circle"></div>
-        </div> <!-- spinner -->
+        <div class="row menu-content-row">
 
-    </body>
+            <div class="col-md-2 menu-col no-side-padding">
+                <ul class="navi list-unstyled">
+                    <li>
+                        <a ui-sref="faculty.referralForm" class="referralTab">
+                            <i class="fa fa-pencil-square-o"></i>
+                            <span class="nav-text">Referral Form</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref="faculty.referralHistory" class="historyTab">
+                            <i class="fa fa-history"></i>
+                            <span class="nav-text">Referral History<span class="badge" ng-show="referralUpdateCount">{{referralUpdateCount}}</span></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref="faculty.messaging" class="messageTab">
+                            <i class="fa fa-envelope"></i>
+                            <span class="nav-text">Messages <span class="badge" ng-show="newMessageCount">{{newMessageCount}}</span></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref="faculty.settings" class="settingTab">
+                            <i class="fa fa-cog"></i>
+                            <span class="nav-text">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="col-md-10 content-col no-side-padding" ui-view></div>
+
+        </div>
+    </div>
+
+<!--    <div class="sk-fading-circle" ng-hide="!isLoading">
+        <div class="sk-circle1 sk-circle"></div>
+        <div class="sk-circle2 sk-circle"></div>
+        <div class="sk-circle3 sk-circle"></div>
+        <div class="sk-circle4 sk-circle"></div>
+        <div class="sk-circle5 sk-circle"></div>
+        <div class="sk-circle6 sk-circle"></div>
+        <div class="sk-circle7 sk-circle"></div>
+        <div class="sk-circle8 sk-circle"></div>
+        <div class="sk-circle9 sk-circle"></div>
+        <div class="sk-circle10 sk-circle"></div>
+        <div class="sk-circle11 sk-circle"></div>
+        <div class="sk-circle12 sk-circle"></div>
+    </div> <!-- spinner -->
+
+</body>
