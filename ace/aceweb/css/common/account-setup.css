@@ -1,0 +1,263 @@
+@font-face {
+    font-family: acre-regular;
+    src: url('../../fonts/acre-regular.ttf');
+}
+
+/* Pen-specific styles */
+* {
+  box-sizing: border-box;
+}
+body {
+  font-size: 1.25rem;
+  font-family: sans-serif;
+  line-height: 150%;
+}
+
+section {
+  color: #fff;
+  text-align: center;
+}
+
+div {
+  height: 100%;
+  min-height: 100%;
+}
+
+article {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  padding: 20px;
+}
+
+.container {
+  display: table;
+  width: 100%;
+}
+
+.left-half {
+  background-color: #cfd5e2;
+  position: absolute;
+  left: 0px;
+  width: 50%;
+}
+
+.right-half {
+  background-color: #10326F;
+  position: absolute;
+  right: 0px;
+  width: 50%;
+}
+
+.right-half img{
+  width: 600px;
+  margin:0 0 0.75rem 0;
+}
+
+
+
+
+.forgotPassword h1 {
+  font-family: gotham-bold;
+  color: #10326F;
+  letter-spacing: 3px;
+  text-shadow: 3px 3px 1px rgba(47, 47, 47, 0.5);
+}
+
+.message p{
+  font-family: acre-regular;
+  padding-bottom: 5px;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: 100;
+  color: #151515;
+  text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.25);
+
+}
+
+.mainbox{
+  border-radius: 3px 3px;
+  padding-bottom: 5px;
+}
+
+.loginForm{
+  padding-top: 5%;
+}
+
+.input-group .input-group-addon {
+  outline: none;
+  height: 50px;
+  border: 3px solid #10326F;
+  background-color: #10326F;
+  border-right: 3px;
+  color: white;
+  margin-left: 50px;
+  box-sizing: border-box;
+}
+
+input[type="email"], input[type="password"], input[type="text"] {
+  display: block;
+  outline: none;
+  height: 50px;
+  border: 3px solid #10326F;
+  margin-left: -3px;
+  padding-left: 13px;
+  -moz-transition: padding 0.5s;
+  transition: padding 0.5s;
+  box-sizing: border-box;
+}
+
+input[type="email"]:focus, input[type="email"].focus, input[type="password"]:focus, input[type="password"].focus , input[type="text"]:focus, input[type="text"].focus{
+  box-shadow: 3px 3px 10px black;
+  border: 3px solid rgba(33,100,223, 1);
+  padding-left: 30px;
+}
+
+
+
+form.ng-submitted input.ng-invalid {
+    background-color: #f9bcc5;
+}
+
+.loginForm .fa-times-circle {
+    position: absolute;
+    float: right;
+    z-index: 2;
+    margin-top: 20px;
+    margin-left: -25px;
+    color: #B62020;
+    text-shadow: 1px 1px 5px rgba(254, 46, 46, 0.3);
+}
+
+.loginForm .fa-check-circle {
+    position: absolute;
+    float: right;
+    z-index: 2;
+    margin-top: 20px;
+    margin-left: -25px;
+    color: #008000;
+    text-shadow: 1px 1px 5px rgba(0, 128, 0, 0.3);
+}
+
+.errorMessage{
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  line-height: inherit;
+  margin-bottom: 7%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  border-radius: 4px 4px;
+  background-color: #ef5068;
+}
+
+.successMessage{
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  line-height: inherit;
+  margin-bottom: 7%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  border-radius: 4px 4px;
+  background-color: #5cb85c;
+}
+
+.caps-lock-alert{
+  color: white;
+  margin-top: -2%;
+  margin-bottom: 7%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: inherit;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: gotham-book;
+  font-size: 14px;
+  border-radius: 4px 4px;
+  background-color: #FAB631;
+}
+
+.form-group .control .button {
+  display: block;
+  outline: none;
+  height: 50px;
+  width: 100%;
+  margin-top: 8%;
+  border: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  background-color: #8CC63F;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 16px;
+  font-style: bold;
+  text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.25);
+  border-bottom: 5px solid #628a2c;
+}
+
+.form-group .button:hover{
+  background-color: #7eb238;
+}
+
+.form-group .button:active{
+  background-color: #628a2c;
+  border-bottom: 5px solid #8CC63F;
+}
+
+.form-group .button span {
+    display: inline-block;
+    position: relative;
+    transition: 0.2s;
+    color: white;
+}
+
+.form-group .button span:after {
+    content: "\f2b6";
+    font-family: FontAwesome;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: 10px;
+    transition: 0.2s;
+    color: white;
+}
+
+.form-group .button:hover span {
+    padding-right: 25px;
+}
+
+.form-group .button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.form-group .control .goBack {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10%;
+    text-align: center;
+    font-size: 15px;
+    color: #151515;
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.goBack:focus {
+    outline: 0;
+}

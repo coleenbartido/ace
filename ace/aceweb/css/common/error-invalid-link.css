@@ -84,7 +84,7 @@ body {
 }
 
 .container .sign-in span:after {
-    content: "\f015";
+    content: "\f060 ";
     font-family: FontAwesome;
     position: absolute;
     opacity: 0;
