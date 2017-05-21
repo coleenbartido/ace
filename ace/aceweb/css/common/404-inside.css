@@ -42,17 +42,18 @@ body {
   display: inline-block;
 }
 
-.container .message h2{
+.container .message h1{
   font-family: gotham-bold;
   color: #568362;
   font-size: 50px;
+  letter-spacing: 15px;
   text-align: left;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 .container .message p{
   font-family: acre-regular;
-  color: #60926d;
+  color: #314E55;
   font-size: 14px;
   text-align: left;
 }
@@ -93,7 +94,7 @@ body {
 }
 
 .container .sign-in span:after {
-    content: "\f0e2";
+    content: "\f060";
     font-family: FontAwesome;
     position: absolute;
     opacity: 0;
