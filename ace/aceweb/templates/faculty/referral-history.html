@@ -34,8 +34,8 @@
 						  	</button>
 
 						  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-									<li><a href="javascript:void(0)" ng-click="markAsRead()">Mark as read</a></li>
-							    <li><a href="javascript:void(0)" ng-click="markAsUnread()">Mark as unread</a></li>
+									<li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i> Mark as read</a></li>
+							    <li><a href="javascript:void(0)" ng-click="markAsUnread()"><i class="fa fa-envelope"></i> Mark as unread</a></li>
 						  	</ul>
 							</div>
 
@@ -125,25 +125,31 @@
 
 <!------------------------------------->
 
-<div class="manageHistory col-md-12 col-md-offset-0 formContainer">
+<div class="manageHistory col-md-12 col-md-offset-0 formContainer" >
 
 				<div class="col-md-12 panel-body manageContainer table-responsive">
 
 						<table class="col-md-12 table table-condensed table-hover ">
-							<col width="20">
-							<col width="150">
-							<col width="150">
+							<col width="30">
+							<col width="80">
 							<col width="100">
-							<col width="100">
+							<col width="130">
+							<col width="130">
 							<col width="60">
 
 				<thead>
 					<tr class="header">
-						<th>
-							<center>
-								<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
-							</center>
+
+						<th class="checkBlock">
+
+								<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"> <a class="fa fa-angle-down dropdown-toggle" id="dropdownSelect" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="true"/>
+									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownSelect">
+										<li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
+										<li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
+									</ul>
+
 						</th>
+
 						<th>DATE</th>
 						<th>STUDENT ID</th>
 						<th>NAME</th>
@@ -155,7 +161,9 @@
 
 						<tr class="listHistory" ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_updated == 0 ? 'info' : 'success'">
 							<td>
-								<center><input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick></center>
+
+									<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick>
+
 							</td>
 							<td>
 								{{ report.report_date | date : "MMM d, yyyy"}}
@@ -189,20 +197,7 @@
 
 	</div>
 
-	<div class="sk-fading-circle" ng-hide="!isLoading">
-      <div class="sk-circle1 sk-circle"></div>
-      <div class="sk-circle2 sk-circle"></div>
-      <div class="sk-circle3 sk-circle"></div>
-      <div class="sk-circle4 sk-circle"></div>
-      <div class="sk-circle5 sk-circle"></div>
-      <div class="sk-circle6 sk-circle"></div>
-      <div class="sk-circle7 sk-circle"></div>
-      <div class="sk-circle8 sk-circle"></div>
-      <div class="sk-circle9 sk-circle"></div>
-      <div class="sk-circle10 sk-circle"></div>
-      <div class="sk-circle11 sk-circle"></div>
-      <div class="sk-circle12 sk-circle"></div>
-  	</div> <!-- spinner -->
+
 
 
 
@@ -296,5 +291,20 @@
 
 
 </div>
+
+<div class="sk-fading-circle" ng-hide="!isLoading">
+		<div class="sk-circle1 sk-circle"></div>
+		<div class="sk-circle2 sk-circle"></div>
+		<div class="sk-circle3 sk-circle"></div>
+		<div class="sk-circle4 sk-circle"></div>
+		<div class="sk-circle5 sk-circle"></div>
+		<div class="sk-circle6 sk-circle"></div>
+		<div class="sk-circle7 sk-circle"></div>
+		<div class="sk-circle8 sk-circle"></div>
+		<div class="sk-circle9 sk-circle"></div>
+		<div class="sk-circle10 sk-circle"></div>
+		<div class="sk-circle11 sk-circle"></div>
+		<div class="sk-circle12 sk-circle"></div>
+	</div> <!-- spinner -->
 
 </body>

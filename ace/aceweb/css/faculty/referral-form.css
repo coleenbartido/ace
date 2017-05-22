@@ -87,10 +87,11 @@ input.ng-invalid.ng-touched, select.ng-invalid.ng-touched, .ng-submitted input.n
 .error-pattern{
   color: white;
   margin-bottom:-15px;
+  padding-left:5px;
   background-color: #EE1F34;
   width: 100%;
   text-align: center;
-  letter-spacing: 1px;
+  font-size: 10px;
   text-shadow: 1px 1px 2px #1E1E1E;
 }
 
@@ -249,28 +250,38 @@ cursor:default;
 }
 
 .buttons .resetBtn{
-  width: 140px;
+  width: 180px;
+  height: 50px;
   padding: 8px;
   margin-left: 30px;
   margin-top: -5px;
 
-  border: 2px solid #bc1d35;
-  background-color: #eb2543;
+
+  border-radius: 25px 25px;
+  background-color: rgba(238,31,52, 0.7);
+  border: 2px solid #d61b2e;
+  text-decoration: none;
   color: #ffffff;
-  text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 .buttons .submitBtn{
-  width: 140px;
+  width: 180px;
+  height: 50px;
   padding: 8px;
   margin-left: 30px;
-  margin-right: -13px;
   margin-top: -5px;
 
-  border: 2px solid #0b234d;
-  background-color: #10326F;
+  background-color: rgba(132, 189, 0, 0.7);
+  border: 2px solid #799d2c;
+  border-radius: 25px 25px;
+  text-decoration: none;
   color: #ffffff;
-  text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 .buttons .submitBtn:disabled{

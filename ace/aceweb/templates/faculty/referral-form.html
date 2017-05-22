@@ -35,9 +35,9 @@
                     <span class="input-label">Student ID: </span>
 
                     <div class="style-select">
-                      <input name="studId" type="text" ng-Model="studId" uib-typeahead="students.student_id for students in getStudentInfo($viewValue)" typeahead-on-select="onSelect($item, $model, $label)" typeahead-min-length="6" class="form-control" id="studId" placeholder="Ex. 2014-12345" pattern="[0-9]{4}\-[0-9]{5}" required>
+                      <input name="studId" type="text" ng-Model="studId" uib-typeahead="students.student_id for students in getStudentInfo($viewValue)" typeahead-on-select="onSelect($item, $model, $label)" typeahead-min-length="6" class="form-control" id="studId" placeholder="Ex. 2014-12345 or 2014SHA12345" pattern="[0-9]{4}\-[0-9]{5}|[0-9]{4}SHA[0-9]{5}" required>
                       <div ng-messages="refForm.studId.$error" ng-show="(refForm.studId.$touched || refForm.$submitted) && !refForm.studId.$valid">
-                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Must follow this format (####-#####)." data-toggle="tooltip" data-placement="auto"></span>
+                        <span class="fa fa-exclamation-circle errspan" ng-message="pattern" title="Please follow the format (####-#####) or (####SHA#####)." data-toggle="tooltip" data-placement="auto"></span>
                         <span class="fa fa-exclamation-circle errspan" ng-message="required" title="Please fill out this field." data-toggle="tooltip"></span>
 
                       </div>
@@ -45,7 +45,7 @@
 
                     <div class="error" ng-messages="refForm.studId.$error" ng-show="refForm.studId.$touched && !refForm.studId.$valid">
                       <p class="error-message" ng-message="required">Please fill out this field.</p>
-                      <p class="error-pattern" ng-message="pattern">Must follow this format (####-#####).</p>
+                      <p class="error-pattern" ng-message="pattern">Allowed format:(####-#####) or (####SHA#####)</p>
                     </div>
                   </div>
 
@@ -346,8 +346,8 @@
 
                 <div class="btns pull-right">
 
-                  <button id="refFormButton" class="submitBtn btn" type="submit" ng-disabled="disableSubmitBtn">{{submitBtn}}</button>
-                  <button class="resetBtn btn" type="reset" ng-click="resetForm()">Reset</button>
+                  <button id="refFormButton" class="submitBtn btn" type="submit" ng-disabled="disableSubmitBtn">{{submitBtn}} Report</button>
+                  <button class="resetBtn btn" type="reset" ng-click="resetForm()">Reset Fields</button>
 
                 </div>
 
