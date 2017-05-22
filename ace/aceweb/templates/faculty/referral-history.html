@@ -144,8 +144,8 @@
 
 								<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"> <a class="fa fa-angle-down dropdown-toggle" id="dropdownSelect" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="true"/>
 									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownSelect">
-										<li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
-										<li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
+										<li><a href="javascript:void(0)" ng-click="selectAllRead()">All read</a></li>
+										<li><a href="javascript:void(0)" ng-click="selectAllUnread()">All unread</a></li>
 									</ul>
 
 						</th>
@@ -162,7 +162,7 @@
 						<tr class="listHistory" ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_updated == 0 ? 'info' : 'success'">
 							<td>
 
-									<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick>
+									<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick> <i class="fa fa-envelope" aria-hidden="true" ng-show="report.is_updated == 1 "></i>
 
 							</td>
 							<td>

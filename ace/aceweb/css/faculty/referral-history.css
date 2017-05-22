@@ -140,7 +140,7 @@ body {
 
 
 .manageContainer .listHistory{
-  border-bottom: 2px solid gray;
+  border-bottom: 1px solid gray;
   height: 45px;
   font-size: 12px;
 }
@@ -159,7 +159,7 @@ body {
   margin-left: auto;
   margin-right: auto;
 
-  bottom: 12px;
+  bottom: 0px;
   left: 0;
   right: 0;
 }
@@ -182,7 +182,7 @@ body {
 }
 
 .manageHistory .manageContainer .table td{
-  border-bottom: gray solid 2px;
+  border-bottom: gray solid 1px;
 }
 
 
@@ -199,4 +199,39 @@ body {
 
 .manageHistory .table input[type="checkbox"]{
   margin-left: 10px;
+}
+
+.listHistory .fa-envelope{
+  margin-left: 13px;
+  margin-top: 4px;
+  position: absolute;
+  font-size: 10px;
+}
+
+.header .dropdown-menu{
+  margin-top: -110px;
+  margin-left: 40px;
+}
+
+.action-dropdown .dropdown-menu{
+  margin-top: 66px;
+  margin-left: 40px;
+}
+
+.table-hover > tbody > tr.success > td {
+     background-color: #ffffff !important;
+     font-weight: 900;
+}
+
+.table-hover > tbody > tr.info > td {
+     background-color: #ffffff !important;
+}
+
+.table-hover > tbody > tr.success:hover > td {
+     background-color: #e5edf7 !important;
+     font-weight: 900;
+}
+
+.table-hover > tbody > tr.info:hover > td {
+     background-color: #e5edf7 !important;
 }

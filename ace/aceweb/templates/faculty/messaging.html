@@ -233,7 +233,7 @@
               <tr class="listMessages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
                   <td class="inbox-small-cells">
 
-                        <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" noclick>
+                        <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" noclick> <i class="fa fa-envelope" aria-hidden="true" ng-show="message.is_read == 0 "></i>
 
                   </td>
 
