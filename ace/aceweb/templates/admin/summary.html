@@ -6,24 +6,41 @@
 
 <body>
 
-	<div ng-show="!isLoading">
+  <div ng-show="!isLoading">
+
+  	<div class="banner">
+  		<div class="button-container col-md-12">
+  						<div class="schoolYear col-md-2">
+                <select ng-model="selectedSY" ng-change="getSummaryData()">
+            	    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
+            	    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
+            	   </select>
+  						</div>
+  		</div>
+
+  		<img src="img/header1.png" class="img-responsive">
+  	</div>
+
+
+<!--	<div ng-show="!isLoading">
 
 		<select ng-model="selectedSY" ng-change="getSummaryData()">
 	    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
 	    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
-	    </select>
+	    </select-->
+      <div class="manageAdmin col-md-12 col-md-offset-0 formContainer">
+        <div class="col-md-12 manageContainer">
 
 	    <uib-tabset active="activeJustified" justified="true">
 
-		  <uib-tab index="0" heading="Term">
+		  <uib-tab class="label" index="0" heading="Term">
 		  	<div ng-show="!isLoadingChart">
-			  	<div class="col-md-11">	  		
-					<canvas id="term" class="chart chart-bar" chart-data="termData" chart-labels="termLabels" chart-series="series" chart-options="termOptions" chart-dataset-override="datasetOverride">
-					</canvas>
-				</div>							
-				<a class="btn btn-info" id="downloadImg1" ng-click="downloadImage($event, 'term')">Save as Image</a>
-				<a class="btn btn-info" id="downloadPDF1" ng-click="downloadPDF('term')">Save as PDF</a>
-			</div>
+			  	<div class="col-md-11">
+					   <canvas id="term" class="chart chart-bar" chart-data="termData" chart-labels="termLabels" chart-series="series" chart-options="termOptions" chart-dataset-override="datasetOverride"></canvas>
+				  </div>
+  				<a class="btn btn-info" id="downloadImg1" ng-click="downloadImage($event, 'term')">Save as Image</a>
+  				<a class="btn btn-info" id="downloadPDF1" ng-click="downloadPDF('term')">Save as PDF</a>
+  			</div>
 
 			<div class="sk-fading-circle" ng-hide="!isLoadingChart">
 			      <div class="sk-circle1 sk-circle"></div>
@@ -42,7 +59,7 @@
 		  </uib-tab>
 
 		  <uib-tab index="1" heading="Program">
-		  	<div ng-show="!isLoadingChart">
+		  	<div ng-show="!isLoadingChart" class="chart-holder">
 			  	<div class="col-md-11">
 					<canvas id="program" class="chart chart-bar" chart-data="programData" chart-labels="programLabels" chart-series="series" chart-options="programOptions" chart-dataset-override="datasetOverride">
 					</canvas>
@@ -163,4 +180,7 @@
       <div class="sk-circle11 sk-circle"></div>
       <div class="sk-circle12 sk-circle"></div>
   	</div> <!-- spinner -->
+
+  </div>
+  </div>
 </body>

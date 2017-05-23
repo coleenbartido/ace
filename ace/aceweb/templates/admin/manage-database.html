@@ -6,18 +6,19 @@
 
 <body>
 
-  <div>
-    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#backupModal" ng-click="showModal(backupForm)">
+  <div class="container">
+    <button class="backup-database btn btn-default" type="button" data-toggle="modal" data-target="#backupModal" ng-click="showModal(backupForm)">
             Backup Database
     </button>
 
-    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#resetModal" ng-click="showModal(resetForm)">
+    <button class="reset-database btn btn-default" type="button" data-toggle="modal" data-target="#resetModal" ng-click="showModal(resetForm)">
             Reset Database
     </button>
 
-    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#restoreModal" ng-click="showModal(restoreForm)">
+    <button class="restore-database btn btn-default" type="button" data-toggle="modal" data-target="#restoreModal" ng-click="showModal(restoreForm)">
             Restore Database
     </button>
+  </div>
 
 
     <div id="backupModal" class="modal fade" role="dialog">
@@ -41,7 +42,7 @@
               </div>
               <div ng-messages="backupForm.userPassword.$error" ng-show="backupForm.$submitted">
                 <p class="invalid-text" ng-message="incorrectPword">Invalid password</p>
-                <p class="invalid-text" ng-message="required">This field is required</p>         
+                <p class="invalid-text" ng-message="required">This field is required</p>
               </div>
 
               <div class="verifyBtn">
@@ -78,7 +79,7 @@
               </div>
               <div ng-messages="resetForm.userPassword.$error" ng-show="resetForm.$submitted">
                 <p class="invalid-text" ng-message="incorrectPword">Invalid password</p>
-                <p class="invalid-text" ng-message="required">This field is required</p>         
+                <p class="invalid-text" ng-message="required">This field is required</p>
               </div>
 
               <div class="verifyBtn">
@@ -115,7 +116,7 @@
               </div>
               <div ng-messages="restoreForm.userPassword.$error" ng-show="restoreForm.$submitted">
                 <p class="invalid-text" ng-message="incorrectPword">Invalid password</p>
-                <p class="invalid-text" ng-message="required">This field is required</p>         
+                <p class="invalid-text" ng-message="required">This field is required</p>
               </div>
 
               <div class="verifyBtn">
@@ -149,11 +150,11 @@
                   <input type="file" class="form-control" id="file" name="file" file-model="file" onchange="angular.element(this).scope().fileNameChanged()"/>
                 </div>
               </div>
-              <div ng-messages="uploadForm.$submitted">             
-                <p class="invalid-text" ng-show="isNoFile">No file selected</p> 
-                <p class="invalid-text" ng-show="invalidFile">Invalid file format</p> 
-                <p class="invalid-text" ng-show="isFileEmpty">Empty file</p> 
-                <p class="invalid-text" ng-show="isNotAuthenticated">Authentication failed</p>         
+              <div ng-messages="uploadForm.$submitted">
+                <p class="invalid-text" ng-show="isNoFile">No file selected</p>
+                <p class="invalid-text" ng-show="invalidFile">Invalid file format</p>
+                <p class="invalid-text" ng-show="isFileEmpty">Empty file</p>
+                <p class="invalid-text" ng-show="isNotAuthenticated">Authentication failed</p>
               </div>
 
               <div class="verifyBtn">
@@ -170,5 +171,3 @@
 
 
 </body>
-
-
