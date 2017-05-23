@@ -143,11 +143,12 @@
 				            <div class="form-group">
 				              <label  class="col-md-12 control-label" for="facultyEmailInput">Email</label>
 				              <div class="col-md-12">
-				                <input type="email" class="form-control" id="facultyEmailInput" name="facultyEmail" ng-model="facultyEmail" required/>
+				                <input type="email" class="form-control" id="facultyEmailInput" name="facultyEmail" ng-model="facultyEmail" pattern="^[a-zA-Z0-9._%+-]+@iacademy.edu.ph" required/>
 				              </div>
 				            </div>
 				            <div ng-messages="regFacultyForm.facultyEmail.$error" ng-show="regFacultyForm.$submitted">
-				              <p class="invalid-text" ng-message="emailExist">Email already used</p>
+											<p class="invalid-text" ng-message="pattern">Must use iACADEMY Email</p>
+											<p class="invalid-text" ng-message="emailExist">Email already used</p>
 				              <p class="invalid-text" ng-message="required">This field is required</p>
 				              <p class="invalid-text" ng-message="email">Invalid email</p>
 				            </div>

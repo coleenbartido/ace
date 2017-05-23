@@ -258,6 +258,15 @@
       $pword = $accountDetails->pword;
       $status = 1;
 
+      if(isset($accountDetails->contactNumber))
+      {
+        $contactNumber = $accountDetails->contactNumber;
+      }
+      else
+      {
+        $contactNumber = NULL;
+      }
+
       $db = new DbOperation();
 
       if($db->isLinkValid($email, $hashCode)) // if this returns true, perform the if statement
@@ -300,6 +309,9 @@
     {
       $messageList[$counter]['sender_fname'] = $db->getFirstName($messageList[$counter]['sender_email']);
       $messageList[$counter]['sender_lname'] = $db->getLastName($messageList[$counter]['sender_email']);
+      $messageList[$counter]['receiver_fname'] = $db->getFirstName($messageList[$counter]['receiver_email']);
+      $messageList[$counter]['receiver_lname'] = $db->getLastName($messageList[$counter]['receiver_email']);
+
 
       if($messageList[$counter]['sender_email'] == $email)
       {

@@ -58,12 +58,12 @@ angular.module('aceWeb')
     }
   };
 
-  $scope.submitFurtherDetails = function(accountForm)
+  $scope.submitFurtherDetails = function(form)
   {
     $scope.invalidInput = false;
     $scope.accountActivated = false;
 
-    if(accountForm.$valid)
+    if(form.$valid)
     {
       $scope.disableLogin = true;
       $scope.activateText = "ACTIVATING ACCOUNT";
@@ -95,7 +95,7 @@ angular.module('aceWeb')
         console.log(response);
 
         $scope.invalidInput = true;
-        $scope.errMsg = response.data.errMsg;
+        $scope.errMsg = "Account already activated";
       })
       .finally(function()
       {
@@ -106,16 +106,17 @@ angular.module('aceWeb')
     else
     {
       $scope.invalidInput = true;
-
-      if(loginForm.password.$invalid)
+      $scope.errMsg = "Invalid Input";
+      /*
+      if(form.password.$invalid)
       {
         $scope.errMsg = "Invalid Password";
       }
-      else if(loginForm.confirmpassword.$error.compareTo)
+      else if(form.confirmpassword.$error.compareTo)
       {
         $scope.errMsg = "Password don't match";
       }
-      else if(loginForm.contactnumber.$invalid)
+      else if(form.contactnumber.$invalid)
       {
         $scope.errMsg = "Invalid Contact Number";
       }
@@ -123,6 +124,7 @@ angular.module('aceWeb')
       {
         $scope.errMsg = "Invalid Input";
       }
+      */
     }
   }
 })

@@ -42,7 +42,7 @@
                                     <i class="fa fa-key fa-fw fa-lg"></i>
                                 </span>
                             <input type="password" autoFocus required class="form-control" name="password" placeholder="Enter Password" ng-Model="userPassword" pattern="^.*(?=.*\d)(?=.*[A-Za-z]).*$" minlength="8" ng-model-options="{allowInvalid: true}">
-                            <div class="e col-md-offset-11" ng-if="accountForm.password.$dirty && accountForm.password.$invalid || accountForm.$submitted && accountForm.password.$invalid">
+                            <div class="e col-md-offset-11" ng-if="accountForm.$submitted && accountForm.password.$invalid">
                                 <i class="fa fa-times-circle fa-lg"></i>
                             </div>
                             <div class="e col-md-offset-11" ng-if="accountForm.password.$valid">
@@ -55,7 +55,7 @@
                                     <i class="fa fa-key fa-fw fa-lg"></i>
                                 </span>
                             <input type="password" required class="form-control" name="confirmpassword" placeholder="Confirm Password" ng-Model="userConfirmPassword" compare-to="userPassword" ng-model-options="{allowInvalid: true}">
-                            <div class="e col-md-offset-11" ng-if="accountForm.confirmpassword.$dirty && accountForm.confirmpassword.$invalid || accountForm.$submitted && accountForm.confirmpassword.$invalid">
+                            <div class="e col-md-offset-11" ng-if="accountForm.$submitted && accountForm.confirmpassword.$invalid">
                                 <i class="fa fa-times-circle fa-lg"></i>
                             </div>
                             <div class="e col-md-offset-11" ng-if="accountForm.confirmpassword.$valid">
@@ -67,11 +67,11 @@
                             <span class="input-group-addon col-md-off-set-1">
                                     <i class="fa fa-address-book fa-fw fa-lg"></i>
                                 </span>
-                            <input type="text" required class="form-control" name="contactnumber" placeholder="Contact Number" ng-Model="userContactNumber" pattern="^[\d ()+-]+$" maxlength="20">
-                            <div class="e col-md-offset-11" ng-if="accountForm.contactnumber.$dirty && accountForm.contactnumber.$invalid || accountForm.$submitted && accountForm.contactnumber.$invalid">
+                            <input type="text" class="form-control" name="contactnumber" placeholder="Contact Number" ng-Model="userContactNumber" pattern="^[\d ()+-]+$" maxlength="20">
+                            <div class="e col-md-offset-11" ng-if="accountForm.$submitted && accountForm.contactnumber.$invalid">
                                 <i class="fa fa-times-circle fa-lg"></i>
                             </div>
-                            <div class="e col-md-offset-11" ng-if="accountForm.contactnumber.$valid">
+                            <div class="e col-md-offset-11" ng-if="userContactNumber && accountForm.contactnumber.$valid">
                                 <i class="fa fa-check-circle fa-lg"></i>
                             </div>
                         </div>

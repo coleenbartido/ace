@@ -57,7 +57,7 @@
 
 
 
-									<tr class="listAdmin" ng-repeat="admin in adminAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(admin)">
+									<tr class="listAdmin" ng-repeat="admin in adminAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage">
 											<td>
 												<center><input type="checkbox" data-checklist-model="adminList.email" data-checklist-value="admin.email" noclick></center>
 											</td>
@@ -142,10 +142,11 @@
 				            <div class="form-group">
 				              <label  class="col-md-12 control-label" for="adminEmailInput">Email</label>
 				              <div class="col-md-12">
-				                <input type="email" class="form-control" id="adminEmailInput" name="adminEmail" ng-model="adminEmail" required/>
+				                <input type="email" class="form-control" id="adminEmailInput" name="adminEmail" ng-model="adminEmail" pattern="^[a-zA-Z0-9._%+-]+@iacademy.edu.ph" required/>
 				              </div>
 				            </div>
 				            <div ng-messages="regAdminForm.adminEmail.$error" ng-show="regAdminForm.$submitted">
+											<p class="invalid-text" ng-message="pattern">Must use iACADEMY Email</p>
 				              <p class="invalid-text" ng-message="emailExist">Email already used</p>
 				              <p class="invalid-text" ng-message="required">This field is required</p>
 				              <p class="invalid-text" ng-message="email">Invalid email</p>

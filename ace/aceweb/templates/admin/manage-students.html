@@ -213,11 +213,11 @@
 				            <div class="form-group">
 				              <label  class="col-md-12 control-label" for="studId">Student ID <i class="glyphicon glyphicon-question-sign" title="Must follow this format (1234-56789)"></i></label>
 				              <div class="col-md-12">
-				                <input type="text" class="form-control" id="studId" name="studId" ng-model="studId" pattern="[0-9]{4}\-[0-9]{5}" required/>
+				                <input type="text" class="form-control" id="studId" name="studId" ng-model="studId" pattern="[0-9]{4}\-[0-9]{5}|[0-9]{4}SHA[0-9]{5}" required/>
 				              </div>
 				            </div>
 				            <div ng-messages="updateStudentForm.studId.$error" ng-show="updateStudentForm.$submitted">
-				              <p class="invalid-text" ng-message="pattern">Must follow this format (1234-56789)</p>
+				              <p class="invalid-text" ng-message="pattern">Please follow the format (####-#####) or (####SHA#####).</p>
 				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
