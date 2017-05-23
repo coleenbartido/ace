@@ -6,7 +6,41 @@
 
 <body>
 
-  <div class="container col-md-12" ng-show="messages">
+  <div ng-show="!isLoading">
+
+    <div class="banner">
+  		<div class="button-container col-md-12">
+  						<div class="searchBar pull-right">
+  							<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
+  						</div>
+
+              <div class="action-dropdown col-md-1">
+                  <button class="btn btn-default dropdown-toggle action" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      Action
+                      <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                      <li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i>  Mark as Read</a></li>
+                      <li><a href="javascript:void(0)" ng-click="markAsUnread()"><i class="fa fa-envelope"></i> Mark as Unread</a></li>
+                      <li class="divider"></li>
+                      <li><a href="javascript:void(0)" ng-click="deleteMessageList()"><i class="fa fa-trash-o"></i> Delete</a></li>
+                  </ul>
+              </div>
+
+              <div class="refresh-button col-md-2">
+                  <button class="btn btn-default dropdown-toggle refresh" data-original-title="Refresh" data-placement="top" ng-click="initScope()">
+                      <i class=" fa fa-refresh"></i>
+                      Refresh
+                  </button>
+              </div>
+  		</div>
+
+  		<img src="img/header1.png" class="img-responsive">
+  	</div>
+
+
+
+  <!--div class="container col-md-12" ng-show="messages">
     <div class="mail-box col-md-12">
 
               <aside class="lg-side">
@@ -215,8 +249,117 @@
 
     </div> <!-- broadcast modal-->
 
+    <!----------------------------------------->
 
-  </div>
+<div class="manageMessage col-md-12 col-md-offset-0 formContainer" >
+
+				<div class="col-md-12 panel-body manageContainer table-responsive">
+
+						<table class="col-md-12 table table-condensed table-hover ">
+              <col width="60">
+              <col width="100">
+              <col width="180">
+              <col width="300">
+              <col width="100">
+
+              <thead>
+                <tr class="header">
+
+                  <th>
+      								<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"> <a class="fa fa-angle-down dropdown-toggle" id="dropdownSelect" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="true"/>
+      									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownSelect">
+      										<li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
+      										<li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
+      									</ul>
+      						</th>
+
+                  <th>DATE</th>
+
+                  <th>FROM</th>
+
+                  <th>SUBJECT</th>
+
+                  <th><center>ACTION</center></th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                <tr class="listMessages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
+                    <td class="inbox-small-cells">
+
+                          <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" noclick> <i class="fa fa-envelope" aria-hidden="true" ng-show="message.is_read == 0 "></i>
+
+                    </td>
+
+                    <td class="view-message">
+                      {{ message.message_date | date:"MMM dd,yyyy" }}
+                    </td>
+
+                    <td class="view-message dont-show">
+                      {{ message.sender_fullName }}
+                    </td>
+
+                    <td class="view-message">
+                      {{ message.message_subject }}
+                    </td>
+
+                    <td>
+                      <center>
+                      <button type="button" class="btn btn-xs btn-danger" ng-click="deleteMessage(message)" noclick><span class="fa fa-trash"></span></button>
+                      </center>
+                    </td>
+                </tr>
+                <tr class="noShow" ng-show="(filtered = (uniqueMessages | filter: searchBox)).length == 0">
+                  <td colspan="5"><center>NO RESULT</center></td>
+                </tr>
+              </tbody>
+
+            </table>
+
+            <center>
+              <div class="custom-pagination pull-right custom-pagination" ng-show="(uniqueMessages | filter:searchBox).length > 0">
+                <ul uib-pagination total-items="(filtered = (uniqueMessages | filter: searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+              </div>
+            </center>
+
+        </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+            <h3 class="modal-title custom-header-color"><i class="fa fa-comments-o" aria-hidden="true"></i> {{selectedMessage.message_subject}}</h3>
+          </div>
+
+          <div class="modal-body">
+            <div id="scrollableDiv" scroll-glue load-more-data>
+              <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
+                <br ng-show="$first">
+                  <strong class="pull-left">{{ message.sender_fullName }}</strong>
+                  <span class="pull-right">{{ message.message_date | date:"medium" }}</span>
+                <br>
+                <br>
+                <p ng-bind-html="message.message_body|newline2br"></p>
+                <hr ng-hide="$last">
+                <br ng-show="$last">
+              </div>
+            </div>
+            <textarea id="customTextArea" rows="4" ng-model="composeEmail" ng-readonly="isSending"></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="sendEmail()" ng-disabled="isSending">{{sendBtn}}</button>
+          </div>
+      </div>
+
+    </div>
+</div>
 
   <div class="sk-fading-circle" ng-hide="messages">
       <div class="sk-circle1 sk-circle"></div>

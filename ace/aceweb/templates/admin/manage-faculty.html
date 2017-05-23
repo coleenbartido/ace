@@ -1,7 +1,7 @@
 <head>
 	<title>ACE Program | Manage Faculty</title>
 
-	<link rel="stylesheet" type="text/css" href="css/superadmin/manage-admin.css">
+	<link rel="stylesheet" type="text/css" href="css/admin/manage-faculty.css">
 </head>
 
 <body>
@@ -23,12 +23,12 @@
 						</div>
 		</div>
 
-		<img src="img/header1.png">
+		<img src="img/header1.png" class="img-responsive">
 	</div>
 
-	<div class="manageAdmin col-md-12 col-md-offset-0 formContainer">
+	<div class="manageFaculty col-md-12 col-md-offset-0 formContainer">
 
-					<div class="panel-body manageContainer">
+					<div class="panel-body manageContainer table-responsive">
 
 							<table class="table table-inbox table-condensed">
 								<col width="15">
@@ -39,7 +39,7 @@
 								<col width="60">
 								<col width="30">
 
-								<tbody>
+								<thead>
 									<tr class="header">
 											<th>
 												<center>
@@ -53,8 +53,12 @@
 											<th>STATUS</th>
 											<th><center>ACTION</center></th>
 									</tr>
+								</thead>
+								<tbody>
 
-									<tr class="listAdmin" ng-repeat="faculty in facultyAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(faculty)">
+								</tbody>
+
+									<tr class="listFaculty" ng-repeat="faculty in facultyAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage">
 											<td>
 												<center><input type="checkbox" data-checklist-model="facultyList.email" data-checklist-value="faculty.email" noclick></center>
 											</td>

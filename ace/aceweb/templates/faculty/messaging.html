@@ -17,7 +17,7 @@
             <div class="action-dropdown col-md-1">
                 <button class="btn btn-default dropdown-toggle action" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     Action
-                    <i class="fa fa-angle-down "></i>
+                    <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                     <li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i>  Mark as Read</a></li>
@@ -199,9 +199,9 @@
 				<div class="col-md-12 panel-body manageContainer table-responsive">
 
 						<table class="col-md-12 table table-condensed table-hover ">
-              <col width="40">
+              <col width="60">
               <col width="100">
-              <col width="130">
+              <col width="180">
               <col width="300">
               <col width="100">
 
@@ -287,7 +287,7 @@
                       <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
                         <br ng-show="$first">
                           <strong class="pull-left">{{ message.sender_fullName }}</strong>
-                          <span class="pull-right">{{ message.message_date | date : "short" }}</span>
+                          <span class="pull-right">{{ message.message_date | date : "medium" }}</span>
                         <br>
                         <br>
                         <p ng-bind-html="message.message_body|newline2br"></p>

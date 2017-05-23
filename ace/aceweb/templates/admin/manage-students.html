@@ -7,7 +7,99 @@
 
 <body>
 
-	<div class="container col-md-12" ng-show="!isLoading">
+	<div ng-show="!isLoading">
+
+		<div class="banner">
+			<div class="button-container col-md-12">
+							<div class="searchBar pull-right">
+								<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
+							</div>
+
+							<div class="delete-button col-md-1">
+								<button class="btn btn-default refresh" ng-disabled="disableDeleteBtn()" ng-click="deleteStudentList()"><i class="fa fa-user-times" aria-hidden="true"></i> Delete Students</button>
+							</div>
+			</div>
+
+			<img src="img/header1.png" class="img-responsive">
+		</div>
+
+		<div class="manageStudents col-md-12 col-md-offset-0 formContainer">
+
+						<div class="panel-body manageContainer table-responsive">
+
+								<table class="table table-inbox table-condensed">
+									<col width="20">
+									<col width="30">
+									<col width="140">
+									<col width="180">
+									<col width="80">
+									<col width="20">
+
+									<thead>
+										<tr class="header">
+												<th>
+													<center>
+													<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
+												</center>
+											</th>
+											<th>STUDENT ID</th>
+											<th>NAME</th>
+											<th>COURSE</th>
+											<th>REPORT COUNT</th>
+											<th><center>ACTIONS</center></th>
+
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr class="listStudents" ng-repeat="student in students | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(student)">
+											<td class="inbox-small-cells">
+												<center>
+													<input type="checkbox" data-checklist-model="studentList.student_id" data-checklist-value="student.student_id" noclick>
+												</center>
+											</td>
+
+											<td class="view-message">
+												{{student.student_id}}
+											</td>
+
+											<td>
+												{{student.student_name }}
+											</td>
+
+				              				<td>
+												{{student.program}}
+											</td>
+
+											<td>
+												<center>
+													{{student.report_count}}
+												</center>
+											</td>
+
+											<td>
+												<center>
+													<button type="button" class="btn btn-xs btn-danger" ng-click="deleteStudent(student)" noclick><span class="fa fa-trash"></span></button>
+												</center>
+											</td>
+
+										</tr>
+										<tr class="noShow" ng-show="(filtered = (students | filter: searchBox)).length == 0">
+											<td colspan="6"><center>NO RESULT</center></td>
+										</tr>
+									</tbody>
+
+								</table>
+
+								<center>
+									<div class="custom-pagination">
+										<ul class="custom-inner-pagination" uib-pagination total-items="(filtered = (students | filter: searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+									</div>
+								</center>
+
+							</div>
+
+<!--	<div class="container col-md-12" ng-show="!isLoading">
 		<div class="student-box col-md-12">
 
 				<aside class="lg-side">
@@ -29,14 +121,14 @@
 								</div>
 
 							</div> <!-- head -->
-						</div> <!-- mail option -->
+<!--						</div> <!-- mail option -->
 
-						<div class="table-height">
+<!--						<div class="table-height">
 							<table class="table table-inbox table-hover">
-								<col width="20"> 
-								<col width="50"> 
-								<col width="100"> 
-								<col width="50">							
+								<col width="20">
+								<col width="50">
+								<col width="100">
+								<col width="50">
 								<col width="20">
 								<col width="20">
 
@@ -47,7 +139,7 @@
 										<td></td>
 										<td>STUDENT ID</td>
 										<td>NAME</td>
-										<td>COURSE</td>									
+										<td>COURSE</td>
 										<td>REPORT COUNT</td>
 										<td><center>ACTIONS</center></td>
 
@@ -98,12 +190,12 @@
 
 						</div> <!-- table-height -->
 
-					</div>
+<!--					</div>
 				</aside>
 		</div>
 
 		<!-- MODALS -->
-					
+
 		<div id="editModal" class="modal fade" role="dialog">
 			<div class="modal-dialog">
 
@@ -111,7 +203,7 @@
 
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-						<p class="modal-title custom-header-color custom-modal-header">Edit Student Information</p>
+						<h3 class="modal-title custom-header-color"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Student Information</h3>
 					</div>
 
 					<div class="modal-body">
@@ -126,7 +218,7 @@
 				            </div>
 				            <div ng-messages="updateStudentForm.studId.$error" ng-show="updateStudentForm.$submitted">
 				              <p class="invalid-text" ng-message="pattern">Must follow this format (1234-56789)</p>
-				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="form-group">
@@ -137,7 +229,7 @@
 				            </div>
 				            <div ng-messages="updateStudentForm.studLName.$error" ng-show="updateStudentForm.$submitted">
 				              <p class="invalid-text" ng-message="pattern">Must only have letters, space, and certain special characters (.  ,' -)</p>
-				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="form-group">
@@ -148,7 +240,7 @@
 				            </div>
 				            <div ng-messages="updateStudentForm.studFName.$error" ng-show="updateStudentForm.$submitted">
 				              <p class="invalid-text" ng-message="pattern">Must only have letters, space, and certain special characters (.  ,' -)</p>
-				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="form-group">
@@ -193,7 +285,7 @@
 				              </div>
 				            </div>
 				            <div ng-messages="updateStudentForm.program.$error" ng-show="updateStudentForm.$submitted">
-				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="form-group">
@@ -213,20 +305,20 @@
 				              </div>
 				            </div>
 				            <div ng-messages="updateStudentForm.level.$error" ng-show="updateStudentForm.$submitted">
-				              <p class="invalid-text" ng-message="required">This field is required</p>         
+				              <p class="invalid-text" ng-message="required">This field is required</p>
 				            </div>
 
 				            <div class="updateBtn">
-				            	<button type="submit" class="btn btn-primary" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
+				            	<button type="submit" class="btn btn-primary pull-right" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
 				            </div>
-							
-				        </form> 
+
+				        </form>
 
 					</div>
 
 				</div>
 
-			</div>		
+			</div>
 		</div><!-- modal closing tag -->
 
 
