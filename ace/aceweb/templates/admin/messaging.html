@@ -27,12 +27,19 @@
                   </ul>
               </div>
 
-              <div class="refresh-button col-md-2">
+              <div class="refresh-button col-md-1 ">
                   <button class="btn btn-default dropdown-toggle refresh" data-original-title="Refresh" data-placement="top" ng-click="initScope()">
                       <i class=" fa fa-refresh"></i>
                       Refresh
                   </button>
               </div>
+
+              <div class="broadcast-button col-md-1 col-md-offset-1">
+                <button class="btn btn-default dropdown-toggle refresh" data-toggle="modal" data-target="#broadcastModal" ng-click="showBroadcastModal()">
+                  <i class=" fa fa-envelope"></i> Broadcast</button>
+              </div>
+
+
   		</div>
 
   		<img src="img/header1.png" class="img-responsive">
@@ -360,6 +367,57 @@
 
     </div>
 </div>
+
+<div id="broadcastModal" class="modal fade" role="dialog">
+
+    <div class="modal-dialog">
+
+      <div class="modal-content">
+
+          <div class="modal-header">
+
+            <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+            <p class="modal-title custom-header-color custom-modal-header">Broadcast Email</p>
+
+          </div>
+
+          <div class="modal-body">
+            <form name="broadcastEmailForm" class="form-horizontal custom-form" role="form" ng-submit="broadcastEmail(broadcastEmailForm)" novalidate>
+
+              <div class="form-group">
+                <label  class="col-md-12 control-label" for="receiver">To</label>
+                <div class="col-md-12">
+                  <input type="text" class="form-control" id="receiver" name="receiver" value="All Faculty" readonly/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label  class="col-md-12 control-label" for="subject">Subject</label>
+                <div class="col-md-12">
+                      <input type="text" class="form-control" id="subject" name="subject" ng-model="subject" ng-readonly="isSending" placeholder="Write a subject...">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label  class="col-md-12 control-label" for="composeBroadcastEmail">Message</label>
+                <div class="col-md-12" newline2br>
+                    <textarea class="form-control" id="customTextArea" rows="5" name="composeBroadcastEmail" ng-model="composeBroadcastEmail" ng-model-options="{allowInvalid: true}" ng-trim="false" placeholder="Write a message..." maxlength="500" ng-readonly="isSending" required></textarea>
+                    <p class="pull-right">{{composeBroadcastEmail.length}}/500</p>
+                </div>
+              </div>
+
+              <div class="sendBtn">
+                <button type="submit" class="btn btn-primary" ng-disabled="isSending">{{sendBtn}}</button>
+              </div>
+
+            </form>
+          </div>
+
+      </div>
+
+    </div>
+
+</div> <!-- broadcast modal-->
 
   <div class="sk-fading-circle" ng-hide="messages">
       <div class="sk-circle1 sk-circle"></div>

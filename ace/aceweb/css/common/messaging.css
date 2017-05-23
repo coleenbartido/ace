@@ -52,6 +52,15 @@ body {
   height: 33px;
 }
 
+.broadcast-button button {
+  text-decoration: none;
+  margin-left: 3vh;
+  margin-top: 5vh;
+  font-size: 13px;
+  position: absolute;
+  height: 33px;
+  margin-right: 15px;
+}
 
 
 .banner .searchBar input[type='text']{

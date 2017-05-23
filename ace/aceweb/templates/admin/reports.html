@@ -7,9 +7,55 @@
 
 <body>
 
-<div>
 	<div ng-show="!isLoading">
-		
+
+		<div class="banner">
+			<div class="button-container col-md-12">
+							<div class="searchBar pull-right">
+								<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
+							</div>
+
+							<!--div class="select-dropdown col-md-1">
+									<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											Select
+											<span class="caret"></span>
+									</button>
+
+									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+											<li><a href="javascript:void(0)" ng-click="selectAllRead()">All read</a></li>
+											<li><a href="javascript:void(0)" ng-click="selectAllUnread()">All unread</a></li>
+									</ul>
+							</div-->
+
+							<div class="action-dropdown col-md-1">
+								<button class="btn btn-default dropdown-toggle" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						    	Action
+						    	<span class="caret"></span>
+						  	</button>
+
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <li><a href="javascript:void(0)" ng-click="markAsRead()"><i class="fa fa-envelope-open"></i>  Mark as Read</a></li>
+                    <li><a href="javascript:void(0)" ng-click="markAsUnread()"><i class="fa fa-envelope"></i> Mark as Unread</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript:void(0)" ng-click="deleteReportList()"><i class="fa fa-trash-o"></i> Delete</a></li>
+                </ul>
+							</div>
+
+							<div class="schoolYear col-md-2">
+								<select ng-model="selectedSY" ng-change="updateSYList()">
+						    	<option ng-show="SYList.length > 0" ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
+						    	<option ng-hide="SYList.length > 0" value="" selected="selected">No Records</option>
+						    </select>
+							</div>
+			</div>
+
+			<img src="img/header1.png" class="img-responsive">
+		</div>
+
+
+<!--div>
+	<div ng-show="!isLoading">
+
 	    <select ng-model="selectedSY" ng-change="updateSYList()">
 	    	<option ng-show="SYList.length > 0" ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
 	    	<option ng-hide="SYList.length > 0" value="" selected="selected">No Records</option>
@@ -52,7 +98,7 @@
 
 		<table class="table table-bordered table-condensed table-striped table-condensed table-hover">
 			<col width="20">
-			<col width="60">			
+			<col width="60">
 			<col width="120">
 			<col width="120">
 			<col width="150">
@@ -62,14 +108,14 @@
 					<tr>
 						<th><center><input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"></center></th>
 						<th>DATE</th>
-						<th>REPORTED BY</th>						
+						<th>REPORTED BY</th>
 						<th>NAME</th>
 						<th>COURSE</th>
 						<th>STATUS</th>
 						<th><center>ACTION</center></th>
 					</tr>
 				</thead>
-				<tbody>		
+				<tbody>
 						<tr ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_read == 1 ? 'info' : 'success'">
 							<td>
 								<center><input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick></center>
@@ -79,7 +125,7 @@
 							</td>
 							<td>
 								{{ report.faculty_fullname}}
-							</td>							
+							</td>
 							<td>
 								{{ report.student_fullname}}
 							</td>
@@ -153,12 +199,12 @@
 
 									    <div class="form-group">
 									        <label  class="col-md-12 control-label" for="composeEmail">Message</label>
-									        <div class="col-md-12">										
+									        <div class="col-md-12">
 												<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}" ng-readonly="isSending" placeholder="Write a message..." maxlength="500" ng-trim="false" required></textarea>
 												<p class="pull-right">{{composeEmail.length}}/500</p>
 									        </div>
 									    </div>
-																		
+
 										<div class="modalBtn">
 									        <button type="submit" class="btn btn-primary" ng-disabled="isSending">{{sendBtn}}</button>
 									    </div>
@@ -180,45 +226,45 @@
 							<div class="modal-content">
 								<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-										<h4 class="modal-title custom-header-color">Report Details</h4>
+										<h3 class="modal-title custom-header-color"><i class="fa fa-file-text" aria-hidden="true"></i> Report Details: {{ selectedReport.student_fname }} {{ selectedReport.student_lname }}</h3>
 								</div>
 								<div class="modal-body">
 									<div class="row">
 										<div class="col-md-12">
 											<div class="row">
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>Date: </b> 
+													<p class="reportFieldLabel"><b>Date: </b>
 													<p class="reportFieldData">{{ selectedReport.report_date | date : "MMMM d, yyyy"}}</p>
 												</div>
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>School Year: </b> 
+													<p class="reportFieldLabel"><b>School Year: </b>
 													<p class="reportFieldData">{{ selectedReport.school_year }}</p>
 												</div>
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>Term: </b> 
+													<p class="reportFieldLabel"><b>Term: </b>
 													<p class="reportFieldData">{{ selectedReport.term }}</p>
-												</div>											
+												</div>
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>Status: </b> 
+													<p class="reportFieldLabel"><b>Status: </b>
 													<p class="reportFieldData">{{ selectedReport.report_status }}</p>
 												</div>
 											</div>
 											<br>
 											<div class="row">
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>Student ID Number: </b> 
+													<p class="reportFieldLabel"><b>Student ID Number: </b>
 													<p class="reportFieldData">{{ selectedReport.student_id }}</p>
 												</div>
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>Student Name: </b> 
+													<p class="reportFieldLabel"><b>Student Name: </b>
 													<p class="reportFieldData">{{ selectedReport.student_fname }} {{ selectedReport.student_lname }}</p>
 												</div>
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>Course: </b> 
+													<p class="reportFieldLabel"><b>Course: </b>
 													<p class="reportFieldData">{{ selectedReport.program }}</p>
 												</div>
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>Level: </b> 											
+													<p class="reportFieldLabel"><b>Level: </b>
 													<p class="reportFieldData">{{ selectedReport.level }}</p>
 												</div>
 											</div>
@@ -229,37 +275,37 @@
 													<p class="reportFieldData">{{ selectedReport.subject_name }}</p>
 												</div>
 												<div class="col-md-3">
-													<p class="reportFieldLabel"><b>Referred by: </b> 
+													<p class="reportFieldLabel"><b>Referred by: </b>
 													<p class="reportFieldData">{{ selectedReport.faculty_fname }} {{ selectedReport.faculty_lname }}</p>
-												</div>																			
+												</div>
 												<div class="col-md-6">
-													<p class="reportFieldLabel"><b>Counselor's Note: </b> 
+													<p class="reportFieldLabel"><b>Counselor's Note: </b>
 													<p class="reportFieldData">{{ selectedReport.counselor_note_view }}</p>
 												</div>
 											</div>
 											<hr>
 											<div class="row">
 												<div class="col-md-6">
-													<p class="reportFieldLabel"><b>Reason(s) for Referral: </b> 
+													<p class="reportFieldLabel"><b>Reason(s) for Referral: </b>
 													<br>
 													<p ng-repeat="reason in reasonList" class="reportFieldData" ng-if="reason != 'N/A'">{{$index + 1}}. {{reason}}</p>
 													<p ng-repeat="reason in reasonList" class="reportFieldData" ng-if="reason == 'N/A'">{{reason}}</p>
 												</div>
 												<div class="col-md-6">
-													<p class="reportFieldLabel"><b>Other Reasons: </b> 
+													<p class="reportFieldLabel"><b>Other Reasons: </b>
 													<p class="reportFieldData">{{selectedReport.referral_comment_view}}</p>
 												</div>
 											</div>
-											
+
 										</div>
 									</div>
-											
+
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-primary reportBtn" ng-click="exportReportPDF(selectedReport)">Export PDF</button>
 
 									<button type="button" class="btn btn-primary reportBtn" data-toggle="modal" data-target="#noteModal" ng-click="updateStatus(selectedReport)" data-dismiss="modal">Update Status</button>
-										
+
 								</div>
 							</div>
 						</div>
@@ -289,29 +335,111 @@
 											  </select>
 								            </div>
 								        </div>
-											
+
 										<div class="form-group">
 								            <label  class="col-md-12 control-label" for="comment">Counselor's Note</label>
 								            <div class="col-md-12">
 								              <textarea id="comment" rows="5" name="comment" ng-model="comment" placeholder="Write a comment..." maxlength="255" ng-trim="false"></textarea>
 								              <p class="pull-right">{{comment.length}}/255</p>
-								            </div>								            
+								            </div>
 								        </div>
 
 								        <div class="modalBtn">
 								            <button type="submit" class="btn btn-primary" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
 								        </div>
-											
+
 									</form>
-					
+
 								</div>
-									
+
 							</div>
 
 						</div>
 				</div><!-- modal closing tag -->
 
+				<div class="manageReports col-md-12 col-md-offset-0 formContainer" >
 
-</div>
+								<div class="col-md-12 panel-body manageContainer table-responsive">
+
+										<table class="col-md-12 table table-condensed table-hover ">
+											<col width="30">
+											<col width="60">
+											<col width="120">
+											<col width="120">
+											<col width="150">
+											<col width="80">
+											<col width="60">
+
+											<thead>
+												<tr class="header">
+
+													<th class="checkBlock">
+
+															<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"> <a class="fa fa-angle-down dropdown-toggle" id="dropdownSelect" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="true"/>
+															<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+																	<li><a href="javascript:void(0)" ng-click="selectAllRead()">All read</a></li>
+																	<li><a href="javascript:void(0)" ng-click="selectAllUnread()">All unread</a></li>
+															</ul>
+
+													</th>
+
+													<th>DATE</th>
+													<th>REPORTED BY</th>
+													<th>NAME</th>
+													<th>COURSE</th>
+													<th>STATUS</th>
+													<th><center>ACTION</center></th>
+												</tr>
+											</thead>
+
+											<tbody>
+													<tr class="listReports"ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_read == 1 ? 'info' : 'success'">
+														<td>
+																<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick><i class="fa fa-envelope" aria-hidden="true" ng-show="report.is_read == 0 "></i>
+														</td>
+														<td>
+															{{ report.report_date | date : "MMM dd, yyyy"}}
+														</td>
+														<td>
+															{{ report.faculty_fullname}}
+														</td>
+														<td>
+															{{ report.student_fullname}}
+														</td>
+														<td>
+															{{ report.program }}
+														</td>
+														<td>
+															{{ report.report_status }}
+														</td>
+
+														<td>
+															<center>
+																<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#messageModal" ng-click="createMessage(report)" noclick><span class="glyphicon glyphicon-pencil"></span></button>
+																<button type="button" class="btn btn-xs btn-danger" ng-click="deleteReport(report.report_id)" noclick><span class="fa fa-trash"></span></button>
+															</center>
+														</td>
+													</tr>
+
+													<tr ng-show="(filtered = (subReports | filter: searchBox)).length == 0">
+														<td colspan="8"><center>NO RESULT</center></td>
+													</tr>
+
+											</tbody>
+									</table>
+
+									<center>
+										<div class="custom-pagination">
+											<ul uib-pagination total-items="(filtered = (subReports | filter: searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+										</div>
+									</center>
+
+								</div>
+
+
+
+
+
+</div-->
 
 </body>
