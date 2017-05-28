@@ -64,6 +64,7 @@ angular.module('aceWeb')
     $scope.lastName = admin.last_name;
     $scope.firstName = admin.first_name;
     $scope.userType = admin.user_type_id;
+    $scope.department = admin.department_id + "";
 
   }
 
@@ -80,7 +81,8 @@ angular.module('aceWeb')
         'email': $scope.email,
         'lastName' : $scope.lastName,
         'firstName' : $scope.firstName,
-        'userType':  $scope.userType
+        'userType':  $scope.userType,
+        'department' : $scope.department
       };
 
       $http({

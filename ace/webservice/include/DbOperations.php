@@ -252,6 +252,18 @@ class DbOperation
         return $accountDetails['contact_number'];
     }
 
+    /*public function getUserInfo($email)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM user WHERE email=?");
+        $stmt->bind_param("s",$email);
+        $stmt->execute();
+        $stmt->store_result();
+        $num_rows = $stmt->num_rows;
+        $stmt->close();
+
+        return $num_rows;
+    }*/
+
 
     public function registerFaculty($email, $fname, $lname, $status, $userType, $hashCode)
     {
@@ -1269,6 +1281,20 @@ class DbOperation
     {
         $stmt = $this->con->prepare("UPDATE user SET last_name=?, first_name=? WHERE email=?");
         $stmt->bind_param("sss", $lastName, $firstName, $email);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if($result)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public function updateDepartment($email, $department)
+    {
+        $stmt = $this->con->prepare("UPDATE admin_account SET department_id=? WHERE email=?");
+        $stmt->bind_param("is", $department, $email);
         $result = $stmt->execute();
         $stmt->close();
 

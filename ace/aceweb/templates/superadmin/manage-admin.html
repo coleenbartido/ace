@@ -57,7 +57,7 @@
 
 
 
-									<tr class="listAdmin" ng-repeat="admin in adminAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage">
+									<tr class="listAdmin" ng-repeat="admin in adminAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(admin)">
 											<td>
 												<center><input type="checkbox" data-checklist-model="adminList.email" data-checklist-value="admin.email" noclick></center>
 											</td>
@@ -243,6 +243,20 @@
 										<div ng-messages="updateAdminForm.level.$error" ng-show="updateAdminForm.$submitted">
 											<p class="invalid-text" ng-message="required">This field is required</p>
 										</div>
+
+										<div class="form-group">
+				              <label  class="col-md-12 control-label" for="department">Department</label>
+				              <div class="col-md-12">
+				              	<select class="form-control" name="department" id="department" ng-model="department" required>
+													<option value="1">Senior High School</option>
+													<option value="2">College</option>
+												</select>
+											</div>
+									 </div>
+
+									 <div ng-messages="updateStudentForm.program.$error" ng-show="updateStudentForm.$submitted">
+										 <p class="invalid-text" ng-message="required">This field is required</p>
+									 </div>
 
 										<div class="updateBtn">
 											<button type="submit" class="btn btn-primary pull-right" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>

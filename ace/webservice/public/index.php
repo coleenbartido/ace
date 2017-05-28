@@ -512,6 +512,23 @@
     return $response;
   });
 
+  /*$app->post('/auth/getUserInfo', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $accountDetails = json_decode(file_get_contents("php://input"));
+
+    $email = $accountDetails->email;
+
+    $db = new DbOperation();
+
+    if($db->getUserInfo($email))
+    {
+      $responseBody = array('contactNum' => $db->getContactNum($email));
+      $response = setResponse($response, 200, $responseBody);
+    }
+
+    return $response;
+  });*/
+
 
 
   //used to edit faculty or administrator's information (ex. name)
@@ -524,14 +541,23 @@
     $lastName = $accountDetails->lastName;
     $firstName = $accountDetails->firstName;
     $userType = $accountDetails->userType;
+    $department = $accountDetails->department;
 
     $updateSuccess = false;
+    //$updateSuccess2 = true;
 
     $db = new DbOperation();
 
     $updateSuccess = $db->updateAccount($email, $lastName, $firstName);
 
-    if($updateSuccess)
+    if($userType == 2)
+    {
+      $updateSuccess2 = $db->updateDepartment($email, $department);
+    }
+
+    //echo $updateSuccess2;
+
+    if($updateSuccess && $updateSuccess2)
     {
       if($userType == 2)
       {
@@ -1587,6 +1613,7 @@
       for($counter=0; $counter < count($adminList); $counter++)
       {
         $departmentId = $db->getDepartment($adminList[$counter]['email']);
+        $adminList[$counter]['department_id'] = $departmentId;
         $adminList[$counter]['department'] = $db->getDepartmentName($departmentId);
 
         if($adminList[$counter]['contact_number'] == null)
