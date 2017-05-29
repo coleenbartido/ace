@@ -38,13 +38,13 @@
                         <span class="input-group-addon col-md-off-set-1">
                             <i class="fa fa-envelope-o fa-fw fa-lg"></i>
                         </span>
-                        <input type="email" auto-focus validate-email required class="form-control" name="email" id="login-email" placeholder="Enter Email Address" ng-Model="userEmail">
-                        <div class="e col-md-offset-11" ng-if="loginForm.email.$dirty && loginForm.email.$invalid || loginForm.$submitted && loginForm.email.$invalid">
+                        <input type="email" auto-focus required class="form-control" name="email" id="login-email" placeholder="Enter Email Address" ng-Model="userEmail">
+                        <!--div class="e col-md-offset-11" ng-if="loginForm.email.$dirty && loginForm.email.$invalid || loginForm.$submitted && loginForm.email.$invalid">
                             <i class="fa fa-times-circle fa-lg"></i>
                         </div>
                         <div class="e col-md-offset-11" ng-if="loginForm.email.$valid">
                             <i class="fa fa-check-circle fa-lg"></i>
-                        </div>
+                        </div-->
                     </div>
 
                     <div class="input-group">
@@ -52,12 +52,12 @@
                             <i class="fa fa-key fa-fw fa-lg"></i>
                         </span>
                         <input type="password" required class="form-control" name="password" id="login-password" placeholder="Enter Password" ng-Model="userPassword"/>
-                        <div class="e col-md-offset-11" ng-if="loginForm.password.$dirty && loginForm.password.$invalid || loginForm.$submitted && loginForm.password.$invalid">
+                        <!--div class="e col-md-offset-11" ng-if="loginForm.password.$dirty && loginForm.password.$invalid || loginForm.$submitted && loginForm.password.$invalid">
                             <i class="fa fa-times-circle fa-lg"></i>
                         </div>
                         <div class="e col-md-offset-11" ng-if="loginForm.password.$valid">
                             <i class="fa fa-check-circle fa-lg"></i>
-                        </div>
+                        </div-->
                     </div>
 
                     <div class="form-group">
