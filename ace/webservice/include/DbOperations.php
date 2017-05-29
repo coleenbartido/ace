@@ -1197,6 +1197,26 @@ class DbOperation
     }
 
 
+    public function getStudentLName($lastName)
+    {
+      $lastName = $lastName . "%";
+      $limit = 5;
+
+      $stmt = $this->con->prepare("SELECT * FROM student WHERE last_name LIKE ? ORDER BY last_name ASC LIMIT ?");
+      $stmt->bind_param("si", $lastName, $limit);
+      $stmt->execute();
+      $result= $stmt->get_result();
+      $arrResult = array();
+      while ($myrow = $result->fetch_assoc())
+      {
+        $arrResult[] = $myrow;
+      }
+      $stmt->close();
+
+      return $arrResult;
+    }
+
+
     public function getStudentLevel($studId, $department)
     {
       if($department == 1)

@@ -51,7 +51,7 @@ angular.module('aceWeb')
     $scope.refForm.year.$setUntouched();
     $scope.refForm.course.$setUntouched();
     $scope.refForm.schoolTerm.$setUntouched();
-    
+
     $scope.year = undefined;
     $scope.course = undefined;
     $scope.schoolTerm = undefined;
@@ -181,6 +181,52 @@ angular.module('aceWeb')
     $scope.course = '' + $item.program;
     $scope.year = '' + $item.level;
   };
+
+  //------------------------------------------ FROM STUDENT LAST name
+
+  $scope.getStudentLName = function(val)
+  {
+    var studentInfo =
+    {
+      'lastName' : val
+    }
+    return $http({
+      method: 'POST',
+      url: config.apiUrl + '/auth/getStudentLName',
+      data: studentInfo,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      console.log(response);
+
+      var students = JSON.parse(response.data.studInfoList)
+      return students;
+    },
+    function(response)
+    {
+    //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
+
+  $scope.onSelectLName = function ($item, $model, $label)
+  {
+    $scope.studId = $item.student_id;
+    $scope.studLName = $item.last_name;
+    $scope.studFName = $item.first_name;
+    $scope.department = '' + $item.department_id;
+    $scope.course = '' + $item.program;
+    $scope.year = '' + $item.level;
+  };
+
+
+//------------------------------------------
 
   $scope.resetForm = function ()
   {
