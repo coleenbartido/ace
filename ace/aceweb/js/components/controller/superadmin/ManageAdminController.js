@@ -72,8 +72,9 @@ angular.module('aceWeb')
   {
     if(form.$valid)
     {
-      $scope.updateBtn = "Updating";
+      $scope.updateBtn = 'Updating...';
       $scope.disableUpdateBtn = true;
+
 
       var adminDetails =
       {
@@ -189,12 +190,12 @@ angular.module('aceWeb')
     }
   }
 
-  $scope.deleteAdmin = function(email)
+  $scope.deleteAdmin = function(email, firstName, lastName)
   {
     BootstrapDialog.show({
       title: '<i class="fa fa-user-times" aria-hidden="true"></i> Delete Administrator',
-      message: 'Are you sure you want to delete this administrator?',
-      type: BootstrapDialog.TYPE_PRIMARY,
+      message: 'Are you sure you want to delete ' + firstName + ' ' + lastName + ' as an administrator?',
+      type: BootstrapDialog.TYPE_DANGER,
       closable: false,
       buttons:
       [{

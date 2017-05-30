@@ -32,7 +32,7 @@
 							<table class="col-md-12 table table-condensed table-hover ">
 								<col width="15">
 								<col width="150">
-								<col width="150">
+								<col width="200">
 								<col width="100">
 								<col width="100">
 								<col width="60">
@@ -84,7 +84,7 @@
 
 											<td class="deleteButton">
 												<center>
-												<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAdmin(admin.email)" noclick><span class="glyphicon glyphicon-trash"></span></button>
+												<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAdmin(admin.email, admin.first_name, admin.last_name)" noclick><span class="glyphicon glyphicon-trash"></span></button>
 												</center>
 											</td>
 							    	</tr>
@@ -155,7 +155,7 @@
 				            <div class="form-group">
 				              <label  class="col-md-12 control-label" for="adminFirstNameInput">First Name</label>
 				              <div class="col-md-12">
-				                <input type="text" maxlength="15" class="form-control" id="adminFirstNameInput" name="adminFirstName" ng-model="adminFirstName" required/>
+				                <input type="text" maxlength="25" class="form-control" id="adminFirstNameInput" name="adminFirstName" ng-model="adminFirstName" required/>
 				              </div>
 				            </div>
 				            <div ng-messages="regAdminForm.adminFirstName.$error" ng-show="regAdminForm.$submitted">
@@ -165,7 +165,7 @@
 				            <div class="form-group">
 				              <label  class="col-md-12 control-label" for="adminLastNameInput">Last Name</label>
 				              <div class="col-md-12">
-				                <input type="text" maxlength="15" class="form-control" id="adminLastNameInput" name="adminLastName" ng-model="adminLastName" required/>
+				                <input type="text" maxlength="25" class="form-control" id="adminLastNameInput" name="adminLastName" ng-model="adminLastName" required/>
 				              </div>
 				            </div>
 				            <div ng-messages="regAdminForm.adminLastName.$error" ng-show="regAdminForm.$submitted">
@@ -219,7 +219,7 @@
 										<div class="form-group">
 											<label  class="col-md-12 control-label" for="lastName">Last Name <i class="glyphicon glyphicon-question-sign" title="Must only have letters, space, and certain special characters (.  ,' -)"></i></label>
 											<div class="col-md-12">
-												<input type="text" maxlength="15" class="form-control" id="lastName" name="lastName" ng-model="lastName" pattern="^[a-zA-Z ,.'-]+$" required/>
+												<input type="text" maxlength="25" class="form-control" id="lastName" name="lastName" ng-model="lastName" pattern="^[a-zA-Z ,.'-]+$" required/>
 											</div>
 										</div>
 										<div ng-messages="updateAdminForm.lastName.$error" ng-show="updateAdminForm.$submitted">
@@ -231,7 +231,7 @@
 										<div class="form-group">
 											<label  class="col-md-12 control-label" for="firstName">First Name <i class="glyphicon glyphicon-question-sign" title="Must only have letters, space, and certain special characters (.  ,' -)"></i></label>
 											<div class="col-md-12">
-												<input type="text" maxlength="15" class="form-control" id="firstName" name="firstName" ng-model="firstName" pattern="^[a-zA-Z ,.'-]+$" required/>
+												<input type="text" maxlength="25" class="form-control" id="firstName" name="firstName" ng-model="firstName" pattern="^[a-zA-Z ,.'-]+$" required/>
 											</div>
 										</div>
 										<div ng-messages="updateAdminForm.firstName.$error" ng-show="updateAdminForm.$submitted">
