@@ -495,7 +495,7 @@
 
   //------- Get Contact Number not applicable for Super Administrator Module
 
-  $app->post('/auth/getContactNum', function (ServerRequestInterface $request, ResponseInterface $response)
+  /*$app->post('/auth/getContactNum', function (ServerRequestInterface $request, ResponseInterface $response)
   {
     $accountDetails = json_decode(file_get_contents("php://input"));
 
@@ -510,25 +510,27 @@
     }
 
     return $response;
-  });
-
-  /*$app->post('/auth/getUserInfo', function (ServerRequestInterface $request, ResponseInterface $response)
-  {
-    $accountDetails = json_decode(file_get_contents("php://input"));
-
-    $email = $accountDetails->email;
-
-    $db = new DbOperation();
-
-    if($db->getUserInfo($email))
-    {
-      $responseBody = array('contactNum' => $db->getContactNum($email));
-      $response = setResponse($response, 200, $responseBody);
-    }
-
-    return $response;
   });*/
 
+  //------- Get User Info not applicable for Super Administrator Module
+
+    $app->post('/auth/getUserInfo', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $accountDetails = json_decode(file_get_contents("php://input"));
+
+      $email = $accountDetails->email;
+
+      $db = new DbOperation();
+
+      if($db->getFirstName($email) && $db->getLastName($email) && $db->getContactNum($email))
+      {
+
+        $responseBody = array('firstName' => $db->getFirstName($email), 'lastName' => $db->getLastName($email), 'contactNum' => $db->getContactNum($email));
+        $response = setResponse($response, 200, $responseBody);
+      }
+
+      return $response;
+    });
 
 
   //used to edit faculty or administrator's information (ex. name)

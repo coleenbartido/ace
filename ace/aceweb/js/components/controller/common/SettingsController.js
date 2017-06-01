@@ -3,7 +3,7 @@ angular.module('aceWeb')
 
 .controller('SettingsController', function(config, $scope, $http, $state, $location, $localStorage, AuthService)
 {
-  $scope.getContactNum = function ()
+  /*$scope.getContactNum = function ()
   {
     var accountDetails =
     {
@@ -32,13 +32,50 @@ angular.module('aceWeb')
     {
 
     });
+  }*/
+
+
+  $scope.getUserInfo = function ()
+  {
+    var accountDetails =
+    {
+      'email' : AuthService.getEmail()
+    }
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/auth/getUserInfo',
+      data: accountDetails,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      //for checking
+      console.log(response);
+
+      $scope.contactNum = response.data.contactNum;
+      $scope.userFName = response.data.firstName;
+      $scope.userLName = response.data.lastName;
+
+    },
+    function(response)
+    {
+      //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+
+    });
   }
+
 
   $scope.initScope = function()
   {
     $scope.saveBtn = "Save";
     $scope.disableSaveBtn = false;
-    $scope.getContactNum();
+    //$scope.getContactNum();
+    $scope.getUserInfo();
   } //scope initScope
 
   $scope.initScope();
@@ -59,6 +96,13 @@ angular.module('aceWeb')
     $scope.settingsForm2.$setPristine();
     $scope.settingsForm2.newContactNum.$setUntouched();
     $scope.newContactNum = $scope.contactNum;
+  }
+
+  $scope.showEditModal = function()
+  {
+    $scope.settingsForm3.$setPristine();
+    $scope.settingsForm3.userLName.$setUntouched();
+    $scope.settingsForm3.userFName.$setUntouched();
   }
 
   $scope.confirmContact = function(form)
@@ -89,6 +133,50 @@ angular.module('aceWeb')
         $scope.contactNum = $scope.newContactNum;
 
         $('#contactModal').modal('hide');
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        console.log(response);
+
+      })
+      .finally(function()
+      {
+        $scope.saveBtn = "Save";
+        $scope.disableSaveBtn = false;
+      });
+    }
+  }
+
+
+  $scope.confirmName = function(form)
+  {
+    if(form.$valid)
+    {
+      $scope.saveBtn = "Saving";
+      $scope.disableSaveBtn = true;
+
+      var changeNameDetails =
+      {
+        'email' : AuthService.getEmail(),
+        'firstName' : $scope.userFName,
+        'lastName' : $scope.userLName
+
+      };
+
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/auth/changeName',
+        data: changeNameDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+
+      .then(function(response)
+      {
+        //for checking
+        console.log(response);
+
+        $('#editModal').modal('hide');
         $scope.showCustomModal("SUCCESS", response.data.successMsg);
       },
       function(response)
