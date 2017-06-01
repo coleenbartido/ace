@@ -226,7 +226,20 @@ class DbOperation
     }
 
 
-    //EDIT TODAY
+    public function changeUserName($email, $firstName, $lastName)
+    {
+        $stmt = $this->con->prepare("UPDATE user SET first_name=?, last_name=? WHERE email=?");
+        $stmt->bind_param("sss", $firstName, $lastName, $email);
+        $result = $stmt->execute();
+        $stmt->close();
+        if($result)
+        {
+            return true;
+          }
+          return false;
+    }
+
+
     public function changeContact($email, $contactNum)
     {
         $stmt = $this->con->prepare("UPDATE user SET hashcode=NULL, token_exp=NULL, contact_number=? WHERE email=?");

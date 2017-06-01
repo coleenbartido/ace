@@ -493,6 +493,33 @@
   });
 
 
+  //------- Change Name not applicable for Super Administrator
+
+  $app->post('/auth/changeName', function (ServerRequestInterface $request, ResponseInterface $response)
+  {
+    $changeNameDetails = json_decode(file_get_contents("php://input"));
+
+    $email = $changeNameDetails->email;
+    $firstName = $changeNameDetails->firstName;
+    $lastName = $changeNameDetails->lastName;
+
+    $db = new DbOperation();
+
+    if($db->changeUserName($email, $firstName, $lastName))
+    {
+      $responseBody = array('successMsg' => 'Name successfully updated');
+      $response = setResponse($response, 200, $responseBody);
+    }
+    else
+    {
+      $responseBody = array('errMsg' => 'Failed to change name.');
+      $response = setResponse($response, 400, $responseBody);
+    }
+    return $response;
+  });
+
+
+
   //------- Get Contact Number not applicable for Super Administrator Module
 
   /*$app->post('/auth/getContactNum', function (ServerRequestInterface $request, ResponseInterface $response)
