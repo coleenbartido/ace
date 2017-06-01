@@ -684,9 +684,32 @@
       {
         $studInfoList[$counter]['level'] = $db->getStudentLevel($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
         $studInfoList[$counter]['program'] = $db->getStudentProgram($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
-        $studInfoList[$counter]['student_fullname'] = $studInfoList[$counter]['last_name'] . " " . $studInfoList[$counter]['first_name'];
+        $studInfoList[$counter]['student_fullname'] = $studInfoList[$counter]['last_name'] . ", " . $studInfoList[$counter]['first_name'];
       }
 
+      $responseBody = array('studInfoList' => json_encode($studInfoList));
+      $response = setResponse($response, 200, $responseBody);
+
+      return $response;
+    });
+
+
+    $app->post('/auth/getStudentFName', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $studentInfo = json_decode(file_get_contents("php://input"));
+
+      $firstName = $studentInfo->firstName;
+
+      $db = new DbOperation();
+
+      $studInfoList = $db->getStudentFName($firstName);
+
+      for($counter=0; $counter < count($studInfoList); $counter++)
+      {
+        $studInfoList[$counter]['level'] = $db->getStudentLevel($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
+        $studInfoList[$counter]['program'] = $db->getStudentProgram($studInfoList[$counter]['student_id'], $studInfoList[$counter]['department_id']);
+        $studInfoList[$counter]['student_fullname'] = $studInfoList[$counter]['first_name'] . " " . $studInfoList[$counter]['last_name'];
+      }
 
       $responseBody = array('studInfoList' => json_encode($studInfoList));
       $response = setResponse($response, 200, $responseBody);

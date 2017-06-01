@@ -1200,10 +1200,28 @@ class DbOperation
     public function getStudentLName($lastName)
     {
       $lastName = $lastName . "%";
-      $limit = 5;
 
-      $stmt = $this->con->prepare("SELECT * FROM student WHERE last_name LIKE ? ORDER BY last_name ASC LIMIT ?");
-      $stmt->bind_param("si", $lastName, $limit);
+      $stmt = $this->con->prepare("SELECT * FROM student WHERE LOWER(last_name) LIKE LOWER(?) ORDER BY last_name DESC");
+      $stmt->bind_param("s", $lastName);
+      $stmt->execute();
+      $result= $stmt->get_result();
+      $arrResult = array();
+      while ($myrow = $result->fetch_assoc())
+      {
+        $arrResult[] = $myrow;
+      }
+      $stmt->close();
+
+      return $arrResult;
+    }
+
+
+    public function getStudentFName($firstName)
+    {
+      $firstName = $firstName . "%";
+
+      $stmt = $this->con->prepare("SELECT * FROM student WHERE LOWER(first_name) LIKE LOWER(?) ORDER BY first_name DESC");
+      $stmt->bind_param("s", $firstName);
       $stmt->execute();
       $result= $stmt->get_result();
       $arrResult = array();

@@ -173,17 +173,6 @@ angular.module('aceWeb')
     });
   }
 
-  $scope.onSelect = function ($item, $model, $label)
-  {
-    $scope.studFName = $item.first_name;
-    $scope.studLName = $item.last_name;
-    $scope.department = '' + $item.department_id;
-    $scope.course = '' + $item.program;
-    $scope.year = '' + $item.level;
-  };
-
-  //------------------------------------------ FROM STUDENT LAST name
-
   $scope.getStudentLName = function(val)
   {
     var studentInfo =
@@ -215,7 +204,38 @@ angular.module('aceWeb')
     });
   }
 
-  $scope.onSelectLName = function ($item, $model, $label)
+  $scope.getStudentFName = function(val)
+  {
+    var studentInfo =
+    {
+      'firstName' : val
+    }
+    return $http({
+      method: 'POST',
+      url: config.apiUrl + '/auth/getStudentFName',
+      data: studentInfo,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      console.log(response);
+
+      var students = JSON.parse(response.data.studInfoList)
+      return students;
+    },
+    function(response)
+    {
+    //for checking
+      console.log(response);
+
+    })
+    .finally(function()
+    {
+
+    });
+  }
+
+  $scope.onSelect = function ($item, $model, $label)
   {
     $scope.studId = $item.student_id;
     $scope.studLName = $item.last_name;

@@ -65,3 +65,36 @@
 [2017-05-05 11:57:15] yuiop hjkl (Administrator) logged in to the system
 [2017-05-05 12:01:15] yuiop hjkl (Administrator) logged in to the system
 [2017-05-05 12:05:36] yuiop hjkl (Administrator) logged in to the system
+[2017-05-31 18:35:02] P J (Faculty Member) logged in to the system
+[2017-05-31 19:19:37] Super Administrator logged in to the system
+[2017-05-31 19:21:17] Super Administrator has successfully created an administrator account.
+[2017-05-31 19:25:03] Paul Jao (Administrator) logged in to the system
+[2017-05-31 19:25:41] Paul Jao (Administrator) has successfully created a faculty account.
+[2017-05-31 19:30:30] Beatricci Deanne Madjus (Faculty Member) logged in to the system
+[2017-05-31 19:33:00] Beatricci Deanne Madjus (Faculty Member) has successfully submitted a referral.
+[2017-05-31 19:36:18] Paul Jao (Administrator) logged in to the system
+[2017-05-31 19:50:33] Beatricci Deanne Madjus (Faculty Member) logged in to the system
+[2017-05-31 19:51:12] Paul Jao (Administrator) logged in to the system
+[2017-05-31 20:02:56] Super Administrator logged in to the system
+[2017-05-31 20:03:34] Paul Jao (Administrator) logged in to the system
+[2017-05-31 20:03:57] Paul Jao (Administrator) has successfully sent a message.
+[2017-05-31 20:08:13] Paul Jao (Administrator) has successfully sent a message.
+[2017-05-31 20:16:18] Beatricci Deanne Madjus (Faculty Member) logged in to the system
+[2017-05-31 20:17:21] Beatricci Deanne Madjus (Faculty Member) has successfully submitted a referral.
+[2017-05-31 20:18:36] Beatricci Deanne Madjus (Faculty Member) has successfully submitted a referral.
+[2017-05-31 20:41:52] Super Administrator logged in to the system
+[2017-05-31 20:43:39] Super Administrator has successfully deleted administrator account/s.
+[2017-05-31 20:44:10] Super Administrator has successfully created an administrator account.
+[2017-05-31 20:49:09] Paul Jao (Administrator) logged in to the system
+[2017-05-31 20:53:01] Paul Jao (Administrator) has successfully updated the status of a report.
+[2017-05-31 20:56:38] Paul Jao (Administrator) has successfully sent a message.
+[2017-05-31 20:58:12] Paul Jao (Administrator) has successfully deleted report/s.
+[2017-05-31 21:00:21] Paul Jao (Administrator) has successfully sent a broadcast email to all faculty.
+[2017-05-31 21:02:31] Paul Jao (Administrator) has  successfully deleted student record/s.
+[2017-05-31 21:03:14] Paul Jao (Administrator) has successfully deleted faculty account/s.
+[2017-05-31 21:03:41] Paul Jao (Administrator) has successfully created a faculty account.
+[2017-05-31 21:05:16] Paul Jao (Administrator) has successfully download a copy of the database
+[2017-05-31 21:06:51] Paul Jao (Administrator) has successfully restored the database
+[2017-05-31 21:11:11] Paul Jao (Administrator) logged in to the system
+[2017-05-31 21:11:33] Bea Madjus (Faculty Member) logged in to the system
+[2017-05-31 21:13:30] Bea Madjus (Faculty Member) has successfully submitted a referral.
