@@ -95,6 +95,7 @@ angular.module('aceWeb')
         console.log(response);
 
         $scope.getFacultyList();
+        
         $('#editModal').modal('hide');
         $scope.showCustomModal("SUCCESS", response.data.successMsg);
       },

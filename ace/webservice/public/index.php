@@ -570,10 +570,9 @@
     $lastName = $accountDetails->lastName;
     $firstName = $accountDetails->firstName;
     $userType = $accountDetails->userType;
-    $department = $accountDetails->department;
 
     $updateSuccess = false;
-    //$updateSuccess2 = true;
+    $updateSuccess2 = true;
 
     $db = new DbOperation();
 
@@ -581,10 +580,10 @@
 
     if($userType == 2)
     {
+      $department = $accountDetails->department;
       $updateSuccess2 = $db->updateDepartment($email, $department);
     }
 
-    //echo $updateSuccess2;
 
     if($updateSuccess && $updateSuccess2)
     {

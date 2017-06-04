@@ -58,7 +58,7 @@
 
 								</tbody>
 
-									<tr class="listFaculty" ng-repeat="faculty in facultyAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage">
+									<tr class="listFaculty" ng-repeat="faculty in facultyAccounts | startFrom:(currentPage-1)*itemsPerPage | filter: searchBox | limitTo:itemsPerPage" data-toggle="modal" data-target="#editModal" ng-click="showPopup(faculty)">
 											<td>
 												<center><input type="checkbox" data-checklist-model="facultyList.email" data-checklist-value="faculty.email" noclick></center>
 											</td>
@@ -196,7 +196,7 @@
 
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-						<p class="modal-title custom-header-color custom-modal-header">Edit Faculty Information</p>
+						<h3 class="modal-title custom-header-color"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Faculty's Information</h3>
 					</div>
 
 					<div class="modal-body">
@@ -232,7 +232,7 @@
 										</div>
 
 										<div class="updateBtn">
-											<button type="submit" class="btn btn-primary" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
+											<button type="submit" class="btn btn-primary pull-right" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
 										</div>
 
 								</form>
