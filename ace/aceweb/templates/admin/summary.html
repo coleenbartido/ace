@@ -10,24 +10,20 @@
 
   	<div class="banner">
   		<div class="button-container col-md-12">
-  						<div class="schoolYear col-md-2">
+  			<div class="schoolYear col-md-2">
                 <select ng-model="selectedSY" ng-change="getSummaryData()">
-            	    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
-            	    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
-            	   </select>
-  						</div>
+            	    <option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
+            	    <option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
+            	</select>
+  			</div>
   		</div>
 
-  		<img src="img/header1.png" class="img-responsive">
+  		<img src="img/header1.png" class="img-responsive"/>
   	</div>
 
 
-<!--	<div ng-show="!isLoading">
+	  <img src="img/logoForChart.jpg" id="imgForChart" ng-show="false"/>
 
-		<select ng-model="selectedSY" ng-change="getSummaryData()">
-	    	<option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
-	    	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
-	    </select-->
       <div class="manageAdmin col-md-12 col-md-offset-0 formContainer">
         <div class="col-md-12 manageContainer">
 
@@ -37,6 +33,7 @@
 		  	<div ng-show="!isLoadingChart">
 			  	<div class="col-md-11">
 					   <canvas id="term" class="chart chart-bar" chart-data="termData" chart-labels="termLabels" chart-series="series" chart-options="termOptions" chart-dataset-override="datasetOverride"></canvas>
+					   <canvas id="term2" ng-show="false"></canvas>
 				  </div>
   				<a class="btn btn-info" id="downloadImg1" ng-click="downloadImage($event, 'term')">Save as Image</a>
   				<a class="btn btn-info" id="downloadPDF1" ng-click="downloadPDF('term')">Save as PDF</a>
@@ -63,6 +60,7 @@
 			  	<div class="col-md-11">
 					<canvas id="program" class="chart chart-bar" chart-data="programData" chart-labels="programLabels" chart-series="series" chart-options="programOptions" chart-dataset-override="datasetOverride">
 					</canvas>
+					<canvas id="program2" ng-show="false"></canvas>
 				</div>
 				<a class="btn btn-info" id="downloadImg2" ng-click="downloadImage($event, 'program')">Save as Image</a>
 				<a class="btn btn-info" id="downloadPDF2" ng-click="downloadPDF('program')">Save as PDF</a>
@@ -89,6 +87,7 @@
 			  	<div class="col-md-11">
 					<canvas id="level" class="chart chart-bar" chart-data="levelData" chart-labels="levelLabels" chart-series="series" chart-options="levelOptions" chart-dataset-override="datasetOverride">
 					</canvas>
+					<canvas id="level2" ng-show="false"></canvas>
 				</div>
 				<a class="btn btn-info" id="downloadImg3" ng-click="downloadImage($event, 'level')">Save as Image</a>
 				<a class="btn btn-info" id="downloadPDF3" ng-click="downloadPDF('level')">Save as PDF</a>
@@ -115,6 +114,7 @@
 				<div class="col-md-11">
 					<canvas id="reason" class="chart chart-bar" chart-data="reasonData" chart-labels="reasonLabels" chart-series="series" chart-options="reasonOptions" chart-dataset-override="datasetOverride">
 					</canvas>
+					<canvas id="reason2" ng-show="false"></canvas>
 				</div>
 				<a class="btn btn-info" id="downloadImg4" ng-click="downloadImage($event, 'reason')">Save as Image</a>
 				<a class="btn btn-info" id="downloadPDF4" ng-click="downloadPDF('reason')">Save as PDF</a>
@@ -141,6 +141,7 @@
 				<div class="col-md-11">
 					<canvas id="status" class="chart chart-bar" chart-data="statusData" chart-labels="statusLabels" chart-series="series" chart-options="statusOptions" chart-dataset-override="datasetOverride">
 					</canvas>
+					<canvas id="status2" ng-show="false"></canvas>
 				</div>
 				<a class="btn btn-info" id="downloadImg5" ng-click="downloadImage($event, 'status')">Save as Image</a>
 				<a class="btn btn-info" id="downloadPDF5" ng-click="downloadPDF('status')">Save as PDF</a>

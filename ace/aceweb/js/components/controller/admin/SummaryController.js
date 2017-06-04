@@ -223,7 +223,33 @@ angular.module('aceWeb')
     var sy = $scope.selectedSY.split(/\s*-\s*/);
     var elemRef = document.getElementById(event.target.id);
 
-    elemRef.href = document.getElementById(chartId).toDataURL('image/png', 1.0);
+    var oldCanvas = document.getElementById(chartId);
+
+    var canvas = document.getElementById(chartId + '2');
+    var context = canvas.getContext('2d');
+
+    var image = document.getElementById('imgForChart');
+
+    canvas.width = oldCanvas.width;
+    canvas.height = oldCanvas.height * 1.30;
+
+    context.fillStyle = "white";
+    context.fillRect(0, 0, canvas.width, canvas.height); 
+
+    context.drawImage(oldCanvas, 0, canvas.height * 0.19); 
+    
+    context.drawImage(image, canvas.width * 0.335, canvas.height * 0.048, canvas.height * 0.08, canvas.height * 0.08);
+    
+    context.font = 'bold ' + (canvas.height * 0.06) + 'pt Arial';
+    context.fillStyle = 'black';
+    var headerText = 'iACADEMY';
+    context.fillText(headerText, canvas.width * 0.39, canvas.height * 0.12);
+
+    context.font = 'bold ' + (canvas.height * 0.025) + 'pt Arial';
+    context.fillStyle = 'black';
+    context.fillText($scope.currentDate, canvas.width * 0.40, canvas.height * 0.18);
+
+    elemRef.href = canvas.toDataURL('image/png', 1.0);
     elemRef.download = chartId + '_chart_' + $scope.currentDateNum + '_' + sy[0] + sy[1] + '.png';
   }
 
@@ -232,7 +258,33 @@ angular.module('aceWeb')
   {    
     var sy = $scope.selectedSY.split(/\s*-\s*/);
 
-    var myImage = document.getElementById(chartId).toDataURL('image/jpeg', 1.0);
+    var oldCanvas = document.getElementById(chartId);
+
+    var canvas = document.getElementById(chartId + '2');
+    var context = canvas.getContext('2d');
+
+    var image = document.getElementById('imgForChart');
+
+    canvas.width = oldCanvas.width;
+    canvas.height = oldCanvas.height * 1.30;
+
+    context.fillStyle = "white";
+    context.fillRect(0, 0, canvas.width, canvas.height); 
+
+    context.drawImage(oldCanvas, 0, canvas.height * 0.19); 
+    
+    context.drawImage(image, canvas.width * 0.335, canvas.height * 0.048, canvas.height * 0.08, canvas.height * 0.08);
+    
+    context.font = 'bold ' + (canvas.height * 0.06) + 'pt Arial';
+    context.fillStyle = 'black';
+    var headerText = 'iACADEMY';
+    context.fillText(headerText, canvas.width * 0.39, canvas.height * 0.12);
+
+    context.font = 'bold ' + (canvas.height * 0.025) + 'pt Arial';
+    context.fillStyle = 'black';
+    context.fillText($scope.currentDate, canvas.width * 0.40, canvas.height * 0.18);
+
+    var myImage = canvas.toDataURL('image/jpeg', 1.0);
 
     var doc = new jsPDF('landscape');
         
