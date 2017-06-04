@@ -103,3 +103,5 @@
 [2017-06-04 11:37:54] Bea Madjus (Faculty Member) logged in to the system
 [2017-06-04 17:14:02] Paul Jao (Administrator) logged in to the system
 [2017-06-04 17:20:07] Paul Jao (Administrator) logged in to the system
+[2017-06-04 17:22:19] Paul Jao (Administrator) logged in to the system
+[2017-06-04 17:25:07] Paul Jao (Administrator) logged in to the system

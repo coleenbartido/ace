@@ -85,10 +85,6 @@ input[type="email"]:focus, input[type="email"].focus, input[type="password"]:foc
     padding-left: 30px;
 }
 
-form.ng-submitted input.ng-invalid {
-    background-color: #f9bcc5;
-}
-
 .loginForm .fa-times-circle {
     position: absolute;
     float: right;
@@ -207,4 +203,8 @@ a:active {
 
 .forgotPass:focus {
     outline: 0;
+}
+
+form.ng-submitted input.ng-invalid {
+    background-color: #f9bcc5;
 }
