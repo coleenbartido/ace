@@ -203,3 +203,34 @@
 [2017-06-05 18:44:15] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
 [2017-06-05 18:44:31] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
 [2017-06-05 18:44:49] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 18:56:02] Super Administrator logged in to the system
+[2017-06-05 18:56:50] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:57:04] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:57:17] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:57:34] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:57:47] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:58:02] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:58:18] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:59:02] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:59:20] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:59:32] Super Administrator has successfully created an administrator account.
+[2017-06-05 18:59:47] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:00:02] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:00:14] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:00:26] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:00:42] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:01:11] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:01:41] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:01:54] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:02:07] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:02:27] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:03:11] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:03:24] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:03:40] Super Administrator has successfully created an administrator account.
+[2017-06-05 19:04:34] Super Administrator logged in to the system
+[2017-06-05 19:09:23] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 19:15:30] Bea Madjus (Administrator) has successfully deleted report/s.
+[2017-06-05 19:15:45] Bea Madjus (Administrator) has successfully deleted report/s.
+[2017-06-05 19:27:07] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 19:35:51] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 19:50:19] Bea Madjus (Administrator) logged in to the system

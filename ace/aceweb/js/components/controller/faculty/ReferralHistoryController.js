@@ -106,7 +106,7 @@ angular.module('aceWeb')
     var pageSize = $scope.itemsPerPage;
     var lastPageLength = $scope.tempFiltered.length % $scope.itemsPerPage;
 
-    if($scope.tempFiltered.length <= $scope.currentPage * $scope.itemsPerPage)
+    if($scope.tempFiltered.length < $scope.currentPage * $scope.itemsPerPage)
     {
       pageSize = lastPageLength;
     }
@@ -148,7 +148,7 @@ angular.module('aceWeb')
       startingItem = ($scope.currentPage-1) * $scope.itemsPerPage;    
     }
 
-    if($scope.filtered.length <= $scope.currentPage * $scope.itemsPerPage)
+    if($scope.filtered.length < $scope.currentPage * $scope.itemsPerPage)
     {
       endingItem = (($scope.currentPage-1) * $scope.itemsPerPage) + lastPageLength;
     }
