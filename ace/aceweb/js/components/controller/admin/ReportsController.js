@@ -753,7 +753,7 @@ angular.module('aceWeb')
     var lines = doc.splitTextToSize(report.referral_comment_view, 181);
     doc.text(15, rowHeightLabel, lines);
 
-    doc.save(report.student_fullname.replace(/[^A-Z0-9]/ig, '').toLowerCase() + $scope.currentDateNum + '.pdf');
+    doc.save(report.student_fullname.replace(/[^A-Z0-9]/ig, '').toLowerCase() + '_' + report.program.replace(/[^A-Z0-9]/ig, '').toLowerCase() + '_' + report.report_date.toString('MMddyy') + '.pdf');
   }
 
   $scope.showCustomModal = function(modalTitle, modalMsg)
