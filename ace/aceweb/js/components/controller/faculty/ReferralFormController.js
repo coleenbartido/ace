@@ -8,10 +8,7 @@ angular.module('aceWeb')
   {
     $scope.submitBtn = "Submit";
     $scope.disableSubmitBtn = false;
-    $scope.currentYear = new Date().getFullYear();
-    $scope.firstSY = ($scope.currentYear - 1) + " - " + $scope.currentYear;
-    $scope.secondSY = $scope.currentYear + " - " + ($scope.currentYear + 1);
-    $scope.thirdSY = ($scope.currentYear + 1) + " - " + ($scope.currentYear + 2);
+
     $scope.reasons = [
     {
       name: 'Student is habitually absent or late (reaching half of allowed absences)',
@@ -81,9 +78,7 @@ angular.module('aceWeb')
 
         var referralDetails =
         {
-          'schoolYear' : $scope.schoolYear,
           'email' : AuthService.getEmail(),
-          'schoolTerm' : $scope.schoolTerm,
           'studId' : $scope.studId,
           'studFName': $scope.studFName,
           'studLName' : $scope.studLName,

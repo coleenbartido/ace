@@ -1364,4 +1364,54 @@ class DbOperation
         return false;
     }
 
+    public function updateCurrentReportInfo($department, $schoolYear, $term)
+    {
+        $stmt = $this->con->prepare("UPDATE current_report_info SET school_year=?, term=? WHERE department_id=?");
+        $stmt->bind_param("sii", $schoolYear, $term, $department);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if($result)
+        {
+            return true;
+        }
+        return false;
+    }
+  
+    public function resetCurrentReportInfo($department)
+    {
+        $stmt = $this->con->prepare("UPDATE current_report_info SET school_year=NULL, term=NULL WHERE department_id=?");
+        $stmt->bind_param("i", $department);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if($result)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    public function getCurrentReferralSchoolYear($department)
+    {
+        $stmt = $this->con->prepare("SELECT school_year FROM current_report_info WHERE department_id=?");
+        $stmt->bind_param("i",$department);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $result['school_year'];
+    }
+
+    public function getCurrentReferralTerm($department)
+    {
+        $stmt = $this->con->prepare("SELECT term FROM current_report_info WHERE department_id=?");
+        $stmt->bind_param("i",$department);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $result['term'];
+    }
+    
 }

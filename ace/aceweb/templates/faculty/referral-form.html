@@ -23,12 +23,6 @@
 
                       </div>
 
-                      <!--div class="row buttons historyDiv">
-                        <div class="btns pull-right">
-                          <button class="historyBtn btn"><i class="fa fa-history" aria-hidden="true"></i> History</button>
-                        </div>
-                      </div-->
-
                       <div class="panel-body studInfo">
 
                         <!---------------------------------------------------------------------->
@@ -125,56 +119,6 @@
 
                           <div ng-messages="refForm.department.$error" ng-show="refForm.department.$touched && !refForm.department.$valid">
                             <p class="error-message" ng-message="required">Please fill out this field.</p>
-                          </div>
-                        </div>
-
-                        <!---------------------------------------------------------------------->
-
-                        <div class="schoolYear col-md-2">
-                          <span class="input-label">School Year:  </span>
-
-                          <div class="style-select">
-                            <select class="form-control" name="schoolYear" id="schoolYear" ng-model="schoolYear" required>
-                              <option disabled selected value></option>
-                              <option value="{{firstSY}}">{{firstSY}}</option>
-                              <option value="{{secondSY}}">{{secondSY}}</option>
-                              <option value="{{thirdSY}}">{{thirdSY}}</option>
-                            </select>
-
-                            <div class="error" ng-messages="refForm.schoolYear.$error" ng-show="(refForm.schoolYear.$touched || refForm.$submitted) && !refForm.schoolYear.$valid">
-                              <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="Please fill out this field." data-toggle="tooltip" data-placement="auto"></span>
-                            </div>
-                          </div>
-
-                          <div class="error" ng-messages="refForm.schoolYear.$error" ng-show="refForm.schoolYear.$touched && !refForm.schoolYear.$valid">
-                            <p class="error-message-term-year" ng-message="required">Please fill out this field.</p>
-                          </div>
-                        </div>
-
-                        <!---------------------------------------------------------------------->
-
-                        <div class="schoolTerm col-md-2" ng-show="department">
-                          <span class="input-label">Term: </span>
-
-
-                          <div class="style-select">
-                            <select class="form-control" name="schoolTerm" id="schoolTerm" ng-model="schoolTerm" required>
-                              <option disabled selected value>  </option>
-                              <option ng-if="department==2" value="1">1st Term</option>
-                              <option ng-if="department==2" value="2">2nd Term</option>
-                              <option ng-if="department==2" value="3">3rd Term</option>
-
-                              <option ng-if="department==1" value="1">1st Term</option>
-                              <option ng-if="department==1" value="2">2nd Term</option>
-                            </select>
-
-                            <div ng-messages="refForm.schoolTerm.$error" ng-show="(refForm.schoolTerm.$touched || refForm.$submitted) && !refForm.schoolTerm.$valid">
-                              <span class="fa fa-exclamation-circle selecterrspan" ng-message="required" title="Please fill out this field." data-toggle="tooltip" data-placement="auto"></span>
-                            </div>
-                          </div>
-
-                          <div class="error" ng-messages="refForm.schoolTerm.$error" ng-show="refForm.schoolTerm.$touched && !refForm.schoolTerm.$valid">
-                            <p class="error-message-term-year" ng-message="required">Please fill out this field.</p>
                           </div>
                         </div>
 

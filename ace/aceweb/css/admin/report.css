@@ -225,7 +225,8 @@ body {
 .table-hover > tbody > tr.info:hover > td {
      background-color: #e5edf7 !important;
 }
-textarea{
+
+textarea {
   font-size: 14px;
   resize: none;
   width: 100%;
@@ -235,6 +236,15 @@ textarea{
 .modal-content{
   width: 1000px;
   margin-left: -150px;
+}
+
+.invalid-text {
+  margin-top: -10px;
+  color: #f00;
+}
+
+form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
+  border:1px solid #f00;
 }
 
 

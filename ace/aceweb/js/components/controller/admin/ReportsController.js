@@ -65,6 +65,10 @@ angular.module('aceWeb')
 
   $scope.initScope = function()
   {
+    $scope.currentYear = new Date().getFullYear();
+    $scope.firstSY = ($scope.currentYear - 1) + " - " + $scope.currentYear;
+    $scope.secondSY = $scope.currentYear + " - " + ($scope.currentYear + 1);
+    $scope.thirdSY = ($scope.currentYear + 1) + " - " + ($scope.currentYear + 2);
     $scope.sendBtn = "Send";
     $scope.isLoading = true;
     $scope.initList = false;
@@ -603,6 +607,127 @@ angular.module('aceWeb')
     $scope.composeEmail = "";
     $scope.sendBtn = "Send";
     $scope.disableSendBtn = false;
+  }
+
+  $scope.enableReferral = function(form)
+  {
+    if(form.$valid)
+    {
+      $scope.enableBtn = "Enabling";
+      $scope.disableToggleBtn = true;
+
+      var updateDetails =
+      {
+        'userEmail' : AuthService.getEmail(),
+        'schoolYear' : $scope.schoolYear,
+        'term' : $scope.term
+      }
+
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/auth/toggleReferral',
+        data: updateDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+
+      .then(function(response)
+      {
+        console.log(response);
+
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        $scope.showCustomModal("ERROR", response.data.errorMsg);
+      })
+      .finally(function()
+      {
+        $('#referralActivationModal').modal('hide');
+        $scope.enableBtn = "Enable";
+        $scope.disableToggleBtn = false;
+      });
+    }
+  }
+
+  $scope.disableReferral = function(form)
+  {
+    if(form.$valid)
+    {
+      $scope.disableBtn = "Disabling";
+      $scope.disableToggleBtn = true;
+
+      var updateDetails =
+      {
+        'userEmail' : AuthService.getEmail()
+      }
+
+      $http({
+        method: 'POST',
+        url: config.apiUrl + '/auth/disableReferral',
+        data: updateDetails,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+
+      .then(function(response)
+      {
+        console.log(response);
+
+        $scope.showCustomModal("SUCCESS", response.data.successMsg);
+      },
+      function(response)
+      {
+        $scope.showCustomModal("ERROR", response.data.errorMsg);
+      })
+      .finally(function()
+      {
+        $('#referralActivationModal').modal('hide');
+        $scope.disableBtn = "Disable";
+        $scope.disableToggleBtn = false;
+      });
+    }
+  }
+
+  $scope.showActivationModal = function ()
+  {
+    $scope.schoolYear = undefined;
+    $scope.term = undefined;
+    $scope.enableBtn = "Enable";
+    $scope.disableBtn = "Disable";
+    $scope.showEnable = false;
+
+    var details =
+    {
+      'email' : AuthService.getEmail()
+    }
+
+    $http({
+      method: 'POST',
+      url: config.apiUrl + '/auth/getCurrentReportInfo',
+      data: details,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(response)
+    {
+      console.log(response);
+
+      if(response.data.schoolYear && response.data.schoolYear)
+      {
+        $scope.schoolYear = response.data.schoolYear;
+        $scope.term = response.data.term + "";
+
+        $scope.showEnable = true;
+      }
+
+      $('#referralActivationModal').modal('show');
+    },
+    function(response)
+    {
+      
+    })
+    .finally(function()
+    {
+            
+    });
   }
 
   //export report to PDF

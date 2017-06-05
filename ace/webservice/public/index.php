@@ -746,6 +746,108 @@
     });
 
 
+    $app->post('/auth/toggleReferral', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $currentReportInfo = json_decode(file_get_contents("php://input"));
+
+      $db = new DbOperation();
+
+      $email = $currentReportInfo->userEmail;
+      $schoolYear = $currentReportInfo->schoolYear;
+      $term = $currentReportInfo->term;
+      $userType = 3;
+      $status = 1;
+      $department = $db->getDepartment($email);
+
+      if($term == 1)
+      {
+        $termWord = "first term";
+      }
+      else if($term == 2)
+      {
+        $termWord = "second term";
+      }
+      else
+      {
+        $termWord = "third term";
+      }
+
+      if ($department == 1) 
+      {
+        $departmentWord = "senior high school";
+      }
+      else
+      {
+        $departmentWord = "college";
+      }
+      
+      if($db->updateCurrentReportInfo($department, $schoolYear, $term))
+      {
+        $emailList = $db->getFacultyAccounts($userType, $status);
+
+        $subject = "ACE Referral";
+        $link = $_ENV['DOMAIN']->CLIENT_URL;
+        $body =
+
+          "Greetings, <br><br>You may now submit " . $departmentWord . " referrals for the " . $termWord . " of school year " . $schoolYear . ".
+          <br><br>To fill out the online form, login <a href=" . $link . ">here</a>.
+          <br><br><br>Thank you.";
+
+        sendEmail($emailList, $subject, $body);
+
+        $responseBody = array('successMsg' => "Referral submission successfully enabled");
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => "Failed to enable referral submission");
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+    
+    $app->post('/auth/disableReferral', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $currentReportInfo = json_decode(file_get_contents("php://input"));
+
+      $db = new DbOperation();
+
+      $email = $currentReportInfo->userEmail;
+      $department = $db->getDepartment($email);
+      
+      if($db->resetCurrentReportInfo($department))
+      {
+        $responseBody = array('successMsg' => "Referral submission successfully disabled");
+        $response = setResponse($response, 200, $responseBody);
+      }
+      else
+      {
+        $responseBody = array('errorMsg' => "Failed to disable referral submission");
+        $response = setResponse($response, 400, $responseBody);
+      }
+
+      return $response;
+    });
+
+
+    $app->post('/auth/getCurrentReportInfo', function (ServerRequestInterface $request, ResponseInterface $response)
+    {
+      $details = json_decode(file_get_contents("php://input"));
+
+      $db = new DbOperation();
+
+      $email = $details->email;
+      $department = $db->getDepartment($email);
+
+      $responseBody = array('schoolYear' => $db->getCurrentReferralSchoolYear($department), 'term' => $db->getCurrentReferralTerm($department));
+      $response = setResponse($response, 200, $responseBody);   
+
+      return $response;
+    });
+
+
     $app->post('/auth/referralForm', function (ServerRequestInterface $request, ResponseInterface $response)
     {
       $reportDetails = json_decode(file_get_contents("php://input"));
@@ -758,12 +860,15 @@
       $studFName = $reportDetails->studFName;
       $studLName = $reportDetails->studLName;
       $subjName = $reportDetails->subjName;
-      $schoolTerm = $reportDetails->schoolTerm;
-      $schoolYear = $reportDetails->schoolYear;
+      $schoolTerm = $db->getCurrentReferralTerm($department);
+      $schoolYear = $db->getCurrentReferralSchoolYear($department);
       $course = $reportDetails->course;
       $year = $reportDetails->year;
       $reasons = $reportDetails->reason;
       $isActive = 1;
+      $last_name = $db->getFirstName($email);
+      $first_name = $db->getLastName($email);
+      $full_name = $first_name . "  " .$last_name;
 
       if($reasons[6]->check && isset($reasons[6]->value))
       {
@@ -772,34 +877,38 @@
       else
       {
         $refComment = NULL;
-      }
+      }     
 
-      $last_name = $db->getFirstName($email);
-      $first_name = $db->getLastName($email);
-      $full_name = $first_name . "  " .$last_name;
-
-      if($db->insertStudent($studId, $department, $studFName, $studLName, $course, $year) && $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons) && $db->updateReportCount($email))
+      if($schoolTerm && $schoolYear)
       {
-        $emailList = $db->getAdminAccounts($department, $isActive);
+        if($db->insertStudent($studId, $department, $studFName, $studLName, $course, $year) && $db->insertReport($email, $studId, $department, $subjName, $schoolTerm, $schoolYear, $refComment, $reasons) && $db->updateReportCount($email))
+        {
+          $emailList = $db->getAdminAccounts($department, $isActive);
 
-        $subject = "ACE Submitted Report";
-        $link = $_ENV['DOMAIN']->CLIENT_URL;
-        $body =
+          $subject = "ACE Submitted Report";
+          $link = $_ENV['DOMAIN']->CLIENT_URL;
+          $body =
 
-          "Greetings, <br><br>" . $full_name . " submitted a referral!
-          <br><br>To view the submitted report, login <a href=" . $link . ">here</a>.
-          <br><br><br>Thank you.";
+            "Greetings, <br><br>" . $full_name . " submitted a referral!
+            <br><br>To view the submitted report, login <a href=" . $link . ">here</a>.
+            <br><br><br>Thank you.";
 
-        sendEmail($emailList, $subject, $body);
+          sendEmail($emailList, $subject, $body);
 
-        logToFile($email, "has successfully submitted a referral.");
+          logToFile($email, "has successfully submitted a referral.");
 
-        $responseBody = array('successMsg' => "Referral form successfully submitted");
-        $response = setResponse($response, 200, $responseBody);
+          $responseBody = array('successMsg' => "Referral form successfully submitted");
+          $response = setResponse($response, 200, $responseBody);
+        }
+        else
+        {
+          $responseBody = array('errorMsg' => "Failed to submit the referral form");
+          $response = setResponse($response, 400, $responseBody);
+        }
       }
       else
       {
-        $responseBody = array('errorMsg' => "Failed to submit the referral form");
+        $responseBody = array('errorMsg' => "Referral submission is currently not allowed");
         $response = setResponse($response, 400, $responseBody);
       }
 
