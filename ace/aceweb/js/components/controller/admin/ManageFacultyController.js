@@ -316,9 +316,23 @@ angular.module('aceWeb')
 
   $scope.$watch("facultyList.email", function()
   {
-    $scope.mainCheckbox = false;
+    $scope.tempFiltered = '';
 
-    if($scope.facultyAccounts && $scope.filtered.length == $scope.facultyList.email.length)
+    if($scope.filtered)
+    {
+      $scope.tempFiltered = $scope.filtered;
+    }
+    
+    $scope.mainCheckbox = false;
+    var pageSize = $scope.itemsPerPage;
+    var lastPageLength = $scope.tempFiltered.length % $scope.itemsPerPage;
+
+    if($scope.tempFiltered.length <= $scope.currentPage * $scope.itemsPerPage)
+    {
+      pageSize = lastPageLength;
+    }
+
+    if($scope.facultyAccounts && pageSize == $scope.facultyList.email.length)
     {
       $scope.mainCheckbox = true;
     }
@@ -352,16 +366,17 @@ angular.module('aceWeb')
 
     if($scope.currentPage >= 2)
     {
-      startingItem = (($scope.currentPage - 1) * ($scope.itemsPerPage)) - 1;
-    }
-
-    if(lastPageLength == 0)
-    {
-      endingItem = $scope.itemsPerPage;
+      startingItem = (($scope.currentPage - 1) * ($scope.itemsPerPage));
+      endingItem = (($scope.currentPage - 1) * $scope.itemsPerPage);
     }
     else
     {
-      endingItem = lastPageLength;
+      endingItem = (($scope.currentPage) * $scope.itemsPerPage);
+    }
+
+    if($scope.filtered.length <= $scope.currentPage * $scope.itemsPerPage)
+    {
+      endingItem = endingItem + lastPageLength;
     }
 
     if($scope.mainCheckbox)
@@ -371,6 +386,12 @@ angular.module('aceWeb')
         $scope.facultyList.email.push($scope.filtered[counter].email);
       }
     }
+  }
+
+  $scope.resetCheckbox = function ()
+  {
+    $scope.facultyList.email = [];
+    $scope.mainCheckbox = false;
   }
 
   $scope.disableDeleteBtn = function ()

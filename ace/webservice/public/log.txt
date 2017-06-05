@@ -158,3 +158,30 @@
 [2017-06-05 11:47:00] Paul Jao (Administrator) has successfully deleted report/s.
 [2017-06-05 11:47:06] Paul Jao (Administrator) has successfully deleted report/s.
 [2017-06-05 11:47:44] Paul Jao (Administrator) logged in to the system
+[2017-06-05 12:04:03] Super Administrator logged in to the system
+[2017-06-05 12:05:03] Paul Jao (Administrator) logged in to the system
+[2017-06-05 12:44:08] Super Administrator logged in to the system
+[2017-06-05 12:45:15] Super Administrator has successfully created an administrator account.
+[2017-06-05 12:48:09] Super Administrator has successfully created an administrator account.
+[2017-06-05 12:49:41] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 12:50:12] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 12:52:17] Bea Madjus (Administrator) has successfully created a faculty account.
+[2017-06-05 13:30:44] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 13:35:55] Josiah Villanueva (Faculty Member) logged in to the system
+[2017-06-05 13:36:39] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:41:38] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:41:57] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:42:17] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:42:35] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:42:56] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:47:50] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:48:09] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:48:34] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 13:50:49] Josiah Villanueva (Faculty Member) logged in to the system
+[2017-06-05 13:51:12] Josiah Villanueva (Faculty Member) has successfully submitted a referral.
+[2017-06-05 13:51:25] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 14:37:43] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 14:44:36] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 15:38:55] Bea Madjus (Administrator) has successfully deleted report/s.
+[2017-06-05 16:07:28] Bea Madjus (Administrator) logged in to the system
+[2017-06-05 16:18:55] Bea Madjus (Administrator) logged in to the system

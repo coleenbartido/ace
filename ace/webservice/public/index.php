@@ -750,6 +750,8 @@
     {
       $reportDetails = json_decode(file_get_contents("php://input"));
 
+      $db = new DbOperation();
+
       $email = $reportDetails->email;
       $studId = $reportDetails->studId;
       $department = $reportDetails->department;
@@ -771,8 +773,6 @@
       {
         $refComment = NULL;
       }
-
-      $db = new DbOperation();
 
       $last_name = $db->getFirstName($email);
       $first_name = $db->getLastName($email);

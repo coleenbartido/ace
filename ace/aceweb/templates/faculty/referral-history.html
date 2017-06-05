@@ -123,7 +123,7 @@
 		</div> -->
 
 
-<!------------------------------------->
+<!---->
 
 <div class="manageHistory col-md-12 col-md-offset-0 formContainer" >
 
@@ -191,7 +191,7 @@
 
 		<center>
 			<div class="custom-pagination">
-				<ul uib-pagination total-items="(filtered = (subReports | filter: searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+				<ul uib-pagination total-items="(filtered = (subReports | filter: searchBox)).length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="resetCheckbox()"></ul>
 			</div>
 		</center>
 
