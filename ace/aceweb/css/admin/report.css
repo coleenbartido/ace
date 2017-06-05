@@ -66,13 +66,7 @@ body {
     margin-right: 50px;
     -webkit-transition: width .35s ease-in-out;
     transition: width .35s ease-in-out;
-
-    /*background-image: url("img/searchicon.png");
-    background-position: 10px 10px;
-    background-repeat: no-repeat;*/
-
 }
-
 
 .banner .searchBar input[type='text']:focus{
   width: 250px;

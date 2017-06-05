@@ -128,3 +128,7 @@
 [2017-06-05 08:16:25] Paul Jao (Administrator) logged in to the system
 [2017-06-05 09:02:00] Paul Jao (Administrator) logged in to the system
 [2017-06-05 09:12:27] Paul Jao (Administrator) logged in to the system
+[2017-06-05 09:24:29] Paul Jao (Administrator) logged in to the system
+[2017-06-05 09:28:48] Paul Jao (Administrator) logged in to the system
+[2017-06-05 09:34:19] Paul Jao (Administrator) logged in to the system
+[2017-06-05 09:45:10] Paul Jao (Administrator) logged in to the system
