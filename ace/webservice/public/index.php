@@ -1593,8 +1593,7 @@
 
 
 
-    //------------------- GET SUMMARY -----------//
-
+    //------------------- GET SY & term -----------//
     $app->post('/auth/getSYList', function (ServerRequestInterface $request, ResponseInterface $response)
     {
       $accountDetails = json_decode(file_get_contents("php://input"));
@@ -1605,7 +1604,7 @@
       $department = $db->getDepartment($email);
       $status = 1;
 
-      $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)));
+      $responseBody = array('SYList' => json_encode($db->getSYList($department, $status)), 'term' => $db->getCurrentTerm($department, $status));
       $response = setResponse($response, 200, $responseBody);
 
       return $response;
@@ -1621,10 +1620,11 @@
 
       $email = $accountDetails->email;
       $schoolYear = $accountDetails->schoolYear;
+      $term = $accountDetails->term;
       $department = $db->getDepartment($email);
       $status = 1;
 
-      $responseBody = array('department' => $department, 'termData' => json_encode($db->getTermData($department, $status, $schoolYear)), 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear)));
+      $responseBody = array('department' => $department, 'programData' => json_encode($db->getProgramData($department, $status, $schoolYear, $term)), 'levelData' => json_encode($db->getLevelData($department, $status, $schoolYear, $term)), 'reasonData' => json_encode($db->getReasonData($department, $status, $schoolYear, $term)), 'statusData' => json_encode($db->getStatusData($department, $status, $schoolYear, $term)));
 
       $response = setResponse($response, 200, $responseBody);
       return $response;

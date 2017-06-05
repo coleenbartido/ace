@@ -958,6 +958,18 @@ class DbOperation
     }
 
 
+    public function getCurrentTerm($department, $status)
+    {
+        $stmt = $this->con->prepare("SELECT term FROM report WHERE department_id=? AND status=? ORDER BY report_date DESC LIMIT 1");
+        $stmt->bind_param("ii", $department, $status);
+        $stmt->execute();
+        $result= $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $result['term'];
+    }
+
+
     public function getTermData($department, $status, $schoolYear)
     {
       $terms = array(1, 2, 3);
@@ -986,45 +998,45 @@ class DbOperation
     }
 
 
-    public function getProgramData($department, $status, $schoolYear)
+    public function getProgramData($department, $status, $schoolYear, $term)
     {
       $programId = array(1, 2, 3, 4, 5, 6, 7, 8);
 
       if($department == 1)
       {
-        $stmt = $this->con->prepare("SELECT (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as HSSCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as ABMCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as CPCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as AniCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as FDCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as MACount");
+        $stmt = $this->con->prepare("SELECT (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as HSSCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as ABMCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as CPCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as AniCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as FDCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as MACount");
 
-        $stmt->bind_param("iisiiisiiisiiisiiisiiisi", $department, $status, $schoolYear, $programId[0],
-                                                      $department, $status, $schoolYear, $programId[1],
-                                                      $department, $status, $schoolYear, $programId[2],
-                                                      $department, $status, $schoolYear, $programId[3],
-                                                      $department, $status, $schoolYear, $programId[4],
-                                                      $department, $status, $schoolYear, $programId[5]);
+        $stmt->bind_param("iisiiiisiiiisiiiisiiiisiiiisii", $department, $status, $schoolYear, $term, $programId[0],
+                                                            $department, $status, $schoolYear, $term, $programId[1],
+                                                            $department, $status, $schoolYear, $term, $programId[2],
+                                                            $department, $status, $schoolYear, $term, $programId[3],
+                                                            $department, $status, $schoolYear, $term, $programId[4],
+                                                            $department, $status, $schoolYear, $term, $programId[5]);
       }
       else
       {
-        $stmt = $this->con->prepare("SELECT (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as SECount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as GDCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as WDCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as AniCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as MMACount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as FDCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as REMCount,
-                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.program_id=?) as BACount");
+        $stmt = $this->con->prepare("SELECT (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as SECount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as GDCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as WDCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as AniCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as MMACount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as FDCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as REMCount,
+                                            (SELECT COUNT(a.report_count) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.program_id=?) as BACount");
 
-        $stmt->bind_param("iisiiisiiisiiisiiisiiisiiisiiisi", $department, $status, $schoolYear, $programId[0],
-                                                              $department, $status, $schoolYear, $programId[1],
-                                                              $department, $status, $schoolYear, $programId[2],
-                                                              $department, $status, $schoolYear, $programId[3],
-                                                              $department, $status, $schoolYear, $programId[4],
-                                                              $department, $status, $schoolYear, $programId[5],
-                                                              $department, $status, $schoolYear, $programId[6],
-                                                              $department, $status, $schoolYear, $programId[7]);
+        $stmt->bind_param("iisiiiisiiiisiiiisiiiisiiiisiiiisiiiisii", $department, $status, $schoolYear, $term, $programId[0],
+                                                                      $department, $status, $schoolYear, $term, $programId[1],
+                                                                      $department, $status, $schoolYear, $term, $programId[2],
+                                                                      $department, $status, $schoolYear, $term, $programId[3],
+                                                                      $department, $status, $schoolYear, $term, $programId[4],
+                                                                      $department, $status, $schoolYear, $term, $programId[5],
+                                                                      $department, $status, $schoolYear, $term, $programId[6],
+                                                                      $department, $status, $schoolYear, $term, $programId[7]);
       }
 
       $stmt->execute();
@@ -1040,25 +1052,25 @@ class DbOperation
     }
 
 
-    public function getLevelData($department, $status, $schoolYear)
+    public function getLevelData($department, $status, $schoolYear, $term)
     {
       $level = array(1, 2, 3, 4);
 
       if($department == 1)
       {
-        $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.level=?) as gradeElevenCount,
-                                            (SELECT COUNT(*) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.level=?) as gradeTwelveCount");
+        $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.level=?) as gradeElevenCount,
+                                            (SELECT COUNT(*) FROM report c INNER JOIN shs_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.level=?) as gradeTwelveCount");
 
-        $stmt->bind_param("iisiiisi", $department, $status, $schoolYear, $level[0], $department, $status, $schoolYear, $level[1]);
+        $stmt->bind_param("iisiiiisii", $department, $status, $schoolYear, $term, $level[0], $department, $status, $schoolYear, $term, $level[1]);
       }
       else
       {
-        $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.level=?) as firstYearCount,
-                                            (SELECT COUNT(*) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.level=?) as secondYearCount,
-                                            (SELECT COUNT(*) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.level=?) as thirdYearCount,
-                                            (SELECT COUNT(*) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.level=?) as fourthYearCount");
+        $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.level=?) as firstYearCount,
+                                            (SELECT COUNT(*) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.level=?) as secondYearCount,
+                                            (SELECT COUNT(*) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.level=?) as thirdYearCount,
+                                            (SELECT COUNT(*) FROM report c INNER JOIN college_student a ON c.student_id = a.student_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.level=?) as fourthYearCount");
 
-        $stmt->bind_param("iisiiisiiisiiisi", $department, $status, $schoolYear, $level[0], $department, $status, $schoolYear, $level[1], $department, $status, $schoolYear, $level[2], $department, $status, $schoolYear, $level[3]);
+        $stmt->bind_param("iisiiiisiiiisiiiisii", $department, $status, $schoolYear, $term, $level[0], $department, $status, $schoolYear, $term, $level[1], $department, $status, $schoolYear, $term, $level[2], $department, $status, $schoolYear, $term, $level[3]);
       }
 
       $stmt->execute();
@@ -1074,20 +1086,20 @@ class DbOperation
     }
 
 
-    public function getReasonData($department, $status, $schoolYear)
+    public function getReasonData($department, $status, $schoolYear, $term)
     {
       $refReason = array(1, 2, 3, 4, 5, 6);
 
 
-      $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.referral_reason_id=?) as reasonOneCount,
-                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.referral_reason_id=?) as reasonTwoCount,
-                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.referral_reason_id=?) as reasonThreeCount,
-                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.referral_reason_id=?) as reasonFourCount,
-                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.referral_reason_id=?) as reasonFiveCount,
-                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND a.referral_reason_id=?) as reasonSixCount,
-                                          (SELECT COUNT(*) FROM report WHERE department_id=? AND status=? AND school_year=? AND referral_comment IS NOT NULL) as otherReasonCount");
+      $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.referral_reason_id=?) as reasonOneCount,
+                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.referral_reason_id=?) as reasonTwoCount,
+                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.referral_reason_id=?) as reasonThreeCount,
+                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.referral_reason_id=?) as reasonFourCount,
+                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.referral_reason_id=?) as reasonFiveCount,
+                                          (SELECT COUNT(*) FROM report c INNER JOIN reason a ON c.report_id = a.report_id WHERE c.department_id=? AND c.status=? AND c.school_year=? AND c.term=? AND a.referral_reason_id=?) as reasonSixCount,
+                                          (SELECT COUNT(*) FROM report WHERE department_id=? AND status=? AND school_year=? AND term=? AND referral_comment IS NOT NULL) as otherReasonCount");
 
-      $stmt->bind_param("iisiiisiiisiiisiiisiiisiiis", $department, $status, $schoolYear, $refReason[0], $department, $status, $schoolYear, $refReason[1], $department, $status, $schoolYear, $refReason[2], $department, $status, $schoolYear, $refReason[3], $department, $status, $schoolYear, $refReason[4], $department, $status, $schoolYear, $refReason[5], $department, $status, $schoolYear);
+      $stmt->bind_param("iisiiiisiiiisiiiisiiiisiiiisiiiisi", $department, $status, $schoolYear, $term, $refReason[0], $department, $status, $schoolYear, $term, $refReason[1], $department, $status, $schoolYear, $term, $refReason[2], $department, $status, $schoolYear, $term, $refReason[3], $department, $status, $schoolYear, $term, $refReason[4], $department, $status, $schoolYear, $term, $refReason[5], $department, $status, $schoolYear, $term);
       $stmt->execute();
       $result= $stmt->get_result();
       $arrResult = array();
@@ -1101,12 +1113,12 @@ class DbOperation
     }
 
 
-    public function getStatusData($department, $status, $schoolYear)
+    public function getStatusData($department, $status, $schoolYear, $term)
     {
       $reportStatus = array(1, 2, 3);
 
-      $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report WHERE report_status_id=? AND department_id=? AND status=? AND school_year=?) as uncounseledCount, (SELECT COUNT(*) FROM report WHERE report_status_id=? AND department_id=? AND status=? AND school_year=?) as inProgressCount, (SELECT COUNT(*) FROM report WHERE report_status_id=? AND department_id=? AND status=? AND school_year=?) as counseledCount");
-      $stmt->bind_param("iiisiiisiiis", $reportStatus[0], $department, $status, $schoolYear, $reportStatus[1], $department, $status, $schoolYear, $reportStatus[2], $department, $status, $schoolYear);
+      $stmt = $this->con->prepare("SELECT (SELECT COUNT(*) FROM report WHERE report_status_id=? AND department_id=? AND status=? AND school_year=? AND term=?) as uncounseledCount, (SELECT COUNT(*) FROM report WHERE report_status_id=? AND department_id=? AND status=? AND school_year=? AND term=?) as inProgressCount, (SELECT COUNT(*) FROM report WHERE report_status_id=? AND department_id=? AND status=? AND school_year=? AND term=?) as counseledCount");
+      $stmt->bind_param("iiisiiiisiiiisi", $reportStatus[0], $department, $status, $schoolYear, $term, $reportStatus[1], $department, $status, $schoolYear, $term, $reportStatus[2], $department, $status, $schoolYear, $term);
       $stmt->execute();
       $result= $stmt->get_result();
       $arrResult = array();

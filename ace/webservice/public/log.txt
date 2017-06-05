@@ -105,3 +105,24 @@
 [2017-06-04 17:20:07] Paul Jao (Administrator) logged in to the system
 [2017-06-04 17:22:19] Paul Jao (Administrator) logged in to the system
 [2017-06-04 17:25:07] Paul Jao (Administrator) logged in to the system
+[2017-06-04 18:09:56] Paul Jao (Administrator) logged in to the system
+[2017-06-04 18:11:59] Paul Jao (Administrator) logged in to the system
+[2017-06-04 18:37:53] Paul Jao (Administrator) logged in to the system
+[2017-06-04 19:04:31] Paul Jao (Administrator) logged in to the system
+[2017-06-04 19:12:39] Paul Jao (Administrator) logged in to the system
+[2017-06-04 20:21:54] Paul Jao (Administrator) logged in to the system
+[2017-06-04 20:41:49] Paul Jao (Administrator) logged in to the system
+[2017-06-04 21:13:31] Bea Madjus (Faculty Member) logged in to the system
+[2017-06-04 21:14:44] Bea Madjus (Faculty Member) has successfully submitted a referral.
+[2017-06-04 21:15:04] Paul Jao (Administrator) logged in to the system
+[2017-06-04 21:16:01] Bea Madjus (Faculty Member) logged in to the system
+[2017-06-04 21:16:23] Bea Madjus (Faculty Member) has successfully submitted a referral.
+[2017-06-04 21:17:08] Paul Jao (Administrator) logged in to the system
+[2017-06-04 21:41:45] Paul Jao (Administrator) logged in to the system
+[2017-06-04 21:42:55] Bea Madjus (Faculty Member) logged in to the system
+[2017-06-04 21:43:20] Bea Madjus (Faculty Member) has successfully submitted a referral.
+[2017-06-04 21:43:42] Paul Jao (Administrator) logged in to the system
+[2017-06-04 21:45:49] Paul Jao (Administrator) logged in to the system
+[2017-06-05 08:07:46] Paul Jao (Administrator) logged in to the system
+[2017-06-05 08:15:45] Paul Jao (Administrator) logged in to the system
+[2017-06-05 08:16:25] Paul Jao (Administrator) logged in to the system

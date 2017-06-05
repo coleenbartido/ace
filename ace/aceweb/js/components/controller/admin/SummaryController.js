@@ -27,6 +27,7 @@ angular.module('aceWeb')
       if($scope.SYList.length != 0)
       {
         $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
+        $scope.selectedTerm = response.data.term;
 
         $scope.getSummaryData();
       }
@@ -54,7 +55,8 @@ angular.module('aceWeb')
     var userDetails =
     {
       'email' : AuthService.getEmail(),
-      'schoolYear' : $scope.selectedSY
+      'schoolYear' : $scope.selectedSY,
+      'term' : $scope.selectedTerm
     }
 
     $http({
@@ -69,7 +71,6 @@ angular.module('aceWeb')
       console.log(response);
 
       var dept = response.data.department;
-      var termDataObj = JSON.parse(response.data.termData);
       var programDataObj = JSON.parse(response.data.programData);
       var levelDataObj = JSON.parse(response.data.levelData);
       var reasonDataObj = JSON.parse(response.data.reasonData);
@@ -92,17 +93,15 @@ angular.module('aceWeb')
         $scope.termLabels = ['First Term','Second Term','Third Term'];
       }
     
-      $scope.reasonLabels = ['Absent or Late','Underachieving','Failing','Plans to Transfer','Violent/Disruptive','Emotional Distress','Others'];
+      $scope.reasonLabels = [['','Habitually Absent','or Late'],'Underachieving','Failing','Plans to Transfer','Violent/Disruptive','Emotional Distress','Others'];
       $scope.statusLabels = ['Uncounseled','In Progress','Counseled'];
 
       //data
-      $scope.termData = [[]];
       $scope.programData = [[]];
       $scope.levelData = [[]];
       $scope.reasonData = [[]];
       $scope.statusData = [[]];
 
-      convertToArray(termDataObj[0], $scope.termData[0]);
       convertToArray(programDataObj[0], $scope.programData[0]);
       convertToArray(levelDataObj[0], $scope.levelData[0]);
       convertToArray(reasonDataObj[0], $scope.reasonData[0]);
@@ -112,7 +111,6 @@ angular.module('aceWeb')
       $scope.series = ['Number of reports'];
 
       //options
-      $scope.termOptions = getOption("Term", $scope.termData[0]);
       $scope.programOptions = getOption("Program", $scope.programData[0]);
       $scope.levelOptions = getOption("Level", $scope.levelData[0]);
       $scope.reasonOptions = getOption("Reason", $scope.reasonData[0]);
@@ -250,7 +248,7 @@ angular.module('aceWeb')
     context.fillText($scope.currentDate, canvas.width * 0.40, canvas.height * 0.18);
 
     elemRef.href = canvas.toDataURL('image/png', 1.0);
-    elemRef.download = chartId + '_chart_' + $scope.currentDateNum + '_' + sy[0] + sy[1] + '.png';
+    elemRef.download = chartId + '_chart_' + sy[0] + sy[1] + '_' + $scope.selectedTerm + '.png';
   }
 
   //download pdf function
@@ -289,7 +287,7 @@ angular.module('aceWeb')
     var doc = new jsPDF('landscape');
         
     doc.addImage(myImage, 'JPEG', 23, 15, 250, 160);
-    doc.save(chartId + '_chart_' + $scope.currentDateNum + '_' + sy[0] + sy[1] + '.pdf');  
+    doc.save(chartId + '_chart_' + sy[0] + sy[1] + '_' + $scope.selectedTerm + '.pdf');  
   }
 
 })
