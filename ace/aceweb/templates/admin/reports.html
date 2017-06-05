@@ -29,6 +29,12 @@
 				                </ul>
 							</div>
 
+							<div class="action-dropdown col-md-1">
+								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="modal" data-target="#referralActivationModal">
+							    	Enable Referral
+							  	</button>
+							</div>
+
 							<div class="schoolYear col-md-2">
 								<select ng-model="selectedSY" ng-change="updateSYList()">
 							    	<option ng-show="SYList.length > 0" ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
@@ -40,54 +46,49 @@
 			<img src="img/header1.png" class="img-responsive">
 		</div>
 
+				<!-- MESSAGE MODAL -->
+				<div id="messageModal" class="modal draggable" role="dialog">
+						<div class="modal-dialog">
 
+							<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
 
-			<!-- MESSAGE MODAL -->
+										<p class="modal-title custom-header-color custom-modal-title">{{subject}}</p>
+									</div>
 
-			<div id="messageModal" class="modal draggable" role="dialog">
-					<div class="modal-dialog">
+									<div class="modal-body">
 
-						<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+										<form name="messageFacultyForm" class="form-horizontal custom-form" role="form" ng-submit="sendEmail(selectedReport, messageFacultyForm)" novalidate>
 
-									<p class="modal-title custom-header-color custom-modal-title">{{subject}}</p>
-								</div>
+											<div class="form-group">
+										        <label  class="col-md-12 control-label" for="receiver">To</label>
+										        <div class="col-md-12">
+													<input type="text" class="form-control" id="receiver" name="receiver" ng-model="receiver" readonly required/>
+										        </div>
+										    </div>
 
-								<div class="modal-body">
+										    <div class="form-group">
+										        <label  class="col-md-12 control-label" for="composeEmail">Message</label>
+										        <div class="col-md-12">
+													<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}" ng-readonly="isSending" placeholder="Write a message..." maxlength="500" ng-trim="false" required></textarea>
+													<p class="pull-right">{{composeEmail.length}}/500</p>
+										        </div>
+										    </div>
 
-									<form name="messageFacultyForm" class="form-horizontal custom-form" role="form" ng-submit="sendEmail(selectedReport, messageFacultyForm)" novalidate>
+											<div class="modalBtn">
+										        <button type="submit" class="btn btn-primary" ng-disabled="isSending">{{sendBtn}}</button>
+										    </div>
 
-										<div class="form-group">
-									        <label  class="col-md-12 control-label" for="receiver">To</label>
-									        <div class="col-md-12">
-												<input type="text" class="form-control" id="receiver" name="receiver" ng-model="receiver" readonly required/>
-									        </div>
-									    </div>
+										</form>
+									</div>
 
-									    <div class="form-group">
-									        <label  class="col-md-12 control-label" for="composeEmail">Message</label>
-									        <div class="col-md-12">
-												<textarea id="comment" rows="5" name="composeEmail" ng-model="composeEmail" ng-model-options="{allowInvalid: true}" ng-readonly="isSending" placeholder="Write a message..." maxlength="500" ng-trim="false" required></textarea>
-												<p class="pull-right">{{composeEmail.length}}/500</p>
-									        </div>
-									    </div>
-
-										<div class="modalBtn">
-									        <button type="submit" class="btn btn-primary" ng-disabled="isSending">{{sendBtn}}</button>
-									    </div>
-
-									</form>
-								</div>
+							</div>
 
 						</div>
+				</div><!-- modal closing tag -->
 
-					</div>
-			</div><!-- modal closing tag -->
-
-
-			<!-- VIEW REPORT -->
-
+				<!-- VIEW REPORT -->
 				<div id="viewModal" class="modal fade" role="dialog">
 						<div class="modal-dialog">
 
@@ -179,10 +180,52 @@
 						</div>
 				</div><!-- modal closing tag -->
 
-
-			<!-- COUNSELOR NOTES -->
-
+				<!-- COUNSELOR NOTES -->
 				<div id="noteModal" class="modal fade" role="dialog">
+						<div class="modal-dialog">
+
+							<div class="modal-content">
+								<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+										<h4 class="modal-title custom-header-color">Update Report Status</h4>
+								</div>
+								<div class="modal-body">
+									<form name="reportUpdateForm" class="form-horizontal custom-form" role="form" ng-submit="updateReportStatus(selectedReport, reportUpdateForm)" novalidate>
+
+										<div class="form-group">
+								            <label  class="col-md-12 control-label" for="status">Report Status</label>
+								            <div class="col-md-12">
+								              <select class="form-control" name="status" id="status" ng-model="status" required>
+												<option value="1">Uncounseled</option>
+												<option value="2">In Progress</option>
+												<option value="3">Counseled</option>
+											  </select>
+								            </div>
+								        </div>
+
+										<div class="form-group">
+								            <label  class="col-md-12 control-label" for="comment">Counselor's Note</label>
+								            <div class="col-md-12">
+								              <textarea id="comment" rows="5" name="comment" ng-model="comment" placeholder="Write a comment..." maxlength="255" ng-trim="false"></textarea>
+								              <p class="pull-right">{{comment.length}}/255</p>
+								            </div>
+								        </div>
+
+								        <div class="modalBtn">
+								            <button type="submit" class="btn btn-primary" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
+								        </div>
+
+									</form>
+
+								</div>
+
+							</div>
+
+						</div>
+				</div><!-- modal closing tag -->
+
+				<!-- COUNSELOR NOTES -->
+				<div id="referralActivationModal" class="modal fade" role="dialog">
 						<div class="modal-dialog">
 
 							<div class="modal-content">

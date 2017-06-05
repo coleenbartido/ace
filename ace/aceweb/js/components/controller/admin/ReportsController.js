@@ -103,7 +103,7 @@ angular.module('aceWeb')
     {
       $scope.tempFiltered = $scope.filtered;
     }
-    
+
     $scope.mainCheckbox = false;
     var pageSize = $scope.itemsPerPage;
     var lastPageLength = $scope.tempFiltered.length % $scope.itemsPerPage;
@@ -142,22 +142,17 @@ angular.module('aceWeb')
   {
     $scope.reportList.report_id = [];
     var startingItem = 0;
-    var endingItem = 0;
+    var endingItem = $scope.currentPage * $scope.itemsPerPage;
     var lastPageLength = $scope.filtered.length % $scope.itemsPerPage;
 
     if($scope.currentPage >= 2)
     {
-      startingItem = (($scope.currentPage - 1) * ($scope.itemsPerPage));
-      endingItem = (($scope.currentPage - 1) * $scope.itemsPerPage);
-    }
-    else
-    {
-      endingItem = (($scope.currentPage) * $scope.itemsPerPage);
+      startingItem = ($scope.currentPage-1) * $scope.itemsPerPage;    
     }
 
     if($scope.filtered.length <= $scope.currentPage * $scope.itemsPerPage)
     {
-      endingItem = endingItem + lastPageLength;
+      endingItem = (($scope.currentPage-1) * $scope.itemsPerPage) + lastPageLength;
     }
 
     if($scope.mainCheckbox)

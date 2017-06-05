@@ -361,22 +361,17 @@ angular.module('aceWeb')
   {
     $scope.facultyList.email = [];
     var startingItem = 0;
-    var endingItem = 0;
+    var endingItem = $scope.currentPage * $scope.itemsPerPage;
     var lastPageLength = $scope.filtered.length % $scope.itemsPerPage;
 
     if($scope.currentPage >= 2)
     {
-      startingItem = (($scope.currentPage - 1) * ($scope.itemsPerPage));
-      endingItem = (($scope.currentPage - 1) * $scope.itemsPerPage);
-    }
-    else
-    {
-      endingItem = (($scope.currentPage) * $scope.itemsPerPage);
+      startingItem = ($scope.currentPage-1) * $scope.itemsPerPage;    
     }
 
     if($scope.filtered.length <= $scope.currentPage * $scope.itemsPerPage)
     {
-      endingItem = endingItem + lastPageLength;
+      endingItem = (($scope.currentPage-1) * $scope.itemsPerPage) + lastPageLength;
     }
 
     if($scope.mainCheckbox)
