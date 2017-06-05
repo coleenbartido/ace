@@ -47,11 +47,9 @@ angular.module('aceWeb')
   {
     $scope.refForm.year.$setUntouched();
     $scope.refForm.course.$setUntouched();
-    $scope.refForm.schoolTerm.$setUntouched();
 
     $scope.year = undefined;
     $scope.course = undefined;
-    $scope.schoolTerm = undefined;
   }
 
   $scope.$watch("reasons", function(n, o)
@@ -240,16 +238,11 @@ angular.module('aceWeb')
     $scope.year = '' + $item.level;
   };
 
-
-//------------------------------------------
-
   $scope.resetForm = function ()
   {
     $scope.refForm.$setUntouched();
     $scope.refForm.$setPristine();
 
-    $scope.schoolYear = undefined;
-    $scope.schoolTerm = undefined;
     $scope.studId = undefined;
     $scope.studFName = undefined;
     $scope.studLName = undefined;
