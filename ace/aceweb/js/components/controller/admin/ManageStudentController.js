@@ -90,10 +90,27 @@ angular.module('aceWeb')
   $scope.controlCheckbox = function ()
   {
     $scope.studentList.student_id = [];
+    var startingItem = 0;
+    var endingItem = 0;
+    var lastPageLength = $scope.filtered.length % $scope.itemsPerPage;
+
+    if($scope.currentPage >= 2)
+    {
+      startingItem = (($scope.currentPage - 1) * ($scope.itemsPerPage)) - 1;
+    }
+
+    if(lastPageLength == 0)
+    {
+      endingItem = $scope.itemsPerPage;
+    }
+    else
+    {
+      endingItem = lastPageLength;
+    }
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < $scope.filtered.length; counter++)
+      for(var counter = startingItem; counter < endingItem; counter++)
       {
         $scope.studentList.student_id.push($scope.filtered[counter].student_id);
       }

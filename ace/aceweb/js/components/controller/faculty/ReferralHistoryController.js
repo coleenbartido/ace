@@ -125,10 +125,27 @@ angular.module('aceWeb')
   $scope.controlCheckbox = function ()
   {
     $scope.reportList.report_id = [];
+    var startingItem = 0;
+    var endingItem = 0;
+    var lastPageLength = $scope.filtered.length % $scope.itemsPerPage;
+
+    if($scope.currentPage >= 2)
+    {
+      startingItem = (($scope.currentPage - 1) * ($scope.itemsPerPage)) - 1;
+    }
+
+    if(lastPageLength == 0)
+    {
+      endingItem = $scope.itemsPerPage;
+    }
+    else
+    {
+      endingItem = lastPageLength;
+    }
 
     if($scope.mainCheckbox)
     {
-      for(var counter=0; counter < $scope.filtered.length; counter++)
+      for(var counter = startingItem; counter < endingItem; counter++)
       {
         $scope.reportList.report_id.push($scope.filtered[counter].report_id);
       }

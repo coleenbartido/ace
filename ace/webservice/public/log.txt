@@ -132,3 +132,8 @@
 [2017-06-05 09:28:48] Paul Jao (Administrator) logged in to the system
 [2017-06-05 09:34:19] Paul Jao (Administrator) logged in to the system
 [2017-06-05 09:45:10] Paul Jao (Administrator) logged in to the system
+[2017-06-05 10:12:26] Paul Jao (Administrator) logged in to the system
+[2017-06-05 10:21:57] Paul Jao (Administrator) logged in to the system
+[2017-06-05 10:22:48] Paul Jao (Administrator) has successfully deleted report/s.
+[2017-06-05 10:23:24] Super Administrator logged in to the system
+[2017-06-05 10:24:37] Bea Madjus (Faculty Member) logged in to the system
