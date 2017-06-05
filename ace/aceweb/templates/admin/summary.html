@@ -13,15 +13,15 @@
   			<div class="schoolYear col-md-2">
                 <select ng-model="selectedSY" ng-change="getSummaryData()">
             	    <option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
-            	   
+            	   	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
             	</select>
   			</div>
-
-  			<div class="schoolYear col-md-2">
+  	
+  			<div class="schoolYear col-md-2" ng-show="!isEmptySYList">
                 <select ng-model="selectedTerm" ng-change="getSummaryData()">
-            	    <option ng-selected="selectedTerm == 1" ng-value="1">First Term</option>
-            	    <option ng-selected="selectedTerm == 2" ng-value="2">Second Term</option>
-            	    <option ng-selected="selectedTerm == 3" ng-value="3">Third Term</option>
+            	    <option value="1">First Term</option>
+            	    <option value="2">Second Term</option>
+            	    <option value="3">Third Term</option>
             	</select>
   			</div>
   		</div>

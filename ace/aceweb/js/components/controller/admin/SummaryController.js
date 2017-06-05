@@ -23,18 +23,15 @@ angular.module('aceWeb')
       console.log(response);
 
       $scope.SYList = JSON.parse(response.data.SYList);
-
+      
       if($scope.SYList.length != 0)
       {
         $scope.selectedSY = $scope.SYList[$scope.SYList.length-1].school_year;
-        $scope.selectedTerm = response.data.term;
+        $scope.selectedTerm = response.data.term + "";  
+        $scope.isEmptySYList = false;   
+      }
 
-        $scope.getSummaryData();
-      }
-      else
-      {
-        $scope.isEmptySYList = true;
-      }
+      $scope.getSummaryData();
       $scope.isLoading = false;
     },
     function(response)
@@ -118,6 +115,8 @@ angular.module('aceWeb')
     },
     function(response)
     {
+      //for checking
+      console.log(response);
 
     })
     .finally(function()
@@ -130,9 +129,11 @@ angular.module('aceWeb')
   {
     $scope.isLoading = true;
     $scope.isLoadingChart = false;
+    $scope.selectedSY = null;
+    $scope.selectedTerm = null;
     $scope.currentDate = Date.today().toString('dddd, MMMM d, yyyy');
     $scope.currentDateNum = Date.today().toString('MMddyy');
-    $scope.isEmptySYList = false;
+    $scope.isEmptySYList = true;
 
     $scope.getSY();
 

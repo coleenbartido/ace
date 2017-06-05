@@ -948,10 +948,6 @@ class DbOperation
                 $arrResult[] = $myrow;
             }
         }
-        else
-        {
-            $arrResult[]['school_year'] = "No Records";
-        }
 
         $stmt->close();
         return $arrResult;
