@@ -78,6 +78,7 @@ angular.module('aceWeb')
     $scope.reportList = {};
     $scope.reportList.report_id = [];
     $scope.mainCheckbox = false;
+    $scope.userDepartment = AuthService.getDepartment();
 
     //for pagination
     $scope.maxSize = 5;

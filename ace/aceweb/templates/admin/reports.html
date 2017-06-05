@@ -256,9 +256,9 @@
 								            <div class="col-md-12">
 								              <select class="form-control" name="term" id="term" ng-model="term" required>
 								              	<option disabled selected value> -- Select Term -- </option>
-												<option value="1">First Term</option>
-												<option value="2">Second Term</option>
-												<option value="3">Third Term</option>
+												<option ng-if="userDepartment == 'College' || userDepartment == 'Senior High School'" value="1">First Term</option>
+												<option ng-if="userDepartment == 'College' || userDepartment == 'Senior High School'" value="2">Second Term</option>
+												<option ng-if="userDepartment == 'College'" value="3">Third Term</option>
 											  </select>
 								            </div>
 								        </div>
