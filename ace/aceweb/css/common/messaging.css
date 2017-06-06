@@ -190,19 +190,22 @@ body {
   border-bottom: gray solid 1px;
 }
 
-
 .modal .modal-dialog label{
   font-size: 14px;
 }
-
 
 .modal .modal-dialog .modal-body{
   font-size: 14px;
 }
 
+.modal .modal-dialog .modal-body .date-text{
+  font-size: 12.5px;
+  padding-right: 10px;
+}
+
 .modal .modal-dialog .modal-body #scrollableDiv{
-  overflow-y: scroll;
-  height: 400px;
+  overflow-y: auto;
+  max-height: 360px;
 }
 
 
