@@ -29,26 +29,26 @@
 				                </ul>
 							</div>
 
-							<div class="action-dropdown col-md-1">
-								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" ng-click="showActivationModal()">
-							    	Referral Submission
-							  	</button>
-							</div>
-
-							<div class="schoolYear col-md-2">
+							<div class="schoolYear col-md-1">
 								<select ng-model="selectedSY" ng-change="updateSYList()">
 							    	<option ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
 							    	<option ng-show="!selectedSY" value="" selected="selected">No Records</option>
 							    </select>
 							</div>
 
-							<div class="schoolYear col-md-2" ng-show="selectedSY">
+							<div class="school-term col-md-1" ng-show="selectedSY">
 				                <select ng-model="selectedTerm" ng-change="updateSYList()">
 				            	    <option ng-if="userDepartment == 'College' || userDepartment == 'Senior High School'" value="1">First Term</option>
 				            	    <option ng-if="userDepartment == 'College' || userDepartment == 'Senior High School'" value="2">Second Term</option>
 				            	    <option ng-if="userDepartment == 'College'" value="3">Third Term</option>
 				            	</select>
 				  			</div>
+
+							<div class="action-dropdown col-md-1 col-md-offset-3">
+								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" ng-click="showActivationModal()">
+							    	<i class="fa fa-plus" aria-hidden="true"></i> Set Referral Submission
+							  	</button>
+							</div>
 			</div>
 
 			<img src="img/header1.png" class="img-responsive">
@@ -62,7 +62,7 @@
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
 
-										<p class="modal-title custom-header-color custom-modal-title">{{subject}}</p>
+										<h3 class="modal-title custom-header-color custom-modal-title"><i class="fa fa-envelope-o" aria-hidden="true"></i> {{subject}}</h3>
 									</div>
 
 									<div class="modal-body">
@@ -84,8 +84,8 @@
 										        </div>
 										    </div>
 
-											<div class="modalBtn">
-										        <button type="submit" class="btn btn-primary" ng-disabled="isSending">{{sendBtn}}</button>
+											<div class="sendBtn">
+										        <button type="submit" class="btn btn-primary pull-right" ng-disabled="isSending">{{sendBtn}}</button>
 										    </div>
 
 										</form>
@@ -97,7 +97,7 @@
 				</div><!-- modal closing tag -->
 
 				<!-- VIEW REPORT -->
-				<div id="viewModal" class="modal fade" role="dialog">
+				<div id="viewModal" class="modal fade report-details" role="dialog">
 						<div class="modal-dialog">
 
 							<div class="modal-content">
@@ -195,7 +195,7 @@
 							<div class="modal-content">
 								<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-										<h4 class="modal-title custom-header-color">Update Report Status</h4>
+										<h3 class="modal-title custom-header-color"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update Report Status: {{ selectedReport.student_fname }} {{ selectedReport.student_lname }} </h3>
 								</div>
 								<div class="modal-body">
 									<form name="reportUpdateForm" class="form-horizontal custom-form" role="form" ng-submit="updateReportStatus(selectedReport, reportUpdateForm)" novalidate>
@@ -219,8 +219,8 @@
 								            </div>
 								        </div>
 
-								        <div class="modalBtn">
-								            <button type="submit" class="btn btn-primary" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
+								        <div class="updateBtn">
+								            <button type="submit" class="btn btn-primary pull-right" ng-disabled="disableUpdateBtn">{{updateBtn}}</button>
 								        </div>
 
 									</form>
@@ -239,7 +239,7 @@
 							<div class="modal-content">
 								<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-										<h4 class="modal-title custom-header-color">Referral Submission</h4>
+										<h3 class="modal-title custom-header-color"><i class="fa fa-plus" aria-hidden="true"></i> Set Referral Submission</h3>
 								</div>
 								<div class="modal-body">
 									<form name="activateReferralForm" class="form-horizontal custom-form" role="form" novalidate>
@@ -258,7 +258,7 @@
 								        <div ng-messages="activateReferralForm.schoolYear.$error" ng-show="activateReferralForm.$submitted">
 							              <p class="invalid-text" ng-message="required">This field is required</p>
 							            </div>
-										
+
 										<div class="form-group">
 								            <label  class="col-md-12 control-label" for="term">Term</label>
 								            <div class="col-md-12">
@@ -296,8 +296,9 @@
 								<div class="col-md-12 panel-body manageContainer table-responsive">
 
 										<table class="col-md-12 table table-condensed table-hover ">
-											<col width="30">
-											<col width="60">
+											<col width="10">
+											<col width="20">
+											<col width="80">
 											<col width="120">
 											<col width="120">
 											<col width="150">
@@ -308,15 +309,9 @@
 												<tr class="header">
 
 													<th class="checkBlock">
-
-															<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"> <a class="fa fa-angle-down dropdown-toggle" id="dropdownSelect" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="true"/>
-															<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-																	<li><a href="javascript:void(0)" ng-click="selectAllRead()">All read</a></li>
-																	<li><a href="javascript:void(0)" ng-click="selectAllUnread()">All unread</a></li>
-															</ul>
-
+															<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
 													</th>
-
+													<th></th>
 													<th>DATE</th>
 													<th>REPORTED BY</th>
 													<th>NAME</th>
@@ -329,7 +324,10 @@
 											<tbody>
 													<tr class="listReports" ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_read == 1 ? 'info' : 'success'">
 														<td>
-																<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick><i class="fa fa-envelope" aria-hidden="true" ng-show="report.is_read == 0 "></i>
+																<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick>
+														</td>
+														<td>
+															<i class="fa fa-envelope" aria-hidden="true" ng-show="report.is_read == 0 "></i>
 														</td>
 														<td>
 															{{ report.report_date | date : "MMM dd, yyyy"}}
@@ -349,8 +347,8 @@
 
 														<td>
 															<center>
-																<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#messageModal" ng-click="createMessage(report)" noclick><span class="glyphicon glyphicon-pencil"></span></button>
-																<button type="button" class="btn btn-xs btn-danger" ng-click="deleteReport(report.report_id)" noclick><span class="fa fa-trash"></span></button>
+																<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#messageModal" ng-click="createMessage(report)" noclick><i class="fa fa-envelope-o" aria-hidden="true"></i></button>
+																<button type="button" class="btn btn-xs btn-danger" ng-click="deleteReport(report.report_id)" noclick><span class="fa fa-trash-o"></span></button>
 															</center>
 														</td>
 													</tr>

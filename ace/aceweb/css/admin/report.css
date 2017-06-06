@@ -53,6 +53,14 @@ body {
   height: 33px;
 }
 
+.school-term select{
+  text-decoration: none;
+  margin-left: 6vh;
+  margin-top: 5vh;
+  font-size: 13px;
+  position: absolute;
+  height: 33px;
+}
 
 .banner .searchBar input[type='text']{
     border-radius: 0px 0px;
@@ -162,6 +170,7 @@ body {
 
 .manageReports .manageContainer .table tbody tr:hover td, .table tbody tr:hover th {
     background-color: #dfe9f5;
+    cursor: pointer;
 }
 .manageReports .manageContainer .table{
   border-collapse: separate;
@@ -192,7 +201,6 @@ body {
 }
 
 .listReports .fa-envelope{
-  margin-left: 8px;
   margin-top: 4px;
   position: absolute;
   font-size: 10px;
@@ -233,10 +241,10 @@ textarea {
 }
 
 
-.modal-content{
+/*.modal-content{
   width: 1000px;
   margin-left: -150px;
-}
+}*/
 
 .invalid-text {
   margin-top: -10px;
@@ -247,6 +255,44 @@ form.ng-submitted input.ng-invalid, form.ng-submitted select.ng-invalid {
   border:1px solid #f00;
 }
 
+.report-details .modal-content{
+    width: 1000px;
+    margin-left: -150px;
+}
+
+.modal-body .form-horizontal .control-label {
+  text-align: left;
+  padding-bottom: 7px;
+}
+
+.custom-form {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.modalBtn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: right;
+}
+
+.modal .modal-content .modal-body .updateBtn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.modal .modal-content .modal-body .updateBtn button{
+  margin-top: -20px;
+}
+
+.modal .modal-content .modal-body .sendBtn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.modal .modal-content .modal-body .sendBtn button{
+  margin-top: -20px;
+}
 
 /*@font-face {
     font-family: acre-regular;
