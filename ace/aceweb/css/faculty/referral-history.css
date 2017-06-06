@@ -52,6 +52,14 @@ body {
   height: 33px;
 }
 
+.school-term select{
+  text-decoration: none;
+  margin-left: 6vh;
+  margin-top: 5vh;
+  font-size: 13px;
+  position: absolute;
+  height: 33px;
+}
 
 .banner .searchBar input[type='text']{
     border-radius: 0px 0px;
@@ -202,7 +210,6 @@ body {
 }
 
 .listHistory .fa-envelope{
-  margin-left: 20px;
   margin-top: 4px;
   position: absolute;
   font-size: 10px;
@@ -234,4 +241,9 @@ body {
 
 .table-hover > tbody > tr.info:hover > td {
      background-color: #e5edf7 !important;
+}
+
+.modal-content{
+  width: 900px;
+  margin-left: -80px;
 }

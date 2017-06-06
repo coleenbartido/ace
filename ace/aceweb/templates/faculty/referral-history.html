@@ -27,14 +27,14 @@
 						  	</ul>
 							</div>
 
-							<div class="schoolYear col-md-2">
+							<div class="schoolYear col-md-1">
 								<select ng-model="selectedSY" ng-change="updateSYList()">
 							    	<option ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
 							    	<option ng-show="!selectedSY" value="" selected="selected">No Records</option>
 							    </select>
 							</div>
 
-							<div class="schoolYear col-md-2" ng-show="selectedSY">
+							<div class="school-term col-md-1" ng-show="selectedSY">
 				                <select ng-model="selectedTerm" ng-change="updateSYList()">
 				            	    <option value="1">First Term</option>
 				            	    <option value="2">Second Term</option>
@@ -46,88 +46,14 @@
 			<img src="img/header1.png" class="img-responsive">
 		</div>
 
-<!--div>
-	<div ng-show="!isLoading">
-
-		<div class="banner">
-			<div class="button-container col-md-12">
-							<div class="searchBar pull-right">
-								<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
-							</div>
-
-							<!--div class="select-dropdown col-md-1">
-									<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-											Select
-											<span class="caret"></span>
-									</button>
-
-									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-											<li><a href="javascript:void(0)" ng-click="selectAllRead()">All read</a></li>
-											<li><a href="javascript:void(0)" ng-click="selectAllUnread()">All unread</a></li>
-									</ul>
-							</div-->
-
-<!--							<div class="action-dropdown col-md-1">
-								<button class="btn btn-default dropdown-toggle" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						    	Action
-						    	<span class="caret"></span>
-						  	</button>
-
-						  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-									<li><a href="javascript:void(0)" ng-click="markAsRead()">Mark as read</a></li>
-							    <li><a href="javascript:void(0)" ng-click="markAsUnread()">Mark as unread</a></li>
-						  	</ul>
-							</div>
-
-							<div class="schoolYear col-md-2">
-								<select ng-model="selectedSY" ng-change="updateSYList()">
-						    	<option ng-show="SYList.length > 0" ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
-						    	<option ng-hide="SYList.length > 0" value="" selected="selected">No Records</option>
-						    </select>
-							</div>
-			</div>
-
-			<img src="img/header1.png">
-		</div>
-
-<!------------------------------------>
-<!--
-	    <select ng-model="selectedSY" ng-change="updateSYList()">
-	    	<option ng-show="SYList.length > 0" ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
-	    	<option ng-hide="SYList.length > 0" value="" selected="selected">No Records</option>
-	    </select>
-
-		<div class="input-group">
-
-			<input type="text" class="form-control" ng-model="searchBox" placeholder="&#xF002; Search " style="font-family:Arial, FontAwesome" />
-
-		</div>
-
-
-		<div class="dropdown">
-
-		  	<button class="btn btn-default dropdown-toggle" type="button" ng-disabled="disableActionBtn()" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-		    	Action
-		    	<span class="caret"></span>
-		  	</button>
-
-		  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-				<li><a href="javascript:void(0)" ng-click="markAsRead()">Mark as read</a></li>
-		    	<li><a href="javascript:void(0)" ng-click="markAsUnread()">Mark as unread</a></li>
-		  	</ul>
-
-		</div> -->
-
-
-<!---->
-
 <div class="manageHistory col-md-12 col-md-offset-0 formContainer" >
 
 				<div class="col-md-12 panel-body manageContainer table-responsive">
 
 						<table class="col-md-12 table table-condensed table-hover ">
-							<col width="45">
-							<col width="70">
+							<col width="5">
+							<col width="20">
+							<col width="80">
 							<col width="10">
 							<col width="150">
 							<col width="150">
@@ -137,15 +63,9 @@
 					<tr class="header">
 
 						<th class="checkBlock">
-
-								<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"> <a class="fa fa-angle-down dropdown-toggle" id="dropdownSelect" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="true"/>
-									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownSelect">
-										<li><a href="javascript:void(0)" ng-click="selectAllRead()">All read</a></li>
-										<li><a href="javascript:void(0)" ng-click="selectAllUnread()">All unread</a></li>
-									</ul>
-
+								<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
 						</th>
-
+						<th></th>
 						<th>DATE</th>
 						<th>STUDENT ID</th>
 						<th>NAME</th>
@@ -157,9 +77,10 @@
 
 						<tr class="listHistory" ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_updated == 0 ? 'info' : 'success'">
 							<td>
-
-									<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick> <i class="fa fa-envelope" aria-hidden="true" ng-show="report.is_updated == 1 "></i>
-
+									<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick>
+							</td>
+							<td>
+								<i class="fa fa-envelope" aria-hidden="true" ng-show="report.is_updated == 1 "></i>
 							</td>
 							<td>
 								{{ report.report_date | date : "MMM d, yyyy"}}
@@ -179,7 +100,7 @@
 						</tr>
 
 						<tr ng-show="(filtered = (subReports | filter: searchBox)).length == 0">
-							<td colspan="6"><center>NO RESULT</center></td>
+							<td colspan="10"><center>NO RESULT</center></td>
 						</tr>
 
 				</tbody>
@@ -205,7 +126,7 @@
 							<div class="modal-content">
 								<div class="modal-header">
 
-									<h3 class="modal-title custom-header-color"><i class="fa fa-file-text" aria-hidden="true"></i>  Report Details: {{ selectedReport.student_id }}</h3>
+									<h3 class="modal-title custom-header-color"><i class="fa fa-file-text" aria-hidden="true"></i>  Report Details: {{ selectedReport.student_fname }} {{ selectedReport.student_lname }}</h3>
 
 								</div>
 								<div class="modal-body">
