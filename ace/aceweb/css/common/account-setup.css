@@ -34,7 +34,9 @@ article {
 
 .container {
   display: table;
+  /*width: 100%; */
   width: 100%;
+  margin:0px auto;
 }
 
 .left-half {
@@ -113,6 +115,12 @@ input[type="email"]:focus, input[type="email"].focus, input[type="password"]:foc
   box-shadow: 3px 3px 10px black;
   border: 3px solid rgba(33,100,223, 1);
   padding-left: 30px;
+}
+
+
+
+form.ng-submitted input.ng-invalid {
+    background-color: #f9bcc5;
 }
 
 .loginForm .fa-times-circle {
@@ -256,6 +264,30 @@ a:active {
     outline: 0;
 }
 
-form.ng-submitted input.ng-invalid {
-    background-color: #f9bcc5;
+
+@media screen and (max-width:990px) {
+  .container{
+    width:100%;
+  }.left-half{
+    width:100%;
+    background-color: #ebedea;
+  }.right-half{
+    left:50%;
+    width:0%;
+  }.right-half img{
+      width:50%;
+      margin:0 0 0.90rem 0;
+  }.form-group .control .button{
+      width:100%;
+      font-size: 12px;
+  }
+
+/*
+.right-half img{
+  width: 600px;
+  margin:0 0 0.75rem 0;
+}
+
+*/
+
 }
