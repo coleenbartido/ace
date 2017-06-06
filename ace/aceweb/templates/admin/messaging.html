@@ -34,11 +34,10 @@
                   </button>
               </div>
 
-              <div class="broadcast-button col-md-1 col-md-offset-1">
+              <div class="broadcast-button col-md-1">
                 <button class="btn btn-default dropdown-toggle refresh" data-toggle="modal" data-target="#broadcastModal" ng-click="showBroadcastModal()">
-                  <i class=" fa fa-envelope"></i> Broadcast</button>
+                  <i class="fa fa-paper-plane" aria-hidden="true"></i> Send Broadcast Email</button>
               </div>
-
 
   		</div>
 
@@ -51,7 +50,8 @@
     				<div class="col-md-12 panel-body manageContainer table-responsive">
 
     						<table class="col-md-12 table table-condensed table-hover ">
-                  <col width="60">
+                  <col width="10">
+                  <col width="20">
                   <col width="100">
                   <col width="180">
                   <col width="300">
@@ -61,12 +61,10 @@
                     <tr class="header">
 
                       <th>
-          								<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()"> <a class="fa fa-angle-down dropdown-toggle" id="dropdownSelect" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="true"/>
-          									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownSelect">
-          										<li><a href="javascript:void(0)" ng-click="selecAllRead()">All read</a></li>
-          										<li><a href="javascript:void(0)" ng-click="selecAllUnread()">All unread</a></li>
-          									</ul>
+          								<input type="checkbox" ng-model="mainCheckbox" ng-change="controlCheckbox()">
           						</th>
+
+                      <th></th>
 
                       <th>DATE</th>
 
@@ -85,9 +83,10 @@
                     <tr class="listMessages" ng-repeat="message in uniqueMessages | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#myModal" ng-click="showPopup(message)" ng-class="message.is_read == 1 ? 'info' : 'success'">
                         <td class="inbox-small-cells">
 
-                              <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" noclick> <i class="fa fa-envelope" aria-hidden="true" ng-show="message.is_read == 0 "></i>
+                              <input type="checkbox" data-checklist-model="markMessageList.report_id" data-checklist-value="message.report_id" noclick>
 
                         </td>
+                        <td><i class="fa fa-envelope" aria-hidden="true" ng-show="message.is_read == 0 "></i></td>
 
                         <td class="view-message">
                           {{ message.message_date | date:"MMM dd,yyyy" }}
@@ -138,7 +137,7 @@
                   <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
                     <br ng-show="$first">
                       <strong class="pull-left">{{ message.sender_fullName }}</strong>
-                      <span class="pull-right date-text">{{ message.message_date | date:"short" }}</span>
+                      <span class="pull-right date-text">{{ message.message_date | date:"medium" }}</span>
                     <br>
                     <br>
                     <p ng-bind-html="message.message_body|newline2br"></p>
@@ -166,7 +165,7 @@
               <div class="modal-header">
 
                 <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-                <p class="modal-title custom-header-color custom-modal-header">Broadcast Email</p>
+                <h3 class="modal-title custom-header-color custom-modal-header"><i class="fa fa-paper-plane" aria-hidden="true"></i> Broadcast an Email</h3>
 
               </div>
 
@@ -196,7 +195,7 @@
                   </div>
 
                   <div class="sendBtn">
-                    <button type="submit" class="btn btn-primary" ng-disabled="isSending">{{sendBtn}}</button>
+                    <button type="submit" class="btn btn-primary pull-right" ng-disabled="isSending">{{sendBtn}}</button>
                   </div>
 
                 </form>
