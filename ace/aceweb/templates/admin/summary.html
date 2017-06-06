@@ -10,14 +10,14 @@
 
   	<div class="banner">
   		<div class="button-container col-md-12">
-  			<div class="schoolYear col-md-2">
+  			<div class="schoolYear col-md-1 col-md-offset-8">
                 <select ng-model="selectedSY" ng-change="getSummaryData()">
             	    <option ng-repeat="year in SYList" ng-selected="$last" ng-value="year.school_year">{{year.school_year}}</option>
             	   	<option ng-show="isEmptySYList" value="" selected="selected">No Records</option>
             	</select>
   			</div>
-  	
-  			<div class="schoolYear col-md-2" ng-show="!isEmptySYList">
+
+    			<div class="school-term col-md-1" ng-show="!isEmptySYList">
                 <select ng-model="selectedTerm" ng-change="getSummaryData()">
             	    <option value="1">First Term</option>
             	    <option value="2">Second Term</option>
@@ -31,10 +31,10 @@
 
 	  <img src="img/logoForChart.jpg" id="imgForChart" ng-show="false"/>
 
-      <div class="manageAdmin col-md-12 col-md-offset-0 formContainer">
-        <div class="col-md-12 manageContainer">
+      <div class="manageAdmin formContainer">
+        <div class=" manageContainer">
 
-	    <uib-tabset active="activeJustified" justified="true">
+	    <uib-tabset active="activeJustified">
 
 		  <uib-tab index="0" heading="Program">
 		  	<div ng-show="!isLoadingChart" class="chart-holder">
@@ -43,8 +43,8 @@
 					</canvas>
 					<canvas id="program2" ng-show="false"></canvas>
 				</div>
-				<a class="btn btn-info" id="downloadImg2" ng-click="downloadImage($event, 'program')">Save as Image</a>
-				<a class="btn btn-info" id="downloadPDF2" ng-click="downloadPDF('program')">Save as PDF</a>
+				<a class="btn btn-primary pull-right save-pdf" id="downloadImg2" ng-click="downloadImage($event, 'program')">Save as Image</a>
+				<a class="btn btn-primary pull-right" id="downloadPDF2" ng-click="downloadPDF('program')">Save as PDF</a>
 			</div>
 
 			<div class="sk-fading-circle" ng-hide="!isLoadingChart">
@@ -70,8 +70,8 @@
 					</canvas>
 					<canvas id="level2" ng-show="false"></canvas>
 				</div>
-				<a class="btn btn-info" id="downloadImg3" ng-click="downloadImage($event, 'level')">Save as Image</a>
-				<a class="btn btn-info" id="downloadPDF3" ng-click="downloadPDF('level')">Save as PDF</a>
+				<a class="btn btn-primary pull-right save-pdf" id="downloadImg3" ng-click="downloadImage($event, 'level')">Save as Image</a>
+				<a class="btn btn-primary pull-right" id="downloadPDF3" ng-click="downloadPDF('level')">Save as PDF</a>
 			</div>
 
 			<div class="sk-fading-circle" ng-hide="!isLoadingChart">
@@ -97,8 +97,8 @@
 					</canvas>
 					<canvas id="reason2" ng-show="false"></canvas>
 				</div>
-				<a class="btn btn-info" id="downloadImg4" ng-click="downloadImage($event, 'reason')">Save as Image</a>
-				<a class="btn btn-info" id="downloadPDF4" ng-click="downloadPDF('reason')">Save as PDF</a>
+				<a class="btn btn-primary pull-right save-pdf" id="downloadImg4" ng-click="downloadImage($event, 'reason')">Save as Image</a>
+				<a class="btn btn-primary pull-right" id="downloadPDF4" ng-click="downloadPDF('reason')">Save as PDF</a>
 			</div>
 
 			<div class="sk-fading-circle" ng-hide="!isLoadingChart">
@@ -124,8 +124,8 @@
 					</canvas>
 					<canvas id="status2" ng-show="false"></canvas>
 				</div>
-				<a class="btn btn-info" id="downloadImg5" ng-click="downloadImage($event, 'status')">Save as Image</a>
-				<a class="btn btn-info" id="downloadPDF5" ng-click="downloadPDF('status')">Save as PDF</a>
+				<a class="btn btn-primary pull-right save-pdf" id="downloadImg5" ng-click="downloadImage($event, 'status')">Save as Image</a>
+				<a class="btn btn-primary pull-right" id="downloadPDF5" ng-click="downloadPDF('status')">Save as PDF</a>
 			</div>
 
 			<div class="sk-fading-circle" ng-hide="!isLoadingChart">

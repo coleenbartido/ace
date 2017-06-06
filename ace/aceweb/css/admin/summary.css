@@ -39,24 +39,68 @@ body {
 .schoolYear select{
   text-decoration: none;
   margin-left: 3vh;
-  margin-top: 5vh;
+  margin-top: 35px;
   font-size: 13px;
   position: absolute;
   height: 33px;
 }
 
-.label{
-
-}
-
-element.style {
-    display: block;
-    width: 1000px;
-    height: 470px;
+.school-term select{
+  text-decoration: none;
+  margin-left: 5vh;
+  margin-top: 35px;
+  font-size: 13px;
+  position: absolute;
+  height: 33px;
 }
 
 .manageAdmin{
-  margin-top: -80px;
-color: white;
-  width: 100%;
+  margin-top: -90px;
+  width: 95%;
+  margin-left: 8vh;
+}
+
+li.active .ng-binding{
+  color: #ffffff !important;
+  background-color: #5c8400 !important;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+li a.ng-binding{
+  color: #ffffff;
+  background-color: rgba(132, 189, 0, 0.5);
+  text-decoration: none;
+  border: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  font-size: 14px;
+}
+
+.nav-tabs > li > a {
+      margin-left: -9px;
+}
+
+.nav-tabs{
+  border-bottom: none;
+  margin-left: 25px;
+}
+
+
+li a:hover.ng-binding{
+  font-size: 14px;
+  background-color: #5c8400;
+  color: #ffffff;
+}
+
+.chart-holder{
+  margin
+}
+
+.btn{
+  margin-top: 15px;
+  margin-right: 10px;
+}
+
+.save-pdf{
+  margin-right: 100px;
 }
