@@ -21,31 +21,37 @@ angular.module('aceWeb')
       console.log(response);
 
       $scope.reports = JSON.parse(response.data.reportsList);
+      $scope.SYList = $scope.reports;
 
       if($scope.reports.length > 0)
       {
-        $scope.SYList = $filter('orderBy')($scope.reports, 'school_year', true);
+        $scope.SYList = $filter('orderBy')($scope.SYList, 'report_date', true);
         $scope.SYList = $filter('unique')($scope.SYList, 'school_year');
 
         if(!$scope.initList || $scope.selectedSY == undefined || $scope.currentSYSize > $scope.SYList.length)
         {
           $scope.selectedSY = $scope.SYList[0].school_year;
+          $scope.selectedTerm = $scope.SYList[0].term + ""; 
         }
-
+        
         for(var counter=0; counter < $scope.reports.length; counter++)
         {
           //convert string date into javascript date object
           strDate = $scope.reports[counter].report_date.replace(/-/g,'/');
           $scope.reports[counter].report_date = new Date(strDate);
         }
-
+        
         $scope.currentSYSize = $scope.SYList.length;
-        $scope.subReports = $filter('filter')($scope.reports, {school_year: $scope.selectedSY});
       }
       else
       {
         $scope.selectedSY = undefined;
+        $scope.selectedTerm = undefined;
       }
+
+      $scope.subReports = $filter('filter')($scope.reports, {school_year: $scope.selectedSY});
+      $scope.subReports = $filter('filter')($scope.subReports, {term: $scope.selectedTerm});
+      $scope.subReports = $filter('orderBy')($scope.subReports, 'report_date', true);
 
       $scope.totalItems = $scope.reports.length;
       $scope.isLoading = false;
@@ -180,6 +186,8 @@ angular.module('aceWeb')
     $scope.reportList.report_id = [];
     $scope.mainCheckbox = false;
     $scope.subReports = $filter('filter')($scope.reports, {school_year: $scope.selectedSY});
+    $scope.subReports = $filter('filter')($scope.subReports, {term: $scope.selectedTerm});
+    $scope.subReports = $filter('orderBy')($scope.subReports, 'report_date', true);
     $scope.subReports = $filter('filter')($scope.subReports, $scope.searchBox);
   }
 

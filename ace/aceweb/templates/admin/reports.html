@@ -37,10 +37,18 @@
 
 							<div class="schoolYear col-md-2">
 								<select ng-model="selectedSY" ng-change="updateSYList()">
-							    	<option ng-show="SYList.length > 0" ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
-							    	<option ng-hide="SYList.length > 0" value="" selected="selected">No Records</option>
+							    	<option ng-repeat="year in SYList" ng-selected="$first" ng-value="year.school_year">{{year.school_year}}</option>
+							    	<option ng-show="!selectedSY" value="" selected="selected">No Records</option>
 							    </select>
 							</div>
+
+							<div class="schoolYear col-md-2" ng-show="selectedSY">
+				                <select ng-model="selectedTerm" ng-change="updateSYList()">
+				            	    <option ng-if="userDepartment == 'College' || userDepartment == 'Senior High School'" value="1">First Term</option>
+				            	    <option ng-if="userDepartment == 'College' || userDepartment == 'Senior High School'" value="2">Second Term</option>
+				            	    <option ng-if="userDepartment == 'College'" value="3">Third Term</option>
+				            	</select>
+				  			</div>
 			</div>
 
 			<img src="img/header1.png" class="img-responsive">
@@ -319,7 +327,7 @@
 											</thead>
 
 											<tbody>
-													<tr class="listReports"ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_read == 1 ? 'info' : 'success'">
+													<tr class="listReports" ng-repeat="report in subReports | filter: searchBox | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage" data-toggle="modal" data-target="#viewModal" ng-click="viewReport(report)" ng-class="report.is_read == 1 ? 'info' : 'success'">
 														<td>
 																<input type="checkbox" data-checklist-model="reportList.report_id" data-checklist-value="report.report_id" noclick><i class="fa fa-envelope" aria-hidden="true" ng-show="report.is_read == 0 "></i>
 														</td>
