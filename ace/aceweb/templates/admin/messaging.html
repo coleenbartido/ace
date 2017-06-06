@@ -94,7 +94,7 @@
                         </td>
 
                         <td class="view-message dont-show">
-                          {{ message.sender_fullName }}
+                          {{ message.receiver_fname }} {{ message.receiver_lname }}
                         </td>
 
                         <td class="view-message">
@@ -130,7 +130,7 @@
 
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-                <h3 class="modal-title custom-header-color"><i class="fa fa-comments-o" aria-hidden="true"></i> {{selectedMessage.message_subject}}</h3>
+                <h4 class="modal-title custom-header-color"><i class="fa fa-comments-o" aria-hidden="true"></i> {{selectedMessage.message_subject}}</h4>
               </div>
 
               <div class="modal-body">
@@ -138,7 +138,7 @@
                   <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
                     <br ng-show="$first">
                       <strong class="pull-left">{{ message.sender_fullName }}</strong>
-                      <span class="pull-right">{{ message.message_date | date:"medium" }}</span>
+                      <span class="pull-right date-text">{{ message.message_date | date:"short" }}</span>
                     <br>
                     <br>
                     <p ng-bind-html="message.message_body|newline2br"></p>

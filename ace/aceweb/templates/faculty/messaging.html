@@ -194,7 +194,7 @@
 
 <!-------------------------------->
 
-<div class="manageMessage col-md-12 col-md-offset-0 formContainer" >
+    <div class="manageMessage col-md-12 col-md-offset-0 formContainer" >
 
       <div class="panel-body manageContainer table-responsive">
 
@@ -242,7 +242,7 @@
                   </td>
 
                   <td class="view-message dont-show">
-                    {{ message.sender_fullName }}
+                    {{ message.receiver_fname }} {{ message.receiver_lname }}
                   </td>
 
                   <td class="view-message">
@@ -268,43 +268,44 @@
             </div>
           </center>
 
-        </div>
+      </div>
 
-        </div>
+    </div>
+
 
         <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
+          <div class="modal-dialog">
 
-              <div class="modal-content">
+            <div class="modal-content">
 
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-                    <h3 class="modal-title custom-header-color"><i class="fa fa-comments-o" aria-hidden="true"></i> {{selectedMessage.message_subject}}</h3>
-                  </div>
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
+                  <h4 class="modal-title custom-header-color"><i class="fa fa-comments-o" aria-hidden="true"></i> {{selectedMessage.message_subject}}</h4>
+                </div>
 
-                  <div class="modal-body">
-                    <div id="scrollableDiv" scroll-glue load-more-data>
-                      <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
-                        <br ng-show="$first">
-                          <strong class="pull-left">{{ message.sender_fullName }}</strong>
-                          <span class="pull-right">{{ message.message_date | date : "medium" }}</span>
-                        <br>
-                        <br>
-                        <p ng-bind-html="message.message_body|newline2br"></p>
-                        <hr ng-hide="$last">
-                        <br ng-show="$last">
-                      </div>
+                <div class="modal-body">
+                  <div id="scrollableDiv" scroll-glue load-more-data>
+                    <div ng-repeat="message in messages | filter: {report_id: selectedMessage.report_id}:true | orderBy: 'message_date' | limitTo: showLimit">
+                      <br ng-show="$first">
+                        <strong class="pull-left">{{ message.sender_fullName }}</strong>
+                        <span class="pull-right date-text">{{ message.message_date | date:"short" }}</span>
+                      <br>
+                      <br>
+                      <p ng-bind-html="message.message_body|newline2br"></p>
+                      <hr ng-hide="$last">
+                      <br ng-show="$last">
                     </div>
-                    <textarea id="customTextArea" rows="4" ng-model="composeEmail" ng-readonly="isSending"></textarea>
                   </div>
+                  <textarea id="customTextArea" rows="4" ng-model="composeEmail" ng-readonly="isSending"></textarea>
+                </div>
 
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="sendEmail()" ng-disabled="isSending">{{sendBtn}}</button>
-                  </div>
-              </div>
-
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" ng-click="sendEmail()" ng-disabled="isSending">{{sendBtn}}</button>
+                </div>
             </div>
-        </div>
+
+          </div>
+      </div>
 </div>
 
           <!-------------------------------------------------------->
