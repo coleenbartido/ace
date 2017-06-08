@@ -244,3 +244,56 @@
 [2017-06-06 04:42:23] Bea Madjus (Administrator) logged in to the system
 [2017-06-06 04:45:19] Coleen Bartido (Administrator) logged in to the system
 [2017-06-06 04:48:12] Bea Madjus (Administrator) logged in to the system
+[2017-06-07 17:54:44] Super Administrator logged in to the system
+[2017-06-07 17:55:35] Super Administrator has successfully created an administrator account.
+[2017-06-07 17:58:37] Super Administrator has successfully deleted administrator account/s.
+[2017-06-07 17:59:00] Super Administrator has successfully created an administrator account.
+[2017-06-07 17:59:46] Super Administrator has successfully deleted administrator account/s.
+[2017-06-07 17:59:58] Super Administrator has successfully created an administrator account.
+[2017-06-07 18:01:20] Paul Jao (Administrator) logged in to the system
+[2017-06-07 18:02:48] Paul Jao (Administrator) has successfully created a faculty account.
+[2017-06-07 18:06:17] Jhaya Valenciano (Faculty Member) logged in to the system
+[2017-06-07 18:11:59] Super Administrator logged in to the system
+[2017-06-07 18:14:33] Paul Jao (Administrator) logged in to the system
+[2017-06-07 18:15:22] Paul Jao (Administrator) logged in to the system
+[2017-06-07 18:15:53] Super Administrator logged in to the system
+[2017-06-07 18:16:36] Super Administrator logged in to the system
+[2017-06-07 18:26:49] Paul Jao (Administrator) logged in to the system
+[2017-06-07 18:27:30] Paul Jao (Administrator) logged in to the system
+[2017-06-07 18:28:05] Jhaya Valenciano (Faculty Member) logged in to the system
+[2017-06-07 18:29:37] Paul Jao (Administrator) logged in to the system
+[2017-06-07 18:30:20] Jhaya Valenciano (Faculty Member) logged in to the system
+[2017-06-07 18:30:56] Jhaya Valenciano (Faculty Member) has successfully submitted a referral.
+[2017-06-07 18:32:44] Jhaya Valenciano (Faculty Member) has successfully submitted a referral.
+[2017-06-07 18:34:10] Jhaya Valenciano (Faculty Member) has successfully submitted a referral.
+[2017-06-07 18:34:33] Paul Jao (Administrator) logged in to the system
+[2017-06-07 18:35:02] Paul Jao (Administrator) has successfully sent a message.
+[2017-06-07 18:35:30] Paul Jao (Administrator) has successfully sent a message.
+[2017-06-07 19:08:21] Super Administrator logged in to the system
+[2017-06-07 19:10:27] Super Administrator has successfully created an administrator account.
+[2017-06-07 19:11:40] Bea Madjus (Administrator) logged in to the system
+[2017-06-07 19:12:16] Super Administrator logged in to the system
+[2017-06-07 19:13:16] Super Administrator has successfully deleted administrator account/s.
+[2017-06-07 19:13:49] Paul Jao (Administrator) logged in to the system
+[2017-06-07 19:19:32] Paul Jao (Administrator) has successfully updated the status of a report.
+[2017-06-07 19:22:41] Paul Jao (Administrator) has successfully sent a broadcast email to all faculty.
+[2017-06-07 19:23:58] Paul Jao (Administrator) has successfully updated student record/s.
+[2017-06-07 19:24:51] Paul Jao (Administrator) has successfully created a faculty account.
+[2017-06-07 19:25:10] Paul Jao (Administrator) has successfully created a faculty account.
+[2017-06-07 19:25:53] Paul Jao (Administrator) has successfully deleted faculty account/s.
+[2017-06-07 19:26:28] Paul Jao (Administrator) has successfully download a copy of the database
+[2017-06-07 19:28:43] Paul Jao (Administrator) has successfully restored the database
+[2017-06-07 19:33:06] Jhaya Valenciano (Faculty Member) logged in to the system
+[2017-06-07 19:34:23] Jhaya Valenciano (Faculty Member) has successfully submitted a referral.
+[2017-06-07 19:36:17] Jhaya Valenciano (Faculty Member) has successfully sent a message.
+[2017-06-07 19:38:45] Jhaya Valenciano (Faculty Member) logged in to the system
+[2017-06-07 19:42:49] Jhaya Valenciano (Faculty Member) logged in to the system
+[2017-06-07 19:50:27] Paul Jao (Administrator) logged in to the system
+[2017-06-07 19:52:34] Paul Jao (Administrator) has successfully updated the status of a report.
+[2017-06-07 19:53:01] Paul Jao (Administrator) has successfully updated the status of a report.
+[2017-06-07 19:53:23] Paul Jao (Administrator) has successfully updated the status of a report.
+[2017-06-07 19:56:22] Jhaya Valenciano (Faculty Member) logged in to the system
+[2017-06-07 19:57:06] Paul Jao (Administrator) logged in to the system
+[2017-06-07 19:58:19] Jhaya Valenciano (Faculty Member) logged in to the system
+[2017-06-07 20:03:06] Paul Jao (Administrator) logged in to the system
+[2017-06-07 20:03:45] Paul Jao (Administrator) has successfully sent a message.

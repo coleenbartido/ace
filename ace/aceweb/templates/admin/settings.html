@@ -22,20 +22,6 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="pull-left">
-                      <p class="setting-label"><b>Edit Name</b></p>
-                    </div>
-                    <div class="pull-right">
-                      <button class="btn btn-primary editBtn" data-toggle="modal" data-target="#editModal" ng-click="showEditModal()">Edit</button>
-                    </div>
-                  </div>
-                </div>
-
-                <hr>
-                <br>
-
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="pull-left">
                       <p class="setting-label"><b>Password</b></p>
                     </div>
                     <div class="pull-right">
@@ -158,57 +144,6 @@
             </div>
 
           </form>
-        </div>
-
-      </div>
-
-    </div>
-  </div><!-- modal closing tag -->
-
-
-  <div id="editModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-      <div class="modal-content">
-
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove custom-header-color" aria-hidden="true"></span></button>
-            <h4 class="modal-title custom-header-color"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Your Information</h3>
-        </div>
-
-        <div class="modal-body">
-
-          <form name="settingsForm3" class="form-horizontal custom-form" role="form" ng-submit="confirmName(settingsForm3)" novalidate>
-
-                  <div class="form-group">
-                    <label  class="col-md-12 control-label" for="userLName">Last Name <i class="glyphicon glyphicon-question-sign" title="Must only have letters, space, and certain special characters (.  ,' -)"></i></label>
-                    <div class="col-md-12">
-                      <input type="text" class="form-control" id="userLName" name="userLName" ng-model="userLName" pattern="^[a-zA-Z ,.'-]+$" required/>
-                    </div>
-                  </div>
-                  <div ng-messages="settingsForm3.userLName.$error" ng-show="settingsForm3.$submitted">
-                    <p class="invalid-text" ng-message="pattern">Must only have letters, space, and certain special characters (.  ,' -)</p>
-                    <p class="invalid-text" ng-message="required">This field is required</p>
-                  </div>
-
-                  <div class="form-group">
-                    <label  class="col-md-12 control-label" for="userFName">First Name <i class="glyphicon glyphicon-question-sign" title="Must only have letters, space, and certain special characters (.  ,' -)"></i></label>
-                    <div class="col-md-12">
-                      <input type="text" class="form-control" id="userFName" name="userFName" ng-model="userFName" pattern="^[a-zA-Z ,.'-]+$" required/>
-                    </div>
-                  </div>
-                  <div ng-messages="settingsForm3.userFName.$error" ng-show="settingsForm3.$submitted">
-                    <p class="invalid-text" ng-message="pattern">Must only have letters, space, and certain special characters (.  ,' -)</p>
-                    <p class="invalid-text" ng-message="required">This field is required</p>
-                  </div>
-
-
-                  <div class="saveBtn">
-                    <button type="submit" class="btn btn-primary pull-right" ng-disabled="disableSaveBtn">{{saveBtn}}</button>
-                  </div>
-
-              </form>
-
         </div>
 
       </div>
